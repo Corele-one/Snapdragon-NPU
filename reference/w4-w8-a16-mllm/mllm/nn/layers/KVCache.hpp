@@ -1,0 +1,36 @@
+// Copyright (c) MLLM Team.
+// Licensed under the MIT License.
+
+#pragma once
+
+#include "mllm/nn/Layer.hpp"
+#include "mllm/core/aops/KVCacheOp.hpp"
+#include "mllm/nn/lmcache/StaticCache.hpp"
+
+namespace mllm::nn {
+
+class KVCache : public Layer {
+ public:
+  KVCache();
+
+  explicit KVCache(const aops::KVCacheOpOptions& options);
+
+  KVCache(int32_t layer_idx, int32_t q_head, int32_t kv_head, int32_t head_dim, bool use_fa2 = true);
+
+  void setLayerIndex(int32_t layer_idx);
+
+  void clearCache();
+
+  // Update current valid sequence length in underlying KV cache op
+  void setCurrentSeqCnt(int32_t seq);
+
+  // Get current valid sequence length from underlying KV cache op
+  int32_t getCurrentSeqCnt() const;
+
+  void setStaticCache(const nn::StaticCache* cache);
+  [[nodiscard]] const nn::StaticCache* getStaticCache() const;
+
+  MLLM_LAYER_ANY_INPUTS_2_OUTPUTS_FORWARD
+};
+
+}  // namespace mllm::nn

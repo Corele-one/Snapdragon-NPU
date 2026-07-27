@@ -1,0 +1,115 @@
+#pragma once
+
+#include <stdint.h>
+
+#include "dsp/quants.h"
+#include "op_reg.h"
+
+#ifndef restrict
+#  define restrict __restrict
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int hvx_rms_norm_f32(float *restrict dst, const float *restrict src, int ne0, int ne1);
+
+int hmx_mat_mul_permuted_w16a32(float *restrict dst, const float *activation, const __fp16 *permuted_weight, int m,
+                                int k, int n, int64_t trace_id, int mode_flags, int op_index,
+                                struct LlmTraceProfileHeader *profile);
+void mat_mul_fp16_activation_cache_invalidate(void);
+int hmx_mat_mul_permuted_qk_0_d16a32(float *restrict dst, const float *activation, const uint8_t *permuted_weight,
+                                     int m, int k, int n, enum ggml_type weight_type, int64_t trace_id,
+                                     int mode_flags, int op_index, struct LlmTraceProfileHeader *profile);
+int hmx_mat_mul_permuted_w8pc_a8pt(float *restrict dst, const float *activation, const uint8_t *permuted_weight,
+                                   int m, int k, int n, int64_t trace_id, int mode_flags, int op_index,
+                                   struct LlmTraceProfileHeader *profile);
+int hmx_mat_mul_lpbq_a8w8(float *restrict dst, const float *activation, const int8_t *permuted_weight,
+                          const int8_t *packed_weight, const int32_t *sum_w_precomputed,
+                          const uint8_t *k32_safe_precomputed, const uint8_t *k64_safe_precomputed,
+                          const float *scale2, const float *bias, const float *r4,
+                          const __fp16 *r4_hmx_dense_fp16_prepacked, const float *input_scale,
+                          const float *out_scale, const float *bias_eff, int r4_block, float act_scale, int m, int k,
+                          int n, int64_t trace_id, int mode_flags, int op_index,
+                          struct LlmTraceProfileHeader *profile);
+void hmx_mat_mul_lpbq_a8w8_activation_cache_invalidate(void);
+int hmx_mat_mul_lpbq_a8w8_components_probe(struct HmxInt8GateResult *result);
+int hmx_mat_mul_lpbq_a8w8_components_probe_m32(struct HmxInt8GateResult *result);
+int hmx_mat_mul_lpbq_a8w8_r4_v6_raw_probe(struct HmxInt8GateResult *results, int max_results);
+int hmx_mat_mul_lpbq_a8w8_r4_decomposition_probe(struct HmxInt8GateResult *results, int max_results);
+int hmx_mat_mul_lpbq_a8w8_r4_store_ab_probe(struct HmxInt8GateResult *results, int max_results);
+int hmx_mat_mul_lpbq_a8w8_r4_schedule_ab_probe(struct HmxInt8GateResult *results, int max_results);
+int hmx_mat_mul_lpbq_a8w8_exact_k64_micro_probe(struct HmxInt8GateResult *results, int max_results, int mode);
+
+int naive_flash_attn_profiled(float *restrict O, const float *restrict Q, const __fp16 *restrict K,
+                              const __fp16 *restrict V, const __fp16 *restrict mask, int qo_len, int kv_len,
+                              int n_heads, int n_kv_heads, int head_dim, int64_t trace_id, int mode_flags,
+                              int op_index, struct LlmTraceProfileHeader *profile);
+
+int simple_flash_attn(__fp16 *restrict O, const __fp16 *restrict Q, const __fp16 *restrict K, const __fp16 *restrict V,
+                      const __fp16 *restrict mask, int qo_len, int kv_len, int n_heads, int n_kv_heads, int head_dim);
+
+int simple_flash_attn_with_flags(__fp16 *restrict O, const __fp16 *restrict Q, const __fp16 *restrict K,
+                                 const __fp16 *restrict V, const __fp16 *restrict mask, int qo_len, int kv_len,
+                                 int n_heads, int n_kv_heads, int head_dim, int mode_flags);
+
+int simple_flash_attn_qo_f32_kv_f16_with_flags(float *restrict O, const float *restrict Q,
+                                               const __fp16 *restrict K, const __fp16 *restrict V,
+                                               const __fp16 *restrict mask, int qo_len, int kv_len, int n_heads,
+                                               int n_kv_heads, int head_dim, int mode_flags);
+
+struct Figure8ProfileHeader;
+
+int simple_flash_attn_profiled(__fp16 *restrict O, const __fp16 *restrict Q, const __fp16 *restrict K,
+                               const __fp16 *restrict V, const __fp16 *restrict mask, int qo_len, int kv_len,
+                               int n_heads, int n_kv_heads, int head_dim, int mode_flags,
+                               struct Figure8ProfileHeader *profile);
+
+int simple_flash_attn_llm_profiled(__fp16 *restrict O, const __fp16 *restrict Q, const __fp16 *restrict K,
+                                   const __fp16 *restrict V, const __fp16 *restrict mask, int qo_len, int kv_len,
+                                   int n_heads, int n_kv_heads, int head_dim, int64_t trace_id, int mode_flags,
+                                   int op_index, struct LlmTraceProfileHeader *profile);
+
+int naive_flash_attn(float *restrict O, const float *restrict Q, const __fp16 *restrict K, const __fp16 *restrict V,
+                     const __fp16 *restrict mask, int qo_len, int kv_len, int n_heads, int n_kv_heads, int head_dim);
+
+// micro-benchmark kernels, don't use directly
+
+#define __vtcm  // only a hint, no real effect
+
+int hmx_mat_mul_fp16_core(__fp16 *restrict __vtcm c, const __fp16 *restrict __vtcm a, const __fp16 *restrict __vtcm b,
+                          __fp16 *restrict __vtcm scales, int m, int k, int n);
+
+int hvx_mat_mul_fp16_core(__fp16 *restrict __vtcm c, const __fp16 *restrict __vtcm a, const __fp16 *restrict __vtcm b,
+                          int m, int k, int n);
+
+int hvx_mat_mul_fp32_core(float *restrict __vtcm c, const float *restrict __vtcm a, const float *restrict __vtcm b,
+                          int m, int k, int n);
+
+int hmx_int8_gate_run(struct HmxInt8GateResult *results, int max_results, int mode);
+
+int qk_os_debug_probe_run(struct HmxInt8GateResult *results, int max_results, int mode);
+
+int hvx_mat_mul_int16_core(int16_t *restrict __vtcm c, const int16_t *restrict __vtcm a,
+                           const int16_t *restrict __vtcm b, int m, int k, int n);
+
+int hvx_mat_mul_int32_core(int32_t *restrict __vtcm c, const int32_t *restrict __vtcm a,
+                           const int32_t *restrict __vtcm b, int m, int k, int n);
+
+int hvx_mat_mul_fp16_core_mt(__fp16 *restrict __vtcm c, const __fp16 *restrict __vtcm a,
+                             const __fp16 *restrict __vtcm b, int M, int K, int N, int n_threads);
+
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+
+namespace op_utils {
+
+int compare_result(const float *x, const float *y, int n_elems);
+
+}
+
+#endif

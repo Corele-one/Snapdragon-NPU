@@ -1,0 +1,68 @@
+# Models and datasets
+/models/
+/projects/*/models/
+# Do not use the old broad "**/models/" rule: MLLM contains source code under
+# reference/w4-w8-a16-mllm/mllm/models/.
+*.gguf
+*.safetensors
+*.pt
+*.pth
+*.onnx
+
+# Native build outputs
+build/
+build-*/
+cmake-build-*/
+android_*/
+hexagon_*/
+CMakeCache.txt
+CMakeFiles/
+**/common/build-info.cpp
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+
+# Generated deployment packages
+projects/pure-fp16/deploy/
+projects/pure-fp16/logs/
+projects/pure-fp16/requests/
+projects/pure-fp16/responses/
+projects/pure-fp16/validation/
+projects/pure-fp16/profiling_traces/
+
+# Large/reproducible trace derivatives
+*.ntff
+*.perfetto.json
+attention_timers_raw.log
+sanity_q4.log
+event_level_results/
+
+# Python and Node
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+node_modules/
+dist/
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets and local overrides
+.env
+.env.*
+!.env.example
+api_key.txt
+*_credentials.*
+local-config.*
+
+# Superseded machine-local planning note; the portable procedure is documented
+# in projects/flashattention/README.md.
+projects/flashattention/FA_Reproduction_Plan.md

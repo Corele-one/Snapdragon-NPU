@@ -1,0 +1,505 @@
+// Copyright (c) MLLM Team.
+// Licensed under the MIT License.
+
+#include <gtest/gtest.h>
+
+#include "mllm/mllm.hpp"
+
+/// Kernel tests
+#include "AscendKernelTest.hpp"
+#include "AscendAclnnKernelTest.hpp"
+#include "AscendBroadcastKernelTest.hpp"
+
+//===----------------------------------------------------------------------===//
+// Graph Builder tests.
+//
+// Tests for ATB graph construction and execution
+//===----------------------------------------------------------------------===//
+#include "AscendGraphBuilderTest.hpp"
+#include "AscendCausalMaskGraphTest.hpp"
+#include "AscendLinearSoftmaxGraphTest.hpp"
+TEST_F(AscendGraphBuilderTest, LinearGraph) {
+  EXPECT_EQ(LinearGraphTest(), true);
+}
+
+TEST_F(AscendGraphBuilderTest, LinearGraphAccuracy) {
+  EXPECT_EQ(LinearGraphAccuracyTest(), true);
+}
+
+TEST_F(AscendLinearSoftmaxGraphTest, LinearSoftmaxGraph) {
+  EXPECT_EQ(LinearSoftmaxGraphPassTest(), true);
+}
+
+TEST_F(AscendLinearSoftmaxGraphTest, LinearSoftmaxGraphAccuracy) {
+  EXPECT_EQ(LinearSoftmaxGraphAccuracyTest(), true);
+}
+
+TEST_F(AscendCausalMaskGraphTest, CausalMaskPluginGraphAccuracy) {
+  EXPECT_EQ(CausalMaskPluginGraphAccuracyTest(), true);
+}
+
+TEST_F(AscendCausalMaskGraphTest, CausalMaskPluginGraphPrefill) {
+  EXPECT_EQ(CausalMaskPluginGraphPrefillTest(), true);
+}
+
+TEST_F(AscendCausalMaskGraphTest, CausalMaskPluginGraphDecode) {
+  EXPECT_EQ(CausalMaskPluginGraphDecodeTest(), true);
+}
+
+TEST_F(AscendGraphBuilderTest, BasicCreation) {
+
+  EXPECT_EQ(BasicCreationTest(), true);
+}
+
+//===----------------------------------------------------------------------===//
+// Element wise ADD.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+TEST_F(AscendKernelTest, AddFloat16) {
+  EXPECT_EQ(AddFloat16Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Element wise SUB.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+TEST_F(AscendKernelTest, SubFloat16) {
+  EXPECT_EQ(SubFloat16Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Element wise MUL.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+TEST_F(AscendKernelTest, MulFloat16) {
+  EXPECT_EQ(MulFloat16Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Element wise MULS.
+//
+// FP16 input, FP16 output
+//===----------------------------------------------------------------------===//
+TEST_F(AscendKernelTest, MulScalarFloat16) {
+  EXPECT_EQ(MulScalarFloat16Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// aclnnAbs (FP16): element-wise absolute value.
+//
+// Verify aclnnAbs works on 310B for FP16 tensors.
+//===----------------------------------------------------------------------===//
+TEST_F(AscendAclnnKernelTest, AclnnAbsFloat16) {
+  EXPECT_EQ(AclnnAbsFloat16Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+                {1, 1024},
+                {128, 128},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// aclnnMaxDim (FP16, keepdim=true): max along last dim.
+//
+// Verify aclnnMaxDim works on 310B with dummy indices buffer.
+//===----------------------------------------------------------------------===//
+TEST_F(AscendAclnnKernelTest, AclnnMaxDimFloat16) {
+  EXPECT_EQ(AclnnMaxDimFloat16Test({
+                {2, 3},
+                {1, 8},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+                {1, 1024},
+                {128, 128},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// ATB ELEWISE_REALDIV (broadcast): [M,K] / [M,1].
+//
+// Verify ATB ELEWISE_REALDIV supports broadcast on 310B.
+//===----------------------------------------------------------------------===//
+TEST_F(AscendBroadcastKernelTest, RealDivBroadcastFloat16) {
+  EXPECT_EQ(RealDivBroadcastFloat16Test({
+                {2, 3},
+                {1, 8},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+                {1, 1024},
+                {128, 128},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// ATB ELEWISE_MUL (broadcast): [M,K] * [M,1].
+//
+// Verify ATB ELEWISE_MUL supports broadcast on 310B (pipeline post-scale step).
+//===----------------------------------------------------------------------===//
+TEST_F(AscendBroadcastKernelTest, MulBroadcastFloat16) {
+  EXPECT_EQ(MulBroadcastFloat16Test({
+                {2, 3},
+                {1, 8},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+                {1, 1024},
+                {128, 128},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// aclnnCast FP16 -> INT8 (alternative to ELEWISE_CAST which fails on 310B).
+//
+// Tests whether aclnnCast can be used for activation quantization on 310B.
+//===----------------------------------------------------------------------===//
+TEST_F(AscendAclnnKernelTest, AclnnCastFloat16ToInt8) {
+  EXPECT_EQ(AclnnCastFloat16ToInt8Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// SiLU activation function.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+#include "AscendSiLUKernelTest.hpp"
+TEST_F(AscendSiLUKernelTest, SiLUFloat16) {
+  EXPECT_EQ(SiLUFloat16Test({
+                {2, 3},
+                {1, 1},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {32, 32},
+                {1, 1024},
+                {128, 128},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Linear layer (MatMul based test).
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+#include "AscendLinearKernelTest.hpp"
+TEST_F(AscendLinearKernelTest, LinearFloat16) {
+  EXPECT_EQ(LinearFloat16Test({
+                // {input_shape, in_channels, out_channels}
+                {{2, 3}, 3, 4},
+                {{1, 8}, 8, 16},
+                {{4, 16}, 16, 32},
+                {{8, 32}, 32, 64},
+                {{1, 1024}, 1024, 512},
+            }),
+            true);
+}
+
+TEST_F(AscendLinearKernelTest, LinearWithBiasFloat16) {
+  EXPECT_EQ(LinearWithBiasFloat16Test({
+                // {input_shape, in_channels, out_channels}
+                {{2, 3}, 3, 4},
+                {{1, 8}, 8, 16},
+                {{4, 16}, 16, 32},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// W8A8 end-to-end pipeline test (corrected activation quantization path).
+//
+// Tests the full pipeline on 310B:
+//   x_fp16 → [ATB ELEWISE_MULS *inv_scale] → x_scaled_fp16
+//           → [aclnnRound FP16]             → x_round_fp16
+//           → [aclnnClamp(-128,127) FP16]   → x_clamped_fp16
+//           → [aclnnCast FP16→INT8]         → x_int8
+//   x_int8, weight_int8, bias_i32, deq_scale → [ATB Linear W8A8] → y_fp16
+//
+// The test returns false at the first failing step so that missing primitive
+// support on 310B is immediately apparent from the diagnostic output.
+//===----------------------------------------------------------------------===//
+TEST_F(AscendLinearKernelTest, LinearW8A8EndToEndPipeline) {
+  EXPECT_EQ(LinearW8A8EndToEndPipelineTest({
+                // {input_shape, K (in_channels), N (out_channels)}
+                {{1, 32},    32,   64},
+                {{1, 64},    64,  128},
+                {{4, 128},  128,  256},
+                {{1, 1024}, 1024, 512},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// RMSNorm layer.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+#include "AscendRMSNormKernelTest.hpp"
+TEST_F(AscendRMSNormKernelTest, RMSNormFloat16) {
+  EXPECT_EQ(RMSNormFloat16Test({
+                // {input_shape, norm_size, epsilon}
+                // Note: ATB RMSNorm requires last dim to be multiple of 16 (FP16 alignment)
+                {{2, 16}, 16, 1e-5f},
+                {{1, 32}, 32, 1e-5f},
+                {{4, 64}, 64, 1e-6f},
+                {{8, 128}, 128, 1e-5f},
+                {{1, 1024}, 1024, 1e-5f},
+                {{128, 256}, 256, 1e-5f},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Softmax activation function.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+#include "AscendSoftmaxKernelTest.hpp"
+TEST_F(AscendSoftmaxKernelTest, SoftmaxFloat16) {
+  EXPECT_EQ(SoftmaxFloat16Test({
+                {2, 3},
+                {1, 8},
+                {4, 4},
+                {8, 8},
+                {16, 16},
+                {1, 1024},
+                {128, 128},
+            },
+            {-1, 0, 1}  // Test different axes
+            ),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Transpose operation.
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+#include "AscendTransposeKernelTest.hpp"
+TEST_F(AscendTransposeKernelTest, TransposeFloat16) {
+  EXPECT_EQ(TransposeFloat16Test({
+                // {shape, dim0, dim1}
+                {{2, 3}, 0, 1},
+                {{4, 8}, 0, 1},
+                {{2, 3, 4}, 0, 1},
+                {{2, 3, 4}, 0, 2},
+                {{2, 3, 4}, 1, 2},
+                {{1, 4, 8, 16}, 1, 2},   // [B, H, S, D] -> [B, S, H, D]
+                {{1, 8, 16, 32}, 1, 2},  // Common attention transpose
+                {{2, 4, 8, 16}, 1, 2},   // Batch > 1
+                {{1, 4, 8, 16}, -2, -1}, // Negative dims
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Scaled Dot-Product Attention (using existing operators).
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+#include "AscendAttentionKernelTest.hpp"
+TEST_F(AscendAttentionKernelTest, ScaledDotProductAttentionFloat16) {
+  EXPECT_EQ(ScaledDotProductAttentionFloat16Test({
+                // {Q_shape, K_shape, V_shape}
+                // Format: [B, S, D]
+                {{1, 4, 8}, {1, 4, 8}, {1, 4, 8}},      // Small: B=1, S=4, D=8
+                {{1, 8, 16}, {1, 8, 16}, {1, 8, 16}},   // Medium: B=1, S=8, D=16
+                {{2, 4, 8}, {2, 4, 8}, {2, 4, 8}},      // Batch=2
+                {{1, 16, 32}, {1, 16, 32}, {1, 16, 32}}, // Larger: B=1, S=16, D=32
+                {{1, 8, 64}, {1, 8, 64}, {1, 8, 64}},   // D=64 (common head dim)
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Multi-Head Attention with Causal Mask.
+//
+// FP16 (Ascend currently uses FP16)
+// Input format: [B, H, S, D] where H = num_heads, D = head_dim
+//===----------------------------------------------------------------------===//
+TEST_F(AscendAttentionKernelTest, MultiHeadAttentionFloat16) {
+  EXPECT_EQ(MultiHeadAttentionFloat16Test({
+                // {Q_shape, K_shape, V_shape, use_causal_mask}
+                // Format: [B, H, S, D]
+
+                // Without mask
+                {{1, 1, 4, 8}, {1, 1, 4, 8}, {1, 1, 4, 8}, false},      // Single head, no mask
+                {{1, 4, 8, 16}, {1, 4, 8, 16}, {1, 4, 8, 16}, false},   // 4 heads, no mask
+                {{1, 8, 16, 64}, {1, 8, 16, 64}, {1, 8, 16, 64}, false}, // 8 heads, D=64
+
+                // With causal mask
+                {{1, 1, 4, 8}, {1, 1, 4, 8}, {1, 1, 4, 8}, true},       // Single head, with mask
+                {{1, 4, 8, 16}, {1, 4, 8, 16}, {1, 4, 8, 16}, true},    // 4 heads, with mask
+                {{1, 8, 16, 64}, {1, 8, 16, 64}, {1, 8, 16, 64}, true}, // 8 heads, with mask
+                {{2, 4, 8, 32}, {2, 4, 8, 32}, {2, 4, 8, 32}, true},    // Batch=2, with mask
+
+                // Different S_q and S_kv (useful for KV cache scenarios)
+                {{1, 4, 1, 32}, {1, 4, 8, 32}, {1, 4, 8, 32}, true},    // S_q=1, S_kv=8 (decode)
+                {{1, 4, 4, 32}, {1, 4, 16, 32}, {1, 4, 16, 32}, true},  // S_q < S_kv
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Grouped Query Attention (GQA).
+//
+// FP16 (Ascend currently uses FP16)
+//===----------------------------------------------------------------------===//
+TEST_F(AscendAttentionKernelTest, GroupedQueryAttentionFloat16) {
+  EXPECT_EQ(GroupedQueryAttentionFloat16Test({
+                // {Q_shape [B, H_q, S_q, D], K_shape [B, H_kv, S_kv, D], V_shape, use_mask}
+
+                // GQA with 2 groups (H_q = 4, H_kv = 2)
+                {{1, 4, 8, 32}, {1, 2, 8, 32}, {1, 2, 8, 32}, false},
+                {{1, 4, 8, 32}, {1, 2, 8, 32}, {1, 2, 8, 32}, true},
+
+                // GQA with 4 groups (H_q = 8, H_kv = 2)
+                {{1, 8, 8, 32}, {1, 2, 8, 32}, {1, 2, 8, 32}, false},
+                {{1, 8, 8, 32}, {1, 2, 8, 32}, {1, 2, 8, 32}, true},
+
+                // MQA (Multi-Query Attention): H_kv = 1
+                {{1, 4, 8, 32}, {1, 1, 8, 32}, {1, 1, 8, 32}, true},
+                {{1, 8, 16, 64}, {1, 1, 16, 64}, {1, 1, 16, 64}, true},
+
+                // Batch > 1
+                {{2, 8, 8, 32}, {2, 2, 8, 32}, {2, 2, 8, 32}, true},
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// Concat
+//===----------------------------------------------------------------------===//
+#include "AscendConcatKernelTest.hpp"
+TEST_F(AscendConcatKernelTest, ConcatFloat16) {
+  EXPECT_EQ(ConcatFloat16Test({{2, 3}, {2, 3}}, 0), true);
+  EXPECT_EQ(ConcatFloat16Test({{1, 8}, {1, 8}}, 1), true);
+  EXPECT_EQ(ConcatFloat16Test({{4, 16}, {4, 16}, {4, 16}}, 0), true);
+  EXPECT_EQ(ConcatFloat16Test({{2, 3, 4}, {2, 3, 5}}, 2), true);
+  EXPECT_EQ(ConcatFloat16Test({{2, 3, 4}, {2, 3, 6}}, -1), true);
+  EXPECT_EQ(ConcatFloat16Test({{2, 7}}, 0), true);
+}
+
+//===----------------------------------------------------------------------===//
+// Slice
+//===----------------------------------------------------------------------===//
+#include "AscendSliceKernelTest.hpp"
+TEST_F(AscendSliceKernelTest, SliceFloat16) {
+  using namespace mllm;
+  // SliceIndicesPair(start, end)
+  EXPECT_EQ(SliceFloat16Test({4, 4}, {SliceIndicesPair(0, 2), SliceIndicesPair(0, 4)}), true);
+  EXPECT_EQ(SliceFloat16Test({4, 8}, {SliceIndicesPair(1, 3), SliceIndicesPair(2, 6)}), true);
+  EXPECT_EQ(SliceFloat16Test({2, 16}, {SliceIndicesPair(0, 1), SliceIndicesPair(0, 8)}), true);
+  EXPECT_EQ(SliceFloat16Test({5, 4}, {SliceIndicesPair(-3, -1), SliceIndicesPair(0, 4)}), true);
+  EXPECT_EQ(SliceFloat16Test({3, 4, 5}, {SliceIndicesPair(kAll, kAll), SliceIndicesPair(1, 3), SliceIndicesPair(0, 5)}), true);
+}
+
+//===----------------------------------------------------------------------===//
+// Embedding operation.
+//
+// FP16 (Ascend currently uses FP16)
+// Uses ACLNN aclnnEmbedding (ATB Gather not supported on 310B)
+//===----------------------------------------------------------------------===//
+#include "AscendEmbeddingKernelTest.hpp"
+TEST_F(AscendEmbeddingKernelTest, EmbeddingFloat16) {
+  EXPECT_EQ(EmbeddingFloat16Test({
+                // {batch_size, seq_len, vocab_size, hidden_size}
+                {1, 8, 256, 128},     // Test case 1
+                {1, 4, 100, 64},      // Test case 2
+                {2, 4, 128, 64},      // Test case 3: Batch > 1
+                {1, 16, 512, 256},    // Test case 4: Larger
+            }),
+            true);
+}
+
+//===----------------------------------------------------------------------===//
+// RoPE (Rotary Position Embedding) operation.
+//
+// FP16 (Ascend currently uses FP16)
+// Input format: [B, H, S, D] where D must be even and >= 16 (ATB requirement)
+//===----------------------------------------------------------------------===//
+#include "AscendRoPEKernelTest.hpp"
+TEST_F(AscendRoPEKernelTest, RoPEFloat16) {
+  EXPECT_EQ(RoPEFloat16Test({
+                // {B, H, S, D} - D must be even and >= 16 (ATB requirement)
+                {1, 4, 8, 16},      // 4 heads, D=16 (minimum)
+                {1, 8, 16, 32},     // 8 heads, D=32
+                {1, 16, 8, 128},    // 16 heads, D=128 (Qwen3 head_dim)
+                {1, 8, 1, 128},     // S=1 (decode phase)
+                {2, 8, 16, 64},     // Batch=2
+            }),
+            true);
+}
+
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  
+  // Initialize context
+  mllm::initializeContext();
+
+  // Initialize Ascend backend
+  mllm::initAscendBackend();
+  
+  auto ret = RUN_ALL_TESTS();
+  
+  // Cleanup
+  mllm::memoryReport();
+  mllm::shutdownContext();
+  
+  return ret;
+}

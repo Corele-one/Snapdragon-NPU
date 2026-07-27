@@ -1,0 +1,18 @@
+{
+    "switched_at":  "2026-05-31T21:33:07.2178810+08:00",
+    "mode":  "iq4",
+    "runtime":  "original-iq4-runtime",
+    "dsp_arch":  "v73",
+    "remote_app_dir":  "/data/local/tmp/llama-npu-chat",
+    "port":  8080,
+    "batch":  512,
+    "ubatch":  512,
+    "threads":  4,
+    "context":  4096,
+    "predict":  2048,
+    "trace":  false,
+    "detailed_trace":  false,
+    "remote_model":  "qwen2.5-1.5b-instruct.iq4_nl+q8_0-hmx.gguf",
+    "llama_npu_mode":  "baseline",
+    "health":  "{\"status\":\"ok\"}"
+}

@@ -1,0 +1,45 @@
+{
+    "created_at":  "2026-05-27T12:02:37.8273017+08:00",
+    "mode":  "pure_fp16",
+    "cpu_fallback":  false,
+    "port":  8080,
+    "passed":  true,
+    "results":  [
+                    {
+                        "name":  "math_short",
+                        "passed":  true,
+                        "reason":  "contains 12",
+                        "content":  "12",
+                        "request":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\requests\\smoke_math_short_20260527_120229.json",
+                        "response":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\responses\\smoke_math_short_20260527_120229.json",
+                        "prompt_tokens":  29,
+                        "completion_tokens":  3,
+                        "prompt_per_second":  201.16258098528044,
+                        "predicted_per_second":  14.720964125010426
+                    },
+                    {
+                        "name":  "safe_value",
+                        "passed":  true,
+                        "reason":  "contains sentinel",
+                        "content":  "SAFE_VALUE=314159",
+                        "request":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\requests\\smoke_safe_value_20260527_120229.json",
+                        "response":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\responses\\smoke_safe_value_20260527_120229.json",
+                        "prompt_tokens":  23,
+                        "completion_tokens":  10,
+                        "prompt_per_second":  145.4775458570525,
+                        "predicted_per_second":  9.200207556682479
+                    },
+                    {
+                        "name":  "cn_npu",
+                        "passed":  true,
+                        "reason":  "utf8=True repeat_ok=True keyword=True cjk=True",
+                        "content":  "NPU是神经网络处理器，专门用于加速深度学习和人工智能计算。",
+                        "request":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\requests\\smoke_cn_npu_20260527_120229.json",
+                        "response":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\responses\\smoke_cn_npu_20260527_120229.json",
+                        "prompt_tokens":  27,
+                        "completion_tokens":  17,
+                        "prompt_per_second":  154.2971763616726,
+                        "predicted_per_second":  9.752812108632558
+                    }
+                ]
+}

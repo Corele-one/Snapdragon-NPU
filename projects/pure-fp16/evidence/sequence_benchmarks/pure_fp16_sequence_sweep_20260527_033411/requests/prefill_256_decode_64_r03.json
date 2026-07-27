@@ -1,0 +1,15 @@
+{
+    "messages":  [
+                     {
+                         "content":  "This is a profiling-only prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. mobile npu profiling prefill workload keeps attention and feed forward layers active while preserving a deterministic prompt. \nRepeat the word alpha until stopped. Do not explain. The generation cap is 64 tokens.",
+                         "role":  "user"
+                     }
+                 ],
+    "stream":  false,
+    "cache_prompt":  false,
+    "npu_mode":  "pure_fp16",
+    "temperature":  0,
+    "top_k":  1,
+    "max_tokens":  64,
+    "timings_per_token":  true
+}

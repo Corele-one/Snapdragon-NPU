@@ -1,0 +1,100 @@
+{
+    "built_at":  "2026-05-27T21:52:36.4682382+08:00",
+    "dsp_arch":  "v73",
+    "fp16_weight_load_mode":  "dma_direct",
+    "fp16_weight_load_mode_value":  1,
+    "fp16_dma_dst_bypass":  1,
+    "fp16_direct_final_dma":  1,
+    "fp16_direct_final_pipeline":  1,
+    "fp16_direct_final_cache_invalidate":  0,
+    "fp16_direct_final_touch":  0,
+    "fp16_decode_direct_pipeline":  1,
+    "fp16_decode_pipeline_max_m":  1,
+    "fp16_parallel_weight_publish":  1,
+    "fp16_publish_use_memcpy":  0,
+    "fp16_parallel_output_store":  1,
+    "fp16_small_m_vtcm":  {
+                              "enabled":  1,
+                              "threshold":  1,
+                              "weight":  2048,
+                              "activation":  512,
+                              "output":  768,
+                              "scratch":  2048,
+                              "pipeline_output":  384
+                          },
+    "matmul_vtcm_kb":  {
+                           "weight":  1152,
+                           "activation":  1536,
+                           "output":  1536,
+                           "scratch":  1152,
+                           "pipeline_output":  512
+                       },
+    "fp16_os_block":  {
+                          "m":  512,
+                          "n":  1536,
+                          "k":  640
+                      },
+    "fp16_os_weight_gather":  {
+                                  "direct_dma":  1,
+                                  "dma_scratch":  1,
+                                  "prefill_only":  0
+                              },
+    "matmul_pipeline_mode":  0,
+    "build_log":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\logs\\build_pure_fp16_20260527_215220.log",
+    "model":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\models\\qwen2.5-1.5b-instruct.f16-hmx.gguf",
+    "llama_build_dir":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared",
+    "htp_android_ship":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\htp-ops-lib-main\\android_ReleaseG_aarch64\\ship",
+    "htp_dsp_ship":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\htp-ops-lib-main\\hexagon_ReleaseG_toolv88_v73\\ship",
+    "files":  [
+                  {
+                      "name":  "llama-server",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\bin\\llama-server",
+                      "size":  25480120
+                  },
+                  {
+                      "name":  "llama-cli",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\bin\\llama-cli",
+                      "size":  11636528
+                  },
+                  {
+                      "name":  "libggml.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\ggml\\src\\libggml.so",
+                      "size":  4237592
+                  },
+                  {
+                      "name":  "libggml-base.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\ggml\\src\\libggml-base.so",
+                      "size":  4216336
+                  },
+                  {
+                      "name":  "libggml-cpu.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\ggml\\src\\libggml-cpu.so",
+                      "size":  2156496
+                  },
+                  {
+                      "name":  "libggml-htp.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\ggml\\src\\ggml-htp\\libggml-htp.so",
+                      "size":  1492824
+                  },
+                  {
+                      "name":  "libllama.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\llama.cpp-npu-htp-backend\\build-android-htp-v73-shared\\src\\libllama.so",
+                      "size":  13740568
+                  },
+                  {
+                      "name":  "libhtp_ops.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\htp-ops-lib-main\\android_ReleaseG_aarch64\\ship\\libhtp_ops.so",
+                      "size":  59488
+                  },
+                  {
+                      "name":  "libhtp_ops_skel.so",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\src\\htp-ops-lib-main\\hexagon_ReleaseG_toolv88_v73\\ship\\libhtp_ops_skel.so",
+                      "size":  1905264
+                  },
+                  {
+                      "name":  "run_server.sh",
+                      "source":  "C:\\Users\\20203\\Desktop\\NPU\\llama-npu\\artifacts\\llm_inference_pure_fp16\\deploy\\run_server.sh",
+                      "size":  5201
+                  }
+              ]
+}
