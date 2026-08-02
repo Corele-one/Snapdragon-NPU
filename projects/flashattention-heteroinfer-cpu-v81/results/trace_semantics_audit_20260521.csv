@@ -1,0 +1,6 @@
+scope,path,checked_rows_or_files,result,action
+flashattention_v73_baseline,artifacts/flashattention/v73/baseline,4680 event rows,standalone simple_flash_attn_profiled DSP qtimer event trace,regenerated ntff/json and README
+flashattention_v73_lut_exp,artifacts/flashattention/v73/lut_exp,4680 event rows,standalone simple_flash_attn_profiled DSP qtimer event trace,regenerated ntff/json and README
+flashattention_v79_baseline,artifacts/flashattention/v79/baseline,4680 event rows,standalone simple_flash_attn_profiled DSP qtimer event trace,regenerated ntff/json and README
+flashattention_v79_lut_exp,artifacts/flashattention/v79/lut_exp,4680 event rows,standalone simple_flash_attn_profiled DSP qtimer event trace,regenerated ntff/json and README
+stale_archives,artifacts/flashattention/**/qprof_thread_only_archive and archive_before_event_trace_*,6 directories,contained old wrong lane mapping,deleted

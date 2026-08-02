@@ -1,0 +1,231 @@
+{
+  "aggregation": "per iteration sums across kv_head records, then median/mean across measured iterations",
+  "by_qo_len": {
+    "16": {
+      "host_elapsed_us": {
+        "count": 20,
+        "mean": 897.75,
+        "median": 885.5
+      },
+      "mean_pct": {
+        "core_acc": 1.1585524602967978,
+        "k_load": 15.000433914779137,
+        "o_scale": 0.11715699036709193,
+        "o_store": 1.0544129133038271,
+        "q_load": 0.7116202377852989,
+        "qk_dot": 1.097804391217565,
+        "safe_sm": 68.22442072376985,
+        "v_load": 12.63559836848043
+      },
+      "mean_us": {
+        "core_acc": 13.35,
+        "k_load": 172.85,
+        "o_scale": 1.35,
+        "o_store": 12.15,
+        "profiled_total": 1152.3,
+        "q_load": 8.2,
+        "qk_dot": 12.65,
+        "safe_sm": 786.15,
+        "v_load": 145.6
+      },
+      "median_pct": {
+        "core_acc": 1.1279826464208242,
+        "k_load": 14.837310195227765,
+        "o_scale": 0.08676789587852494,
+        "o_store": 1.0412147505422993,
+        "q_load": 0.6941431670281996,
+        "qk_dot": 1.1279826464208242,
+        "safe_sm": 68.54663774403471,
+        "v_load": 12.537960954446856
+      },
+      "median_us": {
+        "core_acc": 13.0,
+        "k_load": 171.0,
+        "o_scale": 1.0,
+        "o_store": 12.0,
+        "profiled_total": 1152.5,
+        "q_load": 8.0,
+        "qk_dot": 13.0,
+        "safe_sm": 790.0,
+        "v_load": 144.5
+      },
+      "record_count_values": [
+        2
+      ],
+      "valid_iterations": 20
+    },
+    "32": {
+      "host_elapsed_us": {
+        "count": 20,
+        "mean": 1430.8,
+        "median": 1434.0
+      },
+      "mean_pct": {
+        "core_acc": 1.7639944318933842,
+        "k_load": 8.06234453800689,
+        "o_scale": 0.13920266538874054,
+        "o_store": 1.058853061317633,
+        "q_load": 0.7302434905638848,
+        "qk_dot": 1.0816731703977545,
+        "safe_sm": 81.25328039068026,
+        "v_load": 5.910408251751443
+      },
+      "mean_us": {
+        "core_acc": 38.65,
+        "k_load": 176.65,
+        "o_scale": 3.05,
+        "o_store": 23.2,
+        "profiled_total": 2191.05,
+        "q_load": 16.0,
+        "qk_dot": 23.7,
+        "safe_sm": 1780.3,
+        "v_load": 129.5
+      },
+      "median_pct": {
+        "core_acc": 1.7800091282519397,
+        "k_load": 8.010041077133728,
+        "o_scale": 0.13692377909630307,
+        "o_store": 1.0497489730716567,
+        "q_load": 0.730260155180283,
+        "qk_dot": 1.0953902327704246,
+        "safe_sm": 81.30990415335462,
+        "v_load": 5.887722501141032
+      },
+      "median_us": {
+        "core_acc": 39.0,
+        "k_load": 175.5,
+        "o_scale": 3.0,
+        "o_store": 23.0,
+        "profiled_total": 2191.0,
+        "q_load": 16.0,
+        "qk_dot": 24.0,
+        "safe_sm": 1781.5,
+        "v_load": 129.0
+      },
+      "record_count_values": [
+        2
+      ],
+      "valid_iterations": 20
+    },
+    "4": {
+      "host_elapsed_us": {
+        "count": 20,
+        "mean": 572.95,
+        "median": 568.0
+      },
+      "mean_pct": {
+        "core_acc": 0.43206471777900357,
+        "k_load": 33.17705460562603,
+        "o_scale": 0.24820739106453396,
+        "o_store": 0.6618863761720906,
+        "q_load": 0.38610038610038616,
+        "qk_dot": 0.5331862474719617,
+        "safe_sm": 31.549917264202982,
+        "v_load": 33.01158301158302
+      },
+      "mean_us": {
+        "core_acc": 2.35,
+        "k_load": 180.45,
+        "o_scale": 1.35,
+        "o_store": 3.6,
+        "profiled_total": 543.9,
+        "q_load": 2.1,
+        "qk_dot": 2.9,
+        "safe_sm": 171.6,
+        "v_load": 179.55
+      },
+      "median_pct": {
+        "core_acc": 0.36900369003690037,
+        "k_load": 33.30258302583026,
+        "o_scale": 0.18450184501845018,
+        "o_store": 0.7380073800738007,
+        "q_load": 0.36900369003690037,
+        "qk_dot": 0.5535055350553505,
+        "safe_sm": 31.642066420664207,
+        "v_load": 32.84132841328413
+      },
+      "median_us": {
+        "core_acc": 2.0,
+        "k_load": 180.5,
+        "o_scale": 1.0,
+        "o_store": 4.0,
+        "profiled_total": 542.0,
+        "q_load": 2.0,
+        "qk_dot": 3.0,
+        "safe_sm": 171.5,
+        "v_load": 178.0
+      },
+      "record_count_values": [
+        2
+      ],
+      "valid_iterations": 20
+    },
+    "8": {
+      "host_elapsed_us": {
+        "count": 20,
+        "mean": 692.9,
+        "median": 679.5
+      },
+      "mean_pct": {
+        "core_acc": 0.904891476301968,
+        "k_load": 22.027463139910143,
+        "o_scale": 0.13288616085553376,
+        "o_store": 0.8669240017718155,
+        "q_load": 0.5188888185787509,
+        "qk_dot": 0.9491868632538126,
+        "safe_sm": 47.34544073910018,
+        "v_load": 27.254318800227807
+      },
+      "mean_us": {
+        "core_acc": 7.15,
+        "k_load": 174.05,
+        "o_scale": 1.05,
+        "o_store": 6.85,
+        "profiled_total": 790.15,
+        "q_load": 4.1,
+        "qk_dot": 7.5,
+        "safe_sm": 374.1,
+        "v_load": 215.35
+      },
+      "median_pct": {
+        "core_acc": 0.8951406649616368,
+        "k_load": 21.86700767263427,
+        "o_scale": 0.1278772378516624,
+        "o_store": 0.8951406649616368,
+        "q_load": 0.5115089514066496,
+        "qk_dot": 0.8951406649616368,
+        "safe_sm": 47.82608695652174,
+        "v_load": 26.982097186700766
+      },
+      "median_us": {
+        "core_acc": 7.0,
+        "k_load": 171.0,
+        "o_scale": 1.0,
+        "o_store": 7.0,
+        "profiled_total": 782.0,
+        "q_load": 4.0,
+        "qk_dot": 7.0,
+        "safe_sm": 374.0,
+        "v_load": 211.0
+      },
+      "record_count_values": [
+        2
+      ],
+      "valid_iterations": 20
+    }
+  },
+  "components": [
+    "q_load",
+    "k_load",
+    "v_load",
+    "qk_dot",
+    "safe_sm",
+    "core_acc",
+    "o_scale",
+    "o_store"
+  ],
+  "mode": [
+    "baseline"
+  ],
+  "percentage_denominator": "sum(profiled_components)"
+}

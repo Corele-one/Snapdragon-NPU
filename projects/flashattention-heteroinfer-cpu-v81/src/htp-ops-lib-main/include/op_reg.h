@@ -1,0 +1,428 @@
+#pragma once
+
+#include <stdint.h>
+
+enum HtpOpsIndex {
+  HTP_OPS_RMS_NORM_F32,
+  HTP_OPS_MAT_MUL_PERMUTED_W16A32,
+  HTP_OPS_MAT_MUL_PERMUTED_W4D16A32,
+  HTP_OPS_MAT_MUL_PERMUTED_W8D16A32,
+  HTP_OPS_MAT_MUL_PERMUTED_W4D16A32_IQ4_NL,
+  HTP_OPS_MAT_MUL_PERMUTED_W8PC_A8PT,
+  HTP_OPS_FLASH_ATTN_QO_F32_KV_F16,
+  HTP_OPS_FLASH_ATTN_PROFILE_QO_F32_KV_F16,
+  HTP_OPS_HMX_INT8_GATE,
+  HTP_OPS_ROOFLINE_BENCH,
+  HTP_OPS_COUNT,
+};
+
+enum LlmNpuModeFlags {
+  LLM_NPU_MODE_LUT_EXP          = 1 << 0,
+  LLM_NPU_MODE_HMX_AWARE_TILE   = 1 << 1,
+  LLM_NPU_MODE_TRACE            = 1 << 8,
+  LLM_NPU_MODE_DETAILED_TRACE   = 1 << 9,
+};
+
+struct RpcmemBufAddr {
+  int32_t fd;
+  int32_t offset;
+} __attribute__((packed));
+
+struct RmsNormF32Params {
+  struct RpcmemBufAddr dst;
+  struct RpcmemBufAddr src;
+  int32_t       ne0;
+  int32_t       ne1;
+  int64_t       trace_id;
+  int32_t       mode_flags;
+  int32_t       max_profile_events;
+  struct RpcmemBufAddr profile;
+} __attribute__((packed));
+
+struct MatMulParams {
+  struct RpcmemBufAddr output;
+  struct RpcmemBufAddr activation; // m * k
+  struct RpcmemBufAddr weight; // k * n
+  int32_t m;
+  int32_t k;
+  int32_t n;
+  int64_t trace_id;
+  int32_t mode_flags;
+  int32_t max_profile_events;
+  struct RpcmemBufAddr profile;
+} __attribute__((packed));
+
+struct HmxInt8GateParams {
+  struct RpcmemBufAddr output;
+  int32_t max_results;
+  int32_t reserved;
+} __attribute__((packed));
+
+struct HmxInt8GateResult {
+  int32_t selector;
+  int32_t nan_count;
+  int32_t variant;
+  int32_t output_kind;
+  int32_t tile_bytes;
+  int32_t reserved;
+  float expected;
+  float first8[8];
+  float min_value;
+  float max_value;
+  float mean_value;
+  float rmse;
+} __attribute__((packed));
+
+enum RooflineBenchMode {
+  ROOFLINE_BENCH_MODE_HMX_FP16 = 1,
+  ROOFLINE_BENCH_MODE_DDR_BW = 2,
+  ROOFLINE_BENCH_MODE_VTCM_BW = 3,
+  ROOFLINE_BENCH_MODE_HMX_DMA_BW = 4,
+  ROOFLINE_BENCH_MODE_HVX_FP16 = 5,
+  ROOFLINE_BENCH_MODE_MIX_PRECISION = 6,
+  ROOFLINE_BENCH_MODE_HMX_INT8_SHAPE_SWEEP = 7,
+  ROOFLINE_BENCH_MODE_SIGNED_INT8_ZERO_OVERHEAD = 8,
+};
+
+enum RooflineBenchKind {
+  ROOFLINE_BENCH_KIND_HMX_FP16_GEMM = 1,
+  ROOFLINE_BENCH_KIND_DDR_READ = 2,
+  ROOFLINE_BENCH_KIND_DDR_WRITE = 3,
+  ROOFLINE_BENCH_KIND_DDR_COPY = 4,
+  ROOFLINE_BENCH_KIND_VTCM_READ = 5,
+  ROOFLINE_BENCH_KIND_VTCM_WRITE = 6,
+  ROOFLINE_BENCH_KIND_VTCM_COPY = 7,
+  ROOFLINE_BENCH_KIND_HMX_DMA_READ = 8,
+  ROOFLINE_BENCH_KIND_HVX_FP16_GEMM = 9,
+  ROOFLINE_BENCH_KIND_HVX_FP32_GEMM = 10,
+  ROOFLINE_BENCH_KIND_HVX_INT16_GEMM = 11,
+  // Reserved legacy ids from an earlier semantic-only prototype.  The mixed-precision
+  // roofline does not emit these as peaks because sign-extending INT8/INT4 into INT16
+  // is not a native INT8/INT4 hardware MAC measurement.
+  ROOFLINE_BENCH_KIND_HVX_INT8_AS_INT16_GEMM = 12,
+  ROOFLINE_BENCH_KIND_HVX_INT4_AS_INT16_GEMM = 13,
+  ROOFLINE_BENCH_KIND_HVX_INT4_INT8_AS_INT16_GEMM = 14,
+  ROOFLINE_BENCH_KIND_HVX_INT4_INT16_GEMM = 15,
+  ROOFLINE_BENCH_KIND_HVX_INT8_INT16_GEMM = 16,
+  ROOFLINE_BENCH_KIND_HMX_INT8_RAW_UB_B_GEMM = 17,
+  ROOFLINE_BENCH_KIND_HMX_INT8_SIGNED_K2_GEMM = 18,
+  ROOFLINE_BENCH_KIND_FORMAT_Q4_0_DECODE_FP16_GEMM = 19,
+  ROOFLINE_BENCH_KIND_FORMAT_IQ4_NL_DECODE_FP16_GEMM = 20,
+  ROOFLINE_BENCH_KIND_NOT_AVAILABLE = 21,
+  ROOFLINE_BENCH_KIND_HMX_INT8_INT4_WEIGHT_N_GEMM = 22,
+  ROOFLINE_BENCH_KIND_HMX_INT8_SIGNED_ZP_CORRECTED_GEMM = 23,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_PRODUCER_COPY = 24,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_PRODUCER_COPY_XOR = 25,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_PRODUCER_XOR_INPLACE = 26,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_COLSUM_PRECOMPUTE = 27,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_HVX_BIAS_SCALE_STORE = 28,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_REQUANT_STORE_ZP0 = 29,
+  ROOFLINE_BENCH_KIND_SIGNED_A8_REQUANT_STORE_ZP128 = 30,
+  ROOFLINE_BENCH_KIND_HMX_FP16_INT8_WEIGHT_B_GEMM = 31,
+  ROOFLINE_BENCH_KIND_HMX_FP8_GEMM = 32,
+  // V81 HVX register-resident throughput probes. These are benchmark-only
+  // instruction roofs and remain separate from the software GEMM rows above.
+  ROOFLINE_BENCH_KIND_HVX_FP32_MULADD_PEAK = 33,
+  ROOFLINE_BENCH_KIND_HVX_FP16_MAC_PEAK = 34,
+  ROOFLINE_BENCH_KIND_HVX_BF16_MAC_PEAK = 35,
+  ROOFLINE_BENCH_KIND_HVX_FP8_MAC_PEAK = 36,
+  ROOFLINE_BENCH_KIND_HVX_S16_MAC_PEAK = 37,
+  ROOFLINE_BENCH_KIND_HVX_U16_MAC_PEAK = 38,
+  ROOFLINE_BENCH_KIND_HVX_S16_U16_MAC_PEAK = 39,
+  ROOFLINE_BENCH_KIND_HVX_S8_MAC_PEAK = 40,
+  ROOFLINE_BENCH_KIND_HVX_U8_MAC_PEAK = 41,
+  ROOFLINE_BENCH_KIND_HVX_U8_S8_MAC_PEAK = 42,
+  ROOFLINE_BENCH_KIND_HMX_FP16_INT4_WEIGHT_N_GEMM = 43,
+  // V81 manual-only smoke rows. These validate control/data movement
+  // instructions and intentionally do not publish a compute peak.
+  ROOFLINE_BENCH_KIND_V81_HMX_MANUAL_SMOKE = 44,
+};
+
+enum RooflineBenchEngine {
+  ROOFLINE_BENCH_ENGINE_UNKNOWN = 0,
+  ROOFLINE_BENCH_ENGINE_HMX = 1,
+  ROOFLINE_BENCH_ENGINE_HVX = 2,
+  ROOFLINE_BENCH_ENGINE_FORMAT_EFFECTIVE = 3,
+  ROOFLINE_BENCH_ENGINE_SCALAR = 4,
+};
+
+enum RooflineBenchDType {
+  ROOFLINE_BENCH_DTYPE_UNKNOWN = 0,
+  ROOFLINE_BENCH_DTYPE_FP32 = 1,
+  ROOFLINE_BENCH_DTYPE_FP16 = 2,
+  ROOFLINE_BENCH_DTYPE_INT16 = 3,
+  ROOFLINE_BENCH_DTYPE_INT8 = 4,
+  ROOFLINE_BENCH_DTYPE_INT4_LINEAR = 5,
+  ROOFLINE_BENCH_DTYPE_Q4_0 = 6,
+  ROOFLINE_BENCH_DTYPE_IQ4_NL = 7,
+  ROOFLINE_BENCH_DTYPE_INT32 = 8,
+  ROOFLINE_BENCH_DTYPE_FP8 = 9,
+  ROOFLINE_BENCH_DTYPE_BF16 = 10,
+  ROOFLINE_BENCH_DTYPE_UINT16 = 11,
+  ROOFLINE_BENCH_DTYPE_UINT8 = 12,
+};
+
+enum RooflineBenchPath {
+  ROOFLINE_BENCH_PATH_UNKNOWN = 0,
+  ROOFLINE_BENCH_PATH_HMX_FP16_TILE = 1,
+  ROOFLINE_BENCH_PATH_HMX_RAW_UB_B_DEEP_GEMM = 2,
+  ROOFLINE_BENCH_PATH_HMX_SIGNED_K2 = 3,
+  ROOFLINE_BENCH_PATH_HVX_NATIVE = 4,
+  ROOFLINE_BENCH_PATH_HVX_SIGNEXT_I16 = 5,
+  ROOFLINE_BENCH_PATH_FORMAT_DECODE_TO_FP16 = 6,
+  ROOFLINE_BENCH_PATH_NOT_AVAILABLE = 7,
+  ROOFLINE_BENCH_PATH_HMX_RAW_UB_N_DEEP_GEMM = 8,
+  ROOFLINE_BENCH_PATH_HMX_SIGNED_A8_VIA_UB_COLSUM = 9,
+  ROOFLINE_BENCH_PATH_HVX_COPY = 10,
+  ROOFLINE_BENCH_PATH_HVX_COPY_XOR_0X80 = 11,
+  ROOFLINE_BENCH_PATH_HVX_XOR_0X80_INPLACE = 12,
+  ROOFLINE_BENCH_PATH_OFFLINE_COLSUM = 13,
+  ROOFLINE_BENCH_PATH_HVX_BIAS_SCALE_FLOAT_STORE = 14,
+  ROOFLINE_BENCH_PATH_HVX_REQUANT_STORE_ZP = 15,
+  ROOFLINE_BENCH_PATH_HMX_HF_B_GEMM = 16,
+  ROOFLINE_BENCH_PATH_HMX_F8_F8_GEMM = 17,
+  ROOFLINE_BENCH_PATH_HVX_FP32_QF32_MUL_ADD = 18,
+  ROOFLINE_BENCH_PATH_HVX_FP16_VDMPYACC = 19,
+  ROOFLINE_BENCH_PATH_HVX_BF16_VMPYACC = 20,
+  ROOFLINE_BENCH_PATH_HVX_FP8_VMPYACC = 21,
+  ROOFLINE_BENCH_PATH_HVX_S16_VMPYACC = 22,
+  ROOFLINE_BENCH_PATH_HVX_U16_VMPYACC = 23,
+  ROOFLINE_BENCH_PATH_HVX_S16_U16_VMPYACC = 24,
+  ROOFLINE_BENCH_PATH_HVX_S8_VRMPYACC = 25,
+  ROOFLINE_BENCH_PATH_HVX_U8_VRMPYACC = 26,
+  ROOFLINE_BENCH_PATH_HVX_U8_S8_VRMPYACC = 27,
+  ROOFLINE_BENCH_PATH_HMX_HF_N_GEMM = 28,
+};
+
+struct RooflineBenchParams {
+  struct RpcmemBufAddr output;
+  struct RpcmemBufAddr src;
+  struct RpcmemBufAddr dst;
+  int32_t max_results;
+  int32_t mode;
+  int32_t warmup;
+  int32_t iters;
+  int32_t bytes;
+} __attribute__((packed));
+
+struct RooflineBenchResult {
+  int32_t mode;
+  int32_t kind;
+  int32_t variant;
+  int32_t size;
+  int32_t iters;
+  int64_t elapsed_us;
+  int64_t work_items;
+  int64_t metric_x10000;
+  int32_t engine;
+  int32_t lhs_dtype;
+  int32_t rhs_dtype;
+  int32_t acc_dtype;
+  int32_t path;
+  int32_t correctness;
+  int32_t m;
+  int32_t k;
+  int32_t n;
+  int32_t mt;
+  int32_t kt;
+  int32_t nt;
+  int32_t tile_bytes;
+  int32_t reserved0;
+  int64_t a_bytes;
+  int64_t b_bytes;
+  int64_t c_bytes;
+  int64_t scales_bytes;
+  int64_t allocated_bytes;
+  int64_t total_vtcm_bytes;
+} __attribute__((packed));
+
+struct FlashAttnParams {
+  struct RpcmemBufAddr o;
+  struct RpcmemBufAddr q;
+  struct RpcmemBufAddr k;
+  struct RpcmemBufAddr v;
+  struct RpcmemBufAddr mask;
+  int32_t qo_len;
+  int32_t kv_len;
+  int32_t n_heads;
+  int32_t n_kv_heads;
+  int32_t head_dim;
+  int64_t trace_id;
+  int32_t mode_flags;
+  int32_t max_profile_events;
+  struct RpcmemBufAddr profile;
+} __attribute__((packed));
+
+#define LLM_TRACE_PROFILE_MAGIC 0x4c545250
+
+enum LlmTraceStageComponent {
+  LLM_TRACE_STAGE_VALIDATE_IN = 1,
+  LLM_TRACE_STAGE_VALIDATE_OUT,
+  LLM_TRACE_STAGE_ACTIVATION_HVX_LOAD,
+  LLM_TRACE_STAGE_ACTIVATION_DMA_INFLIGHT,
+  LLM_TRACE_STAGE_ACTIVATION_DMA_WAIT,
+  LLM_TRACE_STAGE_WEIGHT_DMA_INFLIGHT,
+  LLM_TRACE_STAGE_WEIGHT_DMA_WAIT,
+  LLM_TRACE_STAGE_WEIGHT_HVX_DEQUANT,
+  LLM_TRACE_STAGE_WEIGHT_HVX_LOAD,
+  LLM_TRACE_STAGE_HMX_MMA,
+  LLM_TRACE_STAGE_HVX_COMPUTE,
+  LLM_TRACE_STAGE_OUTPUT_STORE,
+  LLM_TRACE_STAGE_ACTIVATION_QUANTIZE,
+  LLM_TRACE_STAGE_ACTIVATION_PACK,
+  LLM_TRACE_STAGE_FLASH_Q_LOAD,
+  LLM_TRACE_STAGE_FLASH_K_LOAD,
+  LLM_TRACE_STAGE_FLASH_V_LOAD,
+  LLM_TRACE_STAGE_FLASH_QK_DOT,
+  LLM_TRACE_STAGE_FLASH_SAFE_SM,
+  LLM_TRACE_STAGE_FLASH_CORE_ACC,
+  LLM_TRACE_STAGE_FLASH_O_SCALE,
+  LLM_TRACE_STAGE_FLASH_O_STORE,
+};
+
+enum LlmTraceStageUnit {
+  LLM_TRACE_UNIT_OTHER = 0,
+  LLM_TRACE_UNIT_DMA = 1,
+  LLM_TRACE_UNIT_HVX = 2,
+  LLM_TRACE_UNIT_HMX = 3,
+  LLM_TRACE_UNIT_STORE = 4,
+  LLM_TRACE_UNIT_MEMORY = 5,
+  LLM_TRACE_UNIT_SCALAR = 6,
+};
+
+struct LlmTraceProfileHeader {
+  int32_t magic;
+  int32_t max_events;
+  int32_t event_count;
+  int32_t event_overflow;
+  int32_t reserved0;
+  int32_t reserved1;
+};
+
+struct LlmTraceProfileEvent {
+  int64_t trace_id;
+  int32_t op_index;
+  int32_t stage;
+  int32_t unit;
+  int32_t worker;
+  int32_t m;
+  int32_t k;
+  int32_t n;
+  int32_t qo_len;
+  int32_t kv_len;
+  int32_t n_heads;
+  int32_t n_kv_heads;
+  int32_t head_dim;
+  int32_t mr;
+  int32_t nc;
+  int32_t kk;
+  int32_t chunk_m;
+  int32_t chunk_n;
+  int32_t chunk_k;
+  int32_t flags;
+  int64_t bytes;
+  int64_t t0_us;
+  int64_t t1_us;
+  int64_t dur_us;
+};
+
+static inline struct LlmTraceProfileEvent *llm_trace_profile_events(struct LlmTraceProfileHeader *header) {
+  return (struct LlmTraceProfileEvent *) (header + 1);
+}
+
+static inline const struct LlmTraceProfileEvent *llm_trace_profile_events_const(
+  const struct LlmTraceProfileHeader *header) {
+  return (const struct LlmTraceProfileEvent *) (header + 1);
+}
+
+#define FIGURE8_PROFILE_MAGIC 0x46494738
+
+enum Figure8ProfileComponent {
+  FIGURE8_COMP_Q_LOAD = 1,
+  FIGURE8_COMP_K_LOAD,
+  FIGURE8_COMP_V_LOAD,
+  FIGURE8_COMP_QK_DOT,
+  FIGURE8_COMP_SAFE_SM,
+  FIGURE8_COMP_CORE_ACC,
+  FIGURE8_COMP_O_SCALE,
+  FIGURE8_COMP_O_STORE,
+};
+
+struct Figure8ProfileHeader {
+  int32_t magic;
+  int32_t max_records;
+  int32_t record_count;
+  int32_t max_events;
+  int32_t event_count;
+  int32_t event_overflow;
+  int32_t reserved0;
+  int32_t reserved1;
+  int64_t dispatch_mapping_us;
+  int64_t dispatch_validate_in_us;
+  int64_t dispatch_compute_us;
+  int64_t dispatch_validate_out_us;
+  int64_t dispatch_total_us;
+};
+
+struct Figure8ProfileRecord {
+  int32_t lut_exp;
+  int32_t qo_len;
+  int32_t kv_len;
+  int32_t n_heads;
+  int32_t n_kv_heads;
+  int32_t head_dim;
+  int32_t kv_head;
+  int32_t worker;
+  int64_t profiled_total;
+  int64_t q_load;
+  int64_t k_load;
+  int64_t v_load;
+  int64_t qk_dot;
+  int64_t safe_sm;
+  int64_t core_acc;
+  int64_t o_scale;
+  int64_t o_store;
+};
+
+struct Figure8ProfileEvent {
+  int32_t component;
+  int32_t lut_exp;
+  int32_t qo_len;
+  int32_t kv_len;
+  int32_t n_heads;
+  int32_t n_kv_heads;
+  int32_t head_dim;
+  int32_t kv_head;
+  int32_t worker;
+  int32_t block_r;
+  int32_t block_c;
+  int32_t reserved;
+  int64_t t0_us;
+  int64_t t1_us;
+  int64_t dur_us;
+};
+
+static inline struct Figure8ProfileRecord *figure8_profile_records(struct Figure8ProfileHeader *header) {
+  return (struct Figure8ProfileRecord *) (header + 1);
+}
+
+static inline const struct Figure8ProfileRecord *figure8_profile_records_const(
+  const struct Figure8ProfileHeader *header) {
+  return (const struct Figure8ProfileRecord *) (header + 1);
+}
+
+static inline struct Figure8ProfileEvent *figure8_profile_events(struct Figure8ProfileHeader *header) {
+  return (struct Figure8ProfileEvent *) (figure8_profile_records(header) + header->max_records);
+}
+
+static inline const struct Figure8ProfileEvent *figure8_profile_events_const(
+  const struct Figure8ProfileHeader *header) {
+  return (const struct Figure8ProfileEvent *) (figure8_profile_records_const(header) + header->max_records);
+}
+
+struct FlashAttnProfileParams {
+  struct FlashAttnParams attn;
+  struct RpcmemBufAddr   profile;
+  int32_t                max_records;
+  int32_t                max_events;
+} __attribute__((packed));

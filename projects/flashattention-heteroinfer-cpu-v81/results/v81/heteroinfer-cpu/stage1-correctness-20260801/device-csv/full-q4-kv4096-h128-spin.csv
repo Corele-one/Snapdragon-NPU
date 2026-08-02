@@ -1,0 +1,7 @@
+mode,wait_policy,wait_strategy,host_cpu_requested,host_cpu_actual,cpu_role,qo_len,kv_len,n_heads,n_kv_heads,head_dim,phase,iteration,host_wall_us,host_thread_cpu_us,wait_wall_us,wait_thread_cpu_us,sleep_us,spin_us,poll_count,predicted_us,prediction_error_us,descriptor_prepare_us,dsp_mapping_us,dsp_validate_in_us,dsp_compute_us,dsp_validate_out_us,dsp_dispatch_total_us,output_hash,ret
+baseline,spin,spin,0,0,low-capacity,4,4096,12,2,128,warmup,0,914,914,914,914,0,914,311387,0,0,0,6,68,826,5,906,c50c94b789741948,0
+baseline,spin,spin,0,0,low-capacity,4,4096,12,2,128,warmup,1,910,909,909,909,0,909,309726,0,0,0,6,68,821,6,902,c50c94b789741948,0
+baseline,spin,spin,0,0,low-capacity,4,4096,12,2,128,warmup,2,908,888,906,886,0,906,301496,0,0,0,7,68,820,5,900,c50c94b789741948,0
+baseline,spin,spin,0,0,low-capacity,4,4096,12,2,128,warmup,3,912,884,911,883,0,911,300033,0,0,0,6,69,824,5,904,c50c94b789741948,0
+baseline,spin,spin,0,0,low-capacity,4,4096,12,2,128,warmup,4,911,882,909,882,0,909,299540,0,0,0,6,69,822,6,903,c50c94b789741948,0
+baseline,spin,spin,0,0,low-capacity,4,4096,12,2,128,measure,0,912,885,911,884,0,911,300555,0,0,0,7,69,823,5,904,c50c94b789741948,0
