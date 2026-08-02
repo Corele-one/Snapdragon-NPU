@@ -20,6 +20,15 @@ if(HEXAGON_SDK_ROOT)
 else()
     include(${HEXAGON_CMAKE_ROOT}/hexagon_fun.cmake)
 endif()
+
+# SDK releases without v81 metadata can accept DSP_ARCH=v81 while silently
+# selecting an older architecture.  Refuse that build before producing a
+# misleading artifact for SM8750P.
+if(DSP_VERSION STREQUAL "v81" AND NOT HEXAGON_ARCH STREQUAL "v81")
+    message(FATAL_ERROR
+        "DSP_ARCH=v81 was requested, but this SDK resolved HEXAGON_ARCH=${HEXAGON_ARCH}. "
+        "Use a Hexagon SDK/toolchain with v81 target libraries.")
+endif()
 set(ignoreVar ${DEPENDENCIES}${V})
 
 # NOTE(hzx): QAIC generated code are located in ${CMAKE_CURRENT_BINARY_DIR}

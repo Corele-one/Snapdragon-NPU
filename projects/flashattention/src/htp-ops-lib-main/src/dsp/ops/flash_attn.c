@@ -322,7 +322,10 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   uint8_t *hmx_output_scales_qk = (uint8_t *) vtcm_seq_alloc(&vtcm_cur, 256);
 
   // end VTCM allocation
-  assert(vtcm_cur <= vtcm_limit);
+  if (vtcm_cur > vtcm_limit) {
+    FARF(ALWAYS, "FA VTCM allocation exceeded grant by %d bytes", (int) (vtcm_cur - vtcm_limit));
+    return;
+  }
 
   float  qk_scale    = 1.0f / sqrtf(head_dim) * 1.44269504f;  // log2(e) = 1.44269504
   __fp16 qk_scale_hf = (__fp16) qk_scale;                     // NOTE: this conversion can be very slow
@@ -628,7 +631,10 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               Q6_V_vror_VR(v_s_rowmax_pack2, VLEN - 2 * sizeof(__fp16));   // lowest 4 bytes valid
             HVX_Vector v_s_rowmax_local_rot =
               Q6_V_vror_VR(v_s_rowmax_local, r_vec_off * sizeof(__fp16));  // highest r*2 bytes valid
-            v_s_rowmax_local = Q6_V_vlalign_VVR(v_s_rowmax_pack2_rot, v_s_rowmax_local_rot, r_vec_off * sizeof(__fp16));
+            const HVX_VectorPred q_two_rows = Q6_Q_vsetq_R(2 * sizeof(__fp16));
+            v_s_rowmax_local_rot = Q6_V_vmux_QVV(q_two_rows, v_s_rowmax_pack2_rot, v_s_rowmax_local_rot);
+            v_s_rowmax_local = Q6_V_vror_VR(v_s_rowmax_local_rot,
+                                             (VLEN - r_vec_off * sizeof(__fp16)) % VLEN);
 
             // compute m_i^j = max(m_i^{j-1}, rowmax(S_i^j))
             HVX_Vector v_m_cur = Q6_Vhf_vmax_VhfVhf(mvec_m[r_vec_idx], v_s_rowmax_local);
@@ -740,7 +746,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             // HVX_Vector v_p_rowsum_pack2     = Q6_V_hi_W(Q6_W_vshuff_VVR(v_p_rowsum1, v_p_rowsum0, -2));
             HVX_Vector v_p_rowsum_pack2_rot = Q6_V_vror_VR(v_p_rowsum_pack2, VLEN - 2 * sizeof(__fp16));
             HVX_Vector v_p_rowsum_local_rot = Q6_V_vror_VR(v_p_rowsum_local, r_vec_off * sizeof(__fp16));
-            v_p_rowsum_local = Q6_V_vlalign_VVR(v_p_rowsum_pack2_rot, v_p_rowsum_local_rot, r_vec_off * sizeof(__fp16));
+            v_p_rowsum_local_rot = Q6_V_vmux_QVV(q_two_rows, v_p_rowsum_pack2_rot, v_p_rowsum_local_rot);
+            v_p_rowsum_local = Q6_V_vror_VR(v_p_rowsum_local_rot,
+                                             (VLEN - r_vec_off * sizeof(__fp16)) % VLEN);
           }
 
           // write local vector registers back to VTCM
@@ -1631,9 +1639,13 @@ static int simple_flash_attn_impl(__fp16 *restrict O, const __fp16 *restrict Q, 
     return -1;
   }
 
-  const int    n_workers            = num_hvx128_contexts;
-  const size_t vtcm_size_per_thread = 1024 * 1024;
-  assert(n_workers * vtcm_size_per_thread <= 6 * 1024 * 1024);  // don't use too much VTCM
+  const int     n_workers            = 1;
+  const size_t  vtcm_size_per_thread = vtcm_manager_get_total_size();
+  uint8_t      *vtcm_base            = (uint8_t *) vtcm_manager_get_vtcm_base();
+  if (!vtcm_base || vtcm_size_per_thread == 0) {
+    FARF(ALWAYS, "FA not supported: no VTCM was granted");
+    return -1;
+  }
 
   simple_fa_task_state_t state;
   state.O          = O;
@@ -1658,19 +1670,13 @@ static int simple_flash_attn_impl(__fp16 *restrict O, const __fp16 *restrict Q, 
 
   state.task_id              = 0;
   state.n_tasks              = n_kv_heads;
-  state.vtcm_base            = (uint8_t *) vtcm_manager_get_vtcm_base();
+  state.vtcm_base            = vtcm_base;
   state.vtcm_size_per_thread = vtcm_size_per_thread;
-
-  worker_pool_job_t job;
-  job.fptr = simple_flash_attn_worker;
-  job.dptr = &state;
 
   int64_t t0 = HAP_perf_get_time_us();
 
   worker_pool_synctoken_init(&(state.sync_ctx), n_workers);
-  for (int i = 0; i < n_workers; ++i) {
-    worker_pool_submit(NULL, job);  // use default worker pool
-  }
+  simple_flash_attn_worker(&state, 0);
   worker_pool_synctoken_wait(&(state.sync_ctx));
 
   int64_t elapsed_us = HAP_perf_get_time_us() - t0;

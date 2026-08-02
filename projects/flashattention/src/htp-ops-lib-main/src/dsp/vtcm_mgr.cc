@@ -24,6 +24,12 @@ extern "C" {
 void vtcm_manager_setup() {
   using namespace vtcm_manager;
 
+  vtcm_base           = nullptr;
+  vtcm_reserved_start = nullptr;
+  vtcm_total_size     = 0;
+  vtcm_mgr_ctx_id     = 0;
+  reserved_areas.clear();
+
   int err;
 
   unsigned int            avail_size, total_size;
@@ -34,13 +40,15 @@ void vtcm_manager_setup() {
     return;
   }
   FARF(ALWAYS, "available VTCM size: %d KiB, total VTCM size: %d KiB", avail_size / 1024, total_size / 1024);
-  vtcm_total_size = total_size;
+  if (avail_size == 0) {
+    FARF(ALWAYS, "%s: no VTCM is currently available", __func__);
+    return;
+  }
 
   compute_res_attr_t req;
   HAP_compute_res_attr_init(&req);
 
-  // NOTE(hzx): here we try to request all VTCM memory in one page
-  HAP_compute_res_attr_set_vtcm_param(&req, total_size, 1);
+  HAP_compute_res_attr_set_vtcm_param(&req, avail_size, 1);
 
   vtcm_mgr_ctx_id = HAP_compute_res_acquire(&req, 10000);  // timeout 10ms
   if (vtcm_mgr_ctx_id == 0) {
@@ -49,9 +57,16 @@ void vtcm_manager_setup() {
   }
 
   vtcm_base = (uint8_t *) HAP_compute_res_attr_get_vtcm_ptr(&req);
-  memset(vtcm_base, 0, total_size);
+  if (!vtcm_base) {
+    FARF(ALWAYS, "%s: resource acquire returned no VTCM address", __func__);
+    HAP_compute_res_release(vtcm_mgr_ctx_id);
+    vtcm_mgr_ctx_id = 0;
+    return;
+  }
+  vtcm_total_size = avail_size;
+  memset(vtcm_base, 0, vtcm_total_size);
 
-  vtcm_reserved_start = vtcm_base + total_size;
+  vtcm_reserved_start = vtcm_base + vtcm_total_size;
 }
 
 void vtcm_manager_reset() {
@@ -60,6 +75,11 @@ void vtcm_manager_reset() {
   if (vtcm_mgr_ctx_id) {
     HAP_compute_res_release(vtcm_mgr_ctx_id);
   }
+  vtcm_base           = nullptr;
+  vtcm_reserved_start = nullptr;
+  vtcm_total_size     = 0;
+  vtcm_mgr_ctx_id     = 0;
+  reserved_areas.clear();
 }
 
 void *vtcm_manager_get_vtcm_base() {

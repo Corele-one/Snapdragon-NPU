@@ -60,6 +60,7 @@ void free_shared_mem_buf(void *buf, int fd, size_t size);
 struct Figure8AttnConfig {
   int         enabled;
   const char *mode;
+  const char *mask_mode;
   int         qo_len;
   int         kv_len;
   int         n_heads;
@@ -68,6 +69,7 @@ struct Figure8AttnConfig {
   int         warmup;
   int         iters;
   int         print_events;
+  int         compare_reference;
   const char *csv_out;
   int         hmx_int8_gate;
   int         hmx_int8_gate_search;
@@ -97,9 +99,9 @@ struct Figure8AttnConfig {
 
 static void figure8_print_usage(const char *prog) {
   fprintf(stderr,
-          "Usage: %s --figure8-attn [--mode baseline|lut-exp] [--qo-len N] [--kv-len N]\n"
+          "Usage: %s --figure8-attn [--mode baseline|lut-exp] [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
           "          [--n-heads N] [--n-kv-heads N] [--head-dim N] [--warmup N] [--iters N]\n"
-          "          [--no-events] [--csv-out PATH]\n"
+          "          [--no-events] [--compare-reference] [--csv-out PATH]\n"
           "       %s --hmx-int8-gate\n"
           "       %s --hmx-int8-search-gate\n"
           "       %s --hmx-int8-bitplane-gate\n"
@@ -162,6 +164,7 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
   *cfg = (struct Figure8AttnConfig) {
     .enabled    = 0,
     .mode       = "baseline",
+    .mask_mode  = "full",
     .qo_len     = 4,
     .kv_len     = 4096,
     .n_heads    = 12,
@@ -170,6 +173,7 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .warmup     = 5,
     .iters      = 20,
     .print_events = 1,
+    .compare_reference = 0,
     .csv_out    = NULL,
     .hmx_int8_gate = 0,
     .hmx_int8_gate_search = 0,
@@ -256,6 +260,12 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
         return -1;
       }
       cfg->mode = argv[i];
+    } else if (strcmp(arg, "--mask-mode") == 0) {
+      if (++i >= argc) {
+        fprintf(stderr, "Missing value for --mask-mode\n");
+        return -1;
+      }
+      cfg->mask_mode = argv[i];
     } else if (strcmp(arg, "--qo-len") == 0) {
       if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->qo_len)) return -1;
     } else if (strcmp(arg, "--kv-len") == 0) {
@@ -274,6 +284,8 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
       if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->bench_bytes)) return -1;
     } else if (strcmp(arg, "--no-events") == 0) {
       cfg->print_events = 0;
+    } else if (strcmp(arg, "--compare-reference") == 0) {
+      cfg->compare_reference = 1;
     } else if (strcmp(arg, "--csv-out") == 0) {
       if (++i >= argc) {
         fprintf(stderr, "Missing value for --csv-out\n");
@@ -298,6 +310,11 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     fprintf(stderr, "Unsupported --mode: %s\n", cfg->mode);
     return -1;
   }
+  if (strcmp(cfg->mask_mode, "full") != 0 && strcmp(cfg->mask_mode, "causal") != 0 &&
+      strcmp(cfg->mask_mode, "padding") != 0) {
+    fprintf(stderr, "Unsupported --mask-mode: %s\n", cfg->mask_mode);
+    return -1;
+  }
   if (cfg->n_heads % cfg->n_kv_heads != 0) {
     fprintf(stderr, "n_heads must be divisible by n_kv_heads\n");
     return -1;
@@ -306,10 +323,10 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
 }
 
 static void figure8_fill_inputs(float *q, __fp16 *k, __fp16 *v, __fp16 *mask, int qo_len, int kv_len, int n_heads,
-                                int n_kv_heads, int head_dim) {
+                                int n_kv_heads, int head_dim, const char *mask_mode) {
   const size_t q_elems    = (size_t) qo_len * n_heads * head_dim;
   const size_t kv_elems   = (size_t) kv_len * n_kv_heads * head_dim;
-  const size_t mask_elems = (size_t) qo_len * kv_len;
+  const size_t kv_pad_len = align_up((size_t) kv_len, 64);
 
   for (size_t i = 0; i < q_elems; ++i) {
     int val = (int) ((i * 13u + 7u) % 251u) - 125;
@@ -321,9 +338,110 @@ static void figure8_fill_inputs(float *q, __fp16 *k, __fp16 *v, __fp16 *mask, in
     k[i]     = (__fp16) ((float) kval * 0.00390625f);
     v[i]     = (__fp16) ((float) vval * 0.00390625f);
   }
-  for (size_t i = 0; i < mask_elems; ++i) {
-    mask[i] = (__fp16) 0.0f;
+  for (int q_idx = 0; q_idx < qo_len; ++q_idx) {
+    for (size_t k_idx = 0; k_idx < kv_pad_len; ++k_idx) {
+      mask[(size_t) q_idx * kv_pad_len + k_idx] = (__fp16) -65504.0f;
+    }
+    for (int k_idx = 0; k_idx < kv_len; ++k_idx) {
+      int masked = 0;
+      if (strcmp(mask_mode, "causal") == 0) {
+        masked = k_idx > kv_len - qo_len + q_idx;
+      } else if (strcmp(mask_mode, "padding") == 0) {
+        masked = k_idx >= kv_len - 3;
+      }
+      mask[(size_t) q_idx * kv_pad_len + k_idx] = masked ? (__fp16) -65504.0f : (__fp16) 0.0f;
+    }
   }
+}
+
+static int figure8_compute_reference(float *output, float *scores, const float *q, const __fp16 *k,
+                                     const __fp16 *v, const __fp16 *mask, int qo_len, int kv_len, int n_heads,
+                                     int n_kv_heads, int head_dim) {
+  if (!output || !scores || !q || !k || !v || n_heads % n_kv_heads != 0) return -1;
+
+  const int    gqa_factor = n_heads / n_kv_heads;
+  const size_t qo_stride  = (size_t) n_heads * head_dim;
+  const size_t kv_stride  = (size_t) n_kv_heads * head_dim;
+  const size_t kv_pad_len = align_up((size_t) kv_len, 64);
+  const float  qk_scale   = 1.4426950408889634f / sqrtf((float) head_dim);
+
+  for (int q_idx = 0; q_idx < qo_len; ++q_idx) {
+    for (int h = 0; h < n_heads; ++h) {
+      const int     kv_h  = h / gqa_factor;
+      const float  *q_row = q + (size_t) q_idx * qo_stride + (size_t) h * head_dim;
+      float         row_max = -INFINITY;
+
+      for (int c = 0; c < kv_len; ++c) {
+        const __fp16 *k_row = k + (size_t) c * kv_stride + (size_t) kv_h * head_dim;
+        float dot = 0.0f;
+        for (int d = 0; d < head_dim; ++d) dot += q_row[d] * (float) k_row[d];
+        float score = dot * qk_scale;
+        if (mask) score += (float) mask[(size_t) q_idx * kv_pad_len + c];
+        scores[c] = score;
+        if (score > row_max) row_max = score;
+      }
+
+      float row_sum = 0.0f;
+      for (int c = 0; c < kv_len; ++c) {
+        scores[c] = exp2f(scores[c] - row_max);
+        row_sum += scores[c];
+      }
+      if (!(row_sum > 0.0f) || !isfinite(row_sum)) return -1;
+
+      float       *o_row   = output + (size_t) q_idx * qo_stride + (size_t) h * head_dim;
+      const float  inv_sum = 1.0f / row_sum;
+      for (int d = 0; d < head_dim; ++d) {
+        float value = 0.0f;
+        for (int c = 0; c < kv_len; ++c) {
+          const __fp16 *v_row = v + (size_t) c * kv_stride + (size_t) kv_h * head_dim;
+          value += scores[c] * (float) v_row[d];
+        }
+        o_row[d] = value * inv_sum;
+      }
+    }
+  }
+  return 0;
+}
+
+static int figure8_report_reference(const struct Figure8AttnConfig *cfg, const float *candidate,
+                                    const float *reference, size_t output_elems) {
+  double sq_error = 0.0;
+  double reference_sq = 0.0;
+  float  max_abs_error = 0.0f;
+  float  max_rel_error = 0.0f;
+  int    candidate_nonfinite = 0;
+  int    reference_nonfinite = 0;
+
+  for (size_t i = 0; i < output_elems; ++i) {
+    const float candidate_value = candidate[i];
+    const float reference_value = reference[i];
+    if (!isfinite(candidate_value)) ++candidate_nonfinite;
+    if (!isfinite(reference_value)) ++reference_nonfinite;
+    if (!isfinite(candidate_value) || !isfinite(reference_value)) continue;
+    const float error = candidate_value - reference_value;
+    const float abs_error = fabsf(error);
+    const float rel_error = abs_error / fmaxf(fabsf(reference_value), 1.0e-6f);
+    sq_error += (double) error * error;
+    reference_sq += (double) reference_value * reference_value;
+    if (abs_error > max_abs_error) max_abs_error = abs_error;
+    if (rel_error > max_rel_error) max_rel_error = rel_error;
+  }
+
+  const float rmse = (float) sqrt(sq_error / output_elems);
+  const float relative_l2 = reference_sq > 0.0 ? (float) sqrt(sq_error / reference_sq) : 0.0f;
+  const float rmse_limit = 2.0e-3f;
+  const float max_abs_limit = 1.0e-2f;
+  const int passed = candidate_nonfinite == 0 && reference_nonfinite == 0 && isfinite(rmse) &&
+                     rmse <= rmse_limit && max_abs_error <= max_abs_limit;
+  fprintf(stderr,
+          "FIG8_ATTENTION_COMPARE candidate_mode=%s reference_mode=host-fp32 qo_len=%d kv_len=%d "
+          "n_heads=%d n_kv_heads=%d head_dim=%d elements=%zu rmse=%g relative_l2=%g max_abs_error=%g "
+          "max_rel_error=%g rmse_limit=%g max_abs_limit=%g candidate_nonfinite=%d reference_nonfinite=%d gate=%s\n",
+          cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, output_elems,
+          rmse, relative_l2, max_abs_error, max_rel_error, rmse_limit, max_abs_limit,
+          candidate_nonfinite, reference_nonfinite,
+          passed ? "pass" : "fail");
+  return passed ? 0 : -1;
 }
 
 static int figure8_wait_channel(struct MessageHeader *msg, int64_t timeout_us) {
@@ -1205,7 +1323,7 @@ end:
 }
 
 static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
-  float  *q = NULL, *o = NULL;
+  float  *q = NULL, *o = NULL, *reference_output = NULL, *reference_scores = NULL;
   __fp16 *k = NULL, *v = NULL, *mask = NULL;
   void   *chan = NULL, *profile = NULL;
   int     q_fd = -1, k_fd = -1, v_fd = -1, o_fd = -1, mask_fd = -1, chan_fd = -1, profile_fd = -1;
@@ -1221,7 +1339,8 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   }
   const size_t q_size              = align_up((size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim * sizeof(float), 128);
   const size_t kv_size = align_up((size_t) cfg->kv_len * cfg->n_kv_heads * cfg->head_dim * sizeof(__fp16), 128);
-  const size_t mask_size = align_up((size_t) cfg->qo_len * cfg->kv_len * sizeof(__fp16), 128);
+  const size_t kv_pad_len = align_up((size_t) cfg->kv_len, 64);
+  const size_t mask_size = align_up((size_t) cfg->qo_len * kv_pad_len * sizeof(__fp16), 128);
   const size_t profile_size = align_up(sizeof(struct Figure8ProfileHeader) +
                                          profile_max_records * sizeof(struct Figure8ProfileRecord) +
                                          profile_max_events * sizeof(struct Figure8ProfileEvent),
@@ -1235,8 +1354,17 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   if (alloc_shared_mem_buf((void **) &mask, &mask_fd, mask_size)) goto end;
   if (alloc_shared_mem_buf(&profile, &profile_fd, profile_size)) goto end;
   if (alloc_shared_mem_buf(&chan, &chan_fd, max_msg_size)) goto end;
+  if (cfg->compare_reference) {
+    reference_output = (float *) malloc(q_size);
+    reference_scores = (float *) malloc((size_t) cfg->kv_len * sizeof(float));
+    if (!reference_output || !reference_scores) {
+      fprintf(stderr, "Failed to allocate Figure 8 reference buffers\n");
+      goto end;
+    }
+  }
 
-  figure8_fill_inputs(q, k, v, mask, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim);
+  figure8_fill_inputs(q, k, v, mask, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim,
+                      cfg->mask_mode);
   memset(o, 0, q_size);
 
   int err = create_htp_message_channel(chan_fd, max_msg_size);
@@ -1276,10 +1404,10 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   };
 
   fprintf(stderr,
-          "FIG8_ATTENTION_CONFIG mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d warmup=%d "
+          "FIG8_ATTENTION_CONFIG mode=%s mask_mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d warmup=%d "
           "iters=%d q_size=%zu kv_size=%zu mask_size=%zu profile_size=%zu profile_max_records=%d "
           "profile_max_events=%d mode_flags=%d print_events=%d\n",
-          cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, cfg->warmup, cfg->iters,
+          cfg->mode, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, cfg->warmup, cfg->iters,
           q_size, kv_size, mask_size, profile_size, profile_max_records, profile_max_events, mode_flags,
           cfg->print_events);
 
@@ -1357,6 +1485,22 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     }
   }
 
+  if (cfg->compare_reference) {
+    const size_t output_elems = (size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim;
+    const int64_t reference_t0 = get_time_us();
+    if (figure8_compute_reference(reference_output, reference_scores, q, k, v, mask, cfg->qo_len, cfg->kv_len,
+                                  cfg->n_heads, cfg->n_kv_heads, cfg->head_dim)) {
+      fprintf(stderr, "Figure 8 host reference failed\n");
+      goto end;
+    }
+    const int64_t reference_elapsed_us = get_time_us() - reference_t0;
+    fprintf(stderr,
+            "FIG8_ATTENTION_REFERENCE_TIMING reference_mode=host-fp32 qo_len=%d kv_len=%d n_heads=%d "
+            "n_kv_heads=%d head_dim=%d elapsed_us=%ld ret=0\n",
+            cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, reference_elapsed_us);
+    if (figure8_report_reference(cfg, o, reference_output, output_elems)) goto end;
+  }
+
   {
     int fds[] = { o_fd, q_fd, k_fd, v_fd, mask_fd, profile_fd };
     (void) figure8_release_dsp_maps(msg, max_msg_size, fds, (int) (sizeof(fds) / sizeof(fds[0])));
@@ -1365,6 +1509,8 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   ret = 0;
 
 end:
+  free(reference_scores);
+  free(reference_output);
   if (csv) {
     fclose(csv);
   }
