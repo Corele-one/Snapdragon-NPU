@@ -231,6 +231,20 @@ static HVX_INLINE_ALWAYS HVX_Vector hvx_my_log2_vqf16_vhf(HVX_Vector x_v) {
 
 // adapted from libs/qhl_hvx/src/qhmath_hvx/qhmath_hvx_inv_ahf.c
 static HVX_INLINE_ALWAYS HVX_Vector hvx_my_inv_vhf(HVX_Vector x_v) {
+#if __HVX_ARCH__ >= 79
+  const HVX_Vector v_zero      = Q6_V_vzero();
+  const HVX_Vector v_abs_mask  = Q6_Vh_vsplat_R(0x7fff);
+  const HVX_Vector v_sign_mask = Q6_Vh_vsplat_R(0x8000);
+  const HVX_Vector v_inf       = Q6_Vh_vsplat_R(0x7c00);
+
+  const HVX_Vector v_abs       = Q6_V_vand_VV(x_v, v_abs_mask);
+  const HVX_Vector v_sign      = Q6_V_vand_VV(x_v, v_sign_mask);
+  const HVX_Vector v_log2_hf   = Q6_Vhf_equals_Vqf16(hvx_my_log2_vqf16_vhf(v_abs));
+  const HVX_Vector v_neg_log2  = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vsub_VhfVhf(v_zero, v_log2_hf));
+  const HVX_Vector v_magnitude = hvx_my_exp2_vhf(v_neg_log2);
+  const HVX_Vector v_signed    = Q6_V_vor_VV(v_magnitude, v_sign);
+  return Q6_V_vmux_QVV(Q6_Q_vcmp_eq_VhVh(x_v, v_zero), v_inf, v_signed);
+#else
   /*
    * Polynomial coefficients packed in specific format (adding zeros on some places)
    * in order to easier manipulate with them later using VLUT instructions
@@ -513,6 +527,7 @@ static HVX_INLINE_ALWAYS HVX_Vector hvx_my_inv_vhf(HVX_Vector x_v) {
 
   /* Convert from qf32 to hf */
   return Q6_Vhf_equals_Wqf32(output_dv.VV);
+#endif
 }
 
 static HVX_INLINE_ALWAYS HVX_Vector hvx_my_exp2_vhf_vqf16(HVX_Vector x) {

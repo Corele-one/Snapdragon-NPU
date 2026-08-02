@@ -148,6 +148,10 @@ void worker_pool_constructor() {
   }
 
   num_hvx128_contexts = (qurt_hvx_get_units() >> 8) & 0xFF;
+  if (num_hvx128_contexts == 0) {
+    num_hvx128_contexts = num_workers;
+    FARF(ALWAYS, "qurt_hvx_get_units reported no HVX128 contexts; falling back to %u workers", num_hvx128_contexts);
+  }
 
   /* initialize static worker_pool for clients who pass NULL as context.*/
   if (worker_pool_init(&static_context) != AEE_SUCCESS) {
