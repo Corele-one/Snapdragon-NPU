@@ -1,0 +1,124 @@
+{
+  "by_qo_len": {
+    "16": {
+      "component_event_counts": {
+        "core_acc": 200,
+        "k_load": 200,
+        "o_scale": 40,
+        "o_store": 40,
+        "q_load": 40,
+        "qk_dot": 200,
+        "safe_sm": 200,
+        "v_load": 200
+      },
+      "component_event_duration_us": {
+        "core_acc": 311,
+        "k_load": 3654,
+        "o_scale": 54,
+        "o_store": 250,
+        "q_load": 188,
+        "qk_dot": 300,
+        "safe_sm": 14308,
+        "v_load": 2669
+      },
+      "event_count_max": 56,
+      "event_count_min": 56,
+      "event_count_rows": 20,
+      "event_overflow_total": 0,
+      "event_rows": 1120,
+      "measured_iterations": 20
+    },
+    "32": {
+      "component_event_counts": {
+        "core_acc": 320,
+        "k_load": 320,
+        "o_scale": 40,
+        "o_store": 40,
+        "q_load": 40,
+        "qk_dot": 320,
+        "safe_sm": 320,
+        "v_load": 320
+      },
+      "component_event_duration_us": {
+        "core_acc": 764,
+        "k_load": 3386,
+        "o_scale": 73,
+        "o_store": 469,
+        "q_load": 335,
+        "qk_dot": 482,
+        "safe_sm": 30376,
+        "v_load": 2417
+      },
+      "event_count_max": 86,
+      "event_count_min": 86,
+      "event_count_rows": 20,
+      "event_overflow_total": 0,
+      "event_rows": 1720,
+      "measured_iterations": 20
+    },
+    "4": {
+      "component_event_counts": {
+        "core_acc": 160,
+        "k_load": 160,
+        "o_scale": 40,
+        "o_store": 40,
+        "q_load": 40,
+        "qk_dot": 160,
+        "safe_sm": 160,
+        "v_load": 160
+      },
+      "component_event_duration_us": {
+        "core_acc": 169,
+        "k_load": 3743,
+        "o_scale": 40,
+        "o_store": 77,
+        "q_load": 52,
+        "qk_dot": 161,
+        "safe_sm": 3145,
+        "v_load": 3255
+      },
+      "event_count_max": 46,
+      "event_count_min": 46,
+      "event_count_rows": 20,
+      "event_overflow_total": 0,
+      "event_rows": 920,
+      "measured_iterations": 20
+    },
+    "8": {
+      "component_event_counts": {
+        "core_acc": 160,
+        "k_load": 160,
+        "o_scale": 40,
+        "o_store": 40,
+        "q_load": 40,
+        "qk_dot": 160,
+        "safe_sm": 160,
+        "v_load": 160
+      },
+      "component_event_duration_us": {
+        "core_acc": 220,
+        "k_load": 3397,
+        "o_scale": 55,
+        "o_store": 144,
+        "q_load": 110,
+        "qk_dot": 192,
+        "safe_sm": 6481,
+        "v_load": 4091
+      },
+      "event_count_max": 46,
+      "event_count_min": 46,
+      "event_count_rows": 20,
+      "event_overflow_total": 0,
+      "event_rows": 920,
+      "measured_iterations": 20
+    }
+  },
+  "hardware_trace": false,
+  "lut_exp_values": [
+    0
+  ],
+  "modes": [
+    "baseline"
+  ],
+  "timeline_source": "FIG8_ATTENTION_EVENT DSP qtimer start/end records"
+}
