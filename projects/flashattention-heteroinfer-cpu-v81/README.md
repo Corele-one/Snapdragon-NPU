@@ -1,205 +1,136 @@
-# FlashAttention on Snapdragon HTP
+# HeteroInfer-Inspired CPU Scheduling for FlashAttention v81
 
-该目录保存 FlashAttention 的 DSP kernel、llama.cpp/GGML HTP 接入、Figure 8 timer 工具和 v73/v79 的紧凑测量结果。
+该项目只研究 CPU host stub 等待、请求生命周期和 DSP dispatch profiling。Attention 数学与 DSP baseline kernel 保持不变，不包含 SCNA kernel、SCNA mode、SCNA 参数或 GPU-NPU tensor parallelism。
 
-## 目录
+## Benchmark Integrity
 
-```text
-flashattention/
-├── README.md
-├── results
-│   ├── v73
-│   │   ├── baseline
-│   │   └── lut_exp
-│   └── v79
-│       ├── baseline
-│       └── lut_exp
-├── src
-│   ├── htp-ops-lib-main
-│   └── llama.cpp-npu-htp-backend
-└── tools
-    ├── compare_figure8_lut_exp.py
-    ├── generate_figure8_perfetto_trace.py
-    ├── parse_figure8_attention_timers.py
-    ├── parse_figure8_long_kv_breakdown.py
-    ├── parse_llm_inference_trace.py
-    └── serve_trace_cors.py
-```
+**本项目主矩阵全部是 SM8750P / Hexagon v81 实测。** legacy、spin、predictive 使用相同 baseline `flash_attn.c`、相同 v81 DSP binary、相同输入和同一设备；等待策略之间的输出逐字节一致。
 
-## 核心实现
+| 数据范围 | 平台 | 是否用于当前主结论 | 说明 |
+|---|---|---:|---|
+| `results/v81/heteroinfer-cpu/stage1-main-20260801/` | SM8750P / v81 | 是 | 36 配置、720 measured samples，含机器可读 provenance |
+| `results/v81/heteroinfer-cpu/stage1-correctness-20260801/` | SM8750P / v81 | 是 | 9 个 FP32 gate 和跨 wait-policy 字节一致性 |
+| `results/v73/`、`results/v79/` | 历史设备/架构 | 否 | 从干净 baseline 快照继承，仅作历史归档，禁止进入本实验图表和 speedup |
 
-### DSP/HTP
+该项目的结果不能与 SCNA 项目的延迟拼接成同一 speedup。CPU 调度收益只在 baseline kernel 固定的条件下解释；HeteroInfer 论文中的 GPU-NPU 端到端收益也没有被套用到本实验。
 
-- `src/htp-ops-lib-main/src/dsp/ops/flash_attn.c`：`head_dim % 64 == 0` 主路径，HMX QK/PV、HVX safe-softmax、LUT/vgather exp、profile timer。
-- `src/htp-ops-lib-main/src/dsp/ops/flash_attn_sp_hdim.c`：非 64 倍数 head dimension fallback。
-- `src/htp-ops-lib-main/src/dsp/op_executor.cc`：DSP op dispatch、rpcmem mapping、profile buffer 和 trace。
-- `src/htp-ops-lib-main/src/host/test.c`：`htp_ops_test --figure8-attn` standalone benchmark。
-- `src/htp-ops-lib-main/include/op_reg.h`：operator ID、mode flag、参数和 profile event ABI。
+## 固定 DSP Kernel
 
-### llama.cpp/GGML C++ framework
-
-- `src/llama.cpp-npu-htp-backend/src/llama.cpp`：构建 `GGML_OP_FLASH_ATTN_EXT` graph。
-- `src/llama.cpp-npu-htp-backend/ggml/src/ggml-htp/`：HTP backend 和 FastRPC request。
-- `src/llama.cpp-npu-htp-backend/examples/server/server.cpp`：`npu_mode` 到 `LLAMA_NPU_MODE`。
-- `src/llama.cpp-npu-htp-backend/tests/test-backend-ops.cpp`：CPU reference/backends 对照测试入口。
-
-## 路径关系
-
-v73/v79 是同一源码的不同构建目标：
+runner 在构建和运行前校验：
 
 ```text
-DSP_ARCH=v73
-DSP_ARCH=v79
+src/htp-ops-lib-main/src/dsp/ops/flash_attn.c
+SHA-256 = 6a8b025bda0cbaa36c3b48e3d379b7502631cdd584a7571e926e6633483356cb
 ```
 
-baseline/LUT-exp 是 runtime mode：
+若该 hash 改变，`verify_baseline_kernel` 会直接终止实验。这保证三种 CPU 策略比较的 DSP Attention kernel 完全相同。
+
+## 实现范围
+
+### Wait policy
+
+- `legacy`：原始 `usleep(50)` 轮询。
+- `spin`：持续 acquire-load completion flag，仅每 1024 polls 检查超时钟。
+- `predictive`：根据同 shape 校准样本的滚动 P10 预测完成时间，先休眠，再以 100 us guard 短时间忙轮询。
+
+### Host control path
+
+- `--wait-policy legacy|spin|predictive`
+- `--host-cpu N`
+- `--host-sync-calibration N`
+- request descriptor 一次预构建。
+- rpcmem、channel 和 DSP fd mapping 全程常驻。
+- 记录 wall latency、thread CPU、sleep/spin time、poll count 与 prediction error。
+- DSP dispatch 分解为 mapping、validate-in、compute、validate-out 和 total。
+
+## v81 实验设置
+
+| 项目 | 设置 |
+|---|---|
+| Device | model `25091RP04C`，SoC `SM8750P`，Android 16，ADB serial `bde3ddde` |
+| DSP | Hexagon v81 |
+| Toolchain | Hexagon SDK 6.6.0.0，Hexagon Tools 19.0.07 |
+| Build gate | DSP compile/link command 含 `-mv81` |
+| Main shape | `qo_len={4,8,16,32}`，`kv_len=4096`，heads/KV-heads `12/2`，head-dim 128 |
+| Per configuration | 20 legacy pre-calibration + 5 warmup + 20 measured |
+| CPU placement | unpinned、CPU0 low-capacity、CPU6 high-capacity |
+| Policy order | rotating order，降低固定执行顺序偏差 |
+| Statistics | median、p50、p95，4000 次 bootstrap 95% CI |
+
+设备实际只有两个 CPU capacity/frequency domain：CPU0-5 为 3.5328 GHz/capacity 792，CPU6-7 为 4.32 GHz/capacity 1024。因此报告使用 low-capacity/high-capacity，不虚构 little/middle/prime 分类。
+
+## 关键结果
+
+- 9/9 个 FP32 correctness gate 通过，legacy/spin/predictive 在每个 case 中输出 SHA-256 完全一致。
+- legacy host control residual 为 `41.0-110.5 us`；spin 为 `10.0-15.0 us`；predictive 为 `9.5-16.0 us`。
+- predictive 消除了 `73.2%-89.1%` 的 legacy control residual。
+- 固定 DSP latency 后，predictive normalized speedup 为 `1.0247x-1.0757x`，12/12 配置的 bootstrap 95% CI 下界大于 1。
+- predictive thread CPU time 中位数约为 spin 的 `5.07%`，即 CPU 时间降低约 `19.7x`。
+- observed speedup 为 `0.979x-1.341x`，但 DSP dispatch 同时偏移 `-20.0%` 到 `+5.6%`。超过 Amdahl 上限的部分属于 DSP/Fabric/DVFS 耦合，不能归因于 CPU 等待策略。
+- 720 个 measured samples 中，DSP dispatch `total - sum(components)` 为 `0-1 us`，中位数 `0 us`。
+
+## 代码与数据
 
 ```text
-htp_ops_test --figure8-attn --mode baseline
-htp_ops_test --figure8-attn --mode lut-exp
+src/htp-ops-lib-main/src/host/test.c          wait policy、校准和 host metrics
+src/htp-ops-lib-main/src/dsp/op_executor.cc   DSP dispatch 分解
+scripts/heteroinfer_cpu_common.sh              baseline hash、v81 build/deploy gate
+scripts/run_heteroinfer_cpu_v81.sh             主性能矩阵
+scripts/run_heteroinfer_cpu_correctness.sh     FP32 与字节一致性矩阵
+scripts/analyze_heteroinfer_cpu.py              统计、置信区间和 SVG
+results/v81/heteroinfer-cpu/                   独立 raw data 与汇总
+docs/stage-reports/                            分阶段报告
 ```
 
-standalone 链路：
+详细报告：
+
+- [阶段一：预测等待与控制面剖析](docs/stage-reports/HeteroInfer_CPU_阶段一_预测等待与控制面剖析_2026-08-01.md)
+
+机器可读实验信息：
+
+- [主矩阵 provenance](results/v81/heteroinfer-cpu/stage1-main-20260801/provenance.txt)
+- [正确性 provenance](results/v81/heteroinfer-cpu/stage1-correctness-20260801/provenance.txt)
+- [主矩阵 summary](results/v81/heteroinfer-cpu/stage1-main-20260801/summary/summary.md)
+
+## 复现
+
+runner 会校验 baseline hash、构建 Android/v81 binaries、检查 `-mv81`、部署到设备并采集 provenance：
+
+```bash
+cd /home/corleone/code/Snapdragon-NPU/projects/flashattention-heteroinfer-cpu-v81
+adb devices
+./scripts/run_heteroinfer_cpu_correctness.sh
+./scripts/run_heteroinfer_cpu_v81.sh
+```
+
+复用已构建和部署的 binary 时可显式跳过 build，但仍会执行 baseline hash gate：
+
+```bash
+SKIP_BUILD=1 ./scripts/run_heteroinfer_cpu_v81.sh
+```
+
+默认结果分别写入：
 
 ```text
-htp_ops_test --figure8-attn
-  -> HTP_OPS_FLASH_ATTN_PROFILE_QO_F32_KV_F16
-  -> simple_flash_attn_profiled(...)
-  -> mode_flags
-  -> enable_vgather_exp
+results/v81/heteroinfer-cpu/stage1-correctness-<stamp>/
+results/v81/heteroinfer-cpu/stage1-main-<stamp>/
 ```
 
-完整 llama.cpp 链路：
+## 结果解释规则
 
-```text
-GGML_OP_FLASH_ATTN_EXT
-  -> ggml-htp/htp-ops.cc
-  -> HTP_OPS_FLASH_ATTN_QO_F32_KV_F16
-  -> op_executor.cc
-  -> simple_flash_attn_llm_profiled(...)
-```
+1. CPU 调度的主结论使用 normalized speedup，即固定同组 legacy DSP 中位数后只比较 host control residual。
+2. observed wall speedup 保留真实系统行为，但不能在 DSP dispatch 发生变化时全部归因于 wait policy。
+3. spin 的延迟收益必须连同约 91%-100% 单核占用一起报告。
+4. 三种策略必须先通过输出字节一致性和 FP32 reference gate。
+5. 任何 v73/v79、SCNA 或 LUT 数据都不得进入本实验主图、主表或摘要结论。
 
-限制：
+## 研究边界
 
-- `baseline/lut_exp` 对比应使用主路径，即 `head_dim % 64 == 0`；本仓库 Figure 8 使用 `head_dim=128`。
-- `flash_attn_sp_hdim.c` fallback 当前固定启用 vgather exp，不接收相同的 runtime mode。
-- `FIGURE8_ENABLE_LUT_EXP` 只影响非-profile 默认值；standalone profile 和完整 llama 路径都由 runtime mode 控制。
-
-## 环境
-
-- WSL2 Ubuntu 22.04；
-- CMake、Ninja；
-- Android NDK r25c；
-- 获授权的 Hexagon SDK 6.x；
-- `adb`；
-- v73/v79 Snapdragon 设备；
-- Python 3。
-
-## Reproduction
-
-以下命令从 `projects/flashattention/` 执行。
-
-### 1. 构建 v73
-
-```powershell
-$HtpWsl = (wsl.exe wslpath -a (Resolve-Path .\src\htp-ops-lib-main)).Trim()
-wsl.exe -d Ubuntu-22.04 -u root -- bash -lc "
-set -e
-source /root/llama-npu-env.sh
-cd '$HtpWsl'
-build_cmake android
-build_cmake hexagon DSP_ARCH=v73 \
-  FIGURE8_ENABLE_PROFILE_TIMERS=ON \
-  FIGURE8_ENABLE_LUT_EXP=OFF
-"
-```
-
-v79 只需把 `DSP_ARCH=v73` 改为 `DSP_ARCH=v79`。
-
-### 2. 部署 standalone benchmark
-
-```powershell
-$Remote = '/data/local/tmp/figure8_attn'
-adb shell "mkdir -p $Remote/cdsp $Remote/dsp"
-adb push .\src\htp-ops-lib-main\android_ReleaseG_aarch64\ship\htp_ops_test "$Remote/"
-adb push .\src\htp-ops-lib-main\android_ReleaseG_aarch64\ship\libhtp_ops.so "$Remote/"
-adb push .\src\htp-ops-lib-main\hexagon_ReleaseG_toolv88_v73\ship\libhtp_ops_skel.so "$Remote/cdsp/"
-adb push .\src\htp-ops-lib-main\hexagon_ReleaseG_toolv88_v73\ship\libhtp_ops_skel.so "$Remote/dsp/"
-adb shell "chmod 755 $Remote/htp_ops_test"
-```
-
-实际 Hexagon 输出目录中的 tool version 可能不同，请以构建日志为准。
-
-### 3. 用同一份 skel 跑 baseline/LUT-exp
-
-Baseline：
-
-```powershell
-adb shell "cd /data/local/tmp/figure8_attn && LD_LIBRARY_PATH=. DSP_LIBRARY_PATH='./cdsp;./dsp;.' ./htp_ops_test --figure8-attn --mode baseline --qo-len 4 --kv-len 4096 --n-heads 12 --n-kv-heads 2 --head-dim 128 --warmup 5 --iters 20"
-```
-
-LUT-exp：
-
-```powershell
-adb shell "cd /data/local/tmp/figure8_attn && LD_LIBRARY_PATH=. DSP_LIBRARY_PATH='./cdsp;./dsp;.' ./htp_ops_test --figure8-attn --mode lut-exp --qo-len 4 --kv-len 4096 --n-heads 12 --n-kv-heads 2 --head-dim 128 --warmup 5 --iters 20"
-```
-
-对 `qo_len=4,8,16,32` 重复运行，并分别保存到：
-
-```text
-results/v73/baseline/raw_q*.log
-results/v73/lut_exp/raw_q*.log
-```
-
-### 4. 解析 timer
-
-```powershell
-python .\tools\parse_figure8_attention_timers.py `
-  --input-dir .\results\v73\baseline `
-  --out-dir .\results\v73\baseline
-```
-
-### 5. 生成 Perfetto/NTFF
-
-```powershell
-python .\tools\generate_figure8_perfetto_trace.py `
-  --input-dir .\results\v73\baseline `
-  --out-dir .\results\v73\baseline\ntff
-```
-
-仓库忽略大型派生 `.ntff` 和 `.perfetto.json`；它们可从 `raw_q*.log` 重新生成。
-
-### 6. 对比 baseline/LUT-exp
-
-```powershell
-python .\tools\compare_figure8_lut_exp.py `
-  --baseline-summary .\results\v73\baseline\attention_timers_summary.json `
-  --lut-exp-summary .\results\v73\lut_exp\attention_timers_summary.json `
-  --out-dir .\results\v73\lut_exp
-```
-
-同样方式处理 v79。`results/v79/v73_vs_v79.*` 是随快照保留的静态历史对比；当前工具目录没有独立的 v73-v79 comparator。
-
-### 7. 数值正确性
-
-standalone log 的 `ret=0` 只说明 FastRPC/kernel 完成，不证明 output 与 reference 一致。完整数值验证应构建 llama.cpp tests，并运行：
-
-```text
-test-backend-ops -o FLASH_ATTN_EXT -b HTP
-```
-
-测试时记录 CPU reference tolerance、model/head shape、DSP arch、SDK 和 build flags。
-
-## Results 语义
-
-- `raw_q*.log`：可重新解析的 qtimer 原始输出。
-- `attention_timers.csv` / `attention_timers_summary.json`：parser 输出。
-- `baseline_vs_lut_exp.*`：同一 arch、同一 shape 的 runtime mode 对比。
-- `v73_vs_v79.*`：历史静态架构对比。
-- `ntff/README.md`：派生 trace 的查看说明。
-
-Perfetto/NTFF 是 DSP qtimer 软件事件，不是 Qualcomm PMU utilization。不能把 `core_acc`、`o_scale` 或 mixed section 直接解释成 HMX/HVX hardware active-cycle。
+- 当前是 standalone synthetic Figure8 benchmark，尚未接入完整 llama runtime 的多 op 请求队列。
+- 未采集完整模型 token latency、能耗或跨时段独立 session 方差。
+- 未实现 HeteroInfer 的 GPU-NPU tensor parallelism。
+- CPU 活跃度可能影响共享 fabric 和 DSP DVFS，因此下一阶段需要同步采集 CPU/fabric/DSP clocks。
 
 ## 许可边界
 
-llama.cpp 子树保留 MIT `LICENSE`。HTP operator 快照没有明确许可证，并缺少不能公开上传的 Qualcomm proprietary 头文件；请从获授权 SDK 环境补齐并阅读根目录 `THIRD_PARTY_NOTICES.md`。
+llama.cpp 子树保留 MIT `LICENSE`。HTP operator 快照依赖获授权的 Qualcomm Hexagon SDK；不要提交 proprietary SDK headers 或未获授权的二进制。
