@@ -83,6 +83,8 @@ int hvx_mat_mul_int32_core(int32_t *restrict __vtcm c, const int32_t *restrict _
 int hvx_mat_mul_fp16_core_mt(__fp16 *restrict __vtcm c, const __fp16 *restrict __vtcm a,
                              const __fp16 *restrict __vtcm b, int M, int K, int N, int n_threads);
 
+int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_flags, int warmup, int iters);
+
 #ifdef __cplusplus
 }
 #endif

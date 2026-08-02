@@ -5,6 +5,7 @@
 #include "dsp/hvx_math.h"
 #include "dsp/vtcm_mgr.h"
 
+#if FIGURE8_ENABLE_LUT_EXP
 static void precompute_safe_softmax_exp2_table() {
   const int n_dup = 4;
 
@@ -46,9 +47,14 @@ static void precompute_safe_softmax_exp2_table() {
     }
   }
 }
+#endif
 
 void init_precomputed_tables();
 
 void init_precomputed_tables() {
+#if FIGURE8_ENABLE_LUT_EXP
   precompute_safe_softmax_exp2_table();
+#else
+  FARF(ALWAYS, "%s: skipping LUT exp precompute", __func__);
+#endif
 }

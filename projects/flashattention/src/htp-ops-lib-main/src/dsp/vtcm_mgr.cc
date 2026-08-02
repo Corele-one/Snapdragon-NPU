@@ -48,6 +48,8 @@ void vtcm_manager_setup() {
   compute_res_attr_t req;
   HAP_compute_res_attr_init(&req);
 
+  // Ask only for resources reported available.  Requesting the physical total
+  // can time out when another cDSP client owns part or all of the VTCM.
   HAP_compute_res_attr_set_vtcm_param(&req, avail_size, 1);
 
   vtcm_mgr_ctx_id = HAP_compute_res_acquire(&req, 10000);  // timeout 10ms

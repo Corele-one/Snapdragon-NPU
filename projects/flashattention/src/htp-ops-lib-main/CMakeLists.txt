@@ -21,13 +21,14 @@ else()
     include(${HEXAGON_CMAKE_ROOT}/hexagon_fun.cmake)
 endif()
 
-# SDK releases without v81 metadata can accept DSP_ARCH=v81 while silently
-# selecting an older architecture.  Refuse that build before producing a
-# misleading artifact for SM8750P.
+# SDK 6.3 accepts DSP_ARCH=v81 at the command line but its CMake architecture
+# table only knows v68 through v79, silently compiling a v68 binary instead.
+# A v68 skel is not a valid target for SM8750P (Hexagon v81), so fail early
+# rather than producing a misleading hexagon_*_v81 build directory.
 if(DSP_VERSION STREQUAL "v81" AND NOT HEXAGON_ARCH STREQUAL "v81")
     message(FATAL_ERROR
-        "DSP_ARCH=v81 was requested, but this SDK resolved HEXAGON_ARCH=${HEXAGON_ARCH}. "
-        "Use a Hexagon SDK/toolchain with v81 target libraries.")
+        "DSP_ARCH=v81 was requested, but this Hexagon SDK resolved HEXAGON_ARCH=${HEXAGON_ARCH}. "
+        "Install an SDK/toolchain containing v81 QuRT and target libraries, then rebuild.")
 endif()
 set(ignoreVar ${DEPENDENCIES}${V})
 
@@ -97,6 +98,7 @@ else()
         ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/ops/mat_mul.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/ops/precompute_table.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/ops/rms_norm.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/ops/scna_exp2.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/ops/mm_benchmark.c
     )
     build_idl(include/htp_ops.idl htp_ops_skel)

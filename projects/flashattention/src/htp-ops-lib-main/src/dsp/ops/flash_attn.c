@@ -10,6 +10,7 @@
 #include "dsp/hvx_convert.h"
 #include "dsp/hvx_internal.h"
 #include "dsp/hvx_math.h"
+#include "dsp/scna_exp2.h"
 #include "dsp/utils.h"
 #include "dsp/vtcm_mgr.h"
 #include "dsp/worker_pool.h"
@@ -254,6 +255,10 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                                 const __fp16 *restrict qk_mask, int qo_len, int kv_len, int n_heads, int n_kv_heads,
                                 int head_dim, int worker_index, int mode_flags, struct Figure8ProfileHeader *profile,
                                 struct LlmTraceProfileHeader *llm_profile, int64_t trace_id, int op_index) {
+  if (profile) {
+    profile->reserved0 = 400;
+    profile->reserved1 = kv_head_idx;
+  }
   // "compile-time" configs
   // TODO: make them real compile-time constants (constexpr or template parameters)
   const int G = n_heads / n_kv_heads;  // GQA factor
@@ -269,11 +274,27 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   const size_t kv_pad_len  = align_up(kv_len, 64);
 
   const bool enable_vgather_exp = (mode_flags & LLM_NPU_MODE_LUT_EXP) != 0;  // use table lookup (vgather) to compute exp
+  const bool enable_scna_exp    = scna_exp2_enabled(mode_flags);
+  const bool numeric_debug      = (mode_flags & LLM_NPU_MODE_NUMERIC_DEBUG) != 0;
   const bool use_fp32_exp       = false;  // compute FP32 exp
+  if (enable_scna_exp && enable_vgather_exp) {
+    FARF(ALWAYS, "SCNA and LUT exp modes are mutually exclusive");
+    return;
+  }
+  scna_exp2_hvx_params_t scna_hvx_params;
+  if (enable_scna_exp) scna_exp2_prepare_hvx_params(&scna_hvx_params, mode_flags);
 
   // determine block sizes
   size_t blk_sz_r, blk_sz_c;  // Br, Bc
+  if (profile) {
+    profile->reserved0 = 390;
+    profile->reserved1 = (int32_t) (vtcm_limit - vtcm);
+  }
   fa_f16_find_chunk_size(&blk_sz_r, &blk_sz_c, G, head_dim, qo_len, kv_len, vtcm_limit - vtcm);
+  if (profile) {
+    profile->reserved0 = 391;
+    profile->reserved1 = (int32_t) blk_sz_c;
+  }
   assert(blk_sz_c % 64 == 0);
 
   const size_t g_br = align_up(G * blk_sz_r, HMX_FP16_TILE_N_ROWS);  // Br'
@@ -322,17 +343,46 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   uint8_t *hmx_output_scales_qk = (uint8_t *) vtcm_seq_alloc(&vtcm_cur, 256);
 
   // end VTCM allocation
+  if (profile) {
+    profile->reserved0 = 392;
+    profile->reserved1 = (int32_t) (vtcm_cur - vtcm);
+  }
   if (vtcm_cur > vtcm_limit) {
-    FARF(ALWAYS, "FA VTCM allocation exceeded grant by %d bytes", (int) (vtcm_cur - vtcm_limit));
+    if (profile) {
+      profile->reserved0 = 399;
+      profile->reserved1 = (int32_t) (vtcm_cur - vtcm_limit);
+    }
     return;
   }
+  if (profile) {
+    profile->reserved0 = 401;
+  }
 
-  float  qk_scale    = 1.0f / sqrtf(head_dim) * 1.44269504f;  // log2(e) = 1.44269504
+  float qk_scale;
+  if (head_dim == 64) {
+    qk_scale = 0.18033688f;  // 1 / sqrt(64) * log2(e)
+  } else if (head_dim == 128) {
+    qk_scale = 0.12751815f;  // 1 / sqrt(128) * log2(e)
+  } else {
+    qk_scale = 1.44269504f / (float) head_dim;
+  }
+  if (profile) {
+    profile->reserved0 = 4011;
+  }
   __fp16 qk_scale_hf = (__fp16) qk_scale;                     // NOTE: this conversion can be very slow
+  if (profile) {
+    profile->reserved0 = 4012;
+  }
 
   // NOTE: there are 32 effective elements in scales, use 4 bytes splat (not Q6_Vh_vsplat_R)
   hmx_init_column_scales(hmx_output_scales_id, Q6_V_vsplat_R(0x3c00));  // fp16: 1.0
+  if (profile) {
+    profile->reserved0 = 402;
+  }
   hmx_init_column_scales(hmx_output_scales_qk, Q6_V_vsplat_R(fp16_to_bits(&qk_scale_hf)));
+  if (profile) {
+    profile->reserved0 = 403;
+  }
 
   // prepare constants
   static int32_t transpose_vscatter_indices_base[32] __vec_aligned__;
@@ -366,10 +416,24 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   TIMER_DEFINE(core_acc);  // core accumulation
   TIMER_DEFINE(o_scale);
   TIMER_DEFINE(o_store);
+  int64_t scna_exp_ticks = 0;
+  int debug_rowsum0_bits = 0;
+  int debug_l0_bits = 0;
+  int debug_core_o0_bits = 0;
+  int debug_inv_l0_bits = 0;
+  int debug_scaled_o0_bits = 0;
+  int debug_p0_first_bits = 0;
+  int debug_p0_last_bits = 0;
+  int debug_sum0_first_bits = 0;
+  int debug_sum0_last_bits = 0;
 
   /////////////// CORE LOGIC BEGIN
 
   for (int ir = 0; ir < qo_len; ir += blk_sz_r) {
+    if (profile) {
+      profile->reserved0 = 410;
+      profile->reserved1 = ir;
+    }
     const size_t n_rows        = smin(qo_len - ir, blk_sz_r);
     const size_t n_rows_g      = n_rows * G;
     const size_t n_row_tiles   = ceil_div(n_rows_g, HMX_FP16_TILE_N_ROWS);
@@ -447,6 +511,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                                          (int64_t) n_rows_g * head_dim * (int64_t) qo_element_size, q_load_stage_t0,
                                          q_load_stage_t1);
     TIMER_STOP_EVENT(q_load, FIGURE8_COMP_Q_LOAD, ir, -1);
+    if (profile) {
+      profile->reserved0 = 411;
+    }
 
     hvx_fill_uh(mvec_m, 0xfbff, col_vec_size);  // init to -65504 (-inf)
     hvx_fill_uh(mvec_l, 0, col_vec_size);       // init: 0
@@ -674,10 +741,24 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               (void) sync_v1;
             }
 
+            const int64_t scna_exp_t0 = enable_scna_exp ? HAP_perf_get_qtimer_count() : 0;
             for (int c = 0; c < n_cols; c += 64) {
               HVX_Vector v_p_row0_hf, v_p_row1_hf;
 
-              if (enable_vgather_exp) {
+              if (enable_scna_exp) {
+                const HVX_Vector v_s_minus_m0 = Q6_Vhf_equals_Vqf16(
+                  Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0));
+                const HVX_Vector v_s_minus_m1 = Q6_Vhf_equals_Vqf16(
+                  Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1));
+                const HVX_VectorPred q_valid0 = Q6_Q_vcmp_gt_VhfVhf(row_buffer0[c / 64], v_neg_inf);
+                const HVX_VectorPred q_valid1 = Q6_Q_vcmp_gt_VhfVhf(row_buffer1[c / 64], v_neg_inf);
+                const HVX_Vector v_zero = Q6_V_vzero();
+                HVX_Vector v_scna_row0, v_scna_row1;
+                hvx_scna_exp2_pair_vhf(v_s_minus_m0, v_s_minus_m1, &scna_hvx_params,
+                                        &v_scna_row0, &v_scna_row1);
+                v_p_row0_hf = Q6_V_vmux_QVV(q_valid0, v_scna_row0, v_zero);
+                v_p_row1_hf = Q6_V_vmux_QVV(q_valid1, v_scna_row1, v_zero);
+              } else if (enable_vgather_exp) {
                 v_p_row0_hf = row_buffer0[c / 64];
                 v_p_row1_hf = row_buffer1[c / 64];
               } else {
@@ -699,6 +780,13 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                   v_p_row0_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m0);
                   v_p_row1_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m1);
                 }
+              }
+
+              if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && r == 0 && c == 0) {
+                _Alignas(VLEN) __fp16 debug_p[64];
+                vmem(debug_p) = v_p_row0_hf;
+                debug_p0_first_bits = fp16_to_bits(&debug_p[0]);
+                debug_p0_last_bits = fp16_to_bits(&debug_p[63]);
               }
 
               // compute P tile output positions
@@ -724,6 +812,7 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(
                 v_p_rowsum1, Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(vp_p_row1), Q6_V_hi_W(vp_p_row1)));
             }
+            if (enable_scna_exp) scna_exp_ticks += HAP_perf_get_qtimer_count() - scna_exp_t0;
 
             // clang-format off
             // rowsum(P) phase 2 reduction
@@ -739,6 +828,12 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             for (int s = 64; s >= 4; s >>= 1) {
               v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vlalign_VVR(v_p_rowsum0, v_zero, s));
               v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vlalign_VVR(v_p_rowsum1, v_zero, s));
+            }
+            if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && r == 0) {
+              _Alignas(VLEN) uint32_t debug_sum[32];
+              vmem(debug_sum) = Q6_Vsf_equals_Vqf32(v_p_rowsum0);
+              debug_sum0_first_bits = debug_sum[0];
+              debug_sum0_last_bits = debug_sum[31];
             }
             HVX_Vector v_p_rowsum_pack2 = Q6_Vhf_equals_Wqf32(Q6_W_vcombine_VV(v_p_rowsum1, v_p_rowsum0));
 
@@ -834,11 +929,25 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
           HVX_Vector v_m_curr = Q6_Vhf_vmax_VhfVhf(v_m_prev, mvec_s_rowmax[i]);
           HVX_Vector v_m_diff = Q6_Vqf16_vsub_VhfVhf(v_m_prev, v_m_curr);  // qf16
 
-          HVX_Vector v_exp_m_diff_hf = hvx_my_exp2_vhf_vqf16(v_m_diff);    // fp16
+          const int64_t scna_exp_t0 = enable_scna_exp ? HAP_perf_get_qtimer_count() : 0;
+          HVX_Vector v_exp_m_diff_hf = enable_scna_exp
+              ? hvx_scna_exp2_vhf(Q6_Vhf_equals_Vqf16(v_m_diff), &scna_hvx_params)
+              : hvx_my_exp2_vhf_vqf16(v_m_diff);    // fp16
+          if (enable_scna_exp) scna_exp_ticks += HAP_perf_get_qtimer_count() - scna_exp_t0;
 
           // l_i^j = exp(m_i^{j-1} - m_i^j) * l_i^{j-1} + rowsum(P_i^j)
           HVX_Vector v_l_curr = Q6_Vqf16_vmpy_Vqf16Vhf(mvec_l[i], v_exp_m_diff_hf);  // qf16
           v_l_curr            = Q6_Vqf16_vadd_Vqf16Vhf(v_l_curr, mvec_p_rowsum[i]);
+
+          if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && i == 0) {
+            _Alignas(VLEN) __fp16 debug_rowsum[64], debug_l[64], debug_exp[64];
+            vmem(debug_rowsum) = mvec_p_rowsum[i];
+            vmem(debug_l) = Q6_Vhf_equals_Vqf16(v_l_curr);
+            vmem(debug_exp) = v_exp_m_diff_hf;
+            debug_rowsum0_bits = fp16_to_bits(&debug_rowsum[0]);
+            debug_l0_bits = fp16_to_bits(&debug_l[0]);
+            (void) debug_exp;
+          }
 
           mvec_m[i] = v_m_curr;
           mvec_l[i] = v_l_curr;
@@ -894,6 +1003,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         hmx_unit_release();
 
         swap_ptr(&o_tile_curr, &o_tile_prev);
+        if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0) {
+          debug_core_o0_bits = fp16_to_bits(&o_tile_prev[0]);
+        }
       }
       int64_t core_acc_hmx_stage_t1 = HAP_perf_get_qtimer_count();
       llm_trace_profile_record_flash_event(llm_profile, trace_id, mode_flags, op_index,
@@ -915,6 +1027,11 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
       for (int i = 0; i < n_row_tiles; ++i) {
         if ((i % 2) == 0) {
           v_content = hvx_my_inv_vhf(Q6_Vhf_equals_Vqf16(mvec_l[i / 2]));
+          if (numeric_debug && kv_head_idx == 0 && ir == 0 && i == 0) {
+            _Alignas(VLEN) __fp16 debug_inv[64];
+            vmem(debug_inv) = v_content;
+            debug_inv_l0_bits = fp16_to_bits(&debug_inv[0]);
+          }
         } else {
           v_content = Q6_V_vror_VR(v_content, 64);
         }
@@ -939,6 +1056,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         }
       }
       hmx_unit_release();
+      if (numeric_debug && kv_head_idx == 0 && ir == 0) {
+        debug_scaled_o0_bits = fp16_to_bits(&o_tile_curr[0]);
+      }
     }
     int64_t o_scale_stage_t1 = HAP_perf_get_qtimer_count();
     llm_trace_profile_record_flash_event(llm_profile, trace_id, mode_flags, op_index, LLM_TRACE_STAGE_FLASH_O_SCALE,
@@ -1024,16 +1144,19 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
     const int64_t core_acc_us = TIMER_US(core_acc);
     const int64_t o_scale_us  = TIMER_US(o_scale);
     const int64_t o_store_us  = TIMER_US(o_store);
+    const int64_t scna_exp_us = HAP_perf_qtimer_count_to_us(scna_exp_ticks);
     const int64_t profiled_total_us =
       q_load_us + k_load_us + v_load_us + qk_dot_us + safe_sm_us + core_acc_us + o_scale_us + o_store_us;
 
     FARF(ALWAYS,
-         "FIG8_ATTENTION_TIMERS lut_exp=%d qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d kv_head=%d "
+         "FIG8_ATTENTION_TIMERS lut_exp=%d scna_mode=%d scna_width=%d qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d kv_head=%d "
          "worker=%d profiled_total=%lld q_load=%lld k_load=%lld v_load=%lld qk_dot=%lld safe_sm=%lld core_acc=%lld "
-         "o_scale=%lld o_store=%lld",
-         enable_vgather_exp ? 1 : 0, qo_len, kv_len, n_heads, n_kv_heads, head_dim, kv_head_idx, worker_index,
+         "o_scale=%lld o_store=%lld scna_exp=%lld",
+         enable_vgather_exp ? 1 : 0, scna_exp2_profile_mode(mode_flags),
+         enable_scna_exp ? scna_exp2_width_from_mode(mode_flags) : 0, qo_len,
+         kv_len, n_heads, n_kv_heads, head_dim, kv_head_idx, worker_index,
          profiled_total_us, q_load_us, k_load_us, v_load_us, qk_dot_us, safe_sm_us, core_acc_us, o_scale_us,
-         o_store_us);
+         o_store_us, scna_exp_us);
 
     if (profile != NULL) {
       int idx = __sync_fetch_and_add(&(profile->record_count), 1);
@@ -1057,6 +1180,18 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
           .core_acc       = core_acc_us,
           .o_scale        = o_scale_us,
           .o_store        = o_store_us,
+          .scna_exp2      = scna_exp_us,
+          .nonlinear_mode = scna_exp2_profile_mode(mode_flags),
+          .scna_width     = enable_scna_exp ? scna_exp2_width_from_mode(mode_flags) : 0,
+          .debug_rowsum0_bits = debug_rowsum0_bits,
+          .debug_l0_bits = debug_l0_bits,
+          .debug_core_o0_bits = debug_core_o0_bits,
+          .debug_inv_l0_bits = debug_inv_l0_bits,
+          .debug_scaled_o0_bits = debug_scaled_o0_bits,
+          .debug_p0_first_bits = debug_p0_first_bits,
+          .debug_p0_last_bits = debug_p0_last_bits,
+          .debug_sum0_first_bits = debug_sum0_first_bits,
+          .debug_sum0_last_bits = debug_sum0_last_bits,
         };
       }
     }
@@ -1575,21 +1710,41 @@ void simple_flash_attn_worker(void *data, int worker_index) {
   uint8_t *vtcm       = s->vtcm_base + worker_index * s->vtcm_size_per_thread;
   uint8_t *vtcm_limit = vtcm + s->vtcm_size_per_thread;
 
+  if (s->profile) {
+    s->profile->reserved0 = 300;
+    s->profile->reserved1 = worker_index;
+  }
   hmx_manager_enable_execution();
+  if (s->profile) {
+    s->profile->reserved0 = 301;
+  }
 
   while (1) {
     unsigned int task_id = worker_pool_atomic_inc_return(&(s->task_id)) - 1;
+    if (s->profile) {
+      s->profile->reserved0 = 302;
+      s->profile->reserved1 = task_id;
+    }
     if (task_id >= s->n_tasks) {
       break;
     }
 
     int kv_head_idx = task_id;
+    if (s->profile) {
+      s->profile->reserved0 = 303;
+    }
     simple_flash_attn_f16_core(kv_head_idx, vtcm, vtcm_limit, s->O, s->Q, s->K, s->V, s->mask, s->qo_len, s->kv_len,
                                s->n_heads, s->n_kv_heads, s->head_dim, worker_index, s->mode_flags, s->profile,
                                s->llm_profile, s->trace_id, s->op_index);
+    if (s->profile) {
+      s->profile->reserved0 = 304;
+    }
   }
 
   hmx_manager_disable_execution();
+  if (s->profile) {
+    s->profile->reserved0 = 305;
+  }
 
   worker_pool_synctoken_jobdone(&(s->sync_ctx));
 }
@@ -1639,12 +1794,24 @@ static int simple_flash_attn_impl(__fp16 *restrict O, const __fp16 *restrict Q, 
     return -1;
   }
 
-  const int     n_workers            = 1;
-  const size_t  vtcm_size_per_thread = vtcm_manager_get_total_size();
-  uint8_t      *vtcm_base            = (uint8_t *) vtcm_manager_get_vtcm_base();
-  if (!vtcm_base || vtcm_size_per_thread == 0) {
+  // The current diagnostic path below executes synchronously on the message
+  // receiver.  Use the VTCM resource actually granted by HAP instead of the
+  // historical 1 MiB-per-worker assumption; on v81 that assumption can write
+  // past the mapped VTCM range before the tile-size search gets a chance to
+  // shrink the working set.
+#if 1
+  const int n_workers = 1;
+#else
+  const int n_workers = num_hvx128_contexts;
+#endif
+  const size_t vtcm_size_per_thread = vtcm_manager_get_total_size() / n_workers;
+  if (vtcm_size_per_thread == 0) {
     FARF(ALWAYS, "FA not supported: no VTCM was granted");
     return -1;
+  }
+  if (profile) {
+    profile->reserved0 = 200;
+    profile->reserved1 = n_workers;
   }
 
   simple_fa_task_state_t state;
@@ -1670,14 +1837,41 @@ static int simple_flash_attn_impl(__fp16 *restrict O, const __fp16 *restrict Q, 
 
   state.task_id              = 0;
   state.n_tasks              = n_kv_heads;
-  state.vtcm_base            = vtcm_base;
+  state.vtcm_base            = (uint8_t *) vtcm_manager_get_vtcm_base();
   state.vtcm_size_per_thread = vtcm_size_per_thread;
+
+  worker_pool_job_t job;
+  job.fptr = simple_flash_attn_worker;
+  job.dptr = &state;
 
   int64_t t0 = HAP_perf_get_time_us();
 
-  worker_pool_synctoken_init(&(state.sync_ctx), n_workers);
+#if 1
+  if (profile) {
+    profile->reserved0 = 210;
+  }
+  worker_pool_synctoken_init(&(state.sync_ctx), 1);
   simple_flash_attn_worker(&state, 0);
   worker_pool_synctoken_wait(&(state.sync_ctx));
+  if (profile) {
+    profile->reserved0 = 211;
+  }
+#else
+  worker_pool_synctoken_init(&(state.sync_ctx), n_workers);
+  if (profile) {
+    profile->reserved0 = 201;
+  }
+  for (int i = 0; i < n_workers; ++i) {
+    worker_pool_submit(NULL, job);  // use default worker pool
+  }
+  if (profile) {
+    profile->reserved0 = 202;
+  }
+  worker_pool_synctoken_wait(&(state.sync_ctx));
+  if (profile) {
+    profile->reserved0 = 203;
+  }
+#endif
 
   int64_t elapsed_us = HAP_perf_get_time_us() - t0;
   FARF(ALWAYS,

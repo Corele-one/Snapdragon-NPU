@@ -78,6 +78,8 @@ const char *dsp_op_name(uint32_t op) {
       return "hmx_int8_gate";
     case HTP_OPS_ROOFLINE_BENCH:
       return "roofline_bench";
+    case HTP_OPS_SCNA_EXP2_BENCH:
+      return "scna_exp2_bench";
     default:
       return "unknown";
   }
@@ -3070,6 +3072,22 @@ int execute_op_simple(struct OpComputeRequest *req) {
       }
       break;
 
+    case HTP_OPS_SCNA_EXP2_BENCH:
+      {
+        auto params = reinterpret_cast<ScnaExp2BenchParams *>(req->payload);
+        if ((params->width != 8 && params->width != 16 && params->width != 32) || params->warmup < 0 ||
+            params->iters <= 0) {
+          ret = -1;
+          break;
+        }
+        add_buffer(out_bufs, params->output, sizeof(ScnaExp2BenchResult));
+        validate_in_bufs();
+        ret = scna_exp2_bench_run((ScnaExp2BenchResult *) OUT_PTR(0), params->width, params->mode_flags,
+                                  params->warmup, params->iters);
+        validate_out_bufs();
+      }
+      break;
+
     case HTP_OPS_FLASH_ATTN_QO_F32_KV_F16:
       {
         auto params = reinterpret_cast<FlashAttnParams *>(req->payload);
@@ -3184,13 +3202,16 @@ int execute_op_simple(struct OpComputeRequest *req) {
         profile->max_events   = max_events;
         profile->event_count  = 0;
         profile->event_overflow = 0;
-        profile->reserved0    = 0;
+        profile->reserved0    = 102;
         profile->reserved1    = 0;
 
         validate_in_bufs();
+        profile->reserved0 = 103;
         ret = simple_flash_attn_profiled((__fp16 *) OUT_PTR(0), (__fp16 *) IN_PTR(0), (__fp16 *) IN_PTR(1),
                                          (__fp16 *) IN_PTR(2), (__fp16 *) IN_PTR(3), qo_len, kv_len, n_heads,
                                          n_kv_heads, head_dim, params->attn.mode_flags, profile);
+        profile->reserved0 = 104;
+        profile->reserved1 = ret;
         validate_out_bufs();
       }
       break;

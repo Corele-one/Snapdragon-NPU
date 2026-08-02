@@ -1,5 +1,7 @@
 # Custom Op library for Qualcomm's Hexagon Tensor Processor
 
+中文架构与调试教程见 [docs/HTP_OPS_LIB_MAIN_TUTORIAL.zh-CN.md](docs/HTP_OPS_LIB_MAIN_TUTORIAL.zh-CN.md)。
+
 This is the code repository for the paper [Scaling LLM Test-Time Compute with Mobile NPU on Smartphones](https://arxiv.org/abs/2509.23324). It contains an operator library supporting LLM inference on Qualcomm Hexagon NPU, which needs to be used with the [llama.cpp main repository](https://github.com/haozixu/llama.cpp-npu). This project is primarily a research prototype and is not recommended for production environments.
 
 **Hardware requirements**: Android phones with Qualcomm Snapdragon 8 Gen 2 or higher SoC, specifically requiring Hexagon DSP version 73 or above. Note that this implementation relies on **FP16 HMX**, which may not be available on some mid-to-low-end devices.

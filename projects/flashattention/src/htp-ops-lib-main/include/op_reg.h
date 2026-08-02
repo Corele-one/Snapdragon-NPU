@@ -13,12 +13,18 @@ enum HtpOpsIndex {
   HTP_OPS_FLASH_ATTN_PROFILE_QO_F32_KV_F16,
   HTP_OPS_HMX_INT8_GATE,
   HTP_OPS_ROOFLINE_BENCH,
+  HTP_OPS_SCNA_EXP2_BENCH,
   HTP_OPS_COUNT,
 };
 
 enum LlmNpuModeFlags {
   LLM_NPU_MODE_LUT_EXP          = 1 << 0,
   LLM_NPU_MODE_HMX_AWARE_TILE   = 1 << 1,
+  LLM_NPU_MODE_SCNA_FP16        = 1 << 2,
+  LLM_NPU_MODE_SCNA_INT8        = 1 << 3,
+  LLM_NPU_MODE_SCNA_D8          = 1 << 4,
+  LLM_NPU_MODE_SCNA_D32         = 1 << 5,
+  LLM_NPU_MODE_NUMERIC_DEBUG    = 1 << 6,
   LLM_NPU_MODE_TRACE            = 1 << 8,
   LLM_NPU_MODE_DETAILED_TRACE   = 1 << 9,
 };
@@ -236,6 +242,45 @@ struct RooflineBenchResult {
   int64_t total_vtcm_bytes;
 } __attribute__((packed));
 
+enum ScnaPrecision {
+  SCNA_PRECISION_FP16 = 1,
+  SCNA_PRECISION_INT8 = 2,
+};
+
+struct ScnaExp2BenchParams {
+  struct RpcmemBufAddr output;
+  int32_t width;
+  int32_t mode_flags;
+  int32_t warmup;
+  int32_t iters;
+} __attribute__((packed));
+
+struct ScnaExp2BenchResult {
+  int32_t width;
+  int32_t precision;
+  int32_t lanes;
+  int32_t iters;
+  int64_t elapsed_us;
+  int64_t pair_elapsed_us;
+  float rmse;
+  float max_abs_error;
+  float dense_rmse;
+  float dense_max_abs_error;
+  float pair_max_abs_diff;
+  float output_at_min;
+  float output_near_minus12;
+  float output_near_minus4;
+  float output_at_zero;
+  int32_t dense_samples;
+  int32_t monotonic_violations;
+  int32_t negative_count;
+  int32_t nan_count;
+  float convert_zero;
+  float convert_one;
+  float convert_quarter;
+  float convert_neg_half;
+} __attribute__((packed));
+
 struct FlashAttnParams {
   struct RpcmemBufAddr o;
   struct RpcmemBufAddr q;
@@ -346,6 +391,7 @@ enum Figure8ProfileComponent {
   FIGURE8_COMP_CORE_ACC,
   FIGURE8_COMP_O_SCALE,
   FIGURE8_COMP_O_STORE,
+  FIGURE8_COMP_SCNA_EXP2,
 };
 
 struct Figure8ProfileHeader {
@@ -377,6 +423,18 @@ struct Figure8ProfileRecord {
   int64_t core_acc;
   int64_t o_scale;
   int64_t o_store;
+  int64_t scna_exp2;
+  int32_t nonlinear_mode;
+  int32_t scna_width;
+  int32_t debug_rowsum0_bits;
+  int32_t debug_l0_bits;
+  int32_t debug_core_o0_bits;
+  int32_t debug_inv_l0_bits;
+  int32_t debug_scaled_o0_bits;
+  int32_t debug_p0_first_bits;
+  int32_t debug_p0_last_bits;
+  int32_t debug_sum0_first_bits;
+  int32_t debug_sum0_last_bits;
 };
 
 struct Figure8ProfileEvent {

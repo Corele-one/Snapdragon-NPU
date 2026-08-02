@@ -45,6 +45,8 @@ static const char *figure8_component_name(int component) {
       return "o_scale";
     case FIGURE8_COMP_O_STORE:
       return "o_store";
+    case FIGURE8_COMP_SCNA_EXP2:
+      return "scna_exp2";
     default:
       return "unknown";
   }
@@ -69,7 +71,9 @@ struct Figure8AttnConfig {
   int         warmup;
   int         iters;
   int         print_events;
+  int         compare_baseline;
   int         compare_reference;
+  int         numeric_debug;
   const char *csv_out;
   int         hmx_int8_gate;
   int         hmx_int8_gate_search;
@@ -95,13 +99,15 @@ struct Figure8AttnConfig {
   int         roofline_signed_int8_zero_overhead_bench;
   int         roofline_case;
   int         bench_bytes;
+  int         scna_exp2_bench;
+  int         scna_width;
 };
 
 static void figure8_print_usage(const char *prog) {
   fprintf(stderr,
-          "Usage: %s --figure8-attn [--mode baseline|lut-exp] [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
+          "Usage: %s --figure8-attn [--mode baseline|lut-exp|scna-fp16|scna-int8] [--scna-width 8|16|32] [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
           "          [--n-heads N] [--n-kv-heads N] [--head-dim N] [--warmup N] [--iters N]\n"
-          "          [--no-events] [--compare-reference] [--csv-out PATH]\n"
+          "          [--no-events] [--compare-baseline] [--compare-reference] [--numeric-debug] [--csv-out PATH]\n"
           "       %s --hmx-int8-gate\n"
           "       %s --hmx-int8-search-gate\n"
           "       %s --hmx-int8-bitplane-gate\n"
@@ -123,7 +129,9 @@ static void figure8_print_usage(const char *prog) {
           "       %s --roofline-bandwidth-bench [--bench-bytes N] [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-mix-precision-bench [--roofline-case N] [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-int8-shape-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
-          "       %s --roofline-signed-int8-zero-overhead-bench [--warmup N] [--iters N] [--csv-out PATH]\n",
+          "       %s --roofline-signed-int8-zero-overhead-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
+          "       %s --scna-exp2-bench [--mode scna-fp16|scna-int8] [--scna-width 8|16|32] [--warmup N] [--iters N]\n",
+          prog,
           prog,
           prog,
           prog,
@@ -173,7 +181,9 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .warmup     = 5,
     .iters      = 20,
     .print_events = 1,
+    .compare_baseline = 0,
     .compare_reference = 0,
+    .numeric_debug = 0,
     .csv_out    = NULL,
     .hmx_int8_gate = 0,
     .hmx_int8_gate_search = 0,
@@ -199,12 +209,18 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .roofline_signed_int8_zero_overhead_bench = 0,
     .roofline_case = 0,
     .bench_bytes = 64 * 1024 * 1024,
+    .scna_exp2_bench = 0,
+    .scna_width = 16,
   };
 
   for (int i = 1; i < argc; ++i) {
     const char *arg = argv[i];
     if (strcmp(arg, "--figure8-attn") == 0) {
       cfg->enabled = 1;
+    } else if (strcmp(arg, "--scna-exp2-bench") == 0) {
+      cfg->scna_exp2_bench = 1;
+    } else if (strcmp(arg, "--scna-width") == 0) {
+      if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->scna_width)) return -1;
     } else if (strcmp(arg, "--hmx-int8-gate") == 0) {
       cfg->hmx_int8_gate = 1;
     } else if (strcmp(arg, "--hmx-int8-search-gate") == 0) {
@@ -284,8 +300,12 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
       if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->bench_bytes)) return -1;
     } else if (strcmp(arg, "--no-events") == 0) {
       cfg->print_events = 0;
+    } else if (strcmp(arg, "--compare-baseline") == 0) {
+      cfg->compare_baseline = 1;
     } else if (strcmp(arg, "--compare-reference") == 0) {
       cfg->compare_reference = 1;
+    } else if (strcmp(arg, "--numeric-debug") == 0) {
+      cfg->numeric_debug = 1;
     } else if (strcmp(arg, "--csv-out") == 0) {
       if (++i >= argc) {
         fprintf(stderr, "Missing value for --csv-out\n");
@@ -300,19 +320,24 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
 
   if (!cfg->enabled && !cfg->roofline_fp16_bench && !cfg->roofline_bandwidth_bench &&
       !cfg->roofline_mix_precision_bench && !cfg->roofline_int8_shape_bench &&
-      !cfg->roofline_signed_int8_zero_overhead_bench) {
+      !cfg->roofline_signed_int8_zero_overhead_bench && !cfg->scna_exp2_bench) {
     return 0;
   }
-  if (!cfg->enabled) {
+  if (!cfg->enabled && !cfg->scna_exp2_bench) {
     return 0;
   }
-  if (strcmp(cfg->mode, "baseline") != 0 && strcmp(cfg->mode, "lut-exp") != 0) {
+  if (strcmp(cfg->mode, "baseline") != 0 && strcmp(cfg->mode, "lut-exp") != 0 &&
+      strcmp(cfg->mode, "scna-fp16") != 0 && strcmp(cfg->mode, "scna-int8") != 0) {
     fprintf(stderr, "Unsupported --mode: %s\n", cfg->mode);
     return -1;
   }
   if (strcmp(cfg->mask_mode, "full") != 0 && strcmp(cfg->mask_mode, "causal") != 0 &&
       strcmp(cfg->mask_mode, "padding") != 0) {
     fprintf(stderr, "Unsupported --mask-mode: %s\n", cfg->mask_mode);
+    return -1;
+  }
+  if (cfg->scna_width != 8 && cfg->scna_width != 16 && cfg->scna_width != 32) {
+    fprintf(stderr, "--scna-width must be one of 8, 16, 32\n");
     return -1;
   }
   if (cfg->n_heads % cfg->n_kv_heads != 0) {
@@ -345,8 +370,10 @@ static void figure8_fill_inputs(float *q, __fp16 *k, __fp16 *v, __fp16 *mask, in
     for (int k_idx = 0; k_idx < kv_len; ++k_idx) {
       int masked = 0;
       if (strcmp(mask_mode, "causal") == 0) {
+        /* Q is the final qo_len-token segment of the KV sequence. */
         masked = k_idx > kv_len - qo_len + q_idx;
       } else if (strcmp(mask_mode, "padding") == 0) {
+        /* Preserve a non-64-aligned tail of masked K/V positions. */
         masked = k_idx >= kv_len - 3;
       }
       mask[(size_t) q_idx * kv_pad_len + k_idx] = masked ? (__fp16) -65504.0f : (__fp16) 0.0f;
@@ -359,17 +386,17 @@ static int figure8_compute_reference(float *output, float *scores, const float *
                                      int n_kv_heads, int head_dim) {
   if (!output || !scores || !q || !k || !v || n_heads % n_kv_heads != 0) return -1;
 
-  const int    gqa_factor = n_heads / n_kv_heads;
-  const size_t qo_stride  = (size_t) n_heads * head_dim;
-  const size_t kv_stride  = (size_t) n_kv_heads * head_dim;
+  const int gqa_factor = n_heads / n_kv_heads;
+  const size_t qo_stride = (size_t) n_heads * head_dim;
+  const size_t kv_stride = (size_t) n_kv_heads * head_dim;
   const size_t kv_pad_len = align_up((size_t) kv_len, 64);
-  const float  qk_scale   = 1.4426950408889634f / sqrtf((float) head_dim);
+  const float qk_scale = 1.4426950408889634f / sqrtf((float) head_dim);
 
   for (int q_idx = 0; q_idx < qo_len; ++q_idx) {
     for (int h = 0; h < n_heads; ++h) {
-      const int     kv_h  = h / gqa_factor;
-      const float  *q_row = q + (size_t) q_idx * qo_stride + (size_t) h * head_dim;
-      float         row_max = -INFINITY;
+      const int kv_h = h / gqa_factor;
+      const float *q_row = q + (size_t) q_idx * qo_stride + (size_t) h * head_dim;
+      float row_max = -INFINITY;
 
       for (int c = 0; c < kv_len; ++c) {
         const __fp16 *k_row = k + (size_t) c * kv_stride + (size_t) kv_h * head_dim;
@@ -388,8 +415,8 @@ static int figure8_compute_reference(float *output, float *scores, const float *
       }
       if (!(row_sum > 0.0f) || !isfinite(row_sum)) return -1;
 
-      float       *o_row   = output + (size_t) q_idx * qo_stride + (size_t) h * head_dim;
-      const float  inv_sum = 1.0f / row_sum;
+      float *o_row = output + (size_t) q_idx * qo_stride + (size_t) h * head_dim;
+      const float inv_sum = 1.0f / row_sum;
       for (int d = 0; d < head_dim; ++d) {
         float value = 0.0f;
         for (int c = 0; c < kv_len; ++c) {
@@ -403,15 +430,18 @@ static int figure8_compute_reference(float *output, float *scores, const float *
   return 0;
 }
 
-static int figure8_report_reference(const struct Figure8AttnConfig *cfg, const float *candidate,
-                                    const float *reference, size_t output_elems) {
+static void figure8_report_comparison(const char *reference_mode, const struct Figure8AttnConfig *cfg,
+                                      int reported_scna_width, const float *candidate, const float *reference,
+                                      size_t output_elems) {
   double sq_error = 0.0;
+  double candidate_sq = 0.0;
   double reference_sq = 0.0;
-  float  max_abs_error = 0.0f;
-  float  max_rel_error = 0.0f;
-  int    candidate_nonfinite = 0;
-  int    reference_nonfinite = 0;
-
+  float max_abs_error = 0.0f;
+  float max_rel_error = 0.0f;
+  float candidate_max_abs = 0.0f;
+  float reference_max_abs = 0.0f;
+  int candidate_nonfinite = 0;
+  int reference_nonfinite = 0;
   for (size_t i = 0; i < output_elems; ++i) {
     const float candidate_value = candidate[i];
     const float reference_value = reference[i];
@@ -422,26 +452,35 @@ static int figure8_report_reference(const struct Figure8AttnConfig *cfg, const f
     const float abs_error = fabsf(error);
     const float rel_error = abs_error / fmaxf(fabsf(reference_value), 1.0e-6f);
     sq_error += (double) error * error;
+    candidate_sq += (double) candidate_value * candidate_value;
     reference_sq += (double) reference_value * reference_value;
     if (abs_error > max_abs_error) max_abs_error = abs_error;
     if (rel_error > max_rel_error) max_rel_error = rel_error;
+    if (fabsf(candidate_value) > candidate_max_abs) candidate_max_abs = fabsf(candidate_value);
+    if (fabsf(reference_value) > reference_max_abs) reference_max_abs = fabsf(reference_value);
   }
-
   const float rmse = (float) sqrt(sq_error / output_elems);
   const float relative_l2 = reference_sq > 0.0 ? (float) sqrt(sq_error / reference_sq) : 0.0f;
-  const float rmse_limit = 2.0e-3f;
-  const float max_abs_limit = 1.0e-2f;
-  const int passed = candidate_nonfinite == 0 && reference_nonfinite == 0 && isfinite(rmse) &&
-                     rmse <= rmse_limit && max_abs_error <= max_abs_limit;
   fprintf(stderr,
-          "FIG8_ATTENTION_COMPARE candidate_mode=%s reference_mode=host-fp32 qo_len=%d kv_len=%d "
+          "FIG8_ATTENTION_COMPARE candidate_mode=%s scna_width=%d reference_mode=%s qo_len=%d kv_len=%d "
           "n_heads=%d n_kv_heads=%d head_dim=%d elements=%zu rmse=%g relative_l2=%g max_abs_error=%g "
-          "max_rel_error=%g rmse_limit=%g max_abs_limit=%g candidate_nonfinite=%d reference_nonfinite=%d gate=%s\n",
-          cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, output_elems,
-          rmse, relative_l2, max_abs_error, max_rel_error, rmse_limit, max_abs_limit,
-          candidate_nonfinite, reference_nonfinite,
-          passed ? "pass" : "fail");
-  return passed ? 0 : -1;
+          "max_rel_error=%g candidate_rms=%g reference_rms=%g candidate_max_abs=%g reference_max_abs=%g "
+          "candidate_nonfinite=%d reference_nonfinite=%d ret=0\n",
+          cfg->mode, reported_scna_width, reference_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads,
+          cfg->head_dim, output_elems, rmse, relative_l2, max_abs_error, max_rel_error,
+          (float) sqrt(candidate_sq / output_elems), (float) sqrt(reference_sq / output_elems), candidate_max_abs,
+          reference_max_abs, candidate_nonfinite, reference_nonfinite);
+}
+
+static int figure8_mode_flags(const struct Figure8AttnConfig *cfg) {
+  int flags = 0;
+  if (strcmp(cfg->mode, "lut-exp") == 0) flags |= LLM_NPU_MODE_LUT_EXP;
+  if (strcmp(cfg->mode, "scna-fp16") == 0) flags |= LLM_NPU_MODE_SCNA_FP16;
+  if (strcmp(cfg->mode, "scna-int8") == 0) flags |= LLM_NPU_MODE_SCNA_INT8;
+  if (cfg->scna_width == 8) flags |= LLM_NPU_MODE_SCNA_D8;
+  if (cfg->scna_width == 32) flags |= LLM_NPU_MODE_SCNA_D32;
+  if (cfg->numeric_debug) flags |= LLM_NPU_MODE_NUMERIC_DEBUG;
+  return flags;
 }
 
 static int figure8_wait_channel(struct MessageHeader *msg, int64_t timeout_us) {
@@ -494,6 +533,33 @@ static int figure8_send_attn_request(struct MessageHeader *msg, size_t max_msg_s
     fprintf(stderr, "Figure 8 attention request failed with 0x%x after %ld us\n", err, elapsed_us);
     return err;
   }
+  return 0;
+}
+
+static int figure8_send_noop_request(struct MessageHeader *msg, size_t max_msg_size) {
+  struct RequestHeader req_hdr = {
+    .state = 0,
+    .type  = REQUEST_TYPE_NO_OP,
+  };
+
+  msg->state.d        = 0;
+  msg->n_reqs         = 1;
+  msg->req_offsets[0] = message_header_size(msg);
+  msg->req_offsets[1] = msg->req_offsets[0] + sizeof(req_hdr);
+  if ((size_t) msg->req_offsets[1] > max_msg_size) {
+    fprintf(stderr, "No-op message buffer is too small\n");
+    return -1;
+  }
+
+  uint8_t *p                  = (uint8_t *) message_header_get_request_ptr(msg, 0);
+  *(struct RequestHeader *) p = req_hdr;
+
+  msg->state.v[0] = 1;
+  if (figure8_wait_channel(msg, 1000000)) {
+    fprintf(stderr, "No-op channel request timed out\n");
+    return -1;
+  }
+  fprintf(stderr, "No-op channel request completed\n");
   return 0;
 }
 
@@ -564,6 +630,79 @@ static int hmx_int8_gate_send_request(struct MessageHeader *msg, size_t max_msg_
     return -1;
   }
   return message_header_get_request_ptr(msg, 0)->state;
+}
+
+static int scna_exp2_send_request(struct MessageHeader *msg, size_t max_msg_size,
+                                  const struct ScnaExp2BenchParams *params) {
+  struct RequestHeader req_hdr = { .state = 0, .type = REQUEST_TYPE_OP_COMPUTE };
+  struct OpComputeRequest compute_req = { .op = HTP_OPS_SCNA_EXP2_BENCH };
+  msg->state.d = 0;
+  msg->n_reqs = 1;
+  msg->req_offsets[0] = message_header_size(msg);
+  msg->req_offsets[1] = msg->req_offsets[0] + sizeof(req_hdr) + sizeof(compute_req) + sizeof(*params);
+  if ((size_t) msg->req_offsets[1] > max_msg_size) return -1;
+  uint8_t *p = (uint8_t *) message_header_get_request_ptr(msg, 0);
+  *(struct RequestHeader *) p = req_hdr;
+  p += sizeof(req_hdr);
+  *(struct OpComputeRequest *) p = compute_req;
+  p += sizeof(compute_req);
+  *(struct ScnaExp2BenchParams *) p = *params;
+  msg->state.v[0] = 1;
+  if (figure8_wait_channel(msg, 30000000)) return -1;
+  return message_header_get_request_ptr(msg, 0)->state;
+}
+
+static int run_scna_exp2_benchmark(const struct Figure8AttnConfig *cfg) {
+  void *chan = NULL;
+  struct ScnaExp2BenchResult *result = NULL;
+  int chan_fd = -1, result_fd = -1;
+  const size_t max_msg_size = 4096;
+  const size_t result_size = align_up(sizeof(*result), 128);
+  int ret = 1;
+  if (alloc_shared_mem_buf(&chan, &chan_fd, max_msg_size)) goto end;
+  if (alloc_shared_mem_buf((void **) &result, &result_fd, result_size)) goto end;
+  memset(result, 0, result_size);
+  if (create_htp_message_channel(chan_fd, max_msg_size)) goto end;
+  const struct ScnaExp2BenchParams params = {
+    .output = { .fd = result_fd, .offset = 0 },
+    .width = cfg->scna_width,
+    .mode_flags = figure8_mode_flags(cfg),
+    .warmup = cfg->warmup,
+    .iters = cfg->iters,
+  };
+  if (scna_exp2_send_request((struct MessageHeader *) chan, max_msg_size, &params)) goto end;
+  printf("SCNA_EXP2_BENCH mode=%s width=%d lanes=%d iters=%d elapsed_us=%lld pair_elapsed_us=%lld "
+         "rmse=%g max_abs_error=%g dense_samples=%d dense_rmse=%g dense_max_abs_error=%g "
+         "pair_max_abs_diff=%g monotonic_violations=%d negative_count=%d nan_count=%d "
+         "y_min=%g y_minus12=%g y_minus4=%g y_zero=%g\n",
+         cfg->mode, result->width, result->lanes, result->iters, (long long) result->elapsed_us,
+         (long long) result->pair_elapsed_us, result->rmse, result->max_abs_error, result->dense_samples,
+         result->dense_rmse, result->dense_max_abs_error, result->pair_max_abs_diff,
+         result->monotonic_violations, result->negative_count, result->nan_count, result->output_at_min,
+         result->output_near_minus12, result->output_near_minus4, result->output_at_zero);
+  printf("HVX_FP16_TO_FP32_PROBE zero=%g one=%g quarter=%g neg_half=%g\n", result->convert_zero,
+         result->convert_one, result->convert_quarter, result->convert_neg_half);
+  if (cfg->csv_out) {
+    FILE *csv = fopen(cfg->csv_out, "w");
+    if (!csv) goto end;
+    fprintf(csv, "mode,width,lanes,iters,elapsed_us,pair_elapsed_us,rmse,max_abs_error,dense_samples,"
+                 "dense_rmse,dense_max_abs_error,pair_max_abs_diff,monotonic_violations,negative_count,"
+                 "nan_count,y_min,y_minus12,y_minus4,y_zero\n");
+    fprintf(csv, "%s,%d,%d,%d,%lld,%lld,%g,%g,%d,%g,%g,%g,%d,%d,%d,%g,%g,%g,%g\n", cfg->mode,
+            result->width, result->lanes, result->iters, (long long) result->elapsed_us,
+            (long long) result->pair_elapsed_us, result->rmse, result->max_abs_error, result->dense_samples,
+            result->dense_rmse, result->dense_max_abs_error, result->pair_max_abs_diff,
+            result->monotonic_violations, result->negative_count, result->nan_count, result->output_at_min,
+            result->output_near_minus12, result->output_near_minus4, result->output_at_zero);
+    fclose(csv);
+  }
+  { int fds[] = { result_fd }; (void) figure8_release_dsp_maps((struct MessageHeader *) chan, max_msg_size, fds, 1); }
+  ret = 0;
+end:
+  if (chan_fd >= 0) htp_ops_destroy_channel(get_global_handle());
+  if (result) free_shared_mem_buf(result, result_fd, result_size);
+  if (chan) free_shared_mem_buf(chan, chan_fd, max_msg_size);
+  return ret;
 }
 
 static int run_hmx_int8_gate(int mode) {
@@ -1323,7 +1462,7 @@ end:
 }
 
 static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
-  float  *q = NULL, *o = NULL, *reference_output = NULL, *reference_scores = NULL;
+  float  *q = NULL, *o = NULL, *candidate_output = NULL, *reference_output = NULL, *reference_scores = NULL;
   __fp16 *k = NULL, *v = NULL, *mask = NULL;
   void   *chan = NULL, *profile = NULL;
   int     q_fd = -1, k_fd = -1, v_fd = -1, o_fd = -1, mask_fd = -1, chan_fd = -1, profile_fd = -1;
@@ -1354,6 +1493,13 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   if (alloc_shared_mem_buf((void **) &mask, &mask_fd, mask_size)) goto end;
   if (alloc_shared_mem_buf(&profile, &profile_fd, profile_size)) goto end;
   if (alloc_shared_mem_buf(&chan, &chan_fd, max_msg_size)) goto end;
+  if (cfg->compare_baseline || cfg->compare_reference) {
+    candidate_output = (float *) malloc(q_size);
+    if (!candidate_output) {
+      fprintf(stderr, "Failed to allocate Figure 8 compare buffer\n");
+      goto end;
+    }
+  }
   if (cfg->compare_reference) {
     reference_output = (float *) malloc(q_size);
     reference_scores = (float *) malloc((size_t) cfg->kv_len * sizeof(float));
@@ -1373,16 +1519,21 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     goto end;
   }
 
+  if (figure8_send_noop_request((struct MessageHeader *) chan, max_msg_size)) {
+    goto end;
+  }
+
   if (cfg->csv_out) {
     csv = fopen(cfg->csv_out, "w");
     if (!csv) {
       fprintf(stderr, "Failed to open csv-out path: %s\n", cfg->csv_out);
       goto end;
     }
-    fprintf(csv, "mode,qo_len,kv_len,n_heads,n_kv_heads,head_dim,phase,iteration,host_elapsed_us,ret\n");
+    fprintf(csv, "mode,scna_width,qo_len,kv_len,n_heads,n_kv_heads,head_dim,phase,iteration,host_elapsed_us,ret\n");
   }
 
-  const int mode_flags = strcmp(cfg->mode, "lut-exp") == 0 ? LLM_NPU_MODE_LUT_EXP : 0;
+  const int mode_flags = figure8_mode_flags(cfg);
+  const int reported_scna_width = strncmp(cfg->mode, "scna-", 5) == 0 ? cfg->scna_width : 0;
   struct FlashAttnProfileParams params = {
     .attn = {
       .o          = { .fd = o_fd, .offset = 0, },
@@ -1405,10 +1556,10 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
 
   fprintf(stderr,
           "FIG8_ATTENTION_CONFIG mode=%s mask_mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d warmup=%d "
-          "iters=%d q_size=%zu kv_size=%zu mask_size=%zu profile_size=%zu profile_max_records=%d "
+          "iters=%d scna_width=%d q_size=%zu kv_size=%zu mask_size=%zu profile_size=%zu profile_max_records=%d "
           "profile_max_events=%d mode_flags=%d print_events=%d\n",
           cfg->mode, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, cfg->warmup, cfg->iters,
-          q_size, kv_size, mask_size, profile_size, profile_max_records, profile_max_events, mode_flags,
+          cfg->scna_width, q_size, kv_size, mask_size, profile_size, profile_max_records, profile_max_events, mode_flags,
           cfg->print_events);
 
   struct MessageHeader *msg = (struct MessageHeader *) chan;
@@ -1424,17 +1575,22 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     int64_t elapsed = get_time_us() - t0;
 
     fprintf(stderr,
-            "FIG8_ATTENTION_HOST_TIMING mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d phase=%s "
+            "FIG8_ATTENTION_HOST_TIMING mode=%s scna_width=%d qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d phase=%s "
             "iteration=%d host_elapsed_us=%ld ret=%d\n",
-            cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, phase,
+            cfg->mode, reported_scna_width, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, phase,
             is_warmup ? i : measured_idx, elapsed, req_ret);
     if (csv) {
-      fprintf(csv, "%s,%d,%d,%d,%d,%d,%s,%d,%ld,%d\n", cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
-              cfg->n_kv_heads, cfg->head_dim, phase, is_warmup ? i : measured_idx, elapsed, req_ret);
+      fprintf(csv, "%s,%d,%d,%d,%d,%d,%d,%s,%d,%ld,%d\n", cfg->mode, reported_scna_width, cfg->qo_len, cfg->kv_len,
+              cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, phase, is_warmup ? i : measured_idx, elapsed, req_ret);
       fflush(csv);
     }
 
     if (req_ret) {
+      struct Figure8ProfileHeader *profile_hdr = (struct Figure8ProfileHeader *) profile;
+      fprintf(stderr,
+              "FIG8_ATTENTION_PROFILE_DEBUG magic=0x%x reserved0=%d reserved1=%d record_count=%d event_count=%d\n",
+              profile_hdr->magic, profile_hdr->reserved0, profile_hdr->reserved1, profile_hdr->record_count,
+              profile_hdr->event_count);
       goto end;
     }
 
@@ -1454,12 +1610,22 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     for (int r = 0; r < record_count; ++r) {
       const struct Figure8ProfileRecord *rec = &records[r];
       fprintf(stderr,
-              "FIG8_ATTENTION_TIMERS mode=%s phase=%s iteration=%d lut_exp=%d qo_len=%d kv_len=%d n_heads=%d "
+              "FIG8_ATTENTION_TIMERS mode=%s phase=%s iteration=%d lut_exp=%d nonlinear_mode=%d scna_width=%d scna_exp=%lld qo_len=%d kv_len=%d n_heads=%d "
               "n_kv_heads=%d head_dim=%d kv_head=%d worker=%d profiled_total=%ld q_load=%ld k_load=%ld v_load=%ld "
               "qk_dot=%ld safe_sm=%ld core_acc=%ld o_scale=%ld o_store=%ld\n",
-              cfg->mode, phase, is_warmup ? i : measured_idx, rec->lut_exp, rec->qo_len, rec->kv_len, rec->n_heads,
+              cfg->mode, phase, is_warmup ? i : measured_idx, rec->lut_exp, rec->nonlinear_mode, rec->scna_width,
+              (long long) rec->scna_exp2, rec->qo_len, rec->kv_len, rec->n_heads,
               rec->n_kv_heads, rec->head_dim, rec->kv_head, rec->worker, rec->profiled_total, rec->q_load,
               rec->k_load, rec->v_load, rec->qk_dot, rec->safe_sm, rec->core_acc, rec->o_scale, rec->o_store);
+      if (cfg->numeric_debug) {
+        fprintf(stderr,
+                "FIG8_NUMERIC kv_head=%d rowsum0_bits=0x%x l0_bits=0x%x core_o0_bits=0x%x "
+                "inv_l0_bits=0x%x scaled_o0_bits=0x%x p0_first_bits=0x%x p0_last_bits=0x%x "
+                "sum0_first_bits=0x%x sum0_last_bits=0x%x\n",
+                rec->kv_head, rec->debug_rowsum0_bits, rec->debug_l0_bits, rec->debug_core_o0_bits,
+                rec->debug_inv_l0_bits, rec->debug_scaled_o0_bits, rec->debug_p0_first_bits,
+                rec->debug_p0_last_bits, rec->debug_sum0_first_bits, rec->debug_sum0_last_bits);
+      }
     }
 
     int event_count = profile_hdr->event_count;
@@ -1485,8 +1651,24 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     }
   }
 
+  if (cfg->compare_baseline) {
+    const size_t output_elems = (size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim;
+    memcpy(candidate_output, o, output_elems * sizeof(float));
+    memset(o, 0, q_size);
+    memset(profile, 0, profile_size);
+    params.attn.mode_flags = 0;
+    const int compare_ret = figure8_send_attn_request(msg, max_msg_size, &params);
+    if (compare_ret) {
+      fprintf(stderr, "Figure 8 baseline compare request failed: %d\n", compare_ret);
+      goto end;
+    }
+
+    figure8_report_comparison("baseline", cfg, reported_scna_width, candidate_output, o, output_elems);
+  }
+
   if (cfg->compare_reference) {
     const size_t output_elems = (size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim;
+    if (!cfg->compare_baseline) memcpy(candidate_output, o, output_elems * sizeof(float));
     const int64_t reference_t0 = get_time_us();
     if (figure8_compute_reference(reference_output, reference_scores, q, k, v, mask, cfg->qo_len, cfg->kv_len,
                                   cfg->n_heads, cfg->n_kv_heads, cfg->head_dim)) {
@@ -1498,7 +1680,8 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
             "FIG8_ATTENTION_REFERENCE_TIMING reference_mode=host-fp32 qo_len=%d kv_len=%d n_heads=%d "
             "n_kv_heads=%d head_dim=%d elapsed_us=%ld ret=0\n",
             cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, reference_elapsed_us);
-    if (figure8_report_reference(cfg, o, reference_output, output_elems)) goto end;
+    figure8_report_comparison("host-fp32", cfg, reported_scna_width, candidate_output, reference_output,
+                              output_elems);
   }
 
   {
@@ -1511,6 +1694,7 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
 end:
   free(reference_scores);
   free(reference_output);
+  free(candidate_output);
   if (csv) {
     fclose(csv);
   }
@@ -1555,8 +1739,14 @@ int alloc_shared_mem_buf(void **p_buf, int *p_fd, size_t size) {
     return -1;
   }
 
+  fprintf(stderr, "alloc_shared_mem_buf: buf=%p fd=%d size=%zu flags=FASTRPC_MAP_FD\n", buf, fd, size);
+
   // map buffer to the DSP
   int err = fastrpc_mmap(CDSP_DOMAIN_ID, fd, buf, 0, size, FASTRPC_MAP_FD);
+  if (err) {
+    fprintf(stderr, "alloc_shared_mem_buf: fastrpc_mmap FASTRPC_MAP_FD failed, err: %d; trying DELAYED\n", err);
+    err = fastrpc_mmap(CDSP_DOMAIN_ID, fd, buf, 0, size, FASTRPC_MAP_FD_DELAYED);
+  }
   if (err) {
     fprintf(stderr, "alloc_shared_mem_buf: fastrpc_mmap failed, err: %d\n", err);
     return -1;
@@ -1873,6 +2063,12 @@ int main(int argc, char **argv) {
     int figure8_ret = run_figure8_attn_benchmark(&figure8_cfg);
     close_dsp_session();
     return figure8_ret;
+  }
+
+  if (figure8_cfg.scna_exp2_bench) {
+    int scna_ret = run_scna_exp2_benchmark(&figure8_cfg);
+    close_dsp_session();
+    return scna_ret;
   }
 
   if (figure8_cfg.roofline_fp16_bench || figure8_cfg.roofline_bandwidth_bench ||
