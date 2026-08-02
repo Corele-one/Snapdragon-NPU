@@ -1,6 +1,9 @@
 # Models and datasets
 /models/
 /projects/*/models/
+
+# Documentation is kept locally and is not versioned in this repository.
+**/docs/
 # Do not use the old broad "**/models/" rule: MLLM contains source code under
 # reference/w4-w8-a16-mllm/mllm/models/.
 *.gguf
