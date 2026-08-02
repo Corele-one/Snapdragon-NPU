@@ -357,6 +357,11 @@ struct Figure8ProfileHeader {
   int32_t event_overflow;
   int32_t reserved0;
   int32_t reserved1;
+  int64_t dispatch_mapping_us;
+  int64_t dispatch_validate_in_us;
+  int64_t dispatch_compute_us;
+  int64_t dispatch_validate_out_us;
+  int64_t dispatch_total_us;
 };
 
 struct Figure8ProfileRecord {

@@ -3145,6 +3145,7 @@ int execute_op_simple(struct OpComputeRequest *req) {
 
     case HTP_OPS_FLASH_ATTN_PROFILE_QO_F32_KV_F16:
       {
+        const int64_t dispatch_t0 = trace_now_us();
         auto params = reinterpret_cast<FlashAttnProfileParams *>(req->payload);
 
         int qo_len      = params->attn.qo_len;
@@ -3172,6 +3173,7 @@ int execute_op_simple(struct OpComputeRequest *req) {
         add_buffer(in_bufs, params->attn.k, kv_size);
         add_buffer(in_bufs, params->attn.v, kv_size);
         add_buffer(in_bufs, params->attn.mask, mask_size);
+        const int64_t mapping_t1 = trace_now_us();
 
         auto profile = reinterpret_cast<Figure8ProfileHeader *>(OUT_PTR(1));
         if (profile == nullptr) {
@@ -3186,12 +3188,29 @@ int execute_op_simple(struct OpComputeRequest *req) {
         profile->event_overflow = 0;
         profile->reserved0    = 0;
         profile->reserved1    = 0;
+        profile->dispatch_mapping_us      = mapping_t1 - dispatch_t0;
+        profile->dispatch_validate_in_us  = 0;
+        profile->dispatch_compute_us      = 0;
+        profile->dispatch_validate_out_us = 0;
+        profile->dispatch_total_us        = 0;
 
+        const int64_t validate_in_t0 = trace_now_us();
         validate_in_bufs();
+        const int64_t validate_in_t1 = trace_now_us();
+        const int64_t compute_t0     = validate_in_t1;
         ret = simple_flash_attn_profiled((__fp16 *) OUT_PTR(0), (__fp16 *) IN_PTR(0), (__fp16 *) IN_PTR(1),
                                          (__fp16 *) IN_PTR(2), (__fp16 *) IN_PTR(3), qo_len, kv_len, n_heads,
                                          n_kv_heads, head_dim, params->attn.mode_flags, profile);
+        const int64_t compute_t1 = trace_now_us();
+        profile->dispatch_validate_in_us = validate_in_t1 - validate_in_t0;
+        profile->dispatch_compute_us     = compute_t1 - compute_t0;
+
+        const int64_t validate_out_t0 = compute_t1;
         validate_out_bufs();
+        const int64_t validate_out_t1 = trace_now_us();
+        profile->dispatch_validate_out_us = validate_out_t1 - validate_out_t0;
+        profile->dispatch_total_us        = validate_out_t1 - dispatch_t0;
+        qurt_mem_cache_clean((qurt_addr_t) profile, sizeof(*profile), QURT_MEM_CACHE_FLUSH, QURT_MEM_DCACHE);
       }
       break;
 

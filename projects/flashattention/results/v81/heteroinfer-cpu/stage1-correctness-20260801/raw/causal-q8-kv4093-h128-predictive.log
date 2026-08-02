@@ -1,0 +1,52 @@
+FIG8_CPU_TOPOLOGY cpu=0 allowed=1 max_freq_khz=3532800 capacity=792 role=low-capacity
+FIG8_CPU_TOPOLOGY cpu=1 allowed=1 max_freq_khz=3532800 capacity=792 role=low-capacity
+FIG8_CPU_TOPOLOGY cpu=2 allowed=1 max_freq_khz=3532800 capacity=792 role=low-capacity
+FIG8_CPU_TOPOLOGY cpu=3 allowed=1 max_freq_khz=3532800 capacity=792 role=low-capacity
+FIG8_CPU_TOPOLOGY cpu=4 allowed=1 max_freq_khz=3532800 capacity=792 role=low-capacity
+FIG8_CPU_TOPOLOGY cpu=5 allowed=1 max_freq_khz=3532800 capacity=792 role=low-capacity
+FIG8_CPU_TOPOLOGY cpu=6 allowed=1 max_freq_khz=4320000 capacity=1024 role=high-capacity
+FIG8_CPU_TOPOLOGY cpu=7 allowed=1 max_freq_khz=4320000 capacity=1024 role=high-capacity
+FIG8_ATTENTION_CONFIG mode=baseline mask_mode=causal qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 warmup=5 iters=1 q_size=49152 kv_size=2095616 mask_size=65536 profile_size=456192 profile_max_records=10 profile_max_events=6320 mode_flags=0 print_events=0 wait_policy=predictive host_cpu=0 cpu_role=low-capacity host_sync_calibration=5 descriptor_prepare_us=0 persistent_rpcmem=1 persistent_channel=1 persistent_dsp_maps=1
+FIG8_SYNC_CALIBRATION requested_policy=predictive iteration=0 effective_strategy=calibration-legacy wait_wall_us=1225 thread_cpu_us=20 sleep_us=1222 spin_us=3 poll_count=12 dsp_dispatch_total_us=1193
+FIG8_SYNC_CALIBRATION requested_policy=predictive iteration=1 effective_strategy=calibration-legacy wait_wall_us=1175 thread_cpu_us=19 sleep_us=1172 spin_us=3 poll_count=11 dsp_dispatch_total_us=1131
+FIG8_SYNC_CALIBRATION requested_policy=predictive iteration=2 effective_strategy=calibration-legacy wait_wall_us=1207 thread_cpu_us=18 sleep_us=1205 spin_us=2 poll_count=12 dsp_dispatch_total_us=1153
+FIG8_SYNC_CALIBRATION requested_policy=predictive iteration=3 effective_strategy=calibration-legacy wait_wall_us=1202 thread_cpu_us=15 sleep_us=1201 spin_us=1 poll_count=12 dsp_dispatch_total_us=1155
+FIG8_SYNC_CALIBRATION requested_policy=predictive iteration=4 effective_strategy=calibration-legacy wait_wall_us=1220 thread_cpu_us=22 sleep_us=1217 spin_us=3 poll_count=12 dsp_dispatch_total_us=1146
+FIG8_ATTENTION_HOST_TIMING mode=baseline qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=0 wait_policy=predictive wait_strategy=predictive-sleep-spin host_cpu_requested=0 host_cpu_actual=0 cpu_role=low-capacity host_wall_us=1164 host_thread_cpu_us=30 wait_wall_us=1163 wait_thread_cpu_us=29 sleep_us=1134 spin_us=29 poll_count=9366 predicted_us=1175 prediction_error_us=-12 output_hash=a10f80ec7de70fca ret=0
+FIG8_ATTENTION_DISPATCH mode=baseline phase=warmup iteration=0 mapping_us=8 validate_in_us=70 compute_us=1067 validate_out_us=10 total_us=1155
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=8 phase=warmup iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=0 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=447 q_load=2 k_load=145 v_load=148 qk_dot=4 safe_sm=143 core_acc=2 o_scale=0 o_store=3
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=0 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=458 q_load=2 k_load=158 v_load=149 qk_dot=4 safe_sm=140 core_acc=2 o_scale=1 o_store=2
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=8 phase=warmup iteration=0 events=16 max_events=6320 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=1 wait_policy=predictive wait_strategy=predictive-sleep-spin host_cpu_requested=0 host_cpu_actual=0 cpu_role=low-capacity host_wall_us=1152 host_thread_cpu_us=30 wait_wall_us=1150 wait_thread_cpu_us=28 sleep_us=1123 spin_us=27 poll_count=9361 predicted_us=1163 prediction_error_us=-13 output_hash=a10f80ec7de70fca ret=0
+FIG8_ATTENTION_DISPATCH mode=baseline phase=warmup iteration=1 mapping_us=7 validate_in_us=70 compute_us=1055 validate_out_us=10 total_us=1142
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=8 phase=warmup iteration=1 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=1 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=439 q_load=2 k_load=143 v_load=140 qk_dot=5 safe_sm=144 core_acc=2 o_scale=0 o_store=3
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=1 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=456 q_load=2 k_load=156 v_load=148 qk_dot=4 safe_sm=141 core_acc=2 o_scale=1 o_store=2
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=8 phase=warmup iteration=1 events=16 max_events=6320 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=2 wait_policy=predictive wait_strategy=predictive-sleep-spin host_cpu_requested=0 host_cpu_actual=0 cpu_role=low-capacity host_wall_us=1160 host_thread_cpu_us=52 wait_wall_us=1159 wait_thread_cpu_us=50 sleep_us=1109 spin_us=50 poll_count=16745 predicted_us=1150 prediction_error_us=9 output_hash=a10f80ec7de70fca ret=0
+FIG8_ATTENTION_DISPATCH mode=baseline phase=warmup iteration=2 mapping_us=7 validate_in_us=69 compute_us=1064 validate_out_us=10 total_us=1151
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=8 phase=warmup iteration=2 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=2 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=440 q_load=2 k_load=145 v_load=139 qk_dot=4 safe_sm=144 core_acc=3 o_scale=0 o_store=3
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=2 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=461 q_load=2 k_load=161 v_load=147 qk_dot=4 safe_sm=142 core_acc=2 o_scale=1 o_store=2
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=8 phase=warmup iteration=2 events=16 max_events=6320 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=3 wait_policy=predictive wait_strategy=predictive-sleep-spin host_cpu_requested=0 host_cpu_actual=0 cpu_role=low-capacity host_wall_us=1142 host_thread_cpu_us=25 wait_wall_us=1140 wait_thread_cpu_us=25 sleep_us=1113 spin_us=27 poll_count=8941 predicted_us=1150 prediction_error_us=-10 output_hash=a10f80ec7de70fca ret=0
+FIG8_ATTENTION_DISPATCH mode=baseline phase=warmup iteration=3 mapping_us=8 validate_in_us=70 compute_us=1045 validate_out_us=9 total_us=1132
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=8 phase=warmup iteration=3 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=3 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=451 q_load=2 k_load=148 v_load=148 qk_dot=4 safe_sm=144 core_acc=2 o_scale=0 o_store=3
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=3 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=433 q_load=2 k_load=140 v_load=140 qk_dot=4 safe_sm=141 core_acc=2 o_scale=1 o_store=3
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=8 phase=warmup iteration=3 events=16 max_events=6320 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=4 wait_policy=predictive wait_strategy=predictive-sleep-spin host_cpu_requested=0 host_cpu_actual=0 cpu_role=low-capacity host_wall_us=1114 host_thread_cpu_us=16 wait_wall_us=1109 wait_thread_cpu_us=15 sleep_us=1100 spin_us=9 poll_count=3242 predicted_us=1140 prediction_error_us=-31 output_hash=a10f80ec7de70fca ret=0
+FIG8_ATTENTION_DISPATCH mode=baseline phase=warmup iteration=4 mapping_us=8 validate_in_us=70 compute_us=1016 validate_out_us=9 total_us=1103
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=8 phase=warmup iteration=4 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=4 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=420 q_load=2 k_load=137 v_load=131 qk_dot=4 safe_sm=141 core_acc=2 o_scale=0 o_store=3
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=4 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=437 q_load=2 k_load=143 v_load=141 qk_dot=4 safe_sm=142 core_acc=2 o_scale=1 o_store=2
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=8 phase=warmup iteration=4 events=16 max_events=6320 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=0 wait_policy=predictive wait_strategy=predictive-sleep-spin host_cpu_requested=0 host_cpu_actual=0 cpu_role=low-capacity host_wall_us=1239 host_thread_cpu_us=162 wait_wall_us=1236 wait_thread_cpu_us=161 sleep_us=1079 spin_us=157 poll_count=21296 predicted_us=1109 prediction_error_us=127 output_hash=a10f80ec7de70fca ret=0
+FIG8_ATTENTION_DISPATCH mode=baseline phase=measure iteration=0 mapping_us=8 validate_in_us=70 compute_us=1140 validate_out_us=10 total_us=1228
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=8 phase=measure iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=0 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=487 q_load=2 k_load=155 v_load=179 qk_dot=4 safe_sm=142 core_acc=2 o_scale=0 o_store=3
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=0 lut_exp=0 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=491 q_load=2 k_load=168 v_load=163 qk_dot=4 safe_sm=149 core_acc=2 o_scale=1 o_store=2
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=8 phase=measure iteration=0 events=16 max_events=6320 overflow=0
+FIG8_ATTENTION_REFERENCE_TIMING reference_mode=host-fp32 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 elapsed_us=170014 ret=0
+FIG8_ATTENTION_COMPARE candidate_mode=baseline reference_mode=host-fp32 qo_len=8 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 elements=12288 rmse=0.00132372 relative_l2=1.80708 max_abs_error=0.00628204 max_rel_error=2682 rmse_limit=0.002 max_abs_limit=0.01 candidate_nonfinite=0 reference_nonfinite=0 gate=pass

@@ -1,6 +1,11 @@
+#define _GNU_SOURCE
+
+#include <errno.h>
+#include <inttypes.h>
 #include <math.h>
 #include <remote.h>
 #include <rpcmem.h>
+#include <sched.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +21,12 @@
 static inline int64_t get_time_us() {
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec * 1000000L + ts.tv_nsec / 1000;
+}
+
+static inline int64_t get_thread_time_us() {
+  struct timespec ts;
+  clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
   return ts.tv_sec * 1000000L + ts.tv_nsec / 1000;
 }
 
@@ -71,6 +82,10 @@ struct Figure8AttnConfig {
   int         print_events;
   int         compare_reference;
   const char *csv_out;
+  const char *output_bin;
+  const char *wait_policy;
+  int         host_cpu;
+  int         host_sync_calibration;
   int         hmx_int8_gate;
   int         hmx_int8_gate_search;
   int         hmx_int8_bitplane_gate;
@@ -101,7 +116,8 @@ static void figure8_print_usage(const char *prog) {
   fprintf(stderr,
           "Usage: %s --figure8-attn [--mode baseline|lut-exp] [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
           "          [--n-heads N] [--n-kv-heads N] [--head-dim N] [--warmup N] [--iters N]\n"
-          "          [--no-events] [--compare-reference] [--csv-out PATH]\n"
+          "          [--wait-policy legacy|spin|predictive] [--host-cpu N] [--host-sync-calibration N]\n"
+          "          [--no-events] [--compare-reference] [--csv-out PATH] [--output-bin PATH]\n"
           "       %s --hmx-int8-gate\n"
           "       %s --hmx-int8-search-gate\n"
           "       %s --hmx-int8-bitplane-gate\n"
@@ -160,6 +176,17 @@ static int parse_int_cli_value(const char *name, const char *value, int *out) {
   return 0;
 }
 
+static int parse_nonnegative_cli_value(const char *name, const char *value, int *out) {
+  char *end = NULL;
+  long  v   = strtol(value, &end, 10);
+  if (!value[0] || *end != '\0' || v < 0 || v > INT32_MAX) {
+    fprintf(stderr, "Invalid non-negative integer for %s: %s\n", name, value);
+    return -1;
+  }
+  *out = (int) v;
+  return 0;
+}
+
 static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *cfg) {
   *cfg = (struct Figure8AttnConfig) {
     .enabled    = 0,
@@ -175,6 +202,10 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .print_events = 1,
     .compare_reference = 0,
     .csv_out    = NULL,
+    .output_bin = NULL,
+    .wait_policy = "legacy",
+    .host_cpu = -1,
+    .host_sync_calibration = 20,
     .hmx_int8_gate = 0,
     .hmx_int8_gate_search = 0,
     .hmx_int8_bitplane_gate = 0,
@@ -266,6 +297,16 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
         return -1;
       }
       cfg->mask_mode = argv[i];
+    } else if (strcmp(arg, "--wait-policy") == 0) {
+      if (++i >= argc) {
+        fprintf(stderr, "Missing value for --wait-policy\n");
+        return -1;
+      }
+      cfg->wait_policy = argv[i];
+    } else if (strcmp(arg, "--host-cpu") == 0) {
+      if (++i >= argc || parse_nonnegative_cli_value(arg, argv[i], &cfg->host_cpu)) return -1;
+    } else if (strcmp(arg, "--host-sync-calibration") == 0) {
+      if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->host_sync_calibration)) return -1;
     } else if (strcmp(arg, "--qo-len") == 0) {
       if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->qo_len)) return -1;
     } else if (strcmp(arg, "--kv-len") == 0) {
@@ -292,6 +333,12 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
         return -1;
       }
       cfg->csv_out = argv[i];
+    } else if (strcmp(arg, "--output-bin") == 0) {
+      if (++i >= argc) {
+        fprintf(stderr, "Missing value for --output-bin\n");
+        return -1;
+      }
+      cfg->output_bin = argv[i];
     } else {
       fprintf(stderr, "Unknown argument: %s\n", arg);
       return -1;
@@ -313,6 +360,11 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
   if (strcmp(cfg->mask_mode, "full") != 0 && strcmp(cfg->mask_mode, "causal") != 0 &&
       strcmp(cfg->mask_mode, "padding") != 0) {
     fprintf(stderr, "Unsupported --mask-mode: %s\n", cfg->mask_mode);
+    return -1;
+  }
+  if (strcmp(cfg->wait_policy, "legacy") != 0 && strcmp(cfg->wait_policy, "spin") != 0 &&
+      strcmp(cfg->wait_policy, "predictive") != 0) {
+    fprintf(stderr, "Unsupported --wait-policy: %s\n", cfg->wait_policy);
     return -1;
   }
   if (cfg->n_heads % cfg->n_kv_heads != 0) {
@@ -444,20 +496,173 @@ static int figure8_report_reference(const struct Figure8AttnConfig *cfg, const f
   return passed ? 0 : -1;
 }
 
-static int figure8_wait_channel(struct MessageHeader *msg, int64_t timeout_us) {
-  const int64_t t0 = get_time_us();
-  while (msg->state.v[1] != 1) {
-    if (get_time_us() - t0 > timeout_us) {
-      fprintf(stderr, "Timed out waiting for DSP message reply\n");
-      return -1;
+enum Figure8WaitPolicy {
+  FIGURE8_WAIT_LEGACY,
+  FIGURE8_WAIT_SPIN,
+  FIGURE8_WAIT_PREDICTIVE,
+};
+
+struct Figure8WaitStats {
+  int64_t  wall_us;
+  int64_t  thread_cpu_us;
+  int64_t  sleep_us;
+  int64_t  spin_us;
+  int64_t  predicted_us;
+  int64_t  prediction_error_us;
+  uint64_t poll_count;
+  const char *strategy;
+};
+
+struct Figure8LatencyPredictor {
+  int64_t *samples;
+  int64_t *scratch;
+  int      capacity;
+  int      count;
+  int      next;
+};
+
+struct Figure8PreparedRequest {
+  struct MessageHeader          *msg;
+  struct RequestHeader          *request;
+  struct FlashAttnProfileParams *params;
+};
+
+static inline uint64_t figure8_message_state_load(const struct MessageHeader *msg) {
+  const uint64_t *state = (const uint64_t *) (const void *) msg;
+  return __atomic_load_n(state, __ATOMIC_ACQUIRE);
+}
+
+static inline void figure8_message_state_store(struct MessageHeader *msg, uint64_t state) {
+  uint64_t *state_ptr = (uint64_t *) (void *) msg;
+  __atomic_store_n(state_ptr, state, __ATOMIC_RELEASE);
+}
+
+static enum Figure8WaitPolicy figure8_parse_wait_policy(const char *name) {
+  if (strcmp(name, "spin") == 0) return FIGURE8_WAIT_SPIN;
+  if (strcmp(name, "predictive") == 0) return FIGURE8_WAIT_PREDICTIVE;
+  return FIGURE8_WAIT_LEGACY;
+}
+
+static int figure8_predictor_init(struct Figure8LatencyPredictor *predictor, int capacity) {
+  memset(predictor, 0, sizeof(*predictor));
+  predictor->samples = (int64_t *) calloc((size_t) capacity, sizeof(int64_t));
+  predictor->scratch = (int64_t *) calloc((size_t) capacity, sizeof(int64_t));
+  if (!predictor->samples || !predictor->scratch) {
+    free(predictor->samples);
+    free(predictor->scratch);
+    memset(predictor, 0, sizeof(*predictor));
+    return -1;
+  }
+  predictor->capacity = capacity;
+  return 0;
+}
+
+static void figure8_predictor_destroy(struct Figure8LatencyPredictor *predictor) {
+  free(predictor->samples);
+  free(predictor->scratch);
+  memset(predictor, 0, sizeof(*predictor));
+}
+
+static void figure8_predictor_add(struct Figure8LatencyPredictor *predictor, int64_t sample_us) {
+  if (!predictor->samples || predictor->capacity <= 0) return;
+  predictor->samples[predictor->next] = sample_us;
+  predictor->next = (predictor->next + 1) % predictor->capacity;
+  if (predictor->count < predictor->capacity) ++predictor->count;
+}
+
+static int64_t figure8_predictor_p10(struct Figure8LatencyPredictor *predictor) {
+  if (!predictor->samples || predictor->count <= 0) return 0;
+  memcpy(predictor->scratch, predictor->samples, (size_t) predictor->count * sizeof(int64_t));
+  for (int i = 1; i < predictor->count; ++i) {
+    const int64_t value = predictor->scratch[i];
+    int           j     = i;
+    while (j > 0 && predictor->scratch[j - 1] > value) {
+      predictor->scratch[j] = predictor->scratch[j - 1];
+      --j;
     }
-    usleep(50);
+    predictor->scratch[j] = value;
+  }
+  const int index = (predictor->count - 1) / 10;
+  return predictor->scratch[index];
+}
+
+static void figure8_sleep_us(int64_t requested_us) {
+  struct timespec duration = {
+    .tv_sec  = requested_us / 1000000,
+    .tv_nsec = (requested_us % 1000000) * 1000,
+  };
+  while (nanosleep(&duration, &duration) != 0 && errno == EINTR) {}
+}
+
+static int figure8_wait_channel_profiled(struct MessageHeader *msg, int64_t timeout_us,
+                                         enum Figure8WaitPolicy policy, int calibration_legacy,
+                                         int update_predictor,
+                                         struct Figure8LatencyPredictor *predictor,
+                                         struct Figure8WaitStats *stats) {
+  const int64_t wall_t0 = get_time_us();
+  const int64_t cpu_t0  = get_thread_time_us();
+  int64_t       sleep_us = 0;
+  int64_t       predicted_us = 0;
+  enum Figure8WaitPolicy effective_policy = policy;
+
+  memset(stats, 0, sizeof(*stats));
+  if (policy == FIGURE8_WAIT_PREDICTIVE && calibration_legacy) {
+    effective_policy = FIGURE8_WAIT_LEGACY;
+    stats->strategy = "calibration-legacy";
+  } else if (policy == FIGURE8_WAIT_PREDICTIVE) {
+    stats->strategy = "predictive-sleep-spin";
+    predicted_us = figure8_predictor_p10(predictor);
+    const int64_t spin_guard_us = 100;
+    if (predicted_us > spin_guard_us) {
+      const int64_t sleep_t0 = get_time_us();
+      figure8_sleep_us(predicted_us - spin_guard_us);
+      sleep_us = get_time_us() - sleep_t0;
+    }
+  } else if (policy == FIGURE8_WAIT_SPIN) {
+    stats->strategy = "spin";
+  } else {
+    stats->strategy = "legacy-usleep50";
+  }
+
+  while (1) {
+    const uint64_t state = figure8_message_state_load(msg);
+    ++stats->poll_count;
+    if (((state >> 8) & 0xffu) == 1u) break;
+
+    int64_t now = 0;
+    if (effective_policy == FIGURE8_WAIT_LEGACY || (stats->poll_count & 1023u) == 0u) {
+      now = get_time_us();
+      if (now - wall_t0 > timeout_us) {
+        fprintf(stderr, "Timed out waiting for DSP message reply\n");
+        return -1;
+      }
+    }
+    if (effective_policy == FIGURE8_WAIT_LEGACY) {
+      const int64_t sleep_t0 = get_time_us();
+      usleep(50);
+      sleep_us += get_time_us() - sleep_t0;
+    }
+  }
+
+  stats->wall_us             = get_time_us() - wall_t0;
+  stats->thread_cpu_us       = get_thread_time_us() - cpu_t0;
+  stats->sleep_us            = sleep_us;
+  stats->spin_us             = stats->wall_us > sleep_us ? stats->wall_us - sleep_us : 0;
+  stats->predicted_us        = predicted_us;
+  stats->prediction_error_us = predicted_us > 0 ? stats->wall_us - predicted_us : 0;
+  if (policy == FIGURE8_WAIT_PREDICTIVE && update_predictor) {
+    figure8_predictor_add(predictor, stats->wall_us);
   }
   return 0;
 }
 
-static int figure8_send_attn_request(struct MessageHeader *msg, size_t max_msg_size,
-                                     const struct FlashAttnProfileParams *params) {
+static int figure8_wait_channel(struct MessageHeader *msg, int64_t timeout_us) {
+  struct Figure8WaitStats stats;
+  return figure8_wait_channel_profiled(msg, timeout_us, FIGURE8_WAIT_LEGACY, 0, 0, NULL, &stats);
+}
+
+static int figure8_prepare_attn_request(struct Figure8PreparedRequest *prepared, struct MessageHeader *msg,
+                                        size_t max_msg_size, const struct FlashAttnProfileParams *params) {
   struct RequestHeader req_hdr = {
     .state = 0,
     .type  = REQUEST_TYPE_OP_COMPUTE,
@@ -466,7 +671,7 @@ static int figure8_send_attn_request(struct MessageHeader *msg, size_t max_msg_s
     .op = HTP_OPS_FLASH_ATTN_PROFILE_QO_F32_KV_F16,
   };
 
-  msg->state.d        = 0;
+  figure8_message_state_store(msg, 0);
   msg->n_reqs         = 1;
   msg->req_offsets[0] = message_header_size(msg);
   msg->req_offsets[1] = msg->req_offsets[0] + sizeof(req_hdr) + sizeof(compute_req) + sizeof(*params);
@@ -482,14 +687,32 @@ static int figure8_send_attn_request(struct MessageHeader *msg, size_t max_msg_s
   p += sizeof(compute_req);
   *(struct FlashAttnProfileParams *) p = *params;
 
+  prepared->msg     = msg;
+  prepared->request = message_header_get_request_ptr(msg, 0);
+  prepared->params  = (struct FlashAttnProfileParams *)
+    ((uint8_t *) prepared->request + sizeof(struct RequestHeader) + sizeof(struct OpComputeRequest));
+  return 0;
+}
+
+static int figure8_dispatch_attn_request(struct Figure8PreparedRequest *prepared,
+                                         enum Figure8WaitPolicy wait_policy, int calibration_legacy,
+                                         int update_predictor,
+                                         struct Figure8LatencyPredictor *predictor,
+                                         struct Figure8WaitStats *wait_stats) {
+  struct MessageHeader *msg = prepared->msg;
+  figure8_message_state_store(msg, 0);
+  prepared->request->state = 0;
+  __atomic_thread_fence(__ATOMIC_RELEASE);
+
   const int64_t t0 = get_time_us();
-  msg->state.v[0]  = 1;
-  if (figure8_wait_channel(msg, 30000000)) {
+  figure8_message_state_store(msg, 1);
+  if (figure8_wait_channel_profiled(msg, 30000000, wait_policy, calibration_legacy, update_predictor,
+                                    predictor, wait_stats)) {
     return -1;
   }
   int64_t elapsed_us = get_time_us() - t0;
 
-  int err = message_header_get_request_ptr(msg, 0)->state;
+  int err = prepared->request->state;
   if (err) {
     fprintf(stderr, "Figure 8 attention request failed with 0x%x after %ld us\n", err, elapsed_us);
     return err;
@@ -1322,6 +1545,107 @@ end:
   return ret;
 }
 
+static int figure8_read_int_file(const char *path, int fallback) {
+  FILE *file = fopen(path, "r");
+  int   value = fallback;
+  if (!file) return fallback;
+  if (fscanf(file, "%d", &value) != 1) value = fallback;
+  fclose(file);
+  return value;
+}
+
+static const char *figure8_cpu_role(int frequency_khz, int min_frequency_khz, int max_frequency_khz) {
+  if (frequency_khz <= 0) return "unknown";
+  if (min_frequency_khz == max_frequency_khz) return "uniform-capacity";
+  if (frequency_khz == min_frequency_khz) return "low-capacity";
+  if (frequency_khz == max_frequency_khz) return "high-capacity";
+  return "middle-capacity";
+}
+
+static int figure8_configure_host_cpu(int requested_cpu, char *selected_role, size_t selected_role_size) {
+  const int ncpus = (int) sysconf(_SC_NPROCESSORS_CONF);
+  cpu_set_t allowed;
+  if (ncpus <= 0 || sched_getaffinity(0, sizeof(allowed), &allowed) != 0) {
+    fprintf(stderr, "Failed to read CPU topology: %s\n", strerror(errno));
+    return -1;
+  }
+
+  int frequencies[CPU_SETSIZE];
+  int capacities[CPU_SETSIZE];
+  int min_frequency_khz = INT32_MAX;
+  int max_frequency_khz = 0;
+  memset(frequencies, 0, sizeof(frequencies));
+  memset(capacities, 0, sizeof(capacities));
+
+  const int limit = ncpus < CPU_SETSIZE ? ncpus : CPU_SETSIZE;
+  for (int cpu = 0; cpu < limit; ++cpu) {
+    char path[128];
+    snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_max_freq", cpu);
+    frequencies[cpu] = figure8_read_int_file(path, 0);
+    snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpu_capacity", cpu);
+    capacities[cpu] = figure8_read_int_file(path, 0);
+    if (CPU_ISSET(cpu, &allowed) && frequencies[cpu] > 0) {
+      if (frequencies[cpu] < min_frequency_khz) min_frequency_khz = frequencies[cpu];
+      if (frequencies[cpu] > max_frequency_khz) max_frequency_khz = frequencies[cpu];
+    }
+  }
+  if (min_frequency_khz == INT32_MAX) min_frequency_khz = 0;
+
+  for (int cpu = 0; cpu < limit; ++cpu) {
+    if (!CPU_ISSET(cpu, &allowed)) continue;
+    fprintf(stderr,
+            "FIG8_CPU_TOPOLOGY cpu=%d allowed=1 max_freq_khz=%d capacity=%d role=%s\n",
+            cpu, frequencies[cpu], capacities[cpu],
+            figure8_cpu_role(frequencies[cpu], min_frequency_khz, max_frequency_khz));
+  }
+
+  if (requested_cpu < 0) {
+    snprintf(selected_role, selected_role_size, "unpinned");
+    return 0;
+  }
+  if (requested_cpu >= limit || !CPU_ISSET(requested_cpu, &allowed)) {
+    fprintf(stderr, "Requested host CPU %d is unavailable or outside the process affinity mask\n", requested_cpu);
+    return -1;
+  }
+
+  cpu_set_t selected;
+  CPU_ZERO(&selected);
+  CPU_SET(requested_cpu, &selected);
+  if (sched_setaffinity(0, sizeof(selected), &selected) != 0) {
+    fprintf(stderr, "Failed to pin host thread to CPU %d: %s\n", requested_cpu, strerror(errno));
+    return -1;
+  }
+  snprintf(selected_role, selected_role_size, "%s",
+           figure8_cpu_role(frequencies[requested_cpu], min_frequency_khz, max_frequency_khz));
+  return 0;
+}
+
+static uint64_t figure8_output_hash(const void *data, size_t size) {
+  const uint8_t *bytes = (const uint8_t *) data;
+  uint64_t       hash  = UINT64_C(1469598103934665603);
+  for (size_t i = 0; i < size; ++i) {
+    hash ^= bytes[i];
+    hash *= UINT64_C(1099511628211);
+  }
+  return hash;
+}
+
+static int figure8_write_output(const char *path, const void *data, size_t size) {
+  if (!path) return 0;
+  FILE *file = fopen(path, "wb");
+  if (!file) {
+    fprintf(stderr, "Failed to open output-bin path: %s\n", path);
+    return -1;
+  }
+  const size_t written = fwrite(data, 1, size, file);
+  const int    failed  = written != size || fclose(file) != 0;
+  if (failed) {
+    fprintf(stderr, "Failed to write complete output-bin file: %s\n", path);
+    return -1;
+  }
+  return 0;
+}
+
 static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   float  *q = NULL, *o = NULL, *reference_output = NULL, *reference_scores = NULL;
   __fp16 *k = NULL, *v = NULL, *mask = NULL;
@@ -1329,6 +1653,15 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   int     q_fd = -1, k_fd = -1, v_fd = -1, o_fd = -1, mask_fd = -1, chan_fd = -1, profile_fd = -1;
   FILE   *csv = NULL;
   int     ret = 1;
+  char    selected_cpu_role[32];
+  struct Figure8LatencyPredictor predictor = { 0 };
+  struct Figure8PreparedRequest  prepared  = { 0 };
+
+  if (figure8_configure_host_cpu(cfg->host_cpu, selected_cpu_role, sizeof(selected_cpu_role))) goto end;
+  if (figure8_predictor_init(&predictor, cfg->host_sync_calibration)) {
+    fprintf(stderr, "Failed to allocate host synchronization calibration window\n");
+    goto end;
+  }
 
   const int    profile_max_records = cfg->n_kv_heads + 8;
   const int    max_q_blocks        = cfg->qo_len;
@@ -1379,7 +1712,11 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
       fprintf(stderr, "Failed to open csv-out path: %s\n", cfg->csv_out);
       goto end;
     }
-    fprintf(csv, "mode,qo_len,kv_len,n_heads,n_kv_heads,head_dim,phase,iteration,host_elapsed_us,ret\n");
+    fprintf(csv,
+            "mode,wait_policy,wait_strategy,host_cpu_requested,host_cpu_actual,cpu_role,qo_len,kv_len,n_heads,"
+            "n_kv_heads,head_dim,phase,iteration,host_wall_us,host_thread_cpu_us,wait_wall_us,wait_thread_cpu_us,"
+            "sleep_us,spin_us,poll_count,predicted_us,prediction_error_us,descriptor_prepare_us,dsp_mapping_us,"
+            "dsp_validate_in_us,dsp_compute_us,dsp_validate_out_us,dsp_dispatch_total_us,output_hash,ret\n");
   }
 
   const int mode_flags = strcmp(cfg->mode, "lut-exp") == 0 ? LLM_NPU_MODE_LUT_EXP : 0;
@@ -1403,15 +1740,42 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     .max_events  = profile_max_events,
   };
 
+  struct MessageHeader *msg = (struct MessageHeader *) chan;
+  const int64_t descriptor_t0 = get_time_us();
+  if (figure8_prepare_attn_request(&prepared, msg, max_msg_size, &params)) goto end;
+  const int64_t descriptor_prepare_us = get_time_us() - descriptor_t0;
+  const enum Figure8WaitPolicy wait_policy = figure8_parse_wait_policy(cfg->wait_policy);
+
   fprintf(stderr,
           "FIG8_ATTENTION_CONFIG mode=%s mask_mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d warmup=%d "
           "iters=%d q_size=%zu kv_size=%zu mask_size=%zu profile_size=%zu profile_max_records=%d "
-          "profile_max_events=%d mode_flags=%d print_events=%d\n",
+          "profile_max_events=%d mode_flags=%d print_events=%d wait_policy=%s host_cpu=%d cpu_role=%s "
+          "host_sync_calibration=%d descriptor_prepare_us=%ld persistent_rpcmem=1 persistent_channel=1 "
+          "persistent_dsp_maps=1\n",
           cfg->mode, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, cfg->warmup, cfg->iters,
           q_size, kv_size, mask_size, profile_size, profile_max_records, profile_max_events, mode_flags,
-          cfg->print_events);
+          cfg->print_events, cfg->wait_policy, cfg->host_cpu, selected_cpu_role, cfg->host_sync_calibration,
+          descriptor_prepare_us);
 
-  struct MessageHeader *msg = (struct MessageHeader *) chan;
+  for (int i = 0; i < cfg->host_sync_calibration; ++i) {
+    memset(o, 0, q_size);
+    memset(profile, 0, profile_size);
+    struct Figure8WaitStats calibration_stats;
+    const int calibration_ret = figure8_dispatch_attn_request(
+      &prepared, FIGURE8_WAIT_PREDICTIVE, 1, 1, &predictor, &calibration_stats);
+    struct Figure8ProfileHeader *calibration_profile = (struct Figure8ProfileHeader *) profile;
+    if (calibration_ret || calibration_profile->magic != FIGURE8_PROFILE_MAGIC) {
+      fprintf(stderr, "Host synchronization calibration failed at iteration %d\n", i);
+      goto end;
+    }
+    fprintf(stderr,
+            "FIG8_SYNC_CALIBRATION requested_policy=%s iteration=%d effective_strategy=%s wait_wall_us=%ld "
+            "thread_cpu_us=%ld sleep_us=%ld spin_us=%ld poll_count=%" PRIu64 " dsp_dispatch_total_us=%ld\n",
+            cfg->wait_policy, i, calibration_stats.strategy, calibration_stats.wall_us,
+            calibration_stats.thread_cpu_us, calibration_stats.sleep_us, calibration_stats.spin_us,
+            calibration_stats.poll_count, calibration_profile->dispatch_total_us);
+  }
+
   for (int i = 0; i < cfg->warmup + cfg->iters; ++i) {
     const int measured_idx = i - cfg->warmup;
     const int is_warmup    = measured_idx < 0;
@@ -1419,20 +1783,27 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
 
     memset(o, 0, q_size);
     memset(profile, 0, profile_size);
-    int64_t t0      = get_time_us();
-    int     req_ret = figure8_send_attn_request(msg, max_msg_size, &params);
-    int64_t elapsed = get_time_us() - t0;
+    struct Figure8WaitStats wait_stats;
+    const int update_predictor = wait_policy == FIGURE8_WAIT_PREDICTIVE && is_warmup;
+    const int64_t wall_t0 = get_time_us();
+    const int64_t cpu_t0  = get_thread_time_us();
+    int req_ret = figure8_dispatch_attn_request(&prepared, wait_policy, 0, update_predictor,
+                                                &predictor, &wait_stats);
+    const int64_t host_thread_cpu_us = get_thread_time_us() - cpu_t0;
+    const int64_t host_wall_us       = get_time_us() - wall_t0;
+    const int     host_cpu_actual    = sched_getcpu();
+    const uint64_t output_hash       = figure8_output_hash(o, q_size);
 
     fprintf(stderr,
             "FIG8_ATTENTION_HOST_TIMING mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d phase=%s "
-            "iteration=%d host_elapsed_us=%ld ret=%d\n",
+            "iteration=%d wait_policy=%s wait_strategy=%s host_cpu_requested=%d host_cpu_actual=%d cpu_role=%s "
+            "host_wall_us=%ld host_thread_cpu_us=%ld wait_wall_us=%ld wait_thread_cpu_us=%ld sleep_us=%ld "
+            "spin_us=%ld poll_count=%" PRIu64 " predicted_us=%ld prediction_error_us=%ld output_hash=%016" PRIx64 " ret=%d\n",
             cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, phase,
-            is_warmup ? i : measured_idx, elapsed, req_ret);
-    if (csv) {
-      fprintf(csv, "%s,%d,%d,%d,%d,%d,%s,%d,%ld,%d\n", cfg->mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
-              cfg->n_kv_heads, cfg->head_dim, phase, is_warmup ? i : measured_idx, elapsed, req_ret);
-      fflush(csv);
-    }
+            is_warmup ? i : measured_idx, cfg->wait_policy, wait_stats.strategy, cfg->host_cpu, host_cpu_actual,
+            selected_cpu_role, host_wall_us, host_thread_cpu_us, wait_stats.wall_us, wait_stats.thread_cpu_us,
+            wait_stats.sleep_us, wait_stats.spin_us, wait_stats.poll_count, wait_stats.predicted_us,
+            wait_stats.prediction_error_us, output_hash, req_ret);
 
     if (req_ret) {
       goto end;
@@ -1442,6 +1813,26 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     if (profile_hdr->magic != FIGURE8_PROFILE_MAGIC) {
       fprintf(stderr, "Bad Figure 8 profile magic: 0x%x\n", profile_hdr->magic);
       goto end;
+    }
+    fprintf(stderr,
+            "FIG8_ATTENTION_DISPATCH mode=%s phase=%s iteration=%d mapping_us=%ld validate_in_us=%ld "
+            "compute_us=%ld validate_out_us=%ld total_us=%ld\n",
+            cfg->mode, phase, is_warmup ? i : measured_idx, profile_hdr->dispatch_mapping_us,
+            profile_hdr->dispatch_validate_in_us, profile_hdr->dispatch_compute_us,
+            profile_hdr->dispatch_validate_out_us, profile_hdr->dispatch_total_us);
+    if (csv) {
+      fprintf(csv,
+              "%s,%s,%s,%d,%d,%s,%d,%d,%d,%d,%d,%s,%d,%ld,%ld,%ld,%ld,%ld,%ld,%" PRIu64
+              ",%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%016" PRIx64 ",%d\n",
+              cfg->mode, cfg->wait_policy, wait_stats.strategy, cfg->host_cpu, host_cpu_actual, selected_cpu_role,
+              cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, phase,
+              is_warmup ? i : measured_idx, host_wall_us, host_thread_cpu_us, wait_stats.wall_us,
+              wait_stats.thread_cpu_us, wait_stats.sleep_us, wait_stats.spin_us, wait_stats.poll_count,
+              wait_stats.predicted_us, wait_stats.prediction_error_us, descriptor_prepare_us,
+              profile_hdr->dispatch_mapping_us, profile_hdr->dispatch_validate_in_us,
+              profile_hdr->dispatch_compute_us, profile_hdr->dispatch_validate_out_us,
+              profile_hdr->dispatch_total_us, output_hash, req_ret);
+      fflush(csv);
     }
     int record_count = profile_hdr->record_count;
     if (record_count > profile_hdr->max_records) {
@@ -1501,6 +1892,8 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     if (figure8_report_reference(cfg, o, reference_output, output_elems)) goto end;
   }
 
+  if (figure8_write_output(cfg->output_bin, o, q_size)) goto end;
+
   {
     int fds[] = { o_fd, q_fd, k_fd, v_fd, mask_fd, profile_fd };
     (void) figure8_release_dsp_maps(msg, max_msg_size, fds, (int) (sizeof(fds) / sizeof(fds[0])));
@@ -1509,6 +1902,7 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   ret = 0;
 
 end:
+  figure8_predictor_destroy(&predictor);
   free(reference_scores);
   free(reference_output);
   if (csv) {
