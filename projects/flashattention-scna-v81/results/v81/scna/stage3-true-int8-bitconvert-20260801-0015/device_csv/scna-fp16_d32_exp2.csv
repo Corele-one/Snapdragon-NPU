@@ -1,0 +1,2 @@
+mode,width,lanes,iters,elapsed_us,pair_elapsed_us,rmse,max_abs_error,dense_samples,dense_rmse,dense_max_abs_error,pair_max_abs_diff,monotonic_violations,negative_count,nan_count,y_min,y_minus12,y_minus4,y_zero
+scna-fp16,32,64,1000,117,183,8.59679e-05,0.000488281,1024,0.00245267,0.0138602,0,0,0,0,0,0.000202417,0.0603333,0.999512

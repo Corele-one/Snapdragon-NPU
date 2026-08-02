@@ -1,0 +1,12 @@
+ .../src/htp-ops-lib-main/CMakeLists.txt            |  11 +
+ .../flashattention/src/htp-ops-lib-main/README.md  |   2 +
+ .../src/htp-ops-lib-main/include/dsp/hvx_math.h    |  15 +
+ .../src/htp-ops-lib-main/include/dsp/ops.h         |   2 +
+ .../src/htp-ops-lib-main/include/op_reg.h          |  58 +++
+ .../src/htp-ops-lib-main/src/dsp/op_executor.cc    |  27 +-
+ .../src/htp-ops-lib-main/src/dsp/ops/flash_attn.c  | 226 +++++++++++-
+ .../src/dsp/ops/precompute_table.c                 |   6 +
+ .../src/htp-ops-lib-main/src/dsp/vtcm_mgr.cc       |  32 +-
+ .../src/htp-ops-lib-main/src/dsp/worker_pool.c     |   4 +
+ .../src/htp-ops-lib-main/src/host/test.c           | 392 +++++++++++++++++++--
+ 11 files changed, 729 insertions(+), 46 deletions(-)

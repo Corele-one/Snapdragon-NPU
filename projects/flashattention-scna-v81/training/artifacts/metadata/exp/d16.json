@@ -1,0 +1,163 @@
+{
+  "active_domain": [
+    -16.0,
+    0.0
+  ],
+  "checkpoint": "training/artifacts/checkpoints/exp/d16/best.json",
+  "checkpoint_sha256": "42a81d5751acd1ef05c431e4ffa54ccac2014acbf1d12a42b7fa684fc3099761",
+  "domain": [
+    -256.0,
+    0.0
+  ],
+  "fp16": {
+    "biases": [
+      3.2186508178710938e-06,
+      5.7220458984375e-06,
+      1.5437602996826172e-05,
+      4.1425228118896484e-05,
+      0.00011026859283447266,
+      0.0002913475036621094,
+      0.0007619857788085938,
+      0.0019683837890625,
+      0.005001068115234375,
+      0.01245880126953125,
+      0.0301666259765625,
+      0.07012939453125,
+      0.15283203125,
+      0.296142578125,
+      0.43017578125,
+      -0.0
+    ],
+    "weights": [
+      1.7881393432617188e-07,
+      3.5762786865234375e-07,
+      1.1324882507324219e-06,
+      3.2186508178710938e-06,
+      9.417533874511719e-06,
+      2.7298927307128906e-05,
+      7.933378219604492e-05,
+      0.00023055076599121094,
+      0.0006699562072753906,
+      0.0019464492797851562,
+      0.005657196044921875,
+      0.0164337158203125,
+      0.047760009765625,
+      0.1387939453125,
+      0.4033203125,
+      0.38525390625
+    ]
+  },
+  "function": "exp",
+  "int8": {
+    "bias_dtype": "s16",
+    "biases": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      31,
+      76,
+      177,
+      385,
+      746,
+      1084,
+      0
+    ],
+    "input_dtype": "s8",
+    "input_multiplier": 8.0,
+    "output_scale": 0.00039690045701554384,
+    "tree_accumulator_dtype": "s32",
+    "weight_dtype": "s8",
+    "weight_scale": 0.0031752036561243507,
+    "weights": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      2,
+      5,
+      15,
+      44,
+      127,
+      121
+    ]
+  },
+  "shape_constraints": {
+    "biases_nonnegative": true,
+    "weights_nonnegative": true
+  },
+  "tree": {
+    "depth": 5,
+    "leaves": 32,
+    "representation": "balanced_branchless_breakpoint"
+  },
+  "validation": {
+    "boundary": {
+      "fp16_direct": {
+        "at_min": 0.0,
+        "at_zero": 1.0
+      },
+      "fp16_tree": {
+        "at_min": 0.0,
+        "at_zero": 1.0
+      },
+      "int8_direct": {
+        "at_min": 0.0,
+        "at_zero": 0.991854242081844
+      },
+      "int8_tree": {
+        "at_min": 0.0,
+        "at_zero": 0.991854242081844
+      }
+    },
+    "direct_tree_max_abs": {
+      "fp16": 0.000732421875,
+      "int8": 0.0
+    },
+    "domain": [
+      -256.0,
+      0.0
+    ],
+    "fp16_direct": {
+      "max_abs": 0.08613005289540887,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.004317327926037017
+    },
+    "fp16_tree": {
+      "max_abs": 0.08606630970932172,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.004310024732728485
+    },
+    "grid_points": 16385,
+    "int8_direct": {
+      "max_abs": 0.1447760483081193,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.005996347140312573
+    },
+    "int8_tree": {
+      "max_abs": 0.1447760483081193,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.005996347140312573
+    }
+  },
+  "width": 16
+}

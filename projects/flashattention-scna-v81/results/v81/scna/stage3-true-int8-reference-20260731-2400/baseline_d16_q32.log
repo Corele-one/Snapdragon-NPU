@@ -1,0 +1,134 @@
+alloc_shared_mem_buf: buf=0x78d8df0000 fd=12 size=196608 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x763fc00000 fd=13 size=2097152 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x763fa00000 fd=14 size=2097152 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x78d8a10000 fd=15 size=196608 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x78d3390000 fd=16 size=262144 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x763f840000 fd=17 size=1793792 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x78d926a000 fd=18 size=4096 flags=FASTRPC_MAP_FD
+No-op channel request completed
+FIG8_ATTENTION_CONFIG mode=baseline mask_mode=full qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 warmup=5 iters=20 scna_width=16 q_size=196608 kv_size=2097152 mask_size=262144 profile_size=1793792 profile_max_records=10 profile_max_events=24896 mode_flags=0 print_events=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=0 host_elapsed_us=2089 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=warmup iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=0 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=869 q_load=8 k_load=68 v_load=144 qk_dot=14 safe_sm=611 core_acc=12 o_scale=1 o_store=11
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=0 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=850 q_load=8 k_load=67 v_load=142 qk_dot=12 safe_sm=600 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=warmup iteration=0 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=1 host_elapsed_us=2185 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=warmup iteration=1 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=1 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=918 q_load=7 k_load=132 v_load=141 qk_dot=12 safe_sm=605 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=1 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=938 q_load=8 k_load=161 v_load=141 qk_dot=12 safe_sm=595 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=warmup iteration=1 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=2 host_elapsed_us=2188 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=warmup iteration=2 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=2 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=918 q_load=7 k_load=139 v_load=138 qk_dot=12 safe_sm=600 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=2 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=940 q_load=8 k_load=165 v_load=139 qk_dot=12 safe_sm=595 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=warmup iteration=2 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=3 host_elapsed_us=2204 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=warmup iteration=3 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=3 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=922 q_load=7 k_load=137 v_load=143 qk_dot=12 safe_sm=601 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=3 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=941 q_load=8 k_load=164 v_load=141 qk_dot=12 safe_sm=595 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=warmup iteration=3 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=4 host_elapsed_us=2137 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=warmup iteration=4 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=4 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=938 q_load=7 k_load=150 v_load=141 qk_dot=12 safe_sm=607 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=warmup iteration=4 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=940 q_load=8 k_load=162 v_load=141 qk_dot=12 safe_sm=596 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=warmup iteration=4 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=0 host_elapsed_us=2162 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=0 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=913 q_load=7 k_load=136 v_load=129 qk_dot=12 safe_sm=607 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=0 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=969 q_load=8 k_load=163 v_load=165 qk_dot=12 safe_sm=600 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=0 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=1 host_elapsed_us=2362 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=1 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=1 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=991 q_load=7 k_load=160 v_load=167 qk_dot=12 safe_sm=623 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=1 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=1019 q_load=8 k_load=200 v_load=158 qk_dot=12 safe_sm=620 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=1 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=2 host_elapsed_us=2254 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=2 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=2 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=981 q_load=7 k_load=162 v_load=147 qk_dot=12 safe_sm=631 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=2 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=1021 q_load=7 k_load=200 v_load=158 qk_dot=12 safe_sm=623 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=2 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=3 host_elapsed_us=2291 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=3 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=3 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=978 q_load=7 k_load=161 v_load=156 qk_dot=12 safe_sm=620 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=3 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=1017 q_load=7 k_load=193 v_load=163 qk_dot=12 safe_sm=621 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=3 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=4 host_elapsed_us=2342 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=4 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=4 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=993 q_load=7 k_load=160 v_load=166 qk_dot=12 safe_sm=626 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=4 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=1015 q_load=7 k_load=199 v_load=161 qk_dot=12 safe_sm=615 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=4 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=5 host_elapsed_us=2183 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=5 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=5 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=988 q_load=7 k_load=160 v_load=159 qk_dot=12 safe_sm=628 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=5 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=949 q_load=8 k_load=172 v_load=138 qk_dot=12 safe_sm=597 core_acc=10 o_scale=2 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=5 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=6 host_elapsed_us=2150 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=6 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=6 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=924 q_load=7 k_load=142 v_load=132 qk_dot=12 safe_sm=610 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=6 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=944 q_load=8 k_load=151 v_load=138 qk_dot=12 safe_sm=614 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=6 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=7 host_elapsed_us=2186 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=7 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=7 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=937 q_load=7 k_load=138 v_load=131 qk_dot=12 safe_sm=628 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=7 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=984 q_load=7 k_load=173 v_load=152 qk_dot=12 safe_sm=619 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=7 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=8 host_elapsed_us=2161 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=8 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=8 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=947 q_load=7 k_load=149 v_load=137 qk_dot=12 safe_sm=620 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=8 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=962 q_load=8 k_load=160 v_load=144 qk_dot=12 safe_sm=617 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=8 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=9 host_elapsed_us=2254 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=9 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=9 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=959 q_load=7 k_load=146 v_load=150 qk_dot=12 safe_sm=622 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=9 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=979 q_load=8 k_load=168 v_load=153 qk_dot=12 safe_sm=617 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=9 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=10 host_elapsed_us=2269 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=10 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=10 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=953 q_load=7 k_load=146 v_load=144 qk_dot=12 safe_sm=622 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=10 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=987 q_load=8 k_load=176 v_load=153 qk_dot=12 safe_sm=617 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=10 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=11 host_elapsed_us=2240 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=11 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=11 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=954 q_load=7 k_load=147 v_load=150 qk_dot=12 safe_sm=617 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=11 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=976 q_load=8 k_load=175 v_load=142 qk_dot=12 safe_sm=618 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=11 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=12 host_elapsed_us=2261 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=12 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=12 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=952 q_load=7 k_load=146 v_load=143 qk_dot=12 safe_sm=623 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=12 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=981 q_load=7 k_load=177 v_load=147 qk_dot=12 safe_sm=617 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=12 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=13 host_elapsed_us=2189 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=13 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=13 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=951 q_load=7 k_load=147 v_load=147 qk_dot=12 safe_sm=617 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=13 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=981 q_load=8 k_load=175 v_load=150 qk_dot=12 safe_sm=615 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=13 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=14 host_elapsed_us=2258 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=14 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=14 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=948 q_load=7 k_load=145 v_load=143 qk_dot=12 safe_sm=620 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=14 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=980 q_load=8 k_load=171 v_load=153 qk_dot=12 safe_sm=615 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=14 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=15 host_elapsed_us=2246 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=15 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=15 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=957 q_load=7 k_load=145 v_load=151 qk_dot=12 safe_sm=621 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=15 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=988 q_load=8 k_load=178 v_load=153 qk_dot=12 safe_sm=616 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=15 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=16 host_elapsed_us=2250 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=16 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=16 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=946 q_load=7 k_load=145 v_load=141 qk_dot=12 safe_sm=620 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=16 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=991 q_load=8 k_load=179 v_load=153 qk_dot=12 safe_sm=618 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=16 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=17 host_elapsed_us=2240 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=17 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=17 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=958 q_load=7 k_load=146 v_load=149 qk_dot=12 safe_sm=623 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=17 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=979 q_load=8 k_load=178 v_load=144 qk_dot=12 safe_sm=616 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=17 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=18 host_elapsed_us=2167 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=18 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=18 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=923 q_load=7 k_load=138 v_load=126 qk_dot=12 safe_sm=618 core_acc=11 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=18 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=946 q_load=8 k_load=162 v_load=134 qk_dot=12 safe_sm=609 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=18 events=16 max_events=24896 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=baseline scna_width=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=19 host_elapsed_us=2169 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=baseline qo_len=32 phase=measure iteration=19 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=19 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=939 q_load=7 k_load=142 v_load=135 qk_dot=12 safe_sm=622 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_TIMERS mode=baseline phase=measure iteration=19 lut_exp=0 nonlinear_mode=0 scna_width=0 scna_exp=0 qo_len=32 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=927 q_load=8 k_load=149 v_load=134 qk_dot=12 safe_sm=603 core_acc=10 o_scale=1 o_store=10
+FIG8_ATTENTION_EVENT_COUNT mode=baseline qo_len=32 phase=measure iteration=19 events=16 max_events=24896 overflow=0

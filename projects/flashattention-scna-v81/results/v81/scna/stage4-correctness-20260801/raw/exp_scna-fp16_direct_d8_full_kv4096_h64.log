@@ -1,0 +1,25 @@
+alloc_shared_mem_buf: buf=0x7437c7d000 fd=12 size=12288 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x719c250000 fd=13 size=1048576 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x719c150000 fd=14 size=1048576 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7437c79000 fd=15 size=12288 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x74379e5000 fd=16 size=32768 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7433fc0000 fd=17 size=233856 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7437c77000 fd=18 size=4096 flags=FASTRPC_MAP_FD
+No-op channel request completed
+FIG8_ATTENTION_CONFIG mode=scna-fp16 scna_function=exp scna_kernel=direct mask_mode=full qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 warmup=1 iters=1 scna_width=8 q_size=12288 kv_size=1048576 mask_size=32768 profile_size=233856 profile_max_records=10 profile_max_events=3224 mode_flags=212 print_events=0
+FIG8_ATTENTION_HOST_TIMING mode=scna-fp16 scna_function=exp scna_kernel=direct scna_width=8 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 phase=warmup iteration=0 host_elapsed_us=731 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=scna-fp16 qo_len=4 phase=warmup iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=1 scna_kernel=0 phase=warmup iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=8 scna_exp=83 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 kv_head=0 worker=0 profiled_total=232 q_load=2 k_load=42 v_load=75 qk_dot=1 safe_sm=106 core_acc=3 o_scale=1 o_store=2
+FIG8_NUMERIC kv_head=0 rowsum0_bits=0x6771 l0_bits=0x6771 core_o0_bits=0x3d33 inv_l0_bits=0x1044 scaled_o0_bits=0x118b p0_first_bits=0x3adf p0_last_bits=0x3b2d sum0_first_bits=0x42e91c81 sum0_last_bits=0x44ee2380
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=1 scna_kernel=0 phase=warmup iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=8 scna_exp=84 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 kv_head=1 worker=0 profiled_total=256 q_load=1 k_load=62 v_load=82 qk_dot=1 safe_sm=108 core_acc=1 o_scale=0 o_store=1
+FIG8_NUMERIC kv_head=1 rowsum0_bits=0x0 l0_bits=0x0 core_o0_bits=0x0 inv_l0_bits=0x0 scaled_o0_bits=0x0 p0_first_bits=0x0 p0_last_bits=0x0 sum0_first_bits=0x0 sum0_last_bits=0x0
+FIG8_ATTENTION_EVENT_COUNT mode=scna-fp16 qo_len=4 phase=warmup iteration=0 events=16 max_events=3224 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=scna-fp16 scna_function=exp scna_kernel=direct scna_width=8 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 phase=measure iteration=0 host_elapsed_us=722 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=scna-fp16 qo_len=4 phase=measure iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=1 scna_kernel=0 phase=measure iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=8 scna_exp=78 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 kv_head=0 worker=0 profiled_total=217 q_load=1 k_load=49 v_load=65 qk_dot=1 safe_sm=99 core_acc=1 o_scale=0 o_store=1
+FIG8_NUMERIC kv_head=0 rowsum0_bits=0x6771 l0_bits=0x6771 core_o0_bits=0x3d33 inv_l0_bits=0x1044 scaled_o0_bits=0x118b p0_first_bits=0x3adf p0_last_bits=0x3b2d sum0_first_bits=0x42e91c81 sum0_last_bits=0x44ee2380
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=1 scna_kernel=0 phase=measure iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=8 scna_exp=83 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 kv_head=1 worker=0 profiled_total=233 q_load=1 k_load=49 v_load=78 qk_dot=1 safe_sm=102 core_acc=1 o_scale=0 o_store=1
+FIG8_NUMERIC kv_head=1 rowsum0_bits=0x0 l0_bits=0x0 core_o0_bits=0x0 inv_l0_bits=0x0 scaled_o0_bits=0x0 p0_first_bits=0x0 p0_last_bits=0x0 sum0_first_bits=0x0 sum0_last_bits=0x0
+FIG8_ATTENTION_EVENT_COUNT mode=scna-fp16 qo_len=4 phase=measure iteration=0 events=16 max_events=3224 overflow=0
+FIG8_ATTENTION_REFERENCE_TIMING reference_mode=host-fp32 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 elapsed_us=49003 ret=0
+FIG8_ATTENTION_COMPARE candidate_mode=scna-fp16 scna_function=exp scna_kernel=direct scna_width=8 reference_mode=host-fp32 qo_len=4 kv_len=4096 n_heads=12 n_kv_heads=2 head_dim=64 elements=3072 rmse=0.000317915 relative_l2=0.927886 max_abs_error=0.000694236 max_rel_error=127.318 candidate_rms=0.000654956 reference_rms=0.000342623 candidate_max_abs=0.00155067 reference_max_abs=0.000907659 candidate_nonfinite=0 reference_nonfinite=0 ret=0

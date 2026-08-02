@@ -1,0 +1,25 @@
+alloc_shared_mem_buf: buf=0x7b71503000 fd=12 size=24576 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x78dd200000 fd=13 size=2095616 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x78dd000000 fd=14 size=2095616 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7b71446000 fd=15 size=24576 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7b7143e000 fd=16 size=32768 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7b70db0000 fd=17 size=233856 flags=FASTRPC_MAP_FD
+alloc_shared_mem_buf: buf=0x7b71683000 fd=18 size=4096 flags=FASTRPC_MAP_FD
+No-op channel request completed
+FIG8_ATTENTION_CONFIG mode=scna-fp16 scna_function=exp2 scna_kernel=direct mask_mode=full qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 warmup=1 iters=1 scna_width=32 q_size=24576 kv_size=2095616 mask_size=32768 profile_size=233856 profile_max_records=10 profile_max_events=3224 mode_flags=100 print_events=0
+FIG8_ATTENTION_HOST_TIMING mode=scna-fp16 scna_function=exp2 scna_kernel=direct scna_width=32 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=warmup iteration=0 host_elapsed_us=1229 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=scna-fp16 qo_len=4 phase=warmup iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=0 scna_kernel=0 phase=warmup iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=32 scna_exp=200 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=467 q_load=2 k_load=78 v_load=143 qk_dot=2 safe_sm=232 core_acc=5 o_scale=2 o_store=3
+FIG8_NUMERIC kv_head=0 rowsum0_bits=0x670c l0_bits=0x670c core_o0_bits=0x4309 inv_l0_bits=0x1084 scaled_o0_bits=0x17f1 p0_first_bits=0x3aad p0_last_bits=0x0 sum0_first_bits=0x42de0381 sum0_last_bits=0x44e17e14
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=0 scna_kernel=0 phase=warmup iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=32 scna_exp=193 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=452 q_load=1 k_load=77 v_load=145 qk_dot=3 safe_sm=221 core_acc=3 o_scale=0 o_store=2
+FIG8_NUMERIC kv_head=1 rowsum0_bits=0x0 l0_bits=0x0 core_o0_bits=0x0 inv_l0_bits=0x0 scaled_o0_bits=0x0 p0_first_bits=0x0 p0_last_bits=0x0 sum0_first_bits=0x0 sum0_last_bits=0x0
+FIG8_ATTENTION_EVENT_COUNT mode=scna-fp16 qo_len=4 phase=warmup iteration=0 events=16 max_events=3224 overflow=0
+FIG8_ATTENTION_HOST_TIMING mode=scna-fp16 scna_function=exp2 scna_kernel=direct scna_width=32 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 phase=measure iteration=0 host_elapsed_us=1331 ret=0
+FIG8_ATTENTION_PROFILE_COUNT mode=scna-fp16 qo_len=4 phase=measure iteration=0 records=2 max_records=10
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=0 scna_kernel=0 phase=measure iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=32 scna_exp=186 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=0 worker=0 profiled_total=512 q_load=1 k_load=147 v_load=145 qk_dot=2 safe_sm=212 core_acc=3 o_scale=1 o_store=1
+FIG8_NUMERIC kv_head=0 rowsum0_bits=0x670c l0_bits=0x670c core_o0_bits=0x4309 inv_l0_bits=0x1084 scaled_o0_bits=0x17f1 p0_first_bits=0x3aad p0_last_bits=0x0 sum0_first_bits=0x42de0381 sum0_last_bits=0x44e17e14
+FIG8_ATTENTION_TIMERS mode=scna-fp16 scna_function=0 scna_kernel=0 phase=measure iteration=0 lut_exp=0 nonlinear_mode=1 scna_width=32 scna_exp=186 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 kv_head=1 worker=0 profiled_total=509 q_load=1 k_load=149 v_load=144 qk_dot=2 safe_sm=209 core_acc=3 o_scale=0 o_store=1
+FIG8_NUMERIC kv_head=1 rowsum0_bits=0x0 l0_bits=0x0 core_o0_bits=0x0 inv_l0_bits=0x0 scaled_o0_bits=0x0 p0_first_bits=0x0 p0_last_bits=0x0 sum0_first_bits=0x0 sum0_last_bits=0x0
+FIG8_ATTENTION_EVENT_COUNT mode=scna-fp16 qo_len=4 phase=measure iteration=0 events=16 max_events=3224 overflow=0
+FIG8_ATTENTION_REFERENCE_TIMING reference_mode=host-fp32 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 elapsed_us=65707 ret=0
+FIG8_ATTENTION_COMPARE candidate_mode=scna-fp16 scna_function=exp2 scna_kernel=direct scna_width=32 reference_mode=host-fp32 qo_len=4 kv_len=4093 n_heads=12 n_kv_heads=2 head_dim=128 elements=6144 rmse=0.000667197 relative_l2=0.965386 max_abs_error=0.0014161 max_rel_error=54.3929 candidate_rms=0.00135786 reference_rms=0.000691119 candidate_max_abs=0.0028801 reference_max_abs=0.00148103 candidate_nonfinite=0 reference_nonfinite=0 ret=0
