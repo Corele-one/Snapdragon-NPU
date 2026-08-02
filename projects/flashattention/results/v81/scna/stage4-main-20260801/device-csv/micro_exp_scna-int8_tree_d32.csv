@@ -1,0 +1,2 @@
+mode,function,kernel,width,lanes,iters,elapsed_us,pair_elapsed_us,rmse,max_abs_error,dense_samples,dense_rmse,dense_max_abs_error,pair_max_abs_diff,direct_tree_max_abs_diff,monotonic_violations,negative_count,nan_count,y_min,y_minus12,y_minus4,y_zero
+scna-int8,exp,tree,32,64,100000,7838,9901,0.00245898,0.0195312,4096,0.00198146,0.05476,0,0,0,0,0,0,0,0.0148773,0.980469

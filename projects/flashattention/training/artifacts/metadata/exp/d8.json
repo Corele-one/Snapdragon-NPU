@@ -1,0 +1,131 @@
+{
+  "active_domain": [
+    -16.0,
+    0.0
+  ],
+  "checkpoint": "training/artifacts/checkpoints/exp/d8/best.json",
+  "checkpoint_sha256": "bb2b44ad65b7d6dbfe74471a1dac9b442b7dec2990562de3752c1b975c653865",
+  "domain": [
+    -256.0,
+    0.0
+  ],
+  "fp16": {
+    "biases": [
+      6.973743438720703e-06,
+      5.269050598144531e-05,
+      0.0004315376281738281,
+      0.00339508056640625,
+      0.0250396728515625,
+      0.1641845703125,
+      0.80712890625,
+      -0.0
+    ],
+    "weights": [
+      4.172325134277344e-07,
+      3.814697265625e-06,
+      3.7789344787597656e-05,
+      0.0003714561462402344,
+      0.003650665283203125,
+      0.035919189453125,
+      0.35302734375,
+      0.60693359375
+    ]
+  },
+  "function": "exp",
+  "int8": {
+    "bias_dtype": "s16",
+    "biases": [
+      0,
+      0,
+      0,
+      0,
+      42,
+      275,
+      1351,
+      0
+    ],
+    "input_dtype": "s8",
+    "input_multiplier": 8.0,
+    "output_scale": 0.0005974353928475387,
+    "tree_accumulator_dtype": "s32",
+    "weight_dtype": "s8",
+    "weight_scale": 0.0047794831427803094,
+    "weights": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      8,
+      74,
+      127
+    ]
+  },
+  "shape_constraints": {
+    "biases_nonnegative": true,
+    "weights_nonnegative": true
+  },
+  "tree": {
+    "depth": 4,
+    "leaves": 16,
+    "representation": "balanced_branchless_breakpoint"
+  },
+  "validation": {
+    "boundary": {
+      "fp16_direct": {
+        "at_min": 0.0,
+        "at_zero": 1.0
+      },
+      "fp16_tree": {
+        "at_min": 0.0,
+        "at_zero": 1.0
+      },
+      "int8_direct": {
+        "at_min": 0.0,
+        "at_zero": 0.9965222352696945
+      },
+      "int8_tree": {
+        "at_min": 0.0,
+        "at_zero": 0.9965222352696945
+      }
+    },
+    "direct_tree_max_abs": {
+      "fp16": 0.00048828125,
+      "int8": 0.0
+    },
+    "domain": [
+      -256.0,
+      0.0
+    ],
+    "fp16_direct": {
+      "max_abs": 0.2404422183254213,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.016507742005649806
+    },
+    "fp16_tree": {
+      "max_abs": 0.2399539370754213,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.016480455506806574
+    },
+    "grid_points": 16385,
+    "int8_direct": {
+      "max_abs": 0.27573957261923154,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.0177117260907786
+    },
+    "int8_tree": {
+      "max_abs": 0.27573957261923154,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "rmse": 0.0177117260907786
+    }
+  },
+  "width": 8
+}

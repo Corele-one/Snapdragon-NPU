@@ -11,7 +11,7 @@
 
 static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_exp2_clamp_vhf(HVX_Vector x) {
   const HVX_Vector v_zero = Q6_V_vzero();
-  __fp16 min_hf = (__fp16) SCNA_EXP2_MIN_INPUT;
+  __fp16 min_hf = (__fp16) SCNA_MIN_INPUT;
   const HVX_Vector v_min = Q6_Vh_vsplat_R(fp16_to_bits(&min_hf));
   x = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(v_min, x), v_min, x);
   return Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x, v_zero), v_zero, x);
@@ -21,7 +21,7 @@ static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_exp2_quantize_s8_vhf(
     HVX_Vector x, const scna_exp2_hvx_params_t *params) {
   (void) params;
   const HVX_Vector v_zero = Q6_V_vzero();
-  __fp16 min_hf = (__fp16) SCNA_EXP2_INT8_MIN_INPUT;
+  __fp16 min_hf = (__fp16) SCNA_INT8_MIN_INPUT;
   const HVX_Vector v_min = Q6_Vh_vsplat_R(fp16_to_bits(&min_hf));
   x = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(v_min, x), v_min, x);
   x = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x, v_zero), v_zero, x);
@@ -48,6 +48,11 @@ static HVX_INLINE_ALWAYS HVX_VectorPair hvx_scna_exp2_i8_product_ordered(
     HVX_Vector activations, HVX_Vector weights) {
   const HVX_VectorPair raw = Q6_Wh_vmpy_VbVb(activations, weights);
   return Q6_W_vshuff_VVR(Q6_V_hi_W(raw), Q6_V_lo_W(raw), -2);
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_pack_ordered_s32_to_s16(HVX_VectorPair values) {
+  const HVX_VectorPair ordered = Q6_W_vshuff_VVR(Q6_V_hi_W(values), Q6_V_lo_W(values), -4);
+  return Q6_Vh_vpack_VwVw_sat(Q6_V_hi_W(ordered), Q6_V_lo_W(ordered));
 }
 
 #define SCNA_DEFINE_HVX_KERNELS(SUFFIX, WIDTH)                                                               \
@@ -150,8 +155,133 @@ SCNA_DEFINE_HVX_INT8_KERNELS(d32, 32)
 
 #undef SCNA_DEFINE_HVX_INT8_KERNELS
 
-__attribute__((noinline)) HVX_Vector hvx_scna_exp2_vhf(
-    HVX_Vector x, const scna_exp2_hvx_params_t *params) {
+static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_vlut16_select(
+    HVX_Vector indexes, HVX_Vector table, int selector) {
+  return Q6_V_lo_W(Q6_Wh_vlut16_VbVhR(indexes, table, selector));
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_vlut16_up_to(
+    HVX_Vector indexes, HVX_Vector table, int selectors) {
+  HVX_Vector result = hvx_scna_vlut16_select(indexes, table, 0);
+  if (selectors > 1) result = Q6_V_vor_VV(result, hvx_scna_vlut16_select(indexes, table, 1));
+  if (selectors > 2) result = Q6_V_vor_VV(result, hvx_scna_vlut16_select(indexes, table, 2));
+  if (selectors > 3) result = Q6_V_vor_VV(result, hvx_scna_vlut16_select(indexes, table, 3));
+  return result;
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_tree_threshold_lookup(
+    HVX_Vector node, HVX_Vector table, int level) {
+  HVX_Vector result = hvx_scna_vlut16_select(node, table, 0);
+  if (level >= 4) result = Q6_V_vor_VV(result, hvx_scna_vlut16_select(node, table, 1));
+  if (level >= 5) {
+    result = Q6_V_vor_VV(result, hvx_scna_vlut16_select(node, table, 2));
+    result = Q6_V_vor_VV(result, hvx_scna_vlut16_select(node, table, 3));
+  }
+  return result;
+}
+
+#define SCNA_TREE_TRAVERSE(X, TABLE, DEPTH, LEAVES, CMP, LEAF)                                              \
+  do {                                                                                                       \
+    const HVX_Vector v_zero = Q6_V_vzero();                                                                  \
+    const HVX_Vector v_one = Q6_Vh_vsplat_R(1);                                                              \
+    HVX_Vector node = v_zero;                                                                                \
+    _Pragma("clang loop unroll(full)")                                                                      \
+    for (int level = 0; level < (DEPTH); ++level) {                                                          \
+      const HVX_Vector threshold = hvx_scna_tree_threshold_lookup(node, (TABLE), level);                     \
+      const HVX_Vector right = Q6_V_vmux_QVV(CMP((X), threshold), v_one, v_zero);                            \
+      node = Q6_Vh_vadd_VhVh(Q6_Vh_vadd_VhVh(node, node), v_one);                                           \
+      node = Q6_Vh_vadd_VhVh(node, right);                                                                   \
+    }                                                                                                        \
+    (LEAF) = Q6_Vh_vsub_VhVh(node, Q6_Vh_vsplat_R((LEAVES) - 1));                                           \
+  } while (0)
+
+#define SCNA_DEFINE_HVX_TREE_KERNELS(SUFFIX, DEPTH, LEAVES, SELECTORS)                                      \
+  static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_tree_eval_##SUFFIX##_vhf(                                    \
+      HVX_Vector x, HVX_Vector thresholds, HVX_Vector slopes, HVX_Vector biases) {                           \
+    x = hvx_scna_exp2_clamp_vhf(x);                                                                           \
+    HVX_Vector leaf;                                                                                          \
+    SCNA_TREE_TRAVERSE(x, thresholds, DEPTH, LEAVES, Q6_Q_vcmp_gt_VhfVhf, leaf);                            \
+    const HVX_Vector slope = hvx_scna_vlut16_up_to(leaf, slopes, SELECTORS);                                 \
+    const HVX_Vector bias = hvx_scna_vlut16_up_to(leaf, biases, SELECTORS);                                  \
+    const HVX_Vector output = Q6_Vhf_vmpyacc_VhfVhfVhf(bias, x, slope);                                     \
+    return Q6_Vhf_vmax_VhfVhf(output, Q6_V_vzero());                                                         \
+  }                                                                                                          \
+  static __attribute__((noinline)) HVX_Vector hvx_scna_tree_##SUFFIX##_vhf(                                 \
+      HVX_Vector x, const scna_hvx_params_t *params) {                                                       \
+    const HVX_Vector thresholds = vmemu(params->tree_threshold_bits);                                        \
+    const HVX_Vector slopes = vmemu(params->tree_slope_bits);                                                \
+    const HVX_Vector biases = vmemu(params->tree_bias_bits);                                                 \
+    return hvx_scna_tree_eval_##SUFFIX##_vhf(x, thresholds, slopes, biases);                                 \
+  }                                                                                                          \
+  static __attribute__((noinline)) void hvx_scna_tree_pair_##SUFFIX##_vhf(                                 \
+      HVX_Vector x0, HVX_Vector x1, const scna_hvx_params_t *params, HVX_Vector *out0, HVX_Vector *out1) {  \
+    const HVX_Vector thresholds = vmemu(params->tree_threshold_bits);                                        \
+    const HVX_Vector slopes = vmemu(params->tree_slope_bits);                                                \
+    const HVX_Vector biases = vmemu(params->tree_bias_bits);                                                 \
+    *out0 = hvx_scna_tree_eval_##SUFFIX##_vhf(x0, thresholds, slopes, biases);                               \
+    *out1 = hvx_scna_tree_eval_##SUFFIX##_vhf(x1, thresholds, slopes, biases);                               \
+  }
+
+#define SCNA_DEFINE_HVX_INT8_TREE_KERNELS(SUFFIX, DEPTH, LEAVES, SELECTORS)                                 \
+  static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_tree_int8_eval_##SUFFIX##_vhf(                               \
+      HVX_Vector x, HVX_Vector thresholds, HVX_Vector slopes, HVX_Vector biases,                            \
+      const scna_hvx_params_t *params) {                                                                     \
+    const HVX_Vector v_zero = Q6_V_vzero();                                                                  \
+    const HVX_Vector qx_h = hvx_scna_exp2_quantize_s8_vhf(x, params);                                       \
+    HVX_Vector leaf;                                                                                          \
+    SCNA_TREE_TRAVERSE(qx_h, thresholds, DEPTH, LEAVES, Q6_Q_vcmp_gt_VhVh, leaf);                           \
+    const HVX_Vector slope = hvx_scna_vlut16_up_to(leaf, slopes, SELECTORS);                                 \
+    const HVX_Vector bias = hvx_scna_vlut16_up_to(leaf, biases, SELECTORS);                                  \
+    HVX_VectorPair sum_w = Q6_Ww_vmpyacc_WwVhVh(Q6_W_vzero(), qx_h, slope);                                 \
+    sum_w = Q6_Ww_vadd_WwWw(sum_w, Q6_Ww_vsxt_Vh(bias));                                                     \
+    HVX_Vector sum_h = hvx_scna_pack_ordered_s32_to_s16(sum_w);                                             \
+    sum_h = Q6_Vh_vmax_VhVh(sum_h, v_zero);                                                                  \
+    const HVX_Vector output_scale = Q6_Vh_vsplat_R(params->int8_output_scale_bits);                          \
+    return Q6_Vhf_vmpy_VhfVhf(Q6_Vhf_vcvt_Vh(sum_h), output_scale);                                         \
+  }                                                                                                          \
+  static __attribute__((noinline)) HVX_Vector hvx_scna_tree_int8_##SUFFIX##_vhf(                            \
+      HVX_Vector x, const scna_hvx_params_t *params) {                                                       \
+    const HVX_Vector thresholds = vmemu(params->tree_threshold_int16);                                       \
+    const HVX_Vector slopes = vmemu(params->tree_slope_int16);                                               \
+    const HVX_Vector biases = vmemu(params->tree_bias_int16);                                                \
+    return hvx_scna_tree_int8_eval_##SUFFIX##_vhf(x, thresholds, slopes, biases, params);                    \
+  }                                                                                                          \
+  static __attribute__((noinline)) void hvx_scna_tree_pair_int8_##SUFFIX##_vhf(                            \
+      HVX_Vector x0, HVX_Vector x1, const scna_hvx_params_t *params, HVX_Vector *out0, HVX_Vector *out1) {  \
+    const HVX_Vector thresholds = vmemu(params->tree_threshold_int16);                                       \
+    const HVX_Vector slopes = vmemu(params->tree_slope_int16);                                               \
+    const HVX_Vector biases = vmemu(params->tree_bias_int16);                                                \
+    *out0 = hvx_scna_tree_int8_eval_##SUFFIX##_vhf(x0, thresholds, slopes, biases, params);                  \
+    *out1 = hvx_scna_tree_int8_eval_##SUFFIX##_vhf(x1, thresholds, slopes, biases, params);                  \
+  }
+
+SCNA_DEFINE_HVX_TREE_KERNELS(d8, 4, 16, 1)
+SCNA_DEFINE_HVX_TREE_KERNELS(d16, 5, 32, 2)
+SCNA_DEFINE_HVX_TREE_KERNELS(d32, 6, 64, 4)
+SCNA_DEFINE_HVX_INT8_TREE_KERNELS(d8, 4, 16, 1)
+SCNA_DEFINE_HVX_INT8_TREE_KERNELS(d16, 5, 32, 2)
+SCNA_DEFINE_HVX_INT8_TREE_KERNELS(d32, 6, 64, 4)
+
+#undef SCNA_DEFINE_HVX_INT8_TREE_KERNELS
+#undef SCNA_DEFINE_HVX_TREE_KERNELS
+#undef SCNA_TREE_TRAVERSE
+
+__attribute__((noinline)) HVX_Vector hvx_scna_exp_vhf(
+    HVX_Vector x, const scna_hvx_params_t *params) {
+  if (params->kernel == SCNA_KERNEL_TREE) {
+    if (params->precision == SCNA_PRECISION_INT8) {
+      switch (params->width) {
+        case 8: return hvx_scna_tree_int8_d8_vhf(x, params);
+        case 16: return hvx_scna_tree_int8_d16_vhf(x, params);
+        default: return hvx_scna_tree_int8_d32_vhf(x, params);
+      }
+    }
+    switch (params->width) {
+      case 8: return hvx_scna_tree_d8_vhf(x, params);
+      case 16: return hvx_scna_tree_d16_vhf(x, params);
+      default: return hvx_scna_tree_d32_vhf(x, params);
+    }
+  }
   if (params->precision == SCNA_PRECISION_INT8) {
     switch (params->width) {
       case 8: return hvx_scna_exp2_int8_d8_vhf(x, params);
@@ -166,9 +296,23 @@ __attribute__((noinline)) HVX_Vector hvx_scna_exp2_vhf(
   }
 }
 
-__attribute__((noinline)) void hvx_scna_exp2_pair_vhf(
-    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+__attribute__((noinline)) void hvx_scna_exp_pair_vhf(
+    HVX_Vector x0, HVX_Vector x1, const scna_hvx_params_t *params,
     HVX_Vector *out0, HVX_Vector *out1) {
+  if (params->kernel == SCNA_KERNEL_TREE) {
+    if (params->precision == SCNA_PRECISION_INT8) {
+      switch (params->width) {
+        case 8: hvx_scna_tree_pair_int8_d8_vhf(x0, x1, params, out0, out1); return;
+        case 16: hvx_scna_tree_pair_int8_d16_vhf(x0, x1, params, out0, out1); return;
+        default: hvx_scna_tree_pair_int8_d32_vhf(x0, x1, params, out0, out1); return;
+      }
+    }
+    switch (params->width) {
+      case 8: hvx_scna_tree_pair_d8_vhf(x0, x1, params, out0, out1); return;
+      case 16: hvx_scna_tree_pair_d16_vhf(x0, x1, params, out0, out1); return;
+      default: hvx_scna_tree_pair_d32_vhf(x0, x1, params, out0, out1); return;
+    }
+  }
   if (params->precision == SCNA_PRECISION_INT8) {
     switch (params->width) {
       case 8: hvx_scna_exp2_pair_int8_d8_vhf(x0, x1, params, out0, out1); return;
@@ -196,11 +340,16 @@ static __attribute__((noinline)) void scna_exp2_bench_eval_pair(
   hvx_scna_exp2_pair_vhf(input0, input1, params, output0, output1);
 }
 
+static inline float scna_exp_reference(float x, int function) {
+  return function == SCNA_FUNCTION_EXP ? expf(x) : exp2f(x);
+}
+
 int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_flags, int warmup, int iters) {
   if (result == NULL || (width != 8 && width != 16 && width != 32) || warmup < 0 || iters <= 0) return -1;
 
   _Alignas(VLEN) __fp16 input[VLEN / sizeof(__fp16)];
   _Alignas(VLEN) __fp16 output[VLEN / sizeof(__fp16)];
+  _Alignas(VLEN) __fp16 alternate_output[VLEN / sizeof(__fp16)];
   _Alignas(VLEN) __fp16 pair_input1[VLEN / sizeof(__fp16)];
   _Alignas(VLEN) __fp16 pair_output0[VLEN / sizeof(__fp16)];
   _Alignas(VLEN) __fp16 pair_output1[VLEN / sizeof(__fp16)];
@@ -242,6 +391,24 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
                             (width == 8 ? LLM_NPU_MODE_SCNA_D8 : width == 32 ? LLM_NPU_MODE_SCNA_D32 : 0);
   scna_exp2_hvx_params_t hvx_params;
   scna_exp2_prepare_hvx_params(&hvx_params, selected_mode);
+  scna_exp2_hvx_params_t alternate_params = hvx_params;
+  alternate_params.kernel = hvx_params.kernel == SCNA_KERNEL_TREE ? SCNA_KERNEL_DIRECT : SCNA_KERNEL_TREE;
+
+  _Alignas(VLEN) int16_t int8_pack_input[VLEN / sizeof(int16_t)];
+  _Alignas(VLEN) int16_t int8_pack_output[VLEN / sizeof(int16_t)];
+  const HVX_Vector int8_qx = hvx_scna_exp2_quantize_s8_vhf(vmem(pair_input1), &hvx_params);
+  const HVX_VectorPair int8_qx_w = Q6_Ww_vsxt_Vh(int8_qx);
+  vmem(int8_pack_input) = int8_qx;
+  vmem(int8_pack_output) = hvx_scna_pack_ordered_s32_to_s16(int8_qx_w);
+  int int8_s32_pack_mismatches = 0;
+  int int8_s32_pack_max_abs_diff = 0;
+  for (int lane = 0; lane < lanes; ++lane) {
+    int diff = int8_pack_output[lane] - int8_pack_input[lane];
+    if (diff < 0) diff = -diff;
+    if (diff != 0) ++int8_s32_pack_mismatches;
+    if (diff > int8_s32_pack_max_abs_diff) int8_s32_pack_max_abs_diff = diff;
+  }
+  static const int int8_probe_lanes[8] = { 0, 1, 2, 30, 31, 32, 62, 63 };
 
   for (int i = 0; i < warmup; ++i) {
     vmem(output) = scna_exp2_bench_eval(vmem(input), &hvx_params);
@@ -274,7 +441,7 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
   }
 
   for (int lane = 0; lane < lanes; ++lane) {
-    const float expected = exp2f(input[lane]);
+    const float expected = scna_exp_reference(input[lane], hvx_params.function);
     const float actual = output[lane];
     const float error = actual - expected;
     sq_error += error * error;
@@ -282,24 +449,29 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
     if (!isfinite(actual)) ++nan_count;
   }
 
-  const int dense_blocks = 16;
+  const int dense_blocks = 64;
   const int dense_samples = dense_blocks * lanes;
   double dense_sq_error = 0.0;
   float dense_max_abs = 0.0f;
   float previous = -INFINITY;
   int monotonic_violations = 0;
   int negative_count = 0;
+  float direct_tree_max_abs_diff = 0.0f;
   for (int block = 0; block < dense_blocks; ++block) {
     for (int lane = 0; lane < lanes; ++lane) {
       const int sample = block * lanes + lane;
-      input[lane] = (__fp16) (-16.0f + 16.0f * sample / (dense_samples - 1));
+      input[lane] = (__fp16) (SCNA_MIN_INPUT + (SCNA_MAX_INPUT - SCNA_MIN_INPUT) *
+                                                sample / (dense_samples - 1));
     }
     vmem(output) = scna_exp2_bench_eval(vmem(input), &hvx_params);
+    vmem(alternate_output) = scna_exp2_bench_eval(vmem(input), &alternate_params);
     for (int lane = 0; lane < lanes; ++lane) {
       const float actual = output[lane];
-      const float error = actual - exp2f(input[lane]);
+      const float error = actual - scna_exp_reference(input[lane], hvx_params.function);
+      const float direct_tree_diff = fabsf(actual - (float) alternate_output[lane]);
       dense_sq_error += error * error;
       if (fabsf(error) > dense_max_abs) dense_max_abs = fabsf(error);
+      if (direct_tree_diff > direct_tree_max_abs_diff) direct_tree_max_abs_diff = direct_tree_diff;
       if (actual < previous) ++monotonic_violations;
       if (actual < 0.0f) ++negative_count;
       if (!isfinite(actual)) ++nan_count;
@@ -309,6 +481,8 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
   *result = (struct ScnaExp2BenchResult) {
     .width = width,
     .precision = (selected_mode & LLM_NPU_MODE_SCNA_INT8) ? SCNA_PRECISION_INT8 : SCNA_PRECISION_FP16,
+    .function = hvx_params.function,
+    .kernel = hvx_params.kernel,
     .lanes = lanes,
     .iters = iters,
     .elapsed_us = elapsed_us,
@@ -318,6 +492,7 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
     .dense_rmse = (float) sqrt(dense_sq_error / dense_samples),
     .dense_max_abs_error = dense_max_abs,
     .pair_max_abs_diff = pair_max_abs_diff,
+    .direct_tree_max_abs_diff = direct_tree_max_abs_diff,
     .output_at_min = single_output0[0],
     .output_near_minus12 = single_output0[60],
     .output_near_minus4 = single_output0[62],
@@ -326,10 +501,17 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
     .monotonic_violations = monotonic_violations,
     .negative_count = negative_count,
     .nan_count = nan_count,
+    .int8_s32_pack_mismatches = int8_s32_pack_mismatches,
+    .int8_s32_pack_max_abs_diff = int8_s32_pack_max_abs_diff,
     .convert_zero = convert_zero,
     .convert_one = convert_one,
     .convert_quarter = convert_quarter,
     .convert_neg_half = convert_neg_half,
   };
+  for (int i = 0; i < 8; ++i) {
+    const int lane = int8_probe_lanes[i];
+    result->int8_s32_pack_probe_input[i] = int8_pack_input[lane];
+    result->int8_s32_pack_probe_output[i] = int8_pack_output[lane];
+  }
   return 0;
 }

@@ -1,0 +1,2 @@
+SCNA_EXP_BENCH mode=scna-int8 function=exp kernel=direct width=8 lanes=64 iters=10000 elapsed_us=464 pair_elapsed_us=556 rmse=0.000429145 max_abs_error=0.00341797 dense_samples=4096 dense_rmse=0.0169006 dense_max_abs_error=0.257808 pair_max_abs_diff=0 direct_tree_max_abs_diff=0.793457 monotonic_violations=0 negative_count=0 nan_count=0 y_min=0 y_minus12=0 y_minus4=0.017334 y_zero=0.996582
+HVX_FP16_TO_FP32_PROBE zero=7.27596e-12 one=1 quarter=0.25 neg_half=-0.5

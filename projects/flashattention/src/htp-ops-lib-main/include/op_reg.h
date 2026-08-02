@@ -25,8 +25,11 @@ enum LlmNpuModeFlags {
   LLM_NPU_MODE_SCNA_D8          = 1 << 4,
   LLM_NPU_MODE_SCNA_D32         = 1 << 5,
   LLM_NPU_MODE_NUMERIC_DEBUG    = 1 << 6,
+  LLM_NPU_MODE_SCNA_FUNCTION_EXP = 1 << 7,
   LLM_NPU_MODE_TRACE            = 1 << 8,
   LLM_NPU_MODE_DETAILED_TRACE   = 1 << 9,
+  LLM_NPU_MODE_SCNA_TREE        = 1 << 10,
+  LLM_NPU_MODE_SCNA_KV_PIPELINE = 1 << 11,
 };
 
 struct RpcmemBufAddr {
@@ -247,6 +250,16 @@ enum ScnaPrecision {
   SCNA_PRECISION_INT8 = 2,
 };
 
+enum ScnaFunction {
+  SCNA_FUNCTION_EXP2 = 0,
+  SCNA_FUNCTION_EXP  = 1,
+};
+
+enum ScnaKernel {
+  SCNA_KERNEL_DIRECT = 0,
+  SCNA_KERNEL_TREE   = 1,
+};
+
 struct ScnaExp2BenchParams {
   struct RpcmemBufAddr output;
   int32_t width;
@@ -258,6 +271,8 @@ struct ScnaExp2BenchParams {
 struct ScnaExp2BenchResult {
   int32_t width;
   int32_t precision;
+  int32_t function;
+  int32_t kernel;
   int32_t lanes;
   int32_t iters;
   int64_t elapsed_us;
@@ -267,6 +282,7 @@ struct ScnaExp2BenchResult {
   float dense_rmse;
   float dense_max_abs_error;
   float pair_max_abs_diff;
+  float direct_tree_max_abs_diff;
   float output_at_min;
   float output_near_minus12;
   float output_near_minus4;
@@ -275,6 +291,10 @@ struct ScnaExp2BenchResult {
   int32_t monotonic_violations;
   int32_t negative_count;
   int32_t nan_count;
+  int32_t int8_s32_pack_mismatches;
+  int32_t int8_s32_pack_max_abs_diff;
+  int16_t int8_s32_pack_probe_input[8];
+  int16_t int8_s32_pack_probe_output[8];
   float convert_zero;
   float convert_one;
   float convert_quarter;
@@ -392,6 +412,9 @@ enum Figure8ProfileComponent {
   FIGURE8_COMP_O_SCALE,
   FIGURE8_COMP_O_STORE,
   FIGURE8_COMP_SCNA_EXP2,
+  FIGURE8_COMP_KV_DMA_ISSUE,
+  FIGURE8_COMP_KV_DMA_WAIT,
+  FIGURE8_COMP_KV_TRANSFORM,
 };
 
 struct Figure8ProfileHeader {
@@ -426,6 +449,12 @@ struct Figure8ProfileRecord {
   int64_t scna_exp2;
   int32_t nonlinear_mode;
   int32_t scna_width;
+  int32_t scna_function;
+  int32_t scna_kernel;
+  int32_t scna_pipeline;
+  int64_t kv_dma_issue;
+  int64_t kv_dma_wait;
+  int64_t kv_transform;
   int32_t debug_rowsum0_bits;
   int32_t debug_l0_bits;
   int32_t debug_core_o0_bits;
