@@ -1,7 +1,0 @@
-mode,wait_policy,wait_strategy,host_cpu_requested,host_cpu_actual,cpu_role,qo_len,kv_len,n_heads,n_kv_heads,head_dim,phase,iteration,host_wall_us,host_thread_cpu_us,wait_wall_us,wait_thread_cpu_us,sleep_us,spin_us,poll_count,predicted_us,prediction_error_us,descriptor_prepare_us,dsp_mapping_us,dsp_validate_in_us,dsp_compute_us,dsp_validate_out_us,dsp_dispatch_total_us,output_hash,ret
-baseline,legacy,legacy-usleep50,0,0,low-capacity,8,4093,12,2,128,warmup,0,1122,22,1120,21,1119,1,11,0,0,0,7,70,1015,10,1102,a10f80ec7de70fca,0
-baseline,legacy,legacy-usleep50,0,0,low-capacity,8,4093,12,2,128,warmup,1,1206,13,1205,12,1204,1,12,0,0,0,7,70,1039,9,1125,a10f80ec7de70fca,0
-baseline,legacy,legacy-usleep50,0,0,low-capacity,8,4093,12,2,128,warmup,2,1206,22,1204,22,1202,2,12,0,0,0,7,70,1035,10,1122,a10f80ec7de70fca,0
-baseline,legacy,legacy-usleep50,0,0,low-capacity,8,4093,12,2,128,warmup,3,1216,16,1215,14,1214,1,12,0,0,0,7,70,1043,9,1129,a10f80ec7de70fca,0
-baseline,legacy,legacy-usleep50,0,0,low-capacity,8,4093,12,2,128,warmup,4,1220,20,1218,19,1217,1,12,0,0,0,7,69,1047,9,1133,a10f80ec7de70fca,0
-baseline,legacy,legacy-usleep50,0,0,low-capacity,8,4093,12,2,128,measure,0,1226,14,1224,13,1223,1,12,0,0,0,8,70,1030,9,1117,a10f80ec7de70fca,0

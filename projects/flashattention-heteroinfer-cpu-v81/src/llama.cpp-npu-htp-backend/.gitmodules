@@ -1,6 +1,0 @@
-# Vendored snapshot note (2026-07-27): the Kompute gitlink was not present in
-# the source-only export. Keep the original declaration commented for
-# provenance instead of advertising a broken nested submodule:
-# [submodule "kompute"]
-#	path = ggml/src/ggml-kompute/kompute
-#	url = https://github.com/nomic-ai/kompute.git
