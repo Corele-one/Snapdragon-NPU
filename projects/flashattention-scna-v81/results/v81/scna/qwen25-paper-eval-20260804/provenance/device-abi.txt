@@ -1,0 +1,7 @@
+Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys
+OS3.0.303.0.WPYCNXM
+36
+Linux localhost 6.6.77-android15-8-gf9a1d4bd8353-abogki440974771-4k #1 SMP PREEMPT Fri Aug 29 01:48:34 UTC 2025 aarch64 Toybox
+bbe9a76ede398637b103d81929f578cc7abf87997b38e9334fcc29046331ceb6  /vendor/lib64/libcdsprpc.so
+2e46d74169f2b834fd88927d8eddc3f26bd24559642843fb4ce9170d823fdfcc  /system/lib64/libbinder_ndk.so
+fa475f2a9143b6d021502f928e00f4a71ee84b48bc5cc5f6a22bc2b39c00c0ed  /system/lib64/libbinder.so

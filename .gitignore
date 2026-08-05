@@ -29,6 +29,8 @@ CMakeFiles/
 *.dylib
 *.exe
 
+projects/model-convert-venv/
+
 # Generated deployment packages
 projects/pure-fp16/deploy/
 projects/pure-fp16/logs/

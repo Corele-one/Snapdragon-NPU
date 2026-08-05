@@ -1,0 +1,14 @@
+load_backend: failed to find ggml_backend_init in ./libggml-htp.so
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v81/src/llama.cpp-npu-htp-backend/ggml/src/ggml-htp/dsprpc_interface.cc:26: unable to load libcdsprpc.so: dlopen failed: cannot locate symbol "_ZN7android6binder2os22get_trace_enabled_tagsEv" referenced by "/system/lib64/libbinder_ndk.so"...
+0: 0x7ed6c8aed4 
+1: 0x7ed6c8ae3c ggml_abort
+2: 0x7ed8c4dda0 
+3: 0x7ed8c4d6ec rpcmem_alloc
+4: 0x7ed8c4d33c 
+5: 0x7ed6ca0ae8 ggml_backend_buft_alloc_buffer
+6: 0x7ed6ca03e0 
+7: 0x7ed6ca0244 ggml_backend_alloc_ctx_tensors_from_buft
+8: 0x7ed22d8e74 
+9: 0x7ed22a9c90 llama_load_model_from_file
+10: 0x59810dfc4c 
+11: 0x7ed207fcd4 __libc_init

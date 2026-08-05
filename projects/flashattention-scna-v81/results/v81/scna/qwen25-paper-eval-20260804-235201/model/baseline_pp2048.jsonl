@@ -1,0 +1,9 @@
+load_backend: failed to find ggml_backend_init in ./libggml-htp.so
+RPCMEM alloc size = 254.98047 MiB
+RPCMEM alloc size = 254.96875 MiB
+RPCMEM alloc size = 254.96875 MiB
+RPCMEM alloc size = 127.47852 MiB
+Initializing HTP backend... (You should see this once)
+RPCMEM alloc size = 56.00000 MiB
+RPCMEM alloc size = 5.62549 MiB
+{"build_commit": "8025517", "build_number": 9, "cpu_info": "CPU, Unknown Hexagon Processor", "gpu_info": "", "backends": "MyHTP", "model_filename": "/data/local/tmp/llama-npu-chat/qwen2.5-1.5b-instruct.iq4_nl+q8_0-hmx.gguf", "model_type": "qwen2 1.5B mixed IQ4_NL & Q8_0", "model_size": 1127184896, "model_n_params": 1543714304, "n_batch": 2048, "n_ubatch": 64, "n_threads": 4, "cpu_mask": "0x0", "cpu_strict": false, "poll": 50, "type_k": "f16", "type_v": "f16", "n_gpu_layers": 99, "split_mode": "layer", "main_gpu": 0, "no_kv_offload": false, "flash_attn": true, "tensor_split": "0.00", "use_mmap": true, "embeddings": false, "n_prompt": 2048, "n_gen": 0, "test_time": "2026-08-04T15:53:47Z", "avg_ns": 4071442662, "stddev_ns": 116988697, "avg_ts": 503.401257, "stddev_ts": 14.121545, "samples_ns": [ 3956907811, 4004775988, 4013099530, 3991373749, 4000661874, 3989776977, 4010649894, 4000026092, 4003630468, 3993063748, 4018426040, 4001147811, 3968411925, 4019934322, 4294812186, 4226210259, 4230270363, 4241321560, 4211893592, 4252459061 ],"samples_ts": [ 517.576, 511.389, 510.329, 513.107, 511.915, 513.312, 510.64, 511.997, 511.536, 512.889, 509.652, 511.853, 516.075, 509.461, 476.854, 484.595, 484.13, 482.868, 486.242, 481.604 ]}

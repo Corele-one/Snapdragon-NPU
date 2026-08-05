@@ -12,6 +12,8 @@
 | `results/v81/scna/stage4-correctness-20260801/` | SM8750P / v81 | 是 | FP32 reference、mask、tail、causal、direct/tree gate |
 | `results/v81/scna/stage5-pipeline-main-20260801/` | SM8750P / v81 | 是 | 同轮 baseline、pipeline off/on 与 5+20 次测量 |
 | `results/v81/scna/stage5-pipeline-correctness-20260801/` | SM8750P / v81 | 是 | pipeline 字节一致性与 FP32 reference |
+| `results/v81/scna/report-audit-20260804/` | SM8750P / v81 | 是 | 原始 HVX、exp-LUT、direct/tree、pipeline 正反顺序同会话审计 |
+| `results/v81/scna/stage6-pipeline-fair-20260804/` | SM8750P / v81 | 是 | 三种 evaluator 均启用相同 KV pipeline 的公平归因 |
 | `results/v81/scna/sm8750p-*` 早期目录 | SM8750P / v81 | 否 | 阶段一至三历史执行成本；Attention 正确性结论已撤回 |
 | `results/v73/`、`results/v79/` | 历史设备/架构 | 否 | 从原项目继承，仅作历史归档，禁止与 v81 SCNA 做 speedup 对比 |
 
@@ -21,8 +23,9 @@
 
 1. SCNA speedup 的分子与分母只能来自同一个 `results/v81/scna/<run>/` 或明确记录的相邻同设备 session。
 2. `results/v73/` 和 `results/v79/` 不得进入 v81 主表、主图、置信区间或摘要数字。
-3. LUT 只允许作为附录；SCNA 主结论只比较 v81 baseline 与 v81 SCNA。
+3. 所有承担跨实现结论的对比图必须同时包含原始 HVX `exp2` 和 exp-LUT；SCNA 内部消融只保留为表格或明确标成内部对照。
 4. 阶段五中 baseline 未启用 KV pipeline，因此 baseline/SCNA 回答的是“组合方案是否超过现有实现”；pipeline off/on 才是 KV 流水贡献的因果消融。
+5. `direct` 是严格 LUT-free 的 SCNA neuron sum；`tree` 使用 `vlut16` 选择 breakpoint 参数，是 lookup-assisted 的等价 PWL 求值器。
 
 ## 实验范围
 
@@ -99,6 +102,8 @@ docs/stage-reports/                             分阶段实验报告
 
 阶段报告：
 
+- [五阶段统一路线、双 baseline 审计与 naive HVX 指令映射](docs/stage-reports/SCNA_HVX_五阶段路线与基线审计_2026-08-04.md)
+- [阶段六：公平 KV pipeline 归因](docs/stage-reports/SCNA_HVX_阶段六_公平KV流水归因_2026-08-04.md)
 - [阶段一/二：Demo 与热路径重写](docs/stage-reports/SCNA_HVX_阶段一阶段二总结_2026-07-31.md)
 - [阶段三：真实 INT8 kernel](docs/stage-reports/SCNA_HVX_阶段三总结_2026-08-01.md)
 - [阶段四：branchless tree 与正确性闭环](docs/stage-reports/SCNA_HVX_阶段四_tree重写与正确性闭环_2026-08-01.md)
@@ -120,6 +125,7 @@ rg -- '-mv81' src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v81/build.ninja
 ./scripts/run_scna_v81_matrix.sh
 ./scripts/run_scna_v81_pipeline_correctness.sh
 ./scripts/run_scna_v81_pipeline.sh
+./scripts/run_scna_v81_report_audit.sh
 ```
 
 LUT 附录默认关闭。仅在明确生成附录时启用：

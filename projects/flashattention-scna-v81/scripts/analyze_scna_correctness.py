@@ -11,6 +11,8 @@ from pathlib import Path
 
 
 PAIR_RE = re.compile(r"(\w+)=([^\s]+)")
+RMSE_LIMIT = 0.002
+MAX_ABS_LIMIT = 0.01
 
 
 def fields(line: str) -> dict[str, str]:
@@ -41,9 +43,10 @@ def main() -> None:
             reference_rows.append(row)
             if int(data.get("candidate_nonfinite", "1")) or int(data.get("reference_nonfinite", "1")):
                 failures.append(f"nonfinite output: {config}")
-            if data.get("candidate_mode") == "baseline":
-                if float(data["rmse"]) > 0.002 or float(data["max_abs_error"]) > 0.01:
-                    failures.append(f"baseline FP32 gate: rmse={data['rmse']} max={data['max_abs_error']} {config}")
+            if float(data["rmse"]) > RMSE_LIMIT or float(data["max_abs_error"]) > MAX_ABS_LIMIT:
+                failures.append(
+                    f"FP32 gate: mode={data.get('candidate_mode', 'unknown')} "
+                    f"rmse={data['rmse']} max={data['max_abs_error']} {config}")
             continue
         if "FIG8_ATTENTION_DIRECT_TREE_COMPARE" in line:
             data = fields(line)
@@ -82,6 +85,7 @@ def main() -> None:
         f"- FP32 comparisons: {len(reference_rows)}",
         f"- Direct/tree comparisons: {len(direct_tree_rows)}",
         f"- Mask/tail probes: {len(mask_probes)}",
+        f"- FP32 thresholds: RMSE <= {RMSE_LIMIT:g}, max abs <= {MAX_ABS_LIMIT:g}",
         f"- Gate failures: {len(failures)}", "",
         "| Mode | Function | Kernel | Cases | Max RMSE | Max absolute error | Nonfinite |",
         "|---|---|---|---:|---:|---:|---:|",

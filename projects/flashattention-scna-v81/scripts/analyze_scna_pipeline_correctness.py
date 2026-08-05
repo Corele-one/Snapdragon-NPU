@@ -10,6 +10,8 @@ from pathlib import Path
 
 
 PAIR_RE = re.compile(r"(\w+)=([^\s]+)")
+RMSE_LIMIT = 0.002
+MAX_ABS_LIMIT = 0.01
 
 
 def fields(line: str) -> dict[str, str]:
@@ -84,6 +86,8 @@ def main() -> None:
 
     failures = sum(row["gate"] != "pass" or row["ret"] != 0 for row in pipeline_rows)
     failures += sum(row["ret"] != 0 or row["candidate_nonfinite"] != 0 or row["reference_nonfinite"] != 0
+                    or float(row["rmse"]) > RMSE_LIMIT
+                    or float(row["max_abs_error"]) > MAX_ABS_LIMIT
                     for row in reference_rows)
     failures += sum(row["gate"] != "pass" for row in probe_rows)
     max_rmse = max((float(row["rmse"]) for row in reference_rows), default=0.0)
@@ -97,6 +101,7 @@ def main() -> None:
         f"- Maximum pipeline byte mismatches: {max_mismatches}",
         f"- Maximum FP32 RMSE: {max_rmse:.7g}",
         f"- Maximum FP32 absolute error: {max_abs:.7g}",
+        f"- FP32 thresholds: RMSE <= {RMSE_LIMIT:g}, max abs <= {MAX_ABS_LIMIT:g}",
         f"- Gate failures: {failures}", "",
     ]
     (args.out_dir / "summary.md").write_text("\n".join(report), encoding="utf-8")

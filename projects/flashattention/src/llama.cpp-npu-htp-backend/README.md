@@ -34,6 +34,9 @@ mkdir -p build; cd build
 2. Perform CMake configuration, ensuring that the environment variable `ANDROID_NDK` corresponding to the Android NDK is set
 
 ```sh
+export ANDROID_NDK=/local/mnt/workspace/Qualcomm/Hexagon_SDK/6.6.0.0/tools/android-ndk-r25c 
+#your NDK Address
+test -f "$ANDROID_NDK/build/cmake/android.toolchain.cmake"
 cmake .. -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-26 -DGGML_HTP=ON -DGGML_OPENMP=OFF
 ```
 

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="540" viewBox="0 0 1100 540">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;letter-spacing:0}.axis{stroke:#30343b;stroke-width:1.4}.grid{stroke:#d9dde3;stroke-width:1}.tick{font-size:12px;fill:#3e4651}.label{font-size:14px;fill:#20242a}.title{font-size:19px;font-weight:700;fill:#15181d}.legend{font-size:12px;fill:#20242a}</style>
+<text x="550.0" y="28" text-anchor="middle" class="title">V81 SCNA KV Pipeline DSP Latency (95% Median CI)</text>
+<line x1="82" y1="448.0" x2="732" y2="448.0" class="grid"/>
+<text x="72" y="452.0" text-anchor="end" class="tick">0</text>
+<line x1="82" y1="370.0" x2="732" y2="370.0" class="grid"/>
+<text x="72" y="374.0" text-anchor="end" class="tick">512</text>
+<line x1="82" y1="292.0" x2="732" y2="292.0" class="grid"/>
+<text x="72" y="296.0" text-anchor="end" class="tick">1023</text>
+<line x1="82" y1="214.0" x2="732" y2="214.0" class="grid"/>
+<text x="72" y="218.0" text-anchor="end" class="tick">1535</text>
+<line x1="82" y1="136.0" x2="732" y2="136.0" class="grid"/>
+<text x="72" y="140.0" text-anchor="end" class="tick">2047</text>
+<line x1="82" y1="58.0" x2="732" y2="58.0" class="grid"/>
+<text x="72" y="62.0" text-anchor="end" class="tick">2559</text>
+<line x1="82" y1="58" x2="82" y2="448" class="axis"/>
+<line x1="82" y1="448" x2="732" y2="448" class="axis"/>
+<text x="82.0" y="471" text-anchor="middle" class="tick">4</text>
+<text x="298.7" y="471" text-anchor="middle" class="tick">8</text>
+<text x="515.3" y="471" text-anchor="middle" class="tick">16</text>
+<text x="732.0" y="471" text-anchor="middle" class="tick">32</text>
+<text x="407.0" y="517" text-anchor="middle" class="label">Query length (tokens)</text>
+<text x="20" y="253.0" text-anchor="middle" transform="rotate(-90 20 253.0)" class="label">DSP latency (us)</text>
+<polyline points="82.0,315.5 298.7,298.1 515.3,234.1 732.0,134.5" fill="none" stroke="#252a31" stroke-width="2.5"/>
+<line x1="82.0" y1="314.9" x2="82.0" y2="316.5" stroke="#252a31"/>
+<line x1="78.0" y1="314.9" x2="86.0" y2="314.9" stroke="#252a31"/>
+<line x1="78.0" y1="316.5" x2="86.0" y2="316.5" stroke="#252a31"/>
+<circle cx="82.0" cy="315.5" r="4" fill="#252a31"/>
+<line x1="298.7" y1="291.8" x2="298.7" y2="307.9" stroke="#252a31"/>
+<line x1="294.7" y1="291.8" x2="302.7" y2="291.8" stroke="#252a31"/>
+<line x1="294.7" y1="307.9" x2="302.7" y2="307.9" stroke="#252a31"/>
+<circle cx="298.7" cy="298.1" r="4" fill="#252a31"/>
+<line x1="515.3" y1="232.6" x2="515.3" y2="235.6" stroke="#252a31"/>
+<line x1="511.3" y1="232.6" x2="519.3" y2="232.6" stroke="#252a31"/>
+<line x1="511.3" y1="235.6" x2="519.3" y2="235.6" stroke="#252a31"/>
+<circle cx="515.3" cy="234.1" r="4" fill="#252a31"/>
+<line x1="732.0" y1="133.0" x2="732.0" y2="136.0" stroke="#252a31"/>
+<line x1="728.0" y1="133.0" x2="736.0" y2="133.0" stroke="#252a31"/>
+<line x1="728.0" y1="136.0" x2="736.0" y2="136.0" stroke="#252a31"/>
+<circle cx="732.0" cy="134.5" r="4" fill="#252a31"/>
+<line x1="762" y1="82" x2="790" y2="82" stroke="#252a31" stroke-width="2.5"/>
+<circle cx="776" cy="82" r="4" fill="#252a31"/>
+<text x="798" y="86" class="legend">Original HVX exp2 / pipe off</text>
+<polyline points="82.0,368.4 298.7,362.5 515.3,297.5 732.0,198.2" fill="none" stroke="#64748b" stroke-width="2.5"/>
+<line x1="82.0" y1="366.5" x2="82.0" y2="372.3" stroke="#64748b"/>
+<line x1="78.0" y1="366.5" x2="86.0" y2="366.5" stroke="#64748b"/>
+<line x1="78.0" y1="372.3" x2="86.0" y2="372.3" stroke="#64748b"/>
+<circle cx="82.0" cy="368.4" r="4" fill="#64748b"/>
+<line x1="298.7" y1="347.6" x2="298.7" y2="362.8" stroke="#64748b"/>
+<line x1="294.7" y1="347.6" x2="302.7" y2="347.6" stroke="#64748b"/>
+<line x1="294.7" y1="362.8" x2="302.7" y2="362.8" stroke="#64748b"/>
+<circle cx="298.7" cy="362.5" r="4" fill="#64748b"/>
+<line x1="515.3" y1="290.7" x2="515.3" y2="307.8" stroke="#64748b"/>
+<line x1="511.3" y1="290.7" x2="519.3" y2="290.7" stroke="#64748b"/>
+<line x1="511.3" y1="307.8" x2="519.3" y2="307.8" stroke="#64748b"/>
+<circle cx="515.3" cy="297.5" r="4" fill="#64748b"/>
+<line x1="732.0" y1="193.4" x2="732.0" y2="200.5" stroke="#64748b"/>
+<line x1="728.0" y1="193.4" x2="736.0" y2="193.4" stroke="#64748b"/>
+<line x1="728.0" y1="200.5" x2="736.0" y2="200.5" stroke="#64748b"/>
+<circle cx="732.0" cy="198.2" r="4" fill="#64748b"/>
+<line x1="762" y1="113" x2="790" y2="113" stroke="#64748b" stroke-width="2.5"/>
+<circle cx="776" cy="113" r="4" fill="#64748b"/>
+<text x="798" y="117" class="legend">Original HVX exp2 / pipe on</text>
+<polyline points="82.0,326.1 298.7,314.1 515.3,283.1 732.0,227.1" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+<line x1="82.0" y1="324.4" x2="82.0" y2="341.7" stroke="#dc2626"/>
+<line x1="78.0" y1="324.4" x2="86.0" y2="324.4" stroke="#dc2626"/>
+<line x1="78.0" y1="341.7" x2="86.0" y2="341.7" stroke="#dc2626"/>
+<circle cx="82.0" cy="326.1" r="4" fill="#dc2626"/>
+<line x1="298.7" y1="310.8" x2="298.7" y2="330.6" stroke="#dc2626"/>
+<line x1="294.7" y1="310.8" x2="302.7" y2="310.8" stroke="#dc2626"/>
+<line x1="294.7" y1="330.6" x2="302.7" y2="330.6" stroke="#dc2626"/>
+<circle cx="298.7" cy="314.1" r="4" fill="#dc2626"/>
+<line x1="515.3" y1="281.7" x2="515.3" y2="292.2" stroke="#dc2626"/>
+<line x1="511.3" y1="281.7" x2="519.3" y2="281.7" stroke="#dc2626"/>
+<line x1="511.3" y1="292.2" x2="519.3" y2="292.2" stroke="#dc2626"/>
+<circle cx="515.3" cy="283.1" r="4" fill="#dc2626"/>
+<line x1="732.0" y1="225.8" x2="732.0" y2="230.2" stroke="#dc2626"/>
+<line x1="728.0" y1="225.8" x2="736.0" y2="225.8" stroke="#dc2626"/>
+<line x1="728.0" y1="230.2" x2="736.0" y2="230.2" stroke="#dc2626"/>
+<circle cx="732.0" cy="227.1" r="4" fill="#dc2626"/>
+<line x1="762" y1="144" x2="790" y2="144" stroke="#dc2626" stroke-width="2.5"/>
+<circle cx="776" cy="144" r="4" fill="#dc2626"/>
+<text x="798" y="148" class="legend">exp-LUT / pipe off</text>
+<polyline points="82.0,400.4 298.7,378.5 515.3,340.0 732.0,295.7" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+<line x1="82.0" y1="400.3" x2="82.0" y2="400.6" stroke="#f59e0b"/>
+<line x1="78.0" y1="400.3" x2="86.0" y2="400.3" stroke="#f59e0b"/>
+<line x1="78.0" y1="400.6" x2="86.0" y2="400.6" stroke="#f59e0b"/>
+<circle cx="82.0" cy="400.4" r="4" fill="#f59e0b"/>
+<line x1="298.7" y1="374.8" x2="298.7" y2="386.3" stroke="#f59e0b"/>
+<line x1="294.7" y1="374.8" x2="302.7" y2="374.8" stroke="#f59e0b"/>
+<line x1="294.7" y1="386.3" x2="302.7" y2="386.3" stroke="#f59e0b"/>
+<circle cx="298.7" cy="378.5" r="4" fill="#f59e0b"/>
+<line x1="515.3" y1="339.5" x2="515.3" y2="340.8" stroke="#f59e0b"/>
+<line x1="511.3" y1="339.5" x2="519.3" y2="339.5" stroke="#f59e0b"/>
+<line x1="511.3" y1="340.8" x2="519.3" y2="340.8" stroke="#f59e0b"/>
+<circle cx="515.3" cy="340.0" r="4" fill="#f59e0b"/>
+<line x1="732.0" y1="293.9" x2="732.0" y2="309.0" stroke="#f59e0b"/>
+<line x1="728.0" y1="293.9" x2="736.0" y2="293.9" stroke="#f59e0b"/>
+<line x1="728.0" y1="309.0" x2="736.0" y2="309.0" stroke="#f59e0b"/>
+<circle cx="732.0" cy="295.7" r="4" fill="#f59e0b"/>
+<line x1="762" y1="175" x2="790" y2="175" stroke="#f59e0b" stroke-width="2.5"/>
+<circle cx="776" cy="175" r="4" fill="#f59e0b"/>
+<text x="798" y="179" class="legend">exp-LUT / pipe on</text>
+<polyline points="82.0,308.2 298.7,284.9 515.3,221.6 732.0,101.4" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<line x1="82.0" y1="304.6" x2="82.0" y2="311.6" stroke="#2563eb"/>
+<line x1="78.0" y1="304.6" x2="86.0" y2="304.6" stroke="#2563eb"/>
+<line x1="78.0" y1="311.6" x2="86.0" y2="311.6" stroke="#2563eb"/>
+<circle cx="82.0" cy="308.2" r="4" fill="#2563eb"/>
+<line x1="298.7" y1="281.4" x2="298.7" y2="301.1" stroke="#2563eb"/>
+<line x1="294.7" y1="281.4" x2="302.7" y2="281.4" stroke="#2563eb"/>
+<line x1="294.7" y1="301.1" x2="302.7" y2="301.1" stroke="#2563eb"/>
+<circle cx="298.7" cy="284.9" r="4" fill="#2563eb"/>
+<line x1="515.3" y1="218.1" x2="515.3" y2="226.4" stroke="#2563eb"/>
+<line x1="511.3" y1="218.1" x2="519.3" y2="218.1" stroke="#2563eb"/>
+<line x1="511.3" y1="226.4" x2="519.3" y2="226.4" stroke="#2563eb"/>
+<circle cx="515.3" cy="221.6" r="4" fill="#2563eb"/>
+<line x1="732.0" y1="99.8" x2="732.0" y2="107.8" stroke="#2563eb"/>
+<line x1="728.0" y1="99.8" x2="736.0" y2="99.8" stroke="#2563eb"/>
+<line x1="728.0" y1="107.8" x2="736.0" y2="107.8" stroke="#2563eb"/>
+<circle cx="732.0" cy="101.4" r="4" fill="#2563eb"/>
+<line x1="762" y1="206" x2="790" y2="206" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="776" cy="206" r="4" fill="#2563eb"/>
+<text x="798" y="210" class="legend">scna-fp16 exp tree d8 / pipe off</text>
+<polyline points="82.0,365.1 298.7,354.9 515.3,287.7 732.0,167.5" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+<line x1="82.0" y1="362.0" x2="82.0" y2="372.6" stroke="#16a34a"/>
+<line x1="78.0" y1="362.0" x2="86.0" y2="362.0" stroke="#16a34a"/>
+<line x1="78.0" y1="372.6" x2="86.0" y2="372.6" stroke="#16a34a"/>
+<circle cx="82.0" cy="365.1" r="4" fill="#16a34a"/>
+<line x1="298.7" y1="337.2" x2="298.7" y2="355.0" stroke="#16a34a"/>
+<line x1="294.7" y1="337.2" x2="302.7" y2="337.2" stroke="#16a34a"/>
+<line x1="294.7" y1="355.0" x2="302.7" y2="355.0" stroke="#16a34a"/>
+<circle cx="298.7" cy="354.9" r="4" fill="#16a34a"/>
+<line x1="515.3" y1="286.9" x2="515.3" y2="289.6" stroke="#16a34a"/>
+<line x1="511.3" y1="286.9" x2="519.3" y2="286.9" stroke="#16a34a"/>
+<line x1="511.3" y1="289.6" x2="519.3" y2="289.6" stroke="#16a34a"/>
+<circle cx="515.3" cy="287.7" r="4" fill="#16a34a"/>
+<line x1="732.0" y1="165.4" x2="732.0" y2="172.4" stroke="#16a34a"/>
+<line x1="728.0" y1="165.4" x2="736.0" y2="165.4" stroke="#16a34a"/>
+<line x1="728.0" y1="172.4" x2="736.0" y2="172.4" stroke="#16a34a"/>
+<circle cx="732.0" cy="167.5" r="4" fill="#16a34a"/>
+<line x1="762" y1="237" x2="790" y2="237" stroke="#16a34a" stroke-width="2.5"/>
+<circle cx="776" cy="237" r="4" fill="#16a34a"/>
+<text x="798" y="241" class="legend">scna-fp16 exp tree d8 / pipe on</text>
+</svg>

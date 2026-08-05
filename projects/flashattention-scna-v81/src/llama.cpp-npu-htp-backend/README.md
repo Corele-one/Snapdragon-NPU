@@ -152,15 +152,15 @@ To perform LLM inference on the device, transfer the produced files from the abo
 - Executable programs (e.g., `llama-cli`)
 - Necessary dynamic-linked libraries (e.g., `libhtp_ops.so`, `libhtp_ops_skel.so` and possible llama.cpp shared objects)
 
-Set the following two environment variables to the current workspace:
+Set the following two environment variables before running. Keep `/system/lib64` ahead of `/vendor/lib64`: on recent Android releases, `libcdsprpc.so` may load `libbinder_ndk.so`, which requires the framework Binder implementation from `/system/lib64`. The workspace still comes first so the HTP host stub can be found.
 
-- `LD_LIBRARY_PATH=/data/local/tmp/llama.cpp`
+- `LD_LIBRARY_PATH=/data/local/tmp/llama.cpp:/system/lib64:/vendor/lib64`
 - `DSP_LIBRARY_PATH=/data/local/tmp/llama.cpp`
 
 Run `llama-cli`:
 
 ```sh
-LD_LIBRARY_PATH=/data/local/tmp/llama.cpp DSP_LIBRARY_PATH=/data/local/tmp/llama.cpp ./llama-cli -t 4 -fa -m qwen2.5-1.5b.iq4_nl+q8_0-hmx.gguf -p "Hello my name is"
+LD_LIBRARY_PATH=/data/local/tmp/llama.cpp:/system/lib64:/vendor/lib64 DSP_LIBRARY_PATH=/data/local/tmp/llama.cpp ./llama-cli -t 4 -fa -m qwen2.5-1.5b.iq4_nl+q8_0-hmx.gguf -p "Hello my name is"
 ```
 
 The `-fa` option is set here to enable the FlashAttention kernel.
@@ -175,7 +175,7 @@ The `-fa` option is set here to enable the FlashAttention kernel.
 
 1. "unable to load libcdsprpc.so"
 
-The HTP backend relies on the interface provided by `libcdsprpc.so` for rpcmem (dmabuf) operations. This dynamic link library is usually located in `/vendor/lib64`. If you encounter this problem, you can try adding `/vendor/lib64:/system/lib64` to the environment variable `LD_LIBRARY_PATH`.
+The HTP backend relies on the interface provided by `libcdsprpc.so` for rpcmem (dmabuf) operations. This dynamic link library is usually located in `/vendor/lib64`. Add both system paths while preserving the order `...:/system/lib64:/vendor/lib64`; reversing them can load an incompatible vendor `libbinder.so` before `libbinder_ndk.so` resolves its framework symbols.
 
 2. Inference gets stuck
 

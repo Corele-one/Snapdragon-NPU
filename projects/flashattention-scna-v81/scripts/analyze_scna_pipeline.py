@@ -58,6 +58,9 @@ def median_ratio_ci(numerators: list[float], denominators: list[float], seed_key
 
 def normalize(data: dict[str, str]) -> tuple[str, str, str, str, int, int, int]:
     mode = data.get("mode", "unknown")
+    pipeline = data.get("scna_pipeline", "off")
+    if pipeline in ("0", "1"):
+        pipeline = "on" if pipeline == "1" else "off"
     if mode.startswith("scna-"):
         function = data.get("scna_function", "exp2")
         if function in ("0", "1"):
@@ -65,12 +68,9 @@ def normalize(data: dict[str, str]) -> tuple[str, str, str, str, int, int, int]:
         kernel = data.get("scna_kernel", "direct")
         if kernel in ("0", "1"):
             kernel = "tree" if kernel == "1" else "direct"
-        pipeline = data.get("scna_pipeline", "off")
-        if pipeline in ("0", "1"):
-            pipeline = "on" if pipeline == "1" else "off"
         width = int(data.get("scna_width", "16"))
     else:
-        function, kernel, pipeline, width = "none", "none", "off", 0
+        function, kernel, width = "none", "none", 0
     return mode, function, kernel, pipeline, width, int(data.get("qo_len", "0")), int(data.get("iteration", "0"))
 
 
@@ -84,19 +84,28 @@ def svg_begin(width: int, height: int, title: str) -> list[str]:
 
 
 def latency_svg(rows: list[dict[str, object]], path: Path) -> tuple[str, str, str, int]:
-    on_q32 = [row for row in rows if row["pipeline"] == "on" and int(row["qo_len"]) == 32]
+    on_q32 = [row for row in rows if row["pipeline"] == "on"
+              and str(row["mode"]).startswith("scna-") and int(row["qo_len"]) == 32]
     selected = min(on_q32, key=lambda row: float(row["total_median_us"]))
     config = (str(selected["mode"]), str(selected["function"]), str(selected["kernel"]), int(selected["scna_width"]))
-    baseline = sorted((row for row in rows if row["mode"] == "baseline"), key=lambda row: int(row["qo_len"]))
-    off = sorted((row for row in rows if (row["mode"], row["function"], row["kernel"], int(row["scna_width"])) == config
-                  and row["pipeline"] == "off"), key=lambda row: int(row["qo_len"]))
-    on = sorted((row for row in rows if (row["mode"], row["function"], row["kernel"], int(row["scna_width"])) == config
-                 and row["pipeline"] == "on"), key=lambda row: int(row["qo_len"]))
-    series = [("Baseline", "#252a31", baseline),
-              (f"{config[0]} {config[1]} {config[2]} d{config[3]} off", "#d4553d", off),
-              (f"{config[0]} {config[1]} {config[2]} d{config[3]} on", "#178f86", on)]
-    width, height = 900, 510
-    left, top, plot_w, plot_h = 82, 58, 620, 365
+    specs = [
+        ("Original HVX exp2 / pipe off", "#252a31", ("baseline", "none", "none", 0, "off")),
+        ("Original HVX exp2 / pipe on", "#64748b", ("baseline", "none", "none", 0, "on")),
+        ("exp-LUT / pipe off", "#dc2626", ("lut-exp", "none", "none", 0, "off")),
+        ("exp-LUT / pipe on", "#f59e0b", ("lut-exp", "none", "none", 0, "on")),
+        (f"{config[0]} {config[1]} {config[2]} d{config[3]} / pipe off", "#2563eb", (*config, "off")),
+        (f"{config[0]} {config[1]} {config[2]} d{config[3]} / pipe on", "#16a34a", (*config, "on")),
+    ]
+    series = []
+    for label, color, key in specs:
+        values = sorted(
+            (row for row in rows
+             if (row["mode"], row["function"], row["kernel"], int(row["scna_width"]), row["pipeline"]) == key),
+            key=lambda row: int(row["qo_len"]))
+        if values:
+            series.append((label, color, values))
+    width, height = 1100, 540
+    left, top, plot_w, plot_h = 82, 58, 650, 390
     ymax = max(float(row["total_ci_high_us"]) for _, _, values in series for row in values) * 1.12
     qs = [4, 8, 16, 32]
     sx = lambda q: left + qs.index(q) * plot_w / 3
@@ -124,9 +133,9 @@ def latency_svg(rows: list[dict[str, object]], path: Path) -> tuple[str, str, st
                     f'<line x1="{x - 4:.1f}" y1="{lo:.1f}" x2="{x + 4:.1f}" y2="{lo:.1f}" stroke="{color}"/>',
                     f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4" fill="{color}"/>']
         ly = 82 + index * 31
-        out += [f'<line x1="724" y1="{ly}" x2="752" y2="{ly}" stroke="{color}" stroke-width="2.5"/>',
-                f'<circle cx="738" cy="{ly}" r="4" fill="{color}"/>',
-                f'<text x="760" y="{ly + 4}" class="legend">{escape(label)}</text>']
+        out += [f'<line x1="762" y1="{ly}" x2="790" y2="{ly}" stroke="{color}" stroke-width="2.5"/>',
+                f'<circle cx="776" cy="{ly}" r="4" fill="{color}"/>',
+                f'<text x="798" y="{ly + 4}" class="legend">{escape(label)}</text>']
     out.append("</svg>")
     path.write_text("\n".join(out) + "\n", encoding="utf-8")
     return config
@@ -274,12 +283,13 @@ def main() -> None:
         row["scna_share_pct"] = 100.0 * float(row["scna_exp_median_us"]) / float(row["total_median_us"])
         rows.append(row)
 
-    baseline = {int(row["qo_len"]): float(row["total_median_us"]) for row in rows if row["mode"] == "baseline"}
+    baseline = {int(row["qo_len"]): float(row["total_median_us"]) for row in rows
+                if row["mode"] == "baseline" and row["pipeline"] == "off"}
     off = {(row["mode"], row["function"], row["kernel"], int(row["scna_width"]), int(row["qo_len"])): row
            for row in rows if row["pipeline"] == "off"}
     for row in rows:
         row["baseline_speedup"] = baseline[int(row["qo_len"])] / float(row["total_median_us"])
-        if row["mode"] == "baseline":
+        if row["pipeline"] == "off":
             row["pipeline_speedup"] = 1.0
             row["pipeline_speedup_ci_low"] = 1.0
             row["pipeline_speedup_ci_high"] = 1.0
@@ -317,8 +327,50 @@ def main() -> None:
             writer.writerows(output_rows)
 
     selected = latency_svg(rows, args.out_dir / "pipeline_latency.svg")
-    speedup_svg(rows, args.out_dir / "pipeline_speedup_q32.svg")
+    q32_exp2_on = [row for row in rows if row["pipeline"] == "on"
+                   and row["function"] == "exp2" and int(row["qo_len"]) == 32]
+    required_speedup_points = {
+        (mode, kernel, width)
+        for mode in ("scna-fp16", "scna-int8")
+        for kernel in ("direct", "tree")
+        for width in (8, 16, 32)
+    }
+    available_speedup_points = {
+        (str(row["mode"]), str(row["kernel"]), int(row["scna_width"]))
+        for row in q32_exp2_on
+    }
+    has_full_speedup_matrix = required_speedup_points <= available_speedup_points
+    if has_full_speedup_matrix:
+        speedup_svg(rows, args.out_dir / "pipeline_speedup_q32.svg")
     breakdown_svg(rows, selected, args.out_dir / "pipeline_breakdown_q32.svg")
+
+    evaluator_rows: list[dict[str, object]] = []
+    for qo_len in (4, 8, 16, 32):
+        candidate_key = (selected[0], selected[1], selected[2], "on", selected[3], qo_len)
+        candidate = [value["profiled_total"] for value in samples[candidate_key]]
+        for reference_mode in ("baseline", "lut-exp"):
+            reference_key = (reference_mode, "none", "none", "on", 0, qo_len)
+            if reference_key not in samples:
+                continue
+            reference = [value["profiled_total"] for value in samples[reference_key]]
+            ratio_ci = median_ratio_ci(
+                reference, candidate, f"evaluator-{reference_mode}-{selected}-{qo_len}")
+            evaluator_rows.append({
+                "qo_len": qo_len,
+                "reference": f"{reference_mode}-pipeline-on",
+                "candidate": f"{selected[0]}-{selected[1]}-{selected[2]}-d{selected[3]}-pipeline-on",
+                "samples_per_side": len(candidate),
+                "reference_median_us": statistics.median(reference),
+                "candidate_median_us": statistics.median(candidate),
+                "reference_over_candidate": statistics.median(reference) / statistics.median(candidate),
+                "ratio_ci95_low": ratio_ci[0],
+                "ratio_ci95_high": ratio_ci[1],
+            })
+    if evaluator_rows:
+        with (args.out_dir / "evaluator_ratios.csv").open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(evaluator_rows[0]), lineterminator="\n")
+            writer.writeheader()
+            writer.writerows(evaluator_rows)
 
     selected_on = next(row for row in rows if row["pipeline"] == "on" and int(row["qo_len"]) == 32 and
                        (row["mode"], row["function"], row["kernel"], int(row["scna_width"])) == selected)
@@ -327,7 +379,7 @@ def main() -> None:
         "# V81 SCNA KV Pipeline Summary", "",
         "Generated from adjacent pipeline-off/on runs. Confidence intervals are deterministic bootstrap 95% CIs of the median.", "",
         "![Pipeline latency](pipeline_latency.svg)", "",
-        "![Pipeline speedup](pipeline_speedup_q32.svg)", "",
+        *(["![Pipeline speedup](pipeline_speedup_q32.svg)", ""] if has_full_speedup_matrix else []),
         "![Pipeline breakdown](pipeline_breakdown_q32.svg)", "",
         "## Selected q32 configuration", "",
         f"- Configuration: {selected[0]} {selected[1]} {selected[2]} d{selected[3]}",
@@ -336,6 +388,14 @@ def main() -> None:
         f"- Host speedup: {float(selected_on['host_pipeline_speedup']):.3f}x, 95% CI [{float(selected_on['host_pipeline_speedup_ci_low']):.3f}x, {float(selected_on['host_pipeline_speedup_ci_high']):.3f}x]",
         f"- K+V median: {float(selected_off['kv_load_median_us']):.1f} us off -> {float(selected_on['kv_load_median_us']):.1f} us on",
         f"- Pipeline DMA issue/wait/transform: {float(selected_on['kv_dma_issue_median_us']):.1f} / {float(selected_on['kv_dma_wait_median_us']):.1f} / {float(selected_on['kv_transform_median_us']):.1f} us", "",
+        "## Fair evaluator comparison", "",
+        "| Qo | Reference | Reference / SCNA [95% CI] |",
+        "|---:|---|---:|",
+        *[f"| {row['qo_len']} | {row['reference']} | "
+          f"{float(row['reference_over_candidate']):.3f}x "
+          f"[{float(row['ratio_ci95_low']):.3f}, {float(row['ratio_ci95_high']):.3f}] |"
+          for row in evaluator_rows],
+        "",
         "## q32 matrix", "",
         "| Mode | Function | Kernel | Width | Off DSP us | On DSP us | Pipeline speedup [95% CI] | Baseline speedup | On K+V us | DMA wait us |",
         "|---|---|---|---:|---:|---:|---:|---:|---:|---:|",

@@ -1,0 +1,4 @@
+ M .gitignore
+ M projects/flashattention-scna-v81/scripts/use_hexagon_sdk_6_6.sh
+ M projects/flashattention/src/llama.cpp-npu-htp-backend/README.md
+?? projects/flashattention/src/llama.cpp-npu-htp-backend/device-package/

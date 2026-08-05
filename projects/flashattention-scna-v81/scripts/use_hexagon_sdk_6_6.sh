@@ -14,4 +14,4 @@ source /local/mnt/workspace/Qualcomm/Hexagon_SDK/6.6.0.0/setup_sdk_env.source
 # this user. CMake/Ninja are host-only generators; reuse the executable 3.28.3
 # bundle from the readable 6.3 installation while retaining all 6.6 target
 # tools, QuRT headers, and FastRPC libraries.
-export CMAKE_ROOT_PATH=/local/mnt/workspace/Qualcomm/Hexagon_SDK/6.3.0.0/tools/cmake-3.28.3-linux-x86_64
+

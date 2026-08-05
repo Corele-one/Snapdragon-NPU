@@ -18,7 +18,12 @@ namespace {
 void * load_lib() {
     auto * lib = dlopen("libcdsprpc.so", RTLD_LAZY | RTLD_LOCAL);
     if (!lib) {
-        GGML_ABORT("unable to load libcdsprpc.so");
+        // Android 15 shell processes may not search the vendor namespace even
+        // when /vendor/lib64 is present in LD_LIBRARY_PATH.
+        lib = dlopen("/vendor/lib64/libcdsprpc.so", RTLD_LAZY | RTLD_LOCAL);
+    }
+    if (!lib) {
+        GGML_ABORT("unable to load libcdsprpc.so: %s", dlerror());
     }
     return lib;
 }

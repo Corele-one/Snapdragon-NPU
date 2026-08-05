@@ -18,8 +18,16 @@ enum HtpOpsIndex {
 enum LlmNpuModeFlags {
   LLM_NPU_MODE_LUT_EXP          = 1 << 0,
   LLM_NPU_MODE_HMX_AWARE_TILE   = 1 << 1,
+  LLM_NPU_MODE_SCNA_FP16        = 1 << 2,
+  LLM_NPU_MODE_SCNA_INT8        = 1 << 3,
+  LLM_NPU_MODE_SCNA_D8          = 1 << 4,
+  LLM_NPU_MODE_SCNA_D32         = 1 << 5,
+  LLM_NPU_MODE_NUMERIC_DEBUG    = 1 << 6,
+  LLM_NPU_MODE_SCNA_FUNCTION_EXP = 1 << 7,
   LLM_NPU_MODE_TRACE            = 1 << 8,
   LLM_NPU_MODE_DETAILED_TRACE   = 1 << 9,
+  LLM_NPU_MODE_SCNA_TREE        = 1 << 10,
+  LLM_NPU_MODE_SCNA_KV_PIPELINE = 1 << 11,
 };
 
 struct RpcmemBufAddr {

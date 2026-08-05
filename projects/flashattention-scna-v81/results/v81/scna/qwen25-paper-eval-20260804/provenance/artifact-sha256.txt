@@ -1,0 +1,5 @@
+bdf377d001b71bb56da5ab1ce46f0c0de6e972711e97e89d1d4410f17224ac1b  src/llama.cpp-npu-htp-backend/build-android-scna-v81/bin/llama-bench
+82ba61339ee887daaf3f582a94844bc68f55706bab420ceb88f5b58050d373f5  src/llama.cpp-npu-htp-backend/build-android-scna-v81/bin/llama-perplexity
+07cf615639d3a8a9e42ac6e3874ef9476bb0c7de7020873550c7576df55a1b6a  src/llama.cpp-npu-htp-backend/build-android-scna-v81/ggml/src/ggml-htp/libggml-htp.so
+6b7240ae3436ba1a5923df933e34032c8a269c808932ca9e1943919cd369514f  src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/libhtp_ops.so
+4ebcc3d321b0dba5a278e1ce9d9c6551b946ba1b064735efda8a36edfcc7184d  src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v81/ship/libhtp_ops_skel.so

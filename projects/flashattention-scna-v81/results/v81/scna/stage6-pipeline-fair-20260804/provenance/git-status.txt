@@ -1,0 +1,11 @@
+ M README.md
+ M scripts/analyze_scna_correctness.py
+ M scripts/analyze_scna_pipeline.py
+ M scripts/analyze_scna_pipeline_correctness.py
+ M scripts/use_hexagon_sdk_6_6.sh
+ M src/htp-ops-lib-main/src/dsp/ops/flash_attn.c
+ M src/htp-ops-lib-main/src/host/test.c
+?? results/v81/scna/report-audit-20260804/
+?? results/v81/scna/stage6-pipeline-fair-20260804/
+?? scripts/run_kv_pipeline_fairness_v81.sh
+?? scripts/run_scna_v81_report_audit.sh

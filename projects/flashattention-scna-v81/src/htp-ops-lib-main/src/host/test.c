@@ -117,7 +117,7 @@ struct Figure8AttnConfig {
 static void figure8_print_usage(const char *prog) {
   fprintf(stderr,
           "Usage: %s --figure8-attn [--mode baseline|lut-exp|scna-fp16|scna-int8] [--scna-width 8|16|32]\n"
-          "          [--scna-function exp2|exp] [--scna-kernel direct|tree] [--scna-pipeline on|off]\n"
+          "          [--scna-function exp2|exp] [--scna-kernel direct|tree] [--kv-pipeline on|off]\n"
           "          [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
           "          [--n-heads N] [--n-kv-heads N] [--head-dim N] [--warmup N] [--iters N]\n"
           "          [--no-events] [--compare-baseline] [--compare-reference] [--compare-direct-tree]\n"
@@ -314,9 +314,9 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
         return -1;
       }
       cfg->scna_kernel = argv[i];
-    } else if (strcmp(arg, "--scna-pipeline") == 0) {
+    } else if (strcmp(arg, "--scna-pipeline") == 0 || strcmp(arg, "--kv-pipeline") == 0) {
       if (++i >= argc) {
-        fprintf(stderr, "Missing value for --scna-pipeline\n");
+        fprintf(stderr, "Missing value for --kv-pipeline\n");
         return -1;
       }
       cfg->scna_pipeline = argv[i];
@@ -391,16 +391,11 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     return -1;
   }
   if (strcmp(cfg->scna_pipeline, "off") != 0 && strcmp(cfg->scna_pipeline, "on") != 0) {
-    fprintf(stderr, "--scna-pipeline must be on or off\n");
+    fprintf(stderr, "--kv-pipeline must be on or off\n");
     return -1;
   }
   if (cfg->compare_direct_tree && strncmp(cfg->mode, "scna-", 5) != 0) {
     fprintf(stderr, "--compare-direct-tree requires a SCNA mode\n");
-    return -1;
-  }
-  if ((cfg->compare_pipeline || strcmp(cfg->scna_pipeline, "on") == 0) &&
-      strncmp(cfg->mode, "scna-", 5) != 0) {
-    fprintf(stderr, "SCNA pipeline options require a SCNA mode\n");
     return -1;
   }
   if (cfg->n_heads % cfg->n_kv_heads != 0) {
@@ -1679,7 +1674,7 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   const int reported_scna_width = strncmp(cfg->mode, "scna-", 5) == 0 ? cfg->scna_width : 0;
   const char *reported_scna_function = strncmp(cfg->mode, "scna-", 5) == 0 ? cfg->scna_function : "exp2";
   const char *reported_scna_kernel = strncmp(cfg->mode, "scna-", 5) == 0 ? cfg->scna_kernel : "direct";
-  const char *reported_scna_pipeline = strncmp(cfg->mode, "scna-", 5) == 0 ? cfg->scna_pipeline : "off";
+  const char *reported_scna_pipeline = cfg->scna_pipeline;
   struct FlashAttnProfileParams params = {
     .attn = {
       .o          = { .fd = o_fd, .offset = 0, },

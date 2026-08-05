@@ -76,6 +76,32 @@ int get_mode_flags(const char * mode) {
     if (std::strcmp(mode, "lut_exp") == 0 || std::strcmp(mode, "lut-exp") == 0) {
         flags |= LLM_NPU_MODE_LUT_EXP;
     }
+    if (std::strcmp(mode, "scna_fp16") == 0 || std::strcmp(mode, "scna-fp16") == 0) {
+        flags |= LLM_NPU_MODE_SCNA_FP16;
+    }
+    if (std::strcmp(mode, "scna_int8") == 0 || std::strcmp(mode, "scna-int8") == 0) {
+        flags |= LLM_NPU_MODE_SCNA_INT8;
+    }
+    const char * scna_width = std::getenv("LLAMA_NPU_SCNA_WIDTH");
+    if (scna_width && std::strcmp(scna_width, "8") == 0) {
+        flags |= LLM_NPU_MODE_SCNA_D8;
+    } else if (scna_width && std::strcmp(scna_width, "32") == 0) {
+        flags |= LLM_NPU_MODE_SCNA_D32;
+    }
+    const char * scna_function = std::getenv("LLAMA_NPU_SCNA_FUNCTION");
+    if (scna_function && std::strcmp(scna_function, "exp") == 0) {
+        flags |= LLM_NPU_MODE_SCNA_FUNCTION_EXP;
+    }
+    const char * scna_kernel = std::getenv("LLAMA_NPU_SCNA_KERNEL");
+    if (scna_kernel && std::strcmp(scna_kernel, "tree") == 0) {
+        flags |= LLM_NPU_MODE_SCNA_TREE;
+    }
+    if (env_truthy("LLAMA_NPU_KV_PIPELINE")) {
+        flags |= LLM_NPU_MODE_SCNA_KV_PIPELINE;
+    }
+    if (env_truthy("LLAMA_NPU_NUMERIC_DEBUG")) {
+        flags |= LLM_NPU_MODE_NUMERIC_DEBUG;
+    }
     if (env_truthy("LLAMA_NPU_TRACE")) {
         flags |= LLM_NPU_MODE_TRACE;
     }

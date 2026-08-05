@@ -341,7 +341,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   const bool enable_scna_exp    = scna_exp2_enabled(mode_flags);
   const int scna_function       = scna_function_from_mode(mode_flags);
   const int scna_kernel         = scna_kernel_from_mode(mode_flags);
-  const bool enable_kv_pipeline = enable_scna_exp && (mode_flags & LLM_NPU_MODE_SCNA_KV_PIPELINE) != 0;
+  // The bit name is retained for ABI compatibility, but K/V staging is
+  // independent of the nonlinear evaluator.
+  const bool enable_kv_pipeline = (mode_flags & LLM_NPU_MODE_SCNA_KV_PIPELINE) != 0;
   const bool numeric_debug      = (mode_flags & LLM_NPU_MODE_NUMERIC_DEBUG) != 0;
   const bool use_fp32_exp       = false;  // compute FP32 exp
   if (enable_scna_exp && enable_vgather_exp) {
