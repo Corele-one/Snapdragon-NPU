@@ -1,0 +1,2161 @@
+session,evaluator,qo_len,host_elapsed_us,source
+1,LUT-EXP,16,684,lut_exp_q16.log
+1,LUT-EXP,16,675,lut_exp_q16.log
+1,LUT-EXP,16,677,lut_exp_q16.log
+1,LUT-EXP,16,687,lut_exp_q16.log
+1,LUT-EXP,16,669,lut_exp_q16.log
+1,LUT-EXP,16,668,lut_exp_q16.log
+1,LUT-EXP,16,678,lut_exp_q16.log
+1,LUT-EXP,16,663,lut_exp_q16.log
+1,LUT-EXP,16,695,lut_exp_q16.log
+1,LUT-EXP,16,768,lut_exp_q16.log
+1,LUT-EXP,16,668,lut_exp_q16.log
+1,LUT-EXP,16,681,lut_exp_q16.log
+1,LUT-EXP,16,690,lut_exp_q16.log
+1,LUT-EXP,16,675,lut_exp_q16.log
+1,LUT-EXP,16,702,lut_exp_q16.log
+1,LUT-EXP,16,759,lut_exp_q16.log
+1,LUT-EXP,16,756,lut_exp_q16.log
+1,LUT-EXP,16,739,lut_exp_q16.log
+1,LUT-EXP,16,730,lut_exp_q16.log
+1,LUT-EXP,16,684,lut_exp_q16.log
+1,LUT-EXP,16,726,lut_exp_q16.log
+1,LUT-EXP,16,765,lut_exp_q16.log
+1,LUT-EXP,16,729,lut_exp_q16.log
+1,LUT-EXP,16,756,lut_exp_q16.log
+1,LUT-EXP,16,711,lut_exp_q16.log
+1,LUT-EXP,16,754,lut_exp_q16.log
+1,LUT-EXP,16,749,lut_exp_q16.log
+1,LUT-EXP,16,771,lut_exp_q16.log
+1,LUT-EXP,16,674,lut_exp_q16.log
+1,LUT-EXP,16,773,lut_exp_q16.log
+1,SCNA lane8 d8,16,1644,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1647,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1657,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1588,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1644,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1625,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1640,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1620,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1608,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1618,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1628,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1620,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1710,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1733,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1657,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1636,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1641,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1632,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1647,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1616,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1640,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1671,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1612,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1647,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1620,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1690,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1738,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1739,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1635,scna_lane8_q16_1.log
+1,SCNA lane8 d8,16,1642,scna_lane8_q16_1.log
+1,LUT-EXP,32,1033,lut_exp_q32.log
+1,LUT-EXP,32,1108,lut_exp_q32.log
+1,LUT-EXP,32,1017,lut_exp_q32.log
+1,LUT-EXP,32,1013,lut_exp_q32.log
+1,LUT-EXP,32,1003,lut_exp_q32.log
+1,LUT-EXP,32,995,lut_exp_q32.log
+1,LUT-EXP,32,1071,lut_exp_q32.log
+1,LUT-EXP,32,1020,lut_exp_q32.log
+1,LUT-EXP,32,1105,lut_exp_q32.log
+1,LUT-EXP,32,1042,lut_exp_q32.log
+1,LUT-EXP,32,1086,lut_exp_q32.log
+1,LUT-EXP,32,1105,lut_exp_q32.log
+1,LUT-EXP,32,1105,lut_exp_q32.log
+1,LUT-EXP,32,1114,lut_exp_q32.log
+1,LUT-EXP,32,1015,lut_exp_q32.log
+1,LUT-EXP,32,1016,lut_exp_q32.log
+1,LUT-EXP,32,1083,lut_exp_q32.log
+1,LUT-EXP,32,1100,lut_exp_q32.log
+1,LUT-EXP,32,1125,lut_exp_q32.log
+1,LUT-EXP,32,1049,lut_exp_q32.log
+1,LUT-EXP,32,1096,lut_exp_q32.log
+1,LUT-EXP,32,1042,lut_exp_q32.log
+1,LUT-EXP,32,1110,lut_exp_q32.log
+1,LUT-EXP,32,1031,lut_exp_q32.log
+1,LUT-EXP,32,1127,lut_exp_q32.log
+1,LUT-EXP,32,1050,lut_exp_q32.log
+1,LUT-EXP,32,1155,lut_exp_q32.log
+1,LUT-EXP,32,1106,lut_exp_q32.log
+1,LUT-EXP,32,1148,lut_exp_q32.log
+1,LUT-EXP,32,1254,lut_exp_q32.log
+1,SCNA lane8 d8,4,826,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,814,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,813,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,724,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,787,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,811,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,819,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,791,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,762,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,846,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,813,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,820,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,795,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,838,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,722,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,825,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,783,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,768,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,711,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,736,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,784,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,865,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,856,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,849,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,768,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,841,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,727,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,879,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,817,scna_lane8_q4_0.log
+1,SCNA lane8 d8,4,789,scna_lane8_q4_0.log
+1,Origin-HVX,16,790,baseline_q16.log
+1,Origin-HVX,16,775,baseline_q16.log
+1,Origin-HVX,16,796,baseline_q16.log
+1,Origin-HVX,16,791,baseline_q16.log
+1,Origin-HVX,16,795,baseline_q16.log
+1,Origin-HVX,16,787,baseline_q16.log
+1,Origin-HVX,16,802,baseline_q16.log
+1,Origin-HVX,16,780,baseline_q16.log
+1,Origin-HVX,16,786,baseline_q16.log
+1,Origin-HVX,16,812,baseline_q16.log
+1,Origin-HVX,16,791,baseline_q16.log
+1,Origin-HVX,16,878,baseline_q16.log
+1,Origin-HVX,16,863,baseline_q16.log
+1,Origin-HVX,16,769,baseline_q16.log
+1,Origin-HVX,16,776,baseline_q16.log
+1,Origin-HVX,16,769,baseline_q16.log
+1,Origin-HVX,16,886,baseline_q16.log
+1,Origin-HVX,16,855,baseline_q16.log
+1,Origin-HVX,16,853,baseline_q16.log
+1,Origin-HVX,16,766,baseline_q16.log
+1,Origin-HVX,16,766,baseline_q16.log
+1,Origin-HVX,16,849,baseline_q16.log
+1,Origin-HVX,16,849,baseline_q16.log
+1,Origin-HVX,16,840,baseline_q16.log
+1,Origin-HVX,16,854,baseline_q16.log
+1,Origin-HVX,16,840,baseline_q16.log
+1,Origin-HVX,16,849,baseline_q16.log
+1,Origin-HVX,16,802,baseline_q16.log
+1,Origin-HVX,16,848,baseline_q16.log
+1,Origin-HVX,16,840,baseline_q16.log
+1,SCNA serial d8,8,827,scna_serial_q8_1.log
+1,SCNA serial d8,8,768,scna_serial_q8_1.log
+1,SCNA serial d8,8,839,scna_serial_q8_1.log
+1,SCNA serial d8,8,785,scna_serial_q8_1.log
+1,SCNA serial d8,8,879,scna_serial_q8_1.log
+1,SCNA serial d8,8,839,scna_serial_q8_1.log
+1,SCNA serial d8,8,781,scna_serial_q8_1.log
+1,SCNA serial d8,8,861,scna_serial_q8_1.log
+1,SCNA serial d8,8,826,scna_serial_q8_1.log
+1,SCNA serial d8,8,852,scna_serial_q8_1.log
+1,SCNA serial d8,8,849,scna_serial_q8_1.log
+1,SCNA serial d8,8,779,scna_serial_q8_1.log
+1,SCNA serial d8,8,853,scna_serial_q8_1.log
+1,SCNA serial d8,8,801,scna_serial_q8_1.log
+1,SCNA serial d8,8,743,scna_serial_q8_1.log
+1,SCNA serial d8,8,802,scna_serial_q8_1.log
+1,SCNA serial d8,8,900,scna_serial_q8_1.log
+1,SCNA serial d8,8,847,scna_serial_q8_1.log
+1,SCNA serial d8,8,726,scna_serial_q8_1.log
+1,SCNA serial d8,8,869,scna_serial_q8_1.log
+1,SCNA serial d8,8,722,scna_serial_q8_1.log
+1,SCNA serial d8,8,735,scna_serial_q8_1.log
+1,SCNA serial d8,8,797,scna_serial_q8_1.log
+1,SCNA serial d8,8,747,scna_serial_q8_1.log
+1,SCNA serial d8,8,793,scna_serial_q8_1.log
+1,SCNA serial d8,8,726,scna_serial_q8_1.log
+1,SCNA serial d8,8,793,scna_serial_q8_1.log
+1,SCNA serial d8,8,835,scna_serial_q8_1.log
+1,SCNA serial d8,8,834,scna_serial_q8_1.log
+1,SCNA serial d8,8,736,scna_serial_q8_1.log
+1,SCNA serial d8,32,1664,scna_serial_q32_0.log
+1,SCNA serial d8,32,1647,scna_serial_q32_0.log
+1,SCNA serial d8,32,1706,scna_serial_q32_0.log
+1,SCNA serial d8,32,1669,scna_serial_q32_0.log
+1,SCNA serial d8,32,1695,scna_serial_q32_0.log
+1,SCNA serial d8,32,1781,scna_serial_q32_0.log
+1,SCNA serial d8,32,1689,scna_serial_q32_0.log
+1,SCNA serial d8,32,1781,scna_serial_q32_0.log
+1,SCNA serial d8,32,1688,scna_serial_q32_0.log
+1,SCNA serial d8,32,1785,scna_serial_q32_0.log
+1,SCNA serial d8,32,1748,scna_serial_q32_0.log
+1,SCNA serial d8,32,1760,scna_serial_q32_0.log
+1,SCNA serial d8,32,1766,scna_serial_q32_0.log
+1,SCNA serial d8,32,1841,scna_serial_q32_0.log
+1,SCNA serial d8,32,1781,scna_serial_q32_0.log
+1,SCNA serial d8,32,1734,scna_serial_q32_0.log
+1,SCNA serial d8,32,1817,scna_serial_q32_0.log
+1,SCNA serial d8,32,1778,scna_serial_q32_0.log
+1,SCNA serial d8,32,1749,scna_serial_q32_0.log
+1,SCNA serial d8,32,1789,scna_serial_q32_0.log
+1,SCNA serial d8,32,1838,scna_serial_q32_0.log
+1,SCNA serial d8,32,1728,scna_serial_q32_0.log
+1,SCNA serial d8,32,1838,scna_serial_q32_0.log
+1,SCNA serial d8,32,1745,scna_serial_q32_0.log
+1,SCNA serial d8,32,1741,scna_serial_q32_0.log
+1,SCNA serial d8,32,1753,scna_serial_q32_0.log
+1,SCNA serial d8,32,1757,scna_serial_q32_0.log
+1,SCNA serial d8,32,1743,scna_serial_q32_0.log
+1,SCNA serial d8,32,1771,scna_serial_q32_0.log
+1,SCNA serial d8,32,1725,scna_serial_q32_0.log
+1,SCNA lane8 d8,4,784,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,788,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,787,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,781,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,787,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,777,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,787,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,797,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,783,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,772,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,791,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,690,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,720,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,734,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,770,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,795,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,761,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,730,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,784,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,754,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,754,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,733,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,745,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,736,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,752,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,775,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,729,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,785,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,786,scna_lane8_q4_1.log
+1,SCNA lane8 d8,4,751,scna_lane8_q4_1.log
+1,SCNA lane8 d8,16,1649,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1637,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1671,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1641,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1610,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1622,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1626,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1623,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1615,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1614,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1612,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1676,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1633,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1633,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1643,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1642,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1748,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1707,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1600,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1721,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1630,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1672,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1640,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1643,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1614,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1617,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1754,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1623,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1755,scna_lane8_q16_0.log
+1,SCNA lane8 d8,16,1623,scna_lane8_q16_0.log
+1,SCNA lane8 d8,8,1098,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1090,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1092,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1086,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1146,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1110,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1094,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1091,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1111,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1081,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1110,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1145,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1083,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1212,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1085,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1087,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1201,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1191,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1104,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1096,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1157,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1089,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1214,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1114,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1177,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1190,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1170,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1189,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1186,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1092,scna_lane8_q8_0.log
+1,SCNA lane8 d8,8,1103,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1006,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1113,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1107,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1112,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1113,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1099,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1015,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1117,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1091,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1071,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1103,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1077,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1096,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1057,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1052,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1110,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1102,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1072,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1102,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1125,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1072,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1107,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1075,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1133,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1087,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1202,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1105,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1170,scna_lane8_q8_1.log
+1,SCNA lane8 d8,8,1115,scna_lane8_q8_1.log
+1,Origin-HVX,32,1249,baseline_q32.log
+1,Origin-HVX,32,1241,baseline_q32.log
+1,Origin-HVX,32,1256,baseline_q32.log
+1,Origin-HVX,32,1263,baseline_q32.log
+1,Origin-HVX,32,1235,baseline_q32.log
+1,Origin-HVX,32,1247,baseline_q32.log
+1,Origin-HVX,32,1247,baseline_q32.log
+1,Origin-HVX,32,1234,baseline_q32.log
+1,Origin-HVX,32,1243,baseline_q32.log
+1,Origin-HVX,32,1244,baseline_q32.log
+1,Origin-HVX,32,1312,baseline_q32.log
+1,Origin-HVX,32,1312,baseline_q32.log
+1,Origin-HVX,32,1242,baseline_q32.log
+1,Origin-HVX,32,1321,baseline_q32.log
+1,Origin-HVX,32,1254,baseline_q32.log
+1,Origin-HVX,32,1372,baseline_q32.log
+1,Origin-HVX,32,1361,baseline_q32.log
+1,Origin-HVX,32,1276,baseline_q32.log
+1,Origin-HVX,32,1300,baseline_q32.log
+1,Origin-HVX,32,1242,baseline_q32.log
+1,Origin-HVX,32,1319,baseline_q32.log
+1,Origin-HVX,32,1332,baseline_q32.log
+1,Origin-HVX,32,1360,baseline_q32.log
+1,Origin-HVX,32,1344,baseline_q32.log
+1,Origin-HVX,32,1337,baseline_q32.log
+1,Origin-HVX,32,1334,baseline_q32.log
+1,Origin-HVX,32,1329,baseline_q32.log
+1,Origin-HVX,32,1280,baseline_q32.log
+1,Origin-HVX,32,1335,baseline_q32.log
+1,Origin-HVX,32,1264,baseline_q32.log
+1,LUT-EXP,8,568,lut_exp_q8.log
+1,LUT-EXP,8,564,lut_exp_q8.log
+1,LUT-EXP,8,578,lut_exp_q8.log
+1,LUT-EXP,8,565,lut_exp_q8.log
+1,LUT-EXP,8,562,lut_exp_q8.log
+1,LUT-EXP,8,566,lut_exp_q8.log
+1,LUT-EXP,8,583,lut_exp_q8.log
+1,LUT-EXP,8,563,lut_exp_q8.log
+1,LUT-EXP,8,572,lut_exp_q8.log
+1,LUT-EXP,8,552,lut_exp_q8.log
+1,LUT-EXP,8,571,lut_exp_q8.log
+1,LUT-EXP,8,572,lut_exp_q8.log
+1,LUT-EXP,8,558,lut_exp_q8.log
+1,LUT-EXP,8,578,lut_exp_q8.log
+1,LUT-EXP,8,554,lut_exp_q8.log
+1,LUT-EXP,8,549,lut_exp_q8.log
+1,LUT-EXP,8,547,lut_exp_q8.log
+1,LUT-EXP,8,559,lut_exp_q8.log
+1,LUT-EXP,8,549,lut_exp_q8.log
+1,LUT-EXP,8,560,lut_exp_q8.log
+1,LUT-EXP,8,563,lut_exp_q8.log
+1,LUT-EXP,8,639,lut_exp_q8.log
+1,LUT-EXP,8,628,lut_exp_q8.log
+1,LUT-EXP,8,655,lut_exp_q8.log
+1,LUT-EXP,8,640,lut_exp_q8.log
+1,LUT-EXP,8,552,lut_exp_q8.log
+1,LUT-EXP,8,660,lut_exp_q8.log
+1,LUT-EXP,8,556,lut_exp_q8.log
+1,LUT-EXP,8,549,lut_exp_q8.log
+1,LUT-EXP,8,624,lut_exp_q8.log
+1,SCNA lane8 d8,32,2920,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2894,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2893,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2892,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2987,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2919,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2888,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2925,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,3003,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2893,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2980,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2898,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2987,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,3001,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2962,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,3013,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2940,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2899,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2922,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2905,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2915,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2985,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2902,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2928,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2920,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2957,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2909,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2920,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2998,scna_lane8_q32_0.log
+1,SCNA lane8 d8,32,2909,scna_lane8_q32_0.log
+1,SCNA serial d8,4,573,scna_serial_q4_1.log
+1,SCNA serial d8,4,606,scna_serial_q4_1.log
+1,SCNA serial d8,4,670,scna_serial_q4_1.log
+1,SCNA serial d8,4,581,scna_serial_q4_1.log
+1,SCNA serial d8,4,694,scna_serial_q4_1.log
+1,SCNA serial d8,4,649,scna_serial_q4_1.log
+1,SCNA serial d8,4,568,scna_serial_q4_1.log
+1,SCNA serial d8,4,660,scna_serial_q4_1.log
+1,SCNA serial d8,4,659,scna_serial_q4_1.log
+1,SCNA serial d8,4,670,scna_serial_q4_1.log
+1,SCNA serial d8,4,656,scna_serial_q4_1.log
+1,SCNA serial d8,4,582,scna_serial_q4_1.log
+1,SCNA serial d8,4,660,scna_serial_q4_1.log
+1,SCNA serial d8,4,676,scna_serial_q4_1.log
+1,SCNA serial d8,4,650,scna_serial_q4_1.log
+1,SCNA serial d8,4,668,scna_serial_q4_1.log
+1,SCNA serial d8,4,653,scna_serial_q4_1.log
+1,SCNA serial d8,4,584,scna_serial_q4_1.log
+1,SCNA serial d8,4,669,scna_serial_q4_1.log
+1,SCNA serial d8,4,692,scna_serial_q4_1.log
+1,SCNA serial d8,4,651,scna_serial_q4_1.log
+1,SCNA serial d8,4,662,scna_serial_q4_1.log
+1,SCNA serial d8,4,588,scna_serial_q4_1.log
+1,SCNA serial d8,4,660,scna_serial_q4_1.log
+1,SCNA serial d8,4,594,scna_serial_q4_1.log
+1,SCNA serial d8,4,590,scna_serial_q4_1.log
+1,SCNA serial d8,4,618,scna_serial_q4_1.log
+1,SCNA serial d8,4,611,scna_serial_q4_1.log
+1,SCNA serial d8,4,697,scna_serial_q4_1.log
+1,SCNA serial d8,4,602,scna_serial_q4_1.log
+1,SCNA serial d8,16,1009,scna_serial_q16_1.log
+1,SCNA serial d8,16,1015,scna_serial_q16_1.log
+1,SCNA serial d8,16,1012,scna_serial_q16_1.log
+1,SCNA serial d8,16,1015,scna_serial_q16_1.log
+1,SCNA serial d8,16,1013,scna_serial_q16_1.log
+1,SCNA serial d8,16,1013,scna_serial_q16_1.log
+1,SCNA serial d8,16,1014,scna_serial_q16_1.log
+1,SCNA serial d8,16,1017,scna_serial_q16_1.log
+1,SCNA serial d8,16,1014,scna_serial_q16_1.log
+1,SCNA serial d8,16,1012,scna_serial_q16_1.log
+1,SCNA serial d8,16,1014,scna_serial_q16_1.log
+1,SCNA serial d8,16,1017,scna_serial_q16_1.log
+1,SCNA serial d8,16,1056,scna_serial_q16_1.log
+1,SCNA serial d8,16,1059,scna_serial_q16_1.log
+1,SCNA serial d8,16,997,scna_serial_q16_1.log
+1,SCNA serial d8,16,971,scna_serial_q16_1.log
+1,SCNA serial d8,16,952,scna_serial_q16_1.log
+1,SCNA serial d8,16,959,scna_serial_q16_1.log
+1,SCNA serial d8,16,969,scna_serial_q16_1.log
+1,SCNA serial d8,16,1058,scna_serial_q16_1.log
+1,SCNA serial d8,16,1066,scna_serial_q16_1.log
+1,SCNA serial d8,16,974,scna_serial_q16_1.log
+1,SCNA serial d8,16,1043,scna_serial_q16_1.log
+1,SCNA serial d8,16,1059,scna_serial_q16_1.log
+1,SCNA serial d8,16,990,scna_serial_q16_1.log
+1,SCNA serial d8,16,967,scna_serial_q16_1.log
+1,SCNA serial d8,16,956,scna_serial_q16_1.log
+1,SCNA serial d8,16,992,scna_serial_q16_1.log
+1,SCNA serial d8,16,998,scna_serial_q16_1.log
+1,SCNA serial d8,16,1049,scna_serial_q16_1.log
+1,SCNA serial d8,8,779,scna_serial_q8_0.log
+1,SCNA serial d8,8,812,scna_serial_q8_0.log
+1,SCNA serial d8,8,808,scna_serial_q8_0.log
+1,SCNA serial d8,8,739,scna_serial_q8_0.log
+1,SCNA serial d8,8,779,scna_serial_q8_0.log
+1,SCNA serial d8,8,789,scna_serial_q8_0.log
+1,SCNA serial d8,8,792,scna_serial_q8_0.log
+1,SCNA serial d8,8,769,scna_serial_q8_0.log
+1,SCNA serial d8,8,780,scna_serial_q8_0.log
+1,SCNA serial d8,8,767,scna_serial_q8_0.log
+1,SCNA serial d8,8,811,scna_serial_q8_0.log
+1,SCNA serial d8,8,781,scna_serial_q8_0.log
+1,SCNA serial d8,8,803,scna_serial_q8_0.log
+1,SCNA serial d8,8,793,scna_serial_q8_0.log
+1,SCNA serial d8,8,739,scna_serial_q8_0.log
+1,SCNA serial d8,8,820,scna_serial_q8_0.log
+1,SCNA serial d8,8,813,scna_serial_q8_0.log
+1,SCNA serial d8,8,811,scna_serial_q8_0.log
+1,SCNA serial d8,8,777,scna_serial_q8_0.log
+1,SCNA serial d8,8,770,scna_serial_q8_0.log
+1,SCNA serial d8,8,764,scna_serial_q8_0.log
+1,SCNA serial d8,8,831,scna_serial_q8_0.log
+1,SCNA serial d8,8,762,scna_serial_q8_0.log
+1,SCNA serial d8,8,895,scna_serial_q8_0.log
+1,SCNA serial d8,8,737,scna_serial_q8_0.log
+1,SCNA serial d8,8,845,scna_serial_q8_0.log
+1,SCNA serial d8,8,802,scna_serial_q8_0.log
+1,SCNA serial d8,8,788,scna_serial_q8_0.log
+1,SCNA serial d8,8,852,scna_serial_q8_0.log
+1,SCNA serial d8,8,748,scna_serial_q8_0.log
+1,SCNA serial d8,32,1768,scna_serial_q32_1.log
+1,SCNA serial d8,32,1766,scna_serial_q32_1.log
+1,SCNA serial d8,32,1772,scna_serial_q32_1.log
+1,SCNA serial d8,32,1686,scna_serial_q32_1.log
+1,SCNA serial d8,32,1711,scna_serial_q32_1.log
+1,SCNA serial d8,32,1742,scna_serial_q32_1.log
+1,SCNA serial d8,32,1743,scna_serial_q32_1.log
+1,SCNA serial d8,32,1748,scna_serial_q32_1.log
+1,SCNA serial d8,32,1759,scna_serial_q32_1.log
+1,SCNA serial d8,32,1716,scna_serial_q32_1.log
+1,SCNA serial d8,32,1725,scna_serial_q32_1.log
+1,SCNA serial d8,32,1685,scna_serial_q32_1.log
+1,SCNA serial d8,32,1778,scna_serial_q32_1.log
+1,SCNA serial d8,32,1735,scna_serial_q32_1.log
+1,SCNA serial d8,32,1732,scna_serial_q32_1.log
+1,SCNA serial d8,32,1771,scna_serial_q32_1.log
+1,SCNA serial d8,32,1745,scna_serial_q32_1.log
+1,SCNA serial d8,32,1765,scna_serial_q32_1.log
+1,SCNA serial d8,32,1687,scna_serial_q32_1.log
+1,SCNA serial d8,32,1730,scna_serial_q32_1.log
+1,SCNA serial d8,32,1781,scna_serial_q32_1.log
+1,SCNA serial d8,32,1774,scna_serial_q32_1.log
+1,SCNA serial d8,32,1748,scna_serial_q32_1.log
+1,SCNA serial d8,32,1781,scna_serial_q32_1.log
+1,SCNA serial d8,32,1795,scna_serial_q32_1.log
+1,SCNA serial d8,32,1791,scna_serial_q32_1.log
+1,SCNA serial d8,32,1766,scna_serial_q32_1.log
+1,SCNA serial d8,32,1717,scna_serial_q32_1.log
+1,SCNA serial d8,32,1729,scna_serial_q32_1.log
+1,SCNA serial d8,32,1747,scna_serial_q32_1.log
+1,LUT-EXP,4,547,lut_exp_q4.log
+1,LUT-EXP,4,554,lut_exp_q4.log
+1,LUT-EXP,4,557,lut_exp_q4.log
+1,LUT-EXP,4,549,lut_exp_q4.log
+1,LUT-EXP,4,461,lut_exp_q4.log
+1,LUT-EXP,4,559,lut_exp_q4.log
+1,LUT-EXP,4,481,lut_exp_q4.log
+1,LUT-EXP,4,464,lut_exp_q4.log
+1,LUT-EXP,4,455,lut_exp_q4.log
+1,LUT-EXP,4,448,lut_exp_q4.log
+1,LUT-EXP,4,561,lut_exp_q4.log
+1,LUT-EXP,4,572,lut_exp_q4.log
+1,LUT-EXP,4,479,lut_exp_q4.log
+1,LUT-EXP,4,457,lut_exp_q4.log
+1,LUT-EXP,4,582,lut_exp_q4.log
+1,LUT-EXP,4,553,lut_exp_q4.log
+1,LUT-EXP,4,568,lut_exp_q4.log
+1,LUT-EXP,4,559,lut_exp_q4.log
+1,LUT-EXP,4,455,lut_exp_q4.log
+1,LUT-EXP,4,478,lut_exp_q4.log
+1,LUT-EXP,4,460,lut_exp_q4.log
+1,LUT-EXP,4,557,lut_exp_q4.log
+1,LUT-EXP,4,476,lut_exp_q4.log
+1,LUT-EXP,4,570,lut_exp_q4.log
+1,LUT-EXP,4,535,lut_exp_q4.log
+1,LUT-EXP,4,492,lut_exp_q4.log
+1,LUT-EXP,4,523,lut_exp_q4.log
+1,LUT-EXP,4,504,lut_exp_q4.log
+1,LUT-EXP,4,526,lut_exp_q4.log
+1,LUT-EXP,4,480,lut_exp_q4.log
+1,Origin-HVX,8,699,baseline_q8.log
+1,Origin-HVX,8,703,baseline_q8.log
+1,Origin-HVX,8,697,baseline_q8.log
+1,Origin-HVX,8,699,baseline_q8.log
+1,Origin-HVX,8,699,baseline_q8.log
+1,Origin-HVX,8,694,baseline_q8.log
+1,Origin-HVX,8,707,baseline_q8.log
+1,Origin-HVX,8,698,baseline_q8.log
+1,Origin-HVX,8,694,baseline_q8.log
+1,Origin-HVX,8,698,baseline_q8.log
+1,Origin-HVX,8,702,baseline_q8.log
+1,Origin-HVX,8,698,baseline_q8.log
+1,Origin-HVX,8,700,baseline_q8.log
+1,Origin-HVX,8,699,baseline_q8.log
+1,Origin-HVX,8,700,baseline_q8.log
+1,Origin-HVX,8,719,baseline_q8.log
+1,Origin-HVX,8,615,baseline_q8.log
+1,Origin-HVX,8,718,baseline_q8.log
+1,Origin-HVX,8,742,baseline_q8.log
+1,Origin-HVX,8,782,baseline_q8.log
+1,Origin-HVX,8,708,baseline_q8.log
+1,Origin-HVX,8,726,baseline_q8.log
+1,Origin-HVX,8,727,baseline_q8.log
+1,Origin-HVX,8,623,baseline_q8.log
+1,Origin-HVX,8,670,baseline_q8.log
+1,Origin-HVX,8,657,baseline_q8.log
+1,Origin-HVX,8,726,baseline_q8.log
+1,Origin-HVX,8,669,baseline_q8.log
+1,Origin-HVX,8,752,baseline_q8.log
+1,Origin-HVX,8,708,baseline_q8.log
+1,SCNA serial d8,4,578,scna_serial_q4_0.log
+1,SCNA serial d8,4,568,scna_serial_q4_0.log
+1,SCNA serial d8,4,580,scna_serial_q4_0.log
+1,SCNA serial d8,4,570,scna_serial_q4_0.log
+1,SCNA serial d8,4,574,scna_serial_q4_0.log
+1,SCNA serial d8,4,579,scna_serial_q4_0.log
+1,SCNA serial d8,4,569,scna_serial_q4_0.log
+1,SCNA serial d8,4,557,scna_serial_q4_0.log
+1,SCNA serial d8,4,564,scna_serial_q4_0.log
+1,SCNA serial d8,4,559,scna_serial_q4_0.log
+1,SCNA serial d8,4,550,scna_serial_q4_0.log
+1,SCNA serial d8,4,562,scna_serial_q4_0.log
+1,SCNA serial d8,4,553,scna_serial_q4_0.log
+1,SCNA serial d8,4,658,scna_serial_q4_0.log
+1,SCNA serial d8,4,578,scna_serial_q4_0.log
+1,SCNA serial d8,4,564,scna_serial_q4_0.log
+1,SCNA serial d8,4,578,scna_serial_q4_0.log
+1,SCNA serial d8,4,563,scna_serial_q4_0.log
+1,SCNA serial d8,4,557,scna_serial_q4_0.log
+1,SCNA serial d8,4,598,scna_serial_q4_0.log
+1,SCNA serial d8,4,641,scna_serial_q4_0.log
+1,SCNA serial d8,4,622,scna_serial_q4_0.log
+1,SCNA serial d8,4,627,scna_serial_q4_0.log
+1,SCNA serial d8,4,589,scna_serial_q4_0.log
+1,SCNA serial d8,4,629,scna_serial_q4_0.log
+1,SCNA serial d8,4,649,scna_serial_q4_0.log
+1,SCNA serial d8,4,624,scna_serial_q4_0.log
+1,SCNA serial d8,4,644,scna_serial_q4_0.log
+1,SCNA serial d8,4,605,scna_serial_q4_0.log
+1,SCNA serial d8,4,615,scna_serial_q4_0.log
+1,SCNA serial d8,16,1014,scna_serial_q16_0.log
+1,SCNA serial d8,16,995,scna_serial_q16_0.log
+1,SCNA serial d8,16,1024,scna_serial_q16_0.log
+1,SCNA serial d8,16,1002,scna_serial_q16_0.log
+1,SCNA serial d8,16,1025,scna_serial_q16_0.log
+1,SCNA serial d8,16,1048,scna_serial_q16_0.log
+1,SCNA serial d8,16,1046,scna_serial_q16_0.log
+1,SCNA serial d8,16,1065,scna_serial_q16_0.log
+1,SCNA serial d8,16,1094,scna_serial_q16_0.log
+1,SCNA serial d8,16,1065,scna_serial_q16_0.log
+1,SCNA serial d8,16,1070,scna_serial_q16_0.log
+1,SCNA serial d8,16,1075,scna_serial_q16_0.log
+1,SCNA serial d8,16,1077,scna_serial_q16_0.log
+1,SCNA serial d8,16,1062,scna_serial_q16_0.log
+1,SCNA serial d8,16,1066,scna_serial_q16_0.log
+1,SCNA serial d8,16,1066,scna_serial_q16_0.log
+1,SCNA serial d8,16,1080,scna_serial_q16_0.log
+1,SCNA serial d8,16,1074,scna_serial_q16_0.log
+1,SCNA serial d8,16,1080,scna_serial_q16_0.log
+1,SCNA serial d8,16,1068,scna_serial_q16_0.log
+1,SCNA serial d8,16,1094,scna_serial_q16_0.log
+1,SCNA serial d8,16,983,scna_serial_q16_0.log
+1,SCNA serial d8,16,1089,scna_serial_q16_0.log
+1,SCNA serial d8,16,1090,scna_serial_q16_0.log
+1,SCNA serial d8,16,983,scna_serial_q16_0.log
+1,SCNA serial d8,16,1094,scna_serial_q16_0.log
+1,SCNA serial d8,16,1081,scna_serial_q16_0.log
+1,SCNA serial d8,16,1085,scna_serial_q16_0.log
+1,SCNA serial d8,16,1051,scna_serial_q16_0.log
+1,SCNA serial d8,16,1063,scna_serial_q16_0.log
+1,Origin-HVX,4,548,baseline_q4.log
+1,Origin-HVX,4,550,baseline_q4.log
+1,Origin-HVX,4,550,baseline_q4.log
+1,Origin-HVX,4,581,baseline_q4.log
+1,Origin-HVX,4,557,baseline_q4.log
+1,Origin-HVX,4,550,baseline_q4.log
+1,Origin-HVX,4,552,baseline_q4.log
+1,Origin-HVX,4,555,baseline_q4.log
+1,Origin-HVX,4,587,baseline_q4.log
+1,Origin-HVX,4,478,baseline_q4.log
+1,Origin-HVX,4,569,baseline_q4.log
+1,Origin-HVX,4,550,baseline_q4.log
+1,Origin-HVX,4,579,baseline_q4.log
+1,Origin-HVX,4,571,baseline_q4.log
+1,Origin-HVX,4,561,baseline_q4.log
+1,Origin-HVX,4,558,baseline_q4.log
+1,Origin-HVX,4,561,baseline_q4.log
+1,Origin-HVX,4,590,baseline_q4.log
+1,Origin-HVX,4,495,baseline_q4.log
+1,Origin-HVX,4,499,baseline_q4.log
+1,Origin-HVX,4,537,baseline_q4.log
+1,Origin-HVX,4,535,baseline_q4.log
+1,Origin-HVX,4,631,baseline_q4.log
+1,Origin-HVX,4,507,baseline_q4.log
+1,Origin-HVX,4,489,baseline_q4.log
+1,Origin-HVX,4,494,baseline_q4.log
+1,Origin-HVX,4,514,baseline_q4.log
+1,Origin-HVX,4,490,baseline_q4.log
+1,Origin-HVX,4,500,baseline_q4.log
+1,Origin-HVX,4,603,baseline_q4.log
+1,SCNA lane8 d8,32,2871,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2973,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2916,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2900,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2973,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2926,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2906,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2981,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2907,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2980,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,3006,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2918,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2883,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2907,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2978,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2993,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2963,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2884,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2989,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2912,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2912,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2951,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2934,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2878,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2909,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2914,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2999,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2979,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,3008,scna_lane8_q32_1.log
+1,SCNA lane8 d8,32,2937,scna_lane8_q32_1.log
+2,LUT-EXP,16,759,lut_exp_q16.log
+2,LUT-EXP,16,741,lut_exp_q16.log
+2,LUT-EXP,16,691,lut_exp_q16.log
+2,LUT-EXP,16,670,lut_exp_q16.log
+2,LUT-EXP,16,749,lut_exp_q16.log
+2,LUT-EXP,16,663,lut_exp_q16.log
+2,LUT-EXP,16,751,lut_exp_q16.log
+2,LUT-EXP,16,736,lut_exp_q16.log
+2,LUT-EXP,16,748,lut_exp_q16.log
+2,LUT-EXP,16,660,lut_exp_q16.log
+2,LUT-EXP,16,662,lut_exp_q16.log
+2,LUT-EXP,16,765,lut_exp_q16.log
+2,LUT-EXP,16,747,lut_exp_q16.log
+2,LUT-EXP,16,754,lut_exp_q16.log
+2,LUT-EXP,16,687,lut_exp_q16.log
+2,LUT-EXP,16,738,lut_exp_q16.log
+2,LUT-EXP,16,700,lut_exp_q16.log
+2,LUT-EXP,16,674,lut_exp_q16.log
+2,LUT-EXP,16,656,lut_exp_q16.log
+2,LUT-EXP,16,771,lut_exp_q16.log
+2,LUT-EXP,16,772,lut_exp_q16.log
+2,LUT-EXP,16,699,lut_exp_q16.log
+2,LUT-EXP,16,667,lut_exp_q16.log
+2,LUT-EXP,16,655,lut_exp_q16.log
+2,LUT-EXP,16,675,lut_exp_q16.log
+2,LUT-EXP,16,651,lut_exp_q16.log
+2,LUT-EXP,16,649,lut_exp_q16.log
+2,LUT-EXP,16,650,lut_exp_q16.log
+2,LUT-EXP,16,659,lut_exp_q16.log
+2,LUT-EXP,16,657,lut_exp_q16.log
+2,SCNA lane8 d8,16,1642,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1643,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1644,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1637,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1662,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1553,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1671,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1672,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1673,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1671,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1670,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1549,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1562,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1600,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1646,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1724,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1612,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1609,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1588,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1585,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1648,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1616,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1597,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1634,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1612,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1668,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1624,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1628,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1677,scna_lane8_q16_1.log
+2,SCNA lane8 d8,16,1621,scna_lane8_q16_1.log
+2,LUT-EXP,32,1035,lut_exp_q32.log
+2,LUT-EXP,32,1017,lut_exp_q32.log
+2,LUT-EXP,32,1117,lut_exp_q32.log
+2,LUT-EXP,32,1123,lut_exp_q32.log
+2,LUT-EXP,32,1031,lut_exp_q32.log
+2,LUT-EXP,32,1049,lut_exp_q32.log
+2,LUT-EXP,32,1027,lut_exp_q32.log
+2,LUT-EXP,32,1121,lut_exp_q32.log
+2,LUT-EXP,32,1030,lut_exp_q32.log
+2,LUT-EXP,32,1032,lut_exp_q32.log
+2,LUT-EXP,32,1123,lut_exp_q32.log
+2,LUT-EXP,32,1141,lut_exp_q32.log
+2,LUT-EXP,32,1076,lut_exp_q32.log
+2,LUT-EXP,32,1076,lut_exp_q32.log
+2,LUT-EXP,32,1019,lut_exp_q32.log
+2,LUT-EXP,32,1133,lut_exp_q32.log
+2,LUT-EXP,32,1085,lut_exp_q32.log
+2,LUT-EXP,32,1028,lut_exp_q32.log
+2,LUT-EXP,32,1031,lut_exp_q32.log
+2,LUT-EXP,32,1039,lut_exp_q32.log
+2,LUT-EXP,32,1127,lut_exp_q32.log
+2,LUT-EXP,32,1018,lut_exp_q32.log
+2,LUT-EXP,32,1026,lut_exp_q32.log
+2,LUT-EXP,32,1028,lut_exp_q32.log
+2,LUT-EXP,32,1102,lut_exp_q32.log
+2,LUT-EXP,32,1088,lut_exp_q32.log
+2,LUT-EXP,32,1075,lut_exp_q32.log
+2,LUT-EXP,32,1084,lut_exp_q32.log
+2,LUT-EXP,32,1079,lut_exp_q32.log
+2,LUT-EXP,32,1075,lut_exp_q32.log
+2,SCNA lane8 d8,4,757,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,819,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,781,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,773,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,766,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,759,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,728,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,757,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,760,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,754,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,792,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,754,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,738,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,737,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,770,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,762,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,778,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,765,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,755,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,762,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,744,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,754,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,753,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,765,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,812,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,813,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,782,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,833,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,711,scna_lane8_q4_0.log
+2,SCNA lane8 d8,4,819,scna_lane8_q4_0.log
+2,Origin-HVX,16,761,baseline_q16.log
+2,Origin-HVX,16,764,baseline_q16.log
+2,Origin-HVX,16,757,baseline_q16.log
+2,Origin-HVX,16,860,baseline_q16.log
+2,Origin-HVX,16,765,baseline_q16.log
+2,Origin-HVX,16,751,baseline_q16.log
+2,Origin-HVX,16,759,baseline_q16.log
+2,Origin-HVX,16,758,baseline_q16.log
+2,Origin-HVX,16,756,baseline_q16.log
+2,Origin-HVX,16,761,baseline_q16.log
+2,Origin-HVX,16,759,baseline_q16.log
+2,Origin-HVX,16,866,baseline_q16.log
+2,Origin-HVX,16,866,baseline_q16.log
+2,Origin-HVX,16,872,baseline_q16.log
+2,Origin-HVX,16,779,baseline_q16.log
+2,Origin-HVX,16,867,baseline_q16.log
+2,Origin-HVX,16,814,baseline_q16.log
+2,Origin-HVX,16,759,baseline_q16.log
+2,Origin-HVX,16,766,baseline_q16.log
+2,Origin-HVX,16,809,baseline_q16.log
+2,Origin-HVX,16,784,baseline_q16.log
+2,Origin-HVX,16,791,baseline_q16.log
+2,Origin-HVX,16,835,baseline_q16.log
+2,Origin-HVX,16,811,baseline_q16.log
+2,Origin-HVX,16,877,baseline_q16.log
+2,Origin-HVX,16,855,baseline_q16.log
+2,Origin-HVX,16,763,baseline_q16.log
+2,Origin-HVX,16,784,baseline_q16.log
+2,Origin-HVX,16,791,baseline_q16.log
+2,Origin-HVX,16,782,baseline_q16.log
+2,SCNA serial d8,8,716,scna_serial_q8_1.log
+2,SCNA serial d8,8,701,scna_serial_q8_1.log
+2,SCNA serial d8,8,698,scna_serial_q8_1.log
+2,SCNA serial d8,8,703,scna_serial_q8_1.log
+2,SCNA serial d8,8,705,scna_serial_q8_1.log
+2,SCNA serial d8,8,700,scna_serial_q8_1.log
+2,SCNA serial d8,8,701,scna_serial_q8_1.log
+2,SCNA serial d8,8,700,scna_serial_q8_1.log
+2,SCNA serial d8,8,698,scna_serial_q8_1.log
+2,SCNA serial d8,8,699,scna_serial_q8_1.log
+2,SCNA serial d8,8,699,scna_serial_q8_1.log
+2,SCNA serial d8,8,700,scna_serial_q8_1.log
+2,SCNA serial d8,8,701,scna_serial_q8_1.log
+2,SCNA serial d8,8,699,scna_serial_q8_1.log
+2,SCNA serial d8,8,699,scna_serial_q8_1.log
+2,SCNA serial d8,8,701,scna_serial_q8_1.log
+2,SCNA serial d8,8,699,scna_serial_q8_1.log
+2,SCNA serial d8,8,703,scna_serial_q8_1.log
+2,SCNA serial d8,8,699,scna_serial_q8_1.log
+2,SCNA serial d8,8,702,scna_serial_q8_1.log
+2,SCNA serial d8,8,703,scna_serial_q8_1.log
+2,SCNA serial d8,8,727,scna_serial_q8_1.log
+2,SCNA serial d8,8,789,scna_serial_q8_1.log
+2,SCNA serial d8,8,824,scna_serial_q8_1.log
+2,SCNA serial d8,8,823,scna_serial_q8_1.log
+2,SCNA serial d8,8,788,scna_serial_q8_1.log
+2,SCNA serial d8,8,785,scna_serial_q8_1.log
+2,SCNA serial d8,8,785,scna_serial_q8_1.log
+2,SCNA serial d8,8,808,scna_serial_q8_1.log
+2,SCNA serial d8,8,743,scna_serial_q8_1.log
+2,SCNA serial d8,32,1655,scna_serial_q32_0.log
+2,SCNA serial d8,32,1644,scna_serial_q32_0.log
+2,SCNA serial d8,32,1786,scna_serial_q32_0.log
+2,SCNA serial d8,32,1746,scna_serial_q32_0.log
+2,SCNA serial d8,32,1736,scna_serial_q32_0.log
+2,SCNA serial d8,32,1791,scna_serial_q32_0.log
+2,SCNA serial d8,32,1757,scna_serial_q32_0.log
+2,SCNA serial d8,32,1686,scna_serial_q32_0.log
+2,SCNA serial d8,32,1675,scna_serial_q32_0.log
+2,SCNA serial d8,32,1707,scna_serial_q32_0.log
+2,SCNA serial d8,32,1723,scna_serial_q32_0.log
+2,SCNA serial d8,32,1736,scna_serial_q32_0.log
+2,SCNA serial d8,32,1783,scna_serial_q32_0.log
+2,SCNA serial d8,32,1746,scna_serial_q32_0.log
+2,SCNA serial d8,32,1689,scna_serial_q32_0.log
+2,SCNA serial d8,32,1743,scna_serial_q32_0.log
+2,SCNA serial d8,32,1746,scna_serial_q32_0.log
+2,SCNA serial d8,32,1722,scna_serial_q32_0.log
+2,SCNA serial d8,32,1749,scna_serial_q32_0.log
+2,SCNA serial d8,32,1707,scna_serial_q32_0.log
+2,SCNA serial d8,32,1772,scna_serial_q32_0.log
+2,SCNA serial d8,32,1727,scna_serial_q32_0.log
+2,SCNA serial d8,32,1747,scna_serial_q32_0.log
+2,SCNA serial d8,32,1719,scna_serial_q32_0.log
+2,SCNA serial d8,32,1721,scna_serial_q32_0.log
+2,SCNA serial d8,32,1732,scna_serial_q32_0.log
+2,SCNA serial d8,32,1730,scna_serial_q32_0.log
+2,SCNA serial d8,32,1717,scna_serial_q32_0.log
+2,SCNA serial d8,32,1683,scna_serial_q32_0.log
+2,SCNA serial d8,32,1728,scna_serial_q32_0.log
+2,SCNA lane8 d8,4,777,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,782,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,773,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,768,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,798,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,772,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,790,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,775,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,764,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,775,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,769,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,766,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,788,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,792,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,790,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,820,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,799,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,803,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,799,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,800,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,791,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,788,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,791,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,783,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,802,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,796,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,797,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,797,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,786,scna_lane8_q4_1.log
+2,SCNA lane8 d8,4,798,scna_lane8_q4_1.log
+2,SCNA lane8 d8,16,1629,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1620,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1595,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1605,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1607,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1603,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1598,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1606,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1562,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1619,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1628,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1597,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1614,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1654,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1622,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1686,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1672,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1601,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1607,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1587,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1586,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1642,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1636,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1611,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1600,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1624,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1618,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1601,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1647,scna_lane8_q16_0.log
+2,SCNA lane8 d8,16,1609,scna_lane8_q16_0.log
+2,SCNA lane8 d8,8,1125,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1128,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1136,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1018,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1132,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1128,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1123,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1127,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1125,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1126,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1127,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1134,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1122,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1016,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1058,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1065,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1054,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1075,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1044,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1064,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1062,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1083,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1066,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1083,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1079,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1059,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1083,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1055,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1083,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1098,scna_lane8_q8_0.log
+2,SCNA lane8 d8,8,1010,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1127,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1114,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1076,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1107,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1088,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1105,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1103,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1076,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1084,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1102,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1079,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1078,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1112,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1000,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,992,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1099,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1072,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1070,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1073,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1069,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1068,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1114,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1063,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1090,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1063,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1089,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1012,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1080,scna_lane8_q8_1.log
+2,SCNA lane8 d8,8,1092,scna_lane8_q8_1.log
+2,Origin-HVX,32,1249,baseline_q32.log
+2,Origin-HVX,32,1205,baseline_q32.log
+2,Origin-HVX,32,1207,baseline_q32.log
+2,Origin-HVX,32,1229,baseline_q32.log
+2,Origin-HVX,32,1208,baseline_q32.log
+2,Origin-HVX,32,1214,baseline_q32.log
+2,Origin-HVX,32,1259,baseline_q32.log
+2,Origin-HVX,32,1202,baseline_q32.log
+2,Origin-HVX,32,1203,baseline_q32.log
+2,Origin-HVX,32,1211,baseline_q32.log
+2,Origin-HVX,32,1241,baseline_q32.log
+2,Origin-HVX,32,1323,baseline_q32.log
+2,Origin-HVX,32,1242,baseline_q32.log
+2,Origin-HVX,32,1336,baseline_q32.log
+2,Origin-HVX,32,1338,baseline_q32.log
+2,Origin-HVX,32,1326,baseline_q32.log
+2,Origin-HVX,32,1304,baseline_q32.log
+2,Origin-HVX,32,1339,baseline_q32.log
+2,Origin-HVX,32,1335,baseline_q32.log
+2,Origin-HVX,32,1329,baseline_q32.log
+2,Origin-HVX,32,1360,baseline_q32.log
+2,Origin-HVX,32,1251,baseline_q32.log
+2,Origin-HVX,32,1330,baseline_q32.log
+2,Origin-HVX,32,1279,baseline_q32.log
+2,Origin-HVX,32,1260,baseline_q32.log
+2,Origin-HVX,32,1231,baseline_q32.log
+2,Origin-HVX,32,1243,baseline_q32.log
+2,Origin-HVX,32,1277,baseline_q32.log
+2,Origin-HVX,32,1239,baseline_q32.log
+2,Origin-HVX,32,1286,baseline_q32.log
+2,LUT-EXP,8,663,lut_exp_q8.log
+2,LUT-EXP,8,661,lut_exp_q8.log
+2,LUT-EXP,8,583,lut_exp_q8.log
+2,LUT-EXP,8,669,lut_exp_q8.log
+2,LUT-EXP,8,656,lut_exp_q8.log
+2,LUT-EXP,8,663,lut_exp_q8.log
+2,LUT-EXP,8,675,lut_exp_q8.log
+2,LUT-EXP,8,683,lut_exp_q8.log
+2,LUT-EXP,8,579,lut_exp_q8.log
+2,LUT-EXP,8,650,lut_exp_q8.log
+2,LUT-EXP,8,545,lut_exp_q8.log
+2,LUT-EXP,8,673,lut_exp_q8.log
+2,LUT-EXP,8,666,lut_exp_q8.log
+2,LUT-EXP,8,663,lut_exp_q8.log
+2,LUT-EXP,8,584,lut_exp_q8.log
+2,LUT-EXP,8,552,lut_exp_q8.log
+2,LUT-EXP,8,560,lut_exp_q8.log
+2,LUT-EXP,8,620,lut_exp_q8.log
+2,LUT-EXP,8,591,lut_exp_q8.log
+2,LUT-EXP,8,682,lut_exp_q8.log
+2,LUT-EXP,8,657,lut_exp_q8.log
+2,LUT-EXP,8,656,lut_exp_q8.log
+2,LUT-EXP,8,645,lut_exp_q8.log
+2,LUT-EXP,8,655,lut_exp_q8.log
+2,LUT-EXP,8,654,lut_exp_q8.log
+2,LUT-EXP,8,647,lut_exp_q8.log
+2,LUT-EXP,8,656,lut_exp_q8.log
+2,LUT-EXP,8,654,lut_exp_q8.log
+2,LUT-EXP,8,647,lut_exp_q8.log
+2,LUT-EXP,8,651,lut_exp_q8.log
+2,SCNA lane8 d8,32,3001,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2968,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2935,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2926,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3024,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3068,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2961,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3007,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2973,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3040,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2980,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2965,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3035,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3010,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3003,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3057,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2995,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2984,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3016,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2930,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2998,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3039,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3047,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3032,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2988,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3051,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2945,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3024,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,3042,scna_lane8_q32_0.log
+2,SCNA lane8 d8,32,2933,scna_lane8_q32_0.log
+2,SCNA serial d8,4,584,scna_serial_q4_1.log
+2,SCNA serial d8,4,638,scna_serial_q4_1.log
+2,SCNA serial d8,4,621,scna_serial_q4_1.log
+2,SCNA serial d8,4,642,scna_serial_q4_1.log
+2,SCNA serial d8,4,643,scna_serial_q4_1.log
+2,SCNA serial d8,4,617,scna_serial_q4_1.log
+2,SCNA serial d8,4,623,scna_serial_q4_1.log
+2,SCNA serial d8,4,617,scna_serial_q4_1.log
+2,SCNA serial d8,4,612,scna_serial_q4_1.log
+2,SCNA serial d8,4,625,scna_serial_q4_1.log
+2,SCNA serial d8,4,556,scna_serial_q4_1.log
+2,SCNA serial d8,4,668,scna_serial_q4_1.log
+2,SCNA serial d8,4,635,scna_serial_q4_1.log
+2,SCNA serial d8,4,646,scna_serial_q4_1.log
+2,SCNA serial d8,4,568,scna_serial_q4_1.log
+2,SCNA serial d8,4,629,scna_serial_q4_1.log
+2,SCNA serial d8,4,622,scna_serial_q4_1.log
+2,SCNA serial d8,4,602,scna_serial_q4_1.log
+2,SCNA serial d8,4,633,scna_serial_q4_1.log
+2,SCNA serial d8,4,615,scna_serial_q4_1.log
+2,SCNA serial d8,4,631,scna_serial_q4_1.log
+2,SCNA serial d8,4,641,scna_serial_q4_1.log
+2,SCNA serial d8,4,636,scna_serial_q4_1.log
+2,SCNA serial d8,4,670,scna_serial_q4_1.log
+2,SCNA serial d8,4,598,scna_serial_q4_1.log
+2,SCNA serial d8,4,626,scna_serial_q4_1.log
+2,SCNA serial d8,4,616,scna_serial_q4_1.log
+2,SCNA serial d8,4,649,scna_serial_q4_1.log
+2,SCNA serial d8,4,639,scna_serial_q4_1.log
+2,SCNA serial d8,4,617,scna_serial_q4_1.log
+2,SCNA serial d8,16,990,scna_serial_q16_1.log
+2,SCNA serial d8,16,987,scna_serial_q16_1.log
+2,SCNA serial d8,16,989,scna_serial_q16_1.log
+2,SCNA serial d8,16,985,scna_serial_q16_1.log
+2,SCNA serial d8,16,985,scna_serial_q16_1.log
+2,SCNA serial d8,16,988,scna_serial_q16_1.log
+2,SCNA serial d8,16,985,scna_serial_q16_1.log
+2,SCNA serial d8,16,988,scna_serial_q16_1.log
+2,SCNA serial d8,16,988,scna_serial_q16_1.log
+2,SCNA serial d8,16,1040,scna_serial_q16_1.log
+2,SCNA serial d8,16,1022,scna_serial_q16_1.log
+2,SCNA serial d8,16,970,scna_serial_q16_1.log
+2,SCNA serial d8,16,965,scna_serial_q16_1.log
+2,SCNA serial d8,16,1088,scna_serial_q16_1.log
+2,SCNA serial d8,16,1069,scna_serial_q16_1.log
+2,SCNA serial d8,16,967,scna_serial_q16_1.log
+2,SCNA serial d8,16,1081,scna_serial_q16_1.log
+2,SCNA serial d8,16,1078,scna_serial_q16_1.log
+2,SCNA serial d8,16,1050,scna_serial_q16_1.log
+2,SCNA serial d8,16,1062,scna_serial_q16_1.log
+2,SCNA serial d8,16,1044,scna_serial_q16_1.log
+2,SCNA serial d8,16,980,scna_serial_q16_1.log
+2,SCNA serial d8,16,1061,scna_serial_q16_1.log
+2,SCNA serial d8,16,1041,scna_serial_q16_1.log
+2,SCNA serial d8,16,1053,scna_serial_q16_1.log
+2,SCNA serial d8,16,1001,scna_serial_q16_1.log
+2,SCNA serial d8,16,979,scna_serial_q16_1.log
+2,SCNA serial d8,16,1009,scna_serial_q16_1.log
+2,SCNA serial d8,16,1012,scna_serial_q16_1.log
+2,SCNA serial d8,16,1060,scna_serial_q16_1.log
+2,SCNA serial d8,8,759,scna_serial_q8_0.log
+2,SCNA serial d8,8,758,scna_serial_q8_0.log
+2,SCNA serial d8,8,747,scna_serial_q8_0.log
+2,SCNA serial d8,8,796,scna_serial_q8_0.log
+2,SCNA serial d8,8,756,scna_serial_q8_0.log
+2,SCNA serial d8,8,761,scna_serial_q8_0.log
+2,SCNA serial d8,8,759,scna_serial_q8_0.log
+2,SCNA serial d8,8,777,scna_serial_q8_0.log
+2,SCNA serial d8,8,752,scna_serial_q8_0.log
+2,SCNA serial d8,8,741,scna_serial_q8_0.log
+2,SCNA serial d8,8,743,scna_serial_q8_0.log
+2,SCNA serial d8,8,745,scna_serial_q8_0.log
+2,SCNA serial d8,8,739,scna_serial_q8_0.log
+2,SCNA serial d8,8,740,scna_serial_q8_0.log
+2,SCNA serial d8,8,735,scna_serial_q8_0.log
+2,SCNA serial d8,8,742,scna_serial_q8_0.log
+2,SCNA serial d8,8,841,scna_serial_q8_0.log
+2,SCNA serial d8,8,829,scna_serial_q8_0.log
+2,SCNA serial d8,8,789,scna_serial_q8_0.log
+2,SCNA serial d8,8,789,scna_serial_q8_0.log
+2,SCNA serial d8,8,784,scna_serial_q8_0.log
+2,SCNA serial d8,8,825,scna_serial_q8_0.log
+2,SCNA serial d8,8,802,scna_serial_q8_0.log
+2,SCNA serial d8,8,776,scna_serial_q8_0.log
+2,SCNA serial d8,8,792,scna_serial_q8_0.log
+2,SCNA serial d8,8,805,scna_serial_q8_0.log
+2,SCNA serial d8,8,809,scna_serial_q8_0.log
+2,SCNA serial d8,8,784,scna_serial_q8_0.log
+2,SCNA serial d8,8,786,scna_serial_q8_0.log
+2,SCNA serial d8,8,702,scna_serial_q8_0.log
+2,SCNA serial d8,32,1783,scna_serial_q32_1.log
+2,SCNA serial d8,32,1730,scna_serial_q32_1.log
+2,SCNA serial d8,32,1784,scna_serial_q32_1.log
+2,SCNA serial d8,32,1754,scna_serial_q32_1.log
+2,SCNA serial d8,32,1736,scna_serial_q32_1.log
+2,SCNA serial d8,32,1701,scna_serial_q32_1.log
+2,SCNA serial d8,32,1746,scna_serial_q32_1.log
+2,SCNA serial d8,32,1755,scna_serial_q32_1.log
+2,SCNA serial d8,32,1726,scna_serial_q32_1.log
+2,SCNA serial d8,32,1742,scna_serial_q32_1.log
+2,SCNA serial d8,32,1735,scna_serial_q32_1.log
+2,SCNA serial d8,32,1733,scna_serial_q32_1.log
+2,SCNA serial d8,32,1796,scna_serial_q32_1.log
+2,SCNA serial d8,32,1728,scna_serial_q32_1.log
+2,SCNA serial d8,32,1737,scna_serial_q32_1.log
+2,SCNA serial d8,32,1730,scna_serial_q32_1.log
+2,SCNA serial d8,32,1681,scna_serial_q32_1.log
+2,SCNA serial d8,32,1726,scna_serial_q32_1.log
+2,SCNA serial d8,32,1779,scna_serial_q32_1.log
+2,SCNA serial d8,32,1760,scna_serial_q32_1.log
+2,SCNA serial d8,32,1759,scna_serial_q32_1.log
+2,SCNA serial d8,32,1735,scna_serial_q32_1.log
+2,SCNA serial d8,32,1733,scna_serial_q32_1.log
+2,SCNA serial d8,32,1728,scna_serial_q32_1.log
+2,SCNA serial d8,32,1728,scna_serial_q32_1.log
+2,SCNA serial d8,32,1779,scna_serial_q32_1.log
+2,SCNA serial d8,32,1730,scna_serial_q32_1.log
+2,SCNA serial d8,32,1732,scna_serial_q32_1.log
+2,SCNA serial d8,32,1756,scna_serial_q32_1.log
+2,SCNA serial d8,32,1756,scna_serial_q32_1.log
+2,LUT-EXP,4,555,lut_exp_q4.log
+2,LUT-EXP,4,569,lut_exp_q4.log
+2,LUT-EXP,4,459,lut_exp_q4.log
+2,LUT-EXP,4,559,lut_exp_q4.log
+2,LUT-EXP,4,556,lut_exp_q4.log
+2,LUT-EXP,4,462,lut_exp_q4.log
+2,LUT-EXP,4,557,lut_exp_q4.log
+2,LUT-EXP,4,556,lut_exp_q4.log
+2,LUT-EXP,4,558,lut_exp_q4.log
+2,LUT-EXP,4,556,lut_exp_q4.log
+2,LUT-EXP,4,572,lut_exp_q4.log
+2,LUT-EXP,4,557,lut_exp_q4.log
+2,LUT-EXP,4,464,lut_exp_q4.log
+2,LUT-EXP,4,557,lut_exp_q4.log
+2,LUT-EXP,4,554,lut_exp_q4.log
+2,LUT-EXP,4,571,lut_exp_q4.log
+2,LUT-EXP,4,554,lut_exp_q4.log
+2,LUT-EXP,4,559,lut_exp_q4.log
+2,LUT-EXP,4,564,lut_exp_q4.log
+2,LUT-EXP,4,469,lut_exp_q4.log
+2,LUT-EXP,4,554,lut_exp_q4.log
+2,LUT-EXP,4,557,lut_exp_q4.log
+2,LUT-EXP,4,578,lut_exp_q4.log
+2,LUT-EXP,4,560,lut_exp_q4.log
+2,LUT-EXP,4,555,lut_exp_q4.log
+2,LUT-EXP,4,474,lut_exp_q4.log
+2,LUT-EXP,4,584,lut_exp_q4.log
+2,LUT-EXP,4,533,lut_exp_q4.log
+2,LUT-EXP,4,524,lut_exp_q4.log
+2,LUT-EXP,4,521,lut_exp_q4.log
+2,Origin-HVX,8,657,baseline_q8.log
+2,Origin-HVX,8,654,baseline_q8.log
+2,Origin-HVX,8,690,baseline_q8.log
+2,Origin-HVX,8,662,baseline_q8.log
+2,Origin-HVX,8,574,baseline_q8.log
+2,Origin-HVX,8,666,baseline_q8.log
+2,Origin-HVX,8,659,baseline_q8.log
+2,Origin-HVX,8,662,baseline_q8.log
+2,Origin-HVX,8,660,baseline_q8.log
+2,Origin-HVX,8,661,baseline_q8.log
+2,Origin-HVX,8,659,baseline_q8.log
+2,Origin-HVX,8,680,baseline_q8.log
+2,Origin-HVX,8,679,baseline_q8.log
+2,Origin-HVX,8,685,baseline_q8.log
+2,Origin-HVX,8,688,baseline_q8.log
+2,Origin-HVX,8,680,baseline_q8.log
+2,Origin-HVX,8,677,baseline_q8.log
+2,Origin-HVX,8,678,baseline_q8.log
+2,Origin-HVX,8,676,baseline_q8.log
+2,Origin-HVX,8,682,baseline_q8.log
+2,Origin-HVX,8,676,baseline_q8.log
+2,Origin-HVX,8,677,baseline_q8.log
+2,Origin-HVX,8,676,baseline_q8.log
+2,Origin-HVX,8,679,baseline_q8.log
+2,Origin-HVX,8,675,baseline_q8.log
+2,Origin-HVX,8,565,baseline_q8.log
+2,Origin-HVX,8,564,baseline_q8.log
+2,Origin-HVX,8,564,baseline_q8.log
+2,Origin-HVX,8,566,baseline_q8.log
+2,Origin-HVX,8,563,baseline_q8.log
+2,SCNA serial d8,4,644,scna_serial_q4_0.log
+2,SCNA serial d8,4,642,scna_serial_q4_0.log
+2,SCNA serial d8,4,636,scna_serial_q4_0.log
+2,SCNA serial d8,4,627,scna_serial_q4_0.log
+2,SCNA serial d8,4,617,scna_serial_q4_0.log
+2,SCNA serial d8,4,624,scna_serial_q4_0.log
+2,SCNA serial d8,4,621,scna_serial_q4_0.log
+2,SCNA serial d8,4,622,scna_serial_q4_0.log
+2,SCNA serial d8,4,666,scna_serial_q4_0.log
+2,SCNA serial d8,4,667,scna_serial_q4_0.log
+2,SCNA serial d8,4,637,scna_serial_q4_0.log
+2,SCNA serial d8,4,621,scna_serial_q4_0.log
+2,SCNA serial d8,4,634,scna_serial_q4_0.log
+2,SCNA serial d8,4,638,scna_serial_q4_0.log
+2,SCNA serial d8,4,616,scna_serial_q4_0.log
+2,SCNA serial d8,4,619,scna_serial_q4_0.log
+2,SCNA serial d8,4,635,scna_serial_q4_0.log
+2,SCNA serial d8,4,633,scna_serial_q4_0.log
+2,SCNA serial d8,4,638,scna_serial_q4_0.log
+2,SCNA serial d8,4,618,scna_serial_q4_0.log
+2,SCNA serial d8,4,620,scna_serial_q4_0.log
+2,SCNA serial d8,4,629,scna_serial_q4_0.log
+2,SCNA serial d8,4,634,scna_serial_q4_0.log
+2,SCNA serial d8,4,622,scna_serial_q4_0.log
+2,SCNA serial d8,4,625,scna_serial_q4_0.log
+2,SCNA serial d8,4,619,scna_serial_q4_0.log
+2,SCNA serial d8,4,636,scna_serial_q4_0.log
+2,SCNA serial d8,4,625,scna_serial_q4_0.log
+2,SCNA serial d8,4,614,scna_serial_q4_0.log
+2,SCNA serial d8,4,617,scna_serial_q4_0.log
+2,SCNA serial d8,16,992,scna_serial_q16_0.log
+2,SCNA serial d8,16,1000,scna_serial_q16_0.log
+2,SCNA serial d8,16,1012,scna_serial_q16_0.log
+2,SCNA serial d8,16,990,scna_serial_q16_0.log
+2,SCNA serial d8,16,1053,scna_serial_q16_0.log
+2,SCNA serial d8,16,1009,scna_serial_q16_0.log
+2,SCNA serial d8,16,1164,scna_serial_q16_0.log
+2,SCNA serial d8,16,1042,scna_serial_q16_0.log
+2,SCNA serial d8,16,1015,scna_serial_q16_0.log
+2,SCNA serial d8,16,1007,scna_serial_q16_0.log
+2,SCNA serial d8,16,988,scna_serial_q16_0.log
+2,SCNA serial d8,16,995,scna_serial_q16_0.log
+2,SCNA serial d8,16,998,scna_serial_q16_0.log
+2,SCNA serial d8,16,1008,scna_serial_q16_0.log
+2,SCNA serial d8,16,1013,scna_serial_q16_0.log
+2,SCNA serial d8,16,1057,scna_serial_q16_0.log
+2,SCNA serial d8,16,1025,scna_serial_q16_0.log
+2,SCNA serial d8,16,1064,scna_serial_q16_0.log
+2,SCNA serial d8,16,1079,scna_serial_q16_0.log
+2,SCNA serial d8,16,971,scna_serial_q16_0.log
+2,SCNA serial d8,16,967,scna_serial_q16_0.log
+2,SCNA serial d8,16,1068,scna_serial_q16_0.log
+2,SCNA serial d8,16,1063,scna_serial_q16_0.log
+2,SCNA serial d8,16,1088,scna_serial_q16_0.log
+2,SCNA serial d8,16,1063,scna_serial_q16_0.log
+2,SCNA serial d8,16,1052,scna_serial_q16_0.log
+2,SCNA serial d8,16,1027,scna_serial_q16_0.log
+2,SCNA serial d8,16,1035,scna_serial_q16_0.log
+2,SCNA serial d8,16,964,scna_serial_q16_0.log
+2,SCNA serial d8,16,1072,scna_serial_q16_0.log
+2,Origin-HVX,4,550,baseline_q4.log
+2,Origin-HVX,4,550,baseline_q4.log
+2,Origin-HVX,4,550,baseline_q4.log
+2,Origin-HVX,4,548,baseline_q4.log
+2,Origin-HVX,4,553,baseline_q4.log
+2,Origin-HVX,4,548,baseline_q4.log
+2,Origin-HVX,4,560,baseline_q4.log
+2,Origin-HVX,4,558,baseline_q4.log
+2,Origin-HVX,4,557,baseline_q4.log
+2,Origin-HVX,4,569,baseline_q4.log
+2,Origin-HVX,4,559,baseline_q4.log
+2,Origin-HVX,4,559,baseline_q4.log
+2,Origin-HVX,4,569,baseline_q4.log
+2,Origin-HVX,4,559,baseline_q4.log
+2,Origin-HVX,4,554,baseline_q4.log
+2,Origin-HVX,4,552,baseline_q4.log
+2,Origin-HVX,4,556,baseline_q4.log
+2,Origin-HVX,4,575,baseline_q4.log
+2,Origin-HVX,4,575,baseline_q4.log
+2,Origin-HVX,4,548,baseline_q4.log
+2,Origin-HVX,4,502,baseline_q4.log
+2,Origin-HVX,4,537,baseline_q4.log
+2,Origin-HVX,4,560,baseline_q4.log
+2,Origin-HVX,4,498,baseline_q4.log
+2,Origin-HVX,4,498,baseline_q4.log
+2,Origin-HVX,4,619,baseline_q4.log
+2,Origin-HVX,4,492,baseline_q4.log
+2,Origin-HVX,4,619,baseline_q4.log
+2,Origin-HVX,4,620,baseline_q4.log
+2,Origin-HVX,4,619,baseline_q4.log
+2,SCNA lane8 d8,32,2849,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2850,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2951,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2980,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2901,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2930,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2923,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2938,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2945,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2902,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2967,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2866,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2891,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2861,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2871,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2864,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2893,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2853,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2937,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2854,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2882,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2881,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2978,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2902,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2910,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2918,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2917,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2930,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2927,scna_lane8_q32_1.log
+2,SCNA lane8 d8,32,2946,scna_lane8_q32_1.log
+3,LUT-EXP,16,737,lut_exp_q16.log
+3,LUT-EXP,16,774,lut_exp_q16.log
+3,LUT-EXP,16,754,lut_exp_q16.log
+3,LUT-EXP,16,760,lut_exp_q16.log
+3,LUT-EXP,16,767,lut_exp_q16.log
+3,LUT-EXP,16,753,lut_exp_q16.log
+3,LUT-EXP,16,755,lut_exp_q16.log
+3,LUT-EXP,16,755,lut_exp_q16.log
+3,LUT-EXP,16,760,lut_exp_q16.log
+3,LUT-EXP,16,740,lut_exp_q16.log
+3,LUT-EXP,16,807,lut_exp_q16.log
+3,LUT-EXP,16,746,lut_exp_q16.log
+3,LUT-EXP,16,749,lut_exp_q16.log
+3,LUT-EXP,16,738,lut_exp_q16.log
+3,LUT-EXP,16,756,lut_exp_q16.log
+3,LUT-EXP,16,746,lut_exp_q16.log
+3,LUT-EXP,16,795,lut_exp_q16.log
+3,LUT-EXP,16,788,lut_exp_q16.log
+3,LUT-EXP,16,783,lut_exp_q16.log
+3,LUT-EXP,16,704,lut_exp_q16.log
+3,LUT-EXP,16,791,lut_exp_q16.log
+3,LUT-EXP,16,783,lut_exp_q16.log
+3,LUT-EXP,16,795,lut_exp_q16.log
+3,LUT-EXP,16,793,lut_exp_q16.log
+3,LUT-EXP,16,784,lut_exp_q16.log
+3,LUT-EXP,16,672,lut_exp_q16.log
+3,LUT-EXP,16,781,lut_exp_q16.log
+3,LUT-EXP,16,785,lut_exp_q16.log
+3,LUT-EXP,16,794,lut_exp_q16.log
+3,LUT-EXP,16,676,lut_exp_q16.log
+3,SCNA lane8 d8,16,1634,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1641,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1528,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1524,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1627,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1585,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1556,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1600,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1551,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1569,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1548,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1561,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1561,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1559,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1561,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1673,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1609,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1570,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1662,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1540,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1612,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1588,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1598,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1653,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1601,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1600,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1617,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1609,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1606,scna_lane8_q16_1.log
+3,SCNA lane8 d8,16,1589,scna_lane8_q16_1.log
+3,LUT-EXP,32,998,lut_exp_q32.log
+3,LUT-EXP,32,1121,lut_exp_q32.log
+3,LUT-EXP,32,1030,lut_exp_q32.log
+3,LUT-EXP,32,1128,lut_exp_q32.log
+3,LUT-EXP,32,1024,lut_exp_q32.log
+3,LUT-EXP,32,1125,lut_exp_q32.log
+3,LUT-EXP,32,1018,lut_exp_q32.log
+3,LUT-EXP,32,1048,lut_exp_q32.log
+3,LUT-EXP,32,1082,lut_exp_q32.log
+3,LUT-EXP,32,1088,lut_exp_q32.log
+3,LUT-EXP,32,1103,lut_exp_q32.log
+3,LUT-EXP,32,1084,lut_exp_q32.log
+3,LUT-EXP,32,1012,lut_exp_q32.log
+3,LUT-EXP,32,1107,lut_exp_q32.log
+3,LUT-EXP,32,1059,lut_exp_q32.log
+3,LUT-EXP,32,1058,lut_exp_q32.log
+3,LUT-EXP,32,1050,lut_exp_q32.log
+3,LUT-EXP,32,1046,lut_exp_q32.log
+3,LUT-EXP,32,1022,lut_exp_q32.log
+3,LUT-EXP,32,1124,lut_exp_q32.log
+3,LUT-EXP,32,1034,lut_exp_q32.log
+3,LUT-EXP,32,1146,lut_exp_q32.log
+3,LUT-EXP,32,1134,lut_exp_q32.log
+3,LUT-EXP,32,1115,lut_exp_q32.log
+3,LUT-EXP,32,1033,lut_exp_q32.log
+3,LUT-EXP,32,1128,lut_exp_q32.log
+3,LUT-EXP,32,1106,lut_exp_q32.log
+3,LUT-EXP,32,1032,lut_exp_q32.log
+3,LUT-EXP,32,1089,lut_exp_q32.log
+3,LUT-EXP,32,1096,lut_exp_q32.log
+3,SCNA lane8 d8,4,771,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,769,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,773,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,769,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,777,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,769,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,770,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,770,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,769,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,771,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,769,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,770,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,705,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,770,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,708,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,749,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,748,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,748,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,746,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,750,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,746,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,747,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,749,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,749,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,781,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,746,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,748,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,747,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,773,scna_lane8_q4_0.log
+3,SCNA lane8 d8,4,747,scna_lane8_q4_0.log
+3,Origin-HVX,16,871,baseline_q16.log
+3,Origin-HVX,16,895,baseline_q16.log
+3,Origin-HVX,16,793,baseline_q16.log
+3,Origin-HVX,16,887,baseline_q16.log
+3,Origin-HVX,16,876,baseline_q16.log
+3,Origin-HVX,16,875,baseline_q16.log
+3,Origin-HVX,16,768,baseline_q16.log
+3,Origin-HVX,16,869,baseline_q16.log
+3,Origin-HVX,16,877,baseline_q16.log
+3,Origin-HVX,16,862,baseline_q16.log
+3,Origin-HVX,16,867,baseline_q16.log
+3,Origin-HVX,16,852,baseline_q16.log
+3,Origin-HVX,16,771,baseline_q16.log
+3,Origin-HVX,16,845,baseline_q16.log
+3,Origin-HVX,16,806,baseline_q16.log
+3,Origin-HVX,16,769,baseline_q16.log
+3,Origin-HVX,16,868,baseline_q16.log
+3,Origin-HVX,16,828,baseline_q16.log
+3,Origin-HVX,16,784,baseline_q16.log
+3,Origin-HVX,16,782,baseline_q16.log
+3,Origin-HVX,16,792,baseline_q16.log
+3,Origin-HVX,16,785,baseline_q16.log
+3,Origin-HVX,16,853,baseline_q16.log
+3,Origin-HVX,16,789,baseline_q16.log
+3,Origin-HVX,16,789,baseline_q16.log
+3,Origin-HVX,16,798,baseline_q16.log
+3,Origin-HVX,16,796,baseline_q16.log
+3,Origin-HVX,16,793,baseline_q16.log
+3,Origin-HVX,16,852,baseline_q16.log
+3,Origin-HVX,16,915,baseline_q16.log
+3,SCNA serial d8,8,742,scna_serial_q8_1.log
+3,SCNA serial d8,8,749,scna_serial_q8_1.log
+3,SCNA serial d8,8,811,scna_serial_q8_1.log
+3,SCNA serial d8,8,760,scna_serial_q8_1.log
+3,SCNA serial d8,8,793,scna_serial_q8_1.log
+3,SCNA serial d8,8,761,scna_serial_q8_1.log
+3,SCNA serial d8,8,767,scna_serial_q8_1.log
+3,SCNA serial d8,8,753,scna_serial_q8_1.log
+3,SCNA serial d8,8,756,scna_serial_q8_1.log
+3,SCNA serial d8,8,749,scna_serial_q8_1.log
+3,SCNA serial d8,8,744,scna_serial_q8_1.log
+3,SCNA serial d8,8,747,scna_serial_q8_1.log
+3,SCNA serial d8,8,745,scna_serial_q8_1.log
+3,SCNA serial d8,8,746,scna_serial_q8_1.log
+3,SCNA serial d8,8,744,scna_serial_q8_1.log
+3,SCNA serial d8,8,784,scna_serial_q8_1.log
+3,SCNA serial d8,8,749,scna_serial_q8_1.log
+3,SCNA serial d8,8,745,scna_serial_q8_1.log
+3,SCNA serial d8,8,740,scna_serial_q8_1.log
+3,SCNA serial d8,8,753,scna_serial_q8_1.log
+3,SCNA serial d8,8,762,scna_serial_q8_1.log
+3,SCNA serial d8,8,748,scna_serial_q8_1.log
+3,SCNA serial d8,8,746,scna_serial_q8_1.log
+3,SCNA serial d8,8,758,scna_serial_q8_1.log
+3,SCNA serial d8,8,751,scna_serial_q8_1.log
+3,SCNA serial d8,8,771,scna_serial_q8_1.log
+3,SCNA serial d8,8,754,scna_serial_q8_1.log
+3,SCNA serial d8,8,753,scna_serial_q8_1.log
+3,SCNA serial d8,8,747,scna_serial_q8_1.log
+3,SCNA serial d8,8,749,scna_serial_q8_1.log
+3,SCNA serial d8,32,1744,scna_serial_q32_0.log
+3,SCNA serial d8,32,1692,scna_serial_q32_0.log
+3,SCNA serial d8,32,1732,scna_serial_q32_0.log
+3,SCNA serial d8,32,1683,scna_serial_q32_0.log
+3,SCNA serial d8,32,1746,scna_serial_q32_0.log
+3,SCNA serial d8,32,1774,scna_serial_q32_0.log
+3,SCNA serial d8,32,1684,scna_serial_q32_0.log
+3,SCNA serial d8,32,1735,scna_serial_q32_0.log
+3,SCNA serial d8,32,1781,scna_serial_q32_0.log
+3,SCNA serial d8,32,1767,scna_serial_q32_0.log
+3,SCNA serial d8,32,1729,scna_serial_q32_0.log
+3,SCNA serial d8,32,1745,scna_serial_q32_0.log
+3,SCNA serial d8,32,1768,scna_serial_q32_0.log
+3,SCNA serial d8,32,1742,scna_serial_q32_0.log
+3,SCNA serial d8,32,1728,scna_serial_q32_0.log
+3,SCNA serial d8,32,1741,scna_serial_q32_0.log
+3,SCNA serial d8,32,1733,scna_serial_q32_0.log
+3,SCNA serial d8,32,1777,scna_serial_q32_0.log
+3,SCNA serial d8,32,1731,scna_serial_q32_0.log
+3,SCNA serial d8,32,1738,scna_serial_q32_0.log
+3,SCNA serial d8,32,1704,scna_serial_q32_0.log
+3,SCNA serial d8,32,1731,scna_serial_q32_0.log
+3,SCNA serial d8,32,1697,scna_serial_q32_0.log
+3,SCNA serial d8,32,1762,scna_serial_q32_0.log
+3,SCNA serial d8,32,1749,scna_serial_q32_0.log
+3,SCNA serial d8,32,1761,scna_serial_q32_0.log
+3,SCNA serial d8,32,1721,scna_serial_q32_0.log
+3,SCNA serial d8,32,1764,scna_serial_q32_0.log
+3,SCNA serial d8,32,1730,scna_serial_q32_0.log
+3,SCNA serial d8,32,1799,scna_serial_q32_0.log
+3,SCNA lane8 d8,4,767,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,780,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,775,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,764,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,778,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,771,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,699,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,770,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,775,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,773,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,766,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,770,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,768,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,766,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,783,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,853,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,802,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,824,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,732,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,736,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,780,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,804,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,791,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,786,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,790,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,788,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,787,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,788,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,787,scna_lane8_q4_1.log
+3,SCNA lane8 d8,4,813,scna_lane8_q4_1.log
+3,SCNA lane8 d8,16,1662,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1645,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1651,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1649,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1642,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1667,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1635,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1598,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1684,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1583,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1671,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1672,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1587,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1631,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1611,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1619,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1601,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1643,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1593,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1651,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1719,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1671,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1637,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1635,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1618,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1656,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1616,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1618,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1645,scna_lane8_q16_0.log
+3,SCNA lane8 d8,16,1612,scna_lane8_q16_0.log
+3,SCNA lane8 d8,8,1074,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1086,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1078,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1094,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1081,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1076,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1049,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1050,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1049,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1052,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1047,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1050,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1054,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1061,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1083,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1113,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1063,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1101,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1102,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1060,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1076,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1081,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1098,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1070,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1107,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1073,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1031,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1109,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1071,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1124,scna_lane8_q8_0.log
+3,SCNA lane8 d8,8,1076,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1082,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1089,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1087,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1073,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1086,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1107,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1085,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1107,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1082,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1146,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1119,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1068,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1079,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1096,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1106,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1087,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1140,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1054,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1054,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1055,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1052,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1053,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1052,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1046,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1055,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1054,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1053,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1056,scna_lane8_q8_1.log
+3,SCNA lane8 d8,8,1055,scna_lane8_q8_1.log
+3,Origin-HVX,32,1204,baseline_q32.log
+3,Origin-HVX,32,1202,baseline_q32.log
+3,Origin-HVX,32,1214,baseline_q32.log
+3,Origin-HVX,32,1218,baseline_q32.log
+3,Origin-HVX,32,1284,baseline_q32.log
+3,Origin-HVX,32,1302,baseline_q32.log
+3,Origin-HVX,32,1309,baseline_q32.log
+3,Origin-HVX,32,1305,baseline_q32.log
+3,Origin-HVX,32,1330,baseline_q32.log
+3,Origin-HVX,32,1351,baseline_q32.log
+3,Origin-HVX,32,1329,baseline_q32.log
+3,Origin-HVX,32,1336,baseline_q32.log
+3,Origin-HVX,32,1316,baseline_q32.log
+3,Origin-HVX,32,1309,baseline_q32.log
+3,Origin-HVX,32,1309,baseline_q32.log
+3,Origin-HVX,32,1301,baseline_q32.log
+3,Origin-HVX,32,1413,baseline_q32.log
+3,Origin-HVX,32,1323,baseline_q32.log
+3,Origin-HVX,32,1319,baseline_q32.log
+3,Origin-HVX,32,1334,baseline_q32.log
+3,Origin-HVX,32,1324,baseline_q32.log
+3,Origin-HVX,32,1316,baseline_q32.log
+3,Origin-HVX,32,1319,baseline_q32.log
+3,Origin-HVX,32,1373,baseline_q32.log
+3,Origin-HVX,32,1324,baseline_q32.log
+3,Origin-HVX,32,1316,baseline_q32.log
+3,Origin-HVX,32,1311,baseline_q32.log
+3,Origin-HVX,32,1422,baseline_q32.log
+3,Origin-HVX,32,1365,baseline_q32.log
+3,Origin-HVX,32,1367,baseline_q32.log
+3,LUT-EXP,8,549,lut_exp_q8.log
+3,LUT-EXP,8,565,lut_exp_q8.log
+3,LUT-EXP,8,562,lut_exp_q8.log
+3,LUT-EXP,8,550,lut_exp_q8.log
+3,LUT-EXP,8,548,lut_exp_q8.log
+3,LUT-EXP,8,551,lut_exp_q8.log
+3,LUT-EXP,8,548,lut_exp_q8.log
+3,LUT-EXP,8,547,lut_exp_q8.log
+3,LUT-EXP,8,547,lut_exp_q8.log
+3,LUT-EXP,8,549,lut_exp_q8.log
+3,LUT-EXP,8,551,lut_exp_q8.log
+3,LUT-EXP,8,556,lut_exp_q8.log
+3,LUT-EXP,8,558,lut_exp_q8.log
+3,LUT-EXP,8,550,lut_exp_q8.log
+3,LUT-EXP,8,551,lut_exp_q8.log
+3,LUT-EXP,8,560,lut_exp_q8.log
+3,LUT-EXP,8,555,lut_exp_q8.log
+3,LUT-EXP,8,552,lut_exp_q8.log
+3,LUT-EXP,8,548,lut_exp_q8.log
+3,LUT-EXP,8,560,lut_exp_q8.log
+3,LUT-EXP,8,549,lut_exp_q8.log
+3,LUT-EXP,8,548,lut_exp_q8.log
+3,LUT-EXP,8,588,lut_exp_q8.log
+3,LUT-EXP,8,619,lut_exp_q8.log
+3,LUT-EXP,8,620,lut_exp_q8.log
+3,LUT-EXP,8,617,lut_exp_q8.log
+3,LUT-EXP,8,618,lut_exp_q8.log
+3,LUT-EXP,8,628,lut_exp_q8.log
+3,LUT-EXP,8,619,lut_exp_q8.log
+3,LUT-EXP,8,620,lut_exp_q8.log
+3,SCNA lane8 d8,32,2929,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2939,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2923,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2919,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2864,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2919,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2919,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2954,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2955,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2909,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2897,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2897,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2896,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2935,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2888,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2892,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2989,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2929,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2873,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2933,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2908,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2895,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2885,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2912,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2919,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2900,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2949,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2955,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,2893,scna_lane8_q32_0.log
+3,SCNA lane8 d8,32,3016,scna_lane8_q32_0.log
+3,SCNA serial d8,4,550,scna_serial_q4_1.log
+3,SCNA serial d8,4,548,scna_serial_q4_1.log
+3,SCNA serial d8,4,548,scna_serial_q4_1.log
+3,SCNA serial d8,4,548,scna_serial_q4_1.log
+3,SCNA serial d8,4,656,scna_serial_q4_1.log
+3,SCNA serial d8,4,572,scna_serial_q4_1.log
+3,SCNA serial d8,4,549,scna_serial_q4_1.log
+3,SCNA serial d8,4,550,scna_serial_q4_1.log
+3,SCNA serial d8,4,657,scna_serial_q4_1.log
+3,SCNA serial d8,4,549,scna_serial_q4_1.log
+3,SCNA serial d8,4,550,scna_serial_q4_1.log
+3,SCNA serial d8,4,556,scna_serial_q4_1.log
+3,SCNA serial d8,4,559,scna_serial_q4_1.log
+3,SCNA serial d8,4,548,scna_serial_q4_1.log
+3,SCNA serial d8,4,548,scna_serial_q4_1.log
+3,SCNA serial d8,4,551,scna_serial_q4_1.log
+3,SCNA serial d8,4,554,scna_serial_q4_1.log
+3,SCNA serial d8,4,547,scna_serial_q4_1.log
+3,SCNA serial d8,4,548,scna_serial_q4_1.log
+3,SCNA serial d8,4,549,scna_serial_q4_1.log
+3,SCNA serial d8,4,549,scna_serial_q4_1.log
+3,SCNA serial d8,4,557,scna_serial_q4_1.log
+3,SCNA serial d8,4,562,scna_serial_q4_1.log
+3,SCNA serial d8,4,550,scna_serial_q4_1.log
+3,SCNA serial d8,4,550,scna_serial_q4_1.log
+3,SCNA serial d8,4,545,scna_serial_q4_1.log
+3,SCNA serial d8,4,634,scna_serial_q4_1.log
+3,SCNA serial d8,4,647,scna_serial_q4_1.log
+3,SCNA serial d8,4,643,scna_serial_q4_1.log
+3,SCNA serial d8,4,626,scna_serial_q4_1.log
+3,SCNA serial d8,16,998,scna_serial_q16_1.log
+3,SCNA serial d8,16,994,scna_serial_q16_1.log
+3,SCNA serial d8,16,989,scna_serial_q16_1.log
+3,SCNA serial d8,16,1013,scna_serial_q16_1.log
+3,SCNA serial d8,16,1003,scna_serial_q16_1.log
+3,SCNA serial d8,16,986,scna_serial_q16_1.log
+3,SCNA serial d8,16,985,scna_serial_q16_1.log
+3,SCNA serial d8,16,984,scna_serial_q16_1.log
+3,SCNA serial d8,16,1020,scna_serial_q16_1.log
+3,SCNA serial d8,16,1038,scna_serial_q16_1.log
+3,SCNA serial d8,16,988,scna_serial_q16_1.log
+3,SCNA serial d8,16,1010,scna_serial_q16_1.log
+3,SCNA serial d8,16,1006,scna_serial_q16_1.log
+3,SCNA serial d8,16,999,scna_serial_q16_1.log
+3,SCNA serial d8,16,1003,scna_serial_q16_1.log
+3,SCNA serial d8,16,999,scna_serial_q16_1.log
+3,SCNA serial d8,16,1118,scna_serial_q16_1.log
+3,SCNA serial d8,16,1004,scna_serial_q16_1.log
+3,SCNA serial d8,16,1000,scna_serial_q16_1.log
+3,SCNA serial d8,16,1007,scna_serial_q16_1.log
+3,SCNA serial d8,16,1120,scna_serial_q16_1.log
+3,SCNA serial d8,16,999,scna_serial_q16_1.log
+3,SCNA serial d8,16,1075,scna_serial_q16_1.log
+3,SCNA serial d8,16,1063,scna_serial_q16_1.log
+3,SCNA serial d8,16,1062,scna_serial_q16_1.log
+3,SCNA serial d8,16,1064,scna_serial_q16_1.log
+3,SCNA serial d8,16,1058,scna_serial_q16_1.log
+3,SCNA serial d8,16,1064,scna_serial_q16_1.log
+3,SCNA serial d8,16,1044,scna_serial_q16_1.log
+3,SCNA serial d8,16,990,scna_serial_q16_1.log
+3,SCNA serial d8,8,802,scna_serial_q8_0.log
+3,SCNA serial d8,8,800,scna_serial_q8_0.log
+3,SCNA serial d8,8,800,scna_serial_q8_0.log
+3,SCNA serial d8,8,801,scna_serial_q8_0.log
+3,SCNA serial d8,8,800,scna_serial_q8_0.log
+3,SCNA serial d8,8,750,scna_serial_q8_0.log
+3,SCNA serial d8,8,814,scna_serial_q8_0.log
+3,SCNA serial d8,8,805,scna_serial_q8_0.log
+3,SCNA serial d8,8,802,scna_serial_q8_0.log
+3,SCNA serial d8,8,806,scna_serial_q8_0.log
+3,SCNA serial d8,8,801,scna_serial_q8_0.log
+3,SCNA serial d8,8,802,scna_serial_q8_0.log
+3,SCNA serial d8,8,802,scna_serial_q8_0.log
+3,SCNA serial d8,8,801,scna_serial_q8_0.log
+3,SCNA serial d8,8,786,scna_serial_q8_0.log
+3,SCNA serial d8,8,836,scna_serial_q8_0.log
+3,SCNA serial d8,8,794,scna_serial_q8_0.log
+3,SCNA serial d8,8,783,scna_serial_q8_0.log
+3,SCNA serial d8,8,793,scna_serial_q8_0.log
+3,SCNA serial d8,8,790,scna_serial_q8_0.log
+3,SCNA serial d8,8,792,scna_serial_q8_0.log
+3,SCNA serial d8,8,789,scna_serial_q8_0.log
+3,SCNA serial d8,8,792,scna_serial_q8_0.log
+3,SCNA serial d8,8,784,scna_serial_q8_0.log
+3,SCNA serial d8,8,792,scna_serial_q8_0.log
+3,SCNA serial d8,8,808,scna_serial_q8_0.log
+3,SCNA serial d8,8,825,scna_serial_q8_0.log
+3,SCNA serial d8,8,785,scna_serial_q8_0.log
+3,SCNA serial d8,8,782,scna_serial_q8_0.log
+3,SCNA serial d8,8,792,scna_serial_q8_0.log
+3,SCNA serial d8,32,1647,scna_serial_q32_1.log
+3,SCNA serial d8,32,1762,scna_serial_q32_1.log
+3,SCNA serial d8,32,1749,scna_serial_q32_1.log
+3,SCNA serial d8,32,1775,scna_serial_q32_1.log
+3,SCNA serial d8,32,1698,scna_serial_q32_1.log
+3,SCNA serial d8,32,1668,scna_serial_q32_1.log
+3,SCNA serial d8,32,1749,scna_serial_q32_1.log
+3,SCNA serial d8,32,1751,scna_serial_q32_1.log
+3,SCNA serial d8,32,1753,scna_serial_q32_1.log
+3,SCNA serial d8,32,1758,scna_serial_q32_1.log
+3,SCNA serial d8,32,1774,scna_serial_q32_1.log
+3,SCNA serial d8,32,1753,scna_serial_q32_1.log
+3,SCNA serial d8,32,1752,scna_serial_q32_1.log
+3,SCNA serial d8,32,1751,scna_serial_q32_1.log
+3,SCNA serial d8,32,1752,scna_serial_q32_1.log
+3,SCNA serial d8,32,1752,scna_serial_q32_1.log
+3,SCNA serial d8,32,1748,scna_serial_q32_1.log
+3,SCNA serial d8,32,1756,scna_serial_q32_1.log
+3,SCNA serial d8,32,1764,scna_serial_q32_1.log
+3,SCNA serial d8,32,1773,scna_serial_q32_1.log
+3,SCNA serial d8,32,1746,scna_serial_q32_1.log
+3,SCNA serial d8,32,1792,scna_serial_q32_1.log
+3,SCNA serial d8,32,1725,scna_serial_q32_1.log
+3,SCNA serial d8,32,1759,scna_serial_q32_1.log
+3,SCNA serial d8,32,1740,scna_serial_q32_1.log
+3,SCNA serial d8,32,1723,scna_serial_q32_1.log
+3,SCNA serial d8,32,1730,scna_serial_q32_1.log
+3,SCNA serial d8,32,1728,scna_serial_q32_1.log
+3,SCNA serial d8,32,1730,scna_serial_q32_1.log
+3,SCNA serial d8,32,1723,scna_serial_q32_1.log
+3,LUT-EXP,4,548,lut_exp_q4.log
+3,LUT-EXP,4,548,lut_exp_q4.log
+3,LUT-EXP,4,552,lut_exp_q4.log
+3,LUT-EXP,4,551,lut_exp_q4.log
+3,LUT-EXP,4,550,lut_exp_q4.log
+3,LUT-EXP,4,550,lut_exp_q4.log
+3,LUT-EXP,4,547,lut_exp_q4.log
+3,LUT-EXP,4,548,lut_exp_q4.log
+3,LUT-EXP,4,553,lut_exp_q4.log
+3,LUT-EXP,4,550,lut_exp_q4.log
+3,LUT-EXP,4,548,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,548,lut_exp_q4.log
+3,LUT-EXP,4,548,lut_exp_q4.log
+3,LUT-EXP,4,550,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,547,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,559,lut_exp_q4.log
+3,LUT-EXP,4,549,lut_exp_q4.log
+3,LUT-EXP,4,556,lut_exp_q4.log
+3,LUT-EXP,4,534,lut_exp_q4.log
+3,LUT-EXP,4,541,lut_exp_q4.log
+3,LUT-EXP,4,526,lut_exp_q4.log
+3,LUT-EXP,4,529,lut_exp_q4.log
+3,LUT-EXP,4,531,lut_exp_q4.log
+3,LUT-EXP,4,571,lut_exp_q4.log
+3,Origin-HVX,8,636,baseline_q8.log
+3,Origin-HVX,8,639,baseline_q8.log
+3,Origin-HVX,8,624,baseline_q8.log
+3,Origin-HVX,8,617,baseline_q8.log
+3,Origin-HVX,8,618,baseline_q8.log
+3,Origin-HVX,8,634,baseline_q8.log
+3,Origin-HVX,8,621,baseline_q8.log
+3,Origin-HVX,8,628,baseline_q8.log
+3,Origin-HVX,8,674,baseline_q8.log
+3,Origin-HVX,8,665,baseline_q8.log
+3,Origin-HVX,8,708,baseline_q8.log
+3,Origin-HVX,8,675,baseline_q8.log
+3,Origin-HVX,8,688,baseline_q8.log
+3,Origin-HVX,8,698,baseline_q8.log
+3,Origin-HVX,8,659,baseline_q8.log
+3,Origin-HVX,8,728,baseline_q8.log
+3,Origin-HVX,8,658,baseline_q8.log
+3,Origin-HVX,8,666,baseline_q8.log
+3,Origin-HVX,8,695,baseline_q8.log
+3,Origin-HVX,8,689,baseline_q8.log
+3,Origin-HVX,8,659,baseline_q8.log
+3,Origin-HVX,8,708,baseline_q8.log
+3,Origin-HVX,8,650,baseline_q8.log
+3,Origin-HVX,8,756,baseline_q8.log
+3,Origin-HVX,8,660,baseline_q8.log
+3,Origin-HVX,8,676,baseline_q8.log
+3,Origin-HVX,8,690,baseline_q8.log
+3,Origin-HVX,8,658,baseline_q8.log
+3,Origin-HVX,8,654,baseline_q8.log
+3,Origin-HVX,8,664,baseline_q8.log
+3,SCNA serial d8,4,562,scna_serial_q4_0.log
+3,SCNA serial d8,4,564,scna_serial_q4_0.log
+3,SCNA serial d8,4,551,scna_serial_q4_0.log
+3,SCNA serial d8,4,553,scna_serial_q4_0.log
+3,SCNA serial d8,4,553,scna_serial_q4_0.log
+3,SCNA serial d8,4,573,scna_serial_q4_0.log
+3,SCNA serial d8,4,570,scna_serial_q4_0.log
+3,SCNA serial d8,4,548,scna_serial_q4_0.log
+3,SCNA serial d8,4,570,scna_serial_q4_0.log
+3,SCNA serial d8,4,546,scna_serial_q4_0.log
+3,SCNA serial d8,4,546,scna_serial_q4_0.log
+3,SCNA serial d8,4,578,scna_serial_q4_0.log
+3,SCNA serial d8,4,555,scna_serial_q4_0.log
+3,SCNA serial d8,4,551,scna_serial_q4_0.log
+3,SCNA serial d8,4,545,scna_serial_q4_0.log
+3,SCNA serial d8,4,550,scna_serial_q4_0.log
+3,SCNA serial d8,4,550,scna_serial_q4_0.log
+3,SCNA serial d8,4,550,scna_serial_q4_0.log
+3,SCNA serial d8,4,563,scna_serial_q4_0.log
+3,SCNA serial d8,4,593,scna_serial_q4_0.log
+3,SCNA serial d8,4,617,scna_serial_q4_0.log
+3,SCNA serial d8,4,626,scna_serial_q4_0.log
+3,SCNA serial d8,4,623,scna_serial_q4_0.log
+3,SCNA serial d8,4,638,scna_serial_q4_0.log
+3,SCNA serial d8,4,647,scna_serial_q4_0.log
+3,SCNA serial d8,4,621,scna_serial_q4_0.log
+3,SCNA serial d8,4,620,scna_serial_q4_0.log
+3,SCNA serial d8,4,616,scna_serial_q4_0.log
+3,SCNA serial d8,4,617,scna_serial_q4_0.log
+3,SCNA serial d8,4,598,scna_serial_q4_0.log
+3,SCNA serial d8,16,996,scna_serial_q16_0.log
+3,SCNA serial d8,16,1000,scna_serial_q16_0.log
+3,SCNA serial d8,16,985,scna_serial_q16_0.log
+3,SCNA serial d8,16,995,scna_serial_q16_0.log
+3,SCNA serial d8,16,987,scna_serial_q16_0.log
+3,SCNA serial d8,16,989,scna_serial_q16_0.log
+3,SCNA serial d8,16,989,scna_serial_q16_0.log
+3,SCNA serial d8,16,987,scna_serial_q16_0.log
+3,SCNA serial d8,16,990,scna_serial_q16_0.log
+3,SCNA serial d8,16,1006,scna_serial_q16_0.log
+3,SCNA serial d8,16,1085,scna_serial_q16_0.log
+3,SCNA serial d8,16,1090,scna_serial_q16_0.log
+3,SCNA serial d8,16,1046,scna_serial_q16_0.log
+3,SCNA serial d8,16,1044,scna_serial_q16_0.log
+3,SCNA serial d8,16,1083,scna_serial_q16_0.log
+3,SCNA serial d8,16,1102,scna_serial_q16_0.log
+3,SCNA serial d8,16,1103,scna_serial_q16_0.log
+3,SCNA serial d8,16,1107,scna_serial_q16_0.log
+3,SCNA serial d8,16,1091,scna_serial_q16_0.log
+3,SCNA serial d8,16,1080,scna_serial_q16_0.log
+3,SCNA serial d8,16,1068,scna_serial_q16_0.log
+3,SCNA serial d8,16,1076,scna_serial_q16_0.log
+3,SCNA serial d8,16,1061,scna_serial_q16_0.log
+3,SCNA serial d8,16,1074,scna_serial_q16_0.log
+3,SCNA serial d8,16,1070,scna_serial_q16_0.log
+3,SCNA serial d8,16,1084,scna_serial_q16_0.log
+3,SCNA serial d8,16,1115,scna_serial_q16_0.log
+3,SCNA serial d8,16,1097,scna_serial_q16_0.log
+3,SCNA serial d8,16,1203,scna_serial_q16_0.log
+3,SCNA serial d8,16,1019,scna_serial_q16_0.log
+3,Origin-HVX,4,494,baseline_q4.log
+3,Origin-HVX,4,614,baseline_q4.log
+3,Origin-HVX,4,624,baseline_q4.log
+3,Origin-HVX,4,501,baseline_q4.log
+3,Origin-HVX,4,537,baseline_q4.log
+3,Origin-HVX,4,524,baseline_q4.log
+3,Origin-HVX,4,477,baseline_q4.log
+3,Origin-HVX,4,557,baseline_q4.log
+3,Origin-HVX,4,548,baseline_q4.log
+3,Origin-HVX,4,495,baseline_q4.log
+3,Origin-HVX,4,501,baseline_q4.log
+3,Origin-HVX,4,508,baseline_q4.log
+3,Origin-HVX,4,499,baseline_q4.log
+3,Origin-HVX,4,498,baseline_q4.log
+3,Origin-HVX,4,500,baseline_q4.log
+3,Origin-HVX,4,496,baseline_q4.log
+3,Origin-HVX,4,497,baseline_q4.log
+3,Origin-HVX,4,499,baseline_q4.log
+3,Origin-HVX,4,499,baseline_q4.log
+3,Origin-HVX,4,500,baseline_q4.log
+3,Origin-HVX,4,491,baseline_q4.log
+3,Origin-HVX,4,517,baseline_q4.log
+3,Origin-HVX,4,538,baseline_q4.log
+3,Origin-HVX,4,497,baseline_q4.log
+3,Origin-HVX,4,495,baseline_q4.log
+3,Origin-HVX,4,544,baseline_q4.log
+3,Origin-HVX,4,534,baseline_q4.log
+3,Origin-HVX,4,509,baseline_q4.log
+3,Origin-HVX,4,513,baseline_q4.log
+3,Origin-HVX,4,494,baseline_q4.log
+3,SCNA lane8 d8,32,2868,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2864,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2934,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2918,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2903,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2926,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2854,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2844,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2859,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2959,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2858,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2983,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2854,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2863,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2857,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2889,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2951,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2848,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2890,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2960,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2953,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2890,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2906,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2837,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2912,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2956,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2894,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2916,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2901,scna_lane8_q32_1.log
+3,SCNA lane8 d8,32,2845,scna_lane8_q32_1.log

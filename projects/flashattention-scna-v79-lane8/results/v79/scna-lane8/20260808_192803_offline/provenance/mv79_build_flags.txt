@@ -1,0 +1,20 @@
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu++17 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu++17 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu++17 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu++17 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  LANGUAGE_COMPILE_FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
+  LANGUAGE_COMPILE_FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g

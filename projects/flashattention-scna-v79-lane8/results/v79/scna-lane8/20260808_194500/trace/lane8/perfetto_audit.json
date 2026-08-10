@@ -1,0 +1,9 @@
+{
+  "trace": "/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/results/v79/scna-lane8/20260808_194500/trace/lane8/scna_lane8_all_q.perfetto.json",
+  "hardware_trace": false,
+  "slice_count": 8044,
+  "scna_exp_slices": 7164,
+  "event_overflow_total": 0,
+  "errors": [],
+  "pass": true
+}

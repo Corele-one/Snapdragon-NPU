@@ -1,0 +1,146 @@
+{
+  "by_qo_len": {
+    "16": {
+      "component_event_counts": {
+        "core_acc": 30,
+        "k_load": 30,
+        "o_scale": 6,
+        "o_store": 6,
+        "q_load": 6,
+        "qk_dot": 30,
+        "safe_sm": 30,
+        "scna_exp": 1500,
+        "v_load": 30
+      },
+      "component_event_duration_us": {
+        "core_acc": 65,
+        "k_load": 565,
+        "o_scale": 6,
+        "o_store": 38,
+        "q_load": 28,
+        "qk_dot": 43,
+        "safe_sm": 6853,
+        "scna_exp": 6128,
+        "v_load": 367
+      },
+      "event_count_max": 556,
+      "event_count_min": 556,
+      "event_count_rows": 3,
+      "event_overflow_total": 0,
+      "event_rows": 1668,
+      "measured_iterations": 3
+    },
+    "32": {
+      "component_event_counts": {
+        "core_acc": 48,
+        "k_load": 48,
+        "o_scale": 6,
+        "o_store": 6,
+        "q_load": 6,
+        "qk_dot": 48,
+        "safe_sm": 48,
+        "scna_exp": 4752,
+        "v_load": 48
+      },
+      "component_event_duration_us": {
+        "core_acc": 153,
+        "k_load": 522,
+        "o_scale": 10,
+        "o_store": 68,
+        "q_load": 48,
+        "qk_dot": 81,
+        "safe_sm": 14309,
+        "scna_exp": 12196,
+        "v_load": 289
+      },
+      "event_count_max": 1670,
+      "event_count_min": 1670,
+      "event_count_rows": 3,
+      "event_overflow_total": 0,
+      "event_rows": 5010,
+      "measured_iterations": 3
+    },
+    "4": {
+      "component_event_counts": {
+        "core_acc": 24,
+        "k_load": 24,
+        "o_scale": 6,
+        "o_store": 6,
+        "q_load": 6,
+        "qk_dot": 24,
+        "safe_sm": 24,
+        "scna_exp": 312,
+        "v_load": 24
+      },
+      "component_event_duration_us": {
+        "core_acc": 37,
+        "k_load": 560,
+        "o_scale": 6,
+        "o_store": 16,
+        "q_load": 12,
+        "qk_dot": 16,
+        "safe_sm": 1732,
+        "scna_exp": 1563,
+        "v_load": 462
+      },
+      "event_count_max": 150,
+      "event_count_min": 150,
+      "event_count_rows": 3,
+      "event_overflow_total": 0,
+      "event_rows": 450,
+      "measured_iterations": 3
+    },
+    "8": {
+      "component_event_counts": {
+        "core_acc": 24,
+        "k_load": 24,
+        "o_scale": 6,
+        "o_store": 6,
+        "q_load": 6,
+        "qk_dot": 24,
+        "safe_sm": 24,
+        "scna_exp": 600,
+        "v_load": 24
+      },
+      "component_event_duration_us": {
+        "core_acc": 38,
+        "k_load": 545,
+        "o_scale": 8,
+        "o_store": 28,
+        "q_load": 18,
+        "qk_dot": 28,
+        "safe_sm": 3399,
+        "scna_exp": 3071,
+        "v_load": 513
+      },
+      "event_count_max": 246,
+      "event_count_min": 246,
+      "event_count_rows": 3,
+      "event_overflow_total": 0,
+      "event_rows": 738,
+      "measured_iterations": 3
+    }
+  },
+  "hardware_trace": false,
+  "layouts": [
+    "lane8"
+  ],
+  "lut_exp_values": [
+    0
+  ],
+  "modes": [
+    "scna-fp16"
+  ],
+  "provenance": {
+    "binary_sha256": "322b3eafee50c7602557f97cf22cde5117506b41fcf3d9fab7f7679de9924de4",
+    "isa": "v79",
+    "layout": "lane8",
+    "qo_len": 8,
+    "scna_width": 8,
+    "seed": "figure8_fixed"
+  },
+  "scna_widths": [
+    8
+  ],
+  "timeline_source": "FIG8_ATTENTION_EVENT DSP qtimer start/end records"
+}

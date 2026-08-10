@@ -1,0 +1,9 @@
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/scna_env_smoke: 1 file pushed. 2.9 MB/s (14648 bytes in 0.005s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/libscna_env.so: 1 file pushed. 8.4 MB/s (39136 bytes in 0.004s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/htp_ops_test: 1 file pushed. 20.9 MB/s (117096 bytes in 0.005s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/libhtp_ops.so: 1 file pushed. 19.5 MB/s (59840 bytes in 0.003s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libscna_env_skel.so: 1 file pushed. 4.5 MB/s (19624 bytes in 0.004s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libscna_env_skel.so: 1 file pushed. 4.0 MB/s (19624 bytes in 0.005s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libhtp_ops_skel.so: 1 file pushed. 36.3 MB/s (1451104 bytes in 0.038s)
+/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libhtp_ops_skel.so: 1 file pushed. 35.7 MB/s (1451104 bytes in 0.039s)
+SCNA_EXP_BENCH layout=serial width=8 lanes=64 warmup=5 iters=2048000 elapsed_us=84488 single_ns_per_64=41.253906 pair_elapsed_us=168976 paired_ns_per_2x64=82.507812 paired_ns_per_64=41.253906 rmse=0.00231995829 max_abs=0.0185189359 dense_samples=4096 dense_rmse=0.0106906574 dense_max_abs=0.15234375 pair_max_abs_diff=0 monotonic_violations=0 negative_count=0 nan_count=0 lane_oracle_mismatches=0 checksum=0x06752613
