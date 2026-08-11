@@ -1,0 +1,13 @@
+{
+  "dense_samples": 4096,
+  "dense_rmse": 0.0106906574,
+  "dense_max_abs": 0.15234375,
+  "monotonic_violations": 0,
+  "negative_count": 0,
+  "nan_count": 0,
+  "canonical_oracle_mismatches": 0,
+  "paired_single_mismatches": 0,
+  "reciprocal_max_relative_error": 0.00634241011,
+  "reciprocal_nonfinite_count": 0,
+  "reciprocal_pass": 1
+}

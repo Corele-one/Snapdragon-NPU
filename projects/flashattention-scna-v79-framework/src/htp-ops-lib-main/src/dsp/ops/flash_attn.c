@@ -615,8 +615,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             // reduction phase 2: intra-vector
             #pragma unroll
             for (int s = 64; s >= 2; s >>= 1) {
-              v_s_rowmax0 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax0, Q6_V_vlalign_VVR(v_s_rowmax0, v_neg_inf, s));
-              v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, Q6_V_vlalign_VVR(v_s_rowmax1, v_neg_inf, s));
+              v_s_rowmax0 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax0, Q6_V_vror_VR(v_s_rowmax0, s));
+              v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, Q6_V_vror_VR(v_s_rowmax1, s));
             }
             // clang-format on
             // now, v_s_rowmax0[63] = rowmax(S)_0, v_s_rowmax1[63] = rowmax(S)_1
@@ -628,7 +628,10 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               Q6_V_vror_VR(v_s_rowmax_pack2, VLEN - 2 * sizeof(__fp16));   // lowest 4 bytes valid
             HVX_Vector v_s_rowmax_local_rot =
               Q6_V_vror_VR(v_s_rowmax_local, r_vec_off * sizeof(__fp16));  // highest r*2 bytes valid
-            v_s_rowmax_local = Q6_V_vlalign_VVR(v_s_rowmax_pack2_rot, v_s_rowmax_local_rot, r_vec_off * sizeof(__fp16));
+            const HVX_VectorPred q_two_rows = Q6_Q_vsetq_R(2 * sizeof(__fp16));
+            v_s_rowmax_local_rot = Q6_V_vmux_QVV(q_two_rows, v_s_rowmax_pack2_rot, v_s_rowmax_local_rot);
+            v_s_rowmax_local = Q6_V_vror_VR(v_s_rowmax_local_rot,
+                                             (VLEN - r_vec_off * sizeof(__fp16)) % VLEN);
 
             // compute m_i^j = max(m_i^{j-1}, rowmax(S_i^j))
             HVX_Vector v_m_cur = Q6_Vhf_vmax_VhfVhf(mvec_m[r_vec_idx], v_s_rowmax_local);
@@ -647,11 +650,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
             if (enable_vgather_exp) {
               for (int c = 0; c < n_cols; c += 64) {
-                HVX_Vector v_s_minus_m0 = Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0);
-                HVX_Vector v_s_minus_m1 = Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1);
-
-                HVX_Vector v_s_minus_m0_hf = Q6_Vhf_equals_Vqf16(v_s_minus_m0);
-                HVX_Vector v_s_minus_m1_hf = Q6_Vhf_equals_Vqf16(v_s_minus_m1);
+                HVX_Vector v_s_minus_m0_hf = hvx_attention_sub_vhf(row_buffer0[c / 64], v_dup_m0);
+                HVX_Vector v_s_minus_m1_hf = hvx_attention_sub_vhf(row_buffer1[c / 64], v_dup_m1);
                 HVX_Vector v_gather_input0 = Q6_Vh_vasl_VhR(v_s_minus_m0_hf, 1);
                 HVX_Vector v_gather_input1 = Q6_Vh_vasl_VhR(v_s_minus_m1_hf, 1);
 
@@ -675,12 +675,12 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                 v_p_row0_hf = row_buffer0[c / 64];
                 v_p_row1_hf = row_buffer1[c / 64];
               } else {
-                HVX_Vector v_s_minus_m0 = Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0);  // qf16
-                HVX_Vector v_s_minus_m1 = Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1);  // qf16
+                HVX_Vector v_s_minus_m0_hf = hvx_attention_sub_vhf(row_buffer0[c / 64], v_dup_m0);
+                HVX_Vector v_s_minus_m1_hf = hvx_attention_sub_vhf(row_buffer1[c / 64], v_dup_m1);
 
                 if (use_fp32_exp) {
-                  HVX_VectorPair vp_s_minus_m0_sf = hvx_my_vqf16_to_wsf(v_s_minus_m0);
-                  HVX_VectorPair vp_s_minus_m1_sf = hvx_my_vqf16_to_wsf(v_s_minus_m1);
+                  HVX_VectorPair vp_s_minus_m0_sf = hvx_my_vhf_to_wsf(v_s_minus_m0_hf);
+                  HVX_VectorPair vp_s_minus_m1_sf = hvx_my_vhf_to_wsf(v_s_minus_m1_hf);
 
                   HVX_Vector v_p_row00_sf = hvx_my_exp2_vsf(Q6_V_lo_W(vp_s_minus_m0_sf));
                   HVX_Vector v_p_row01_sf = hvx_my_exp2_vsf(Q6_V_hi_W(vp_s_minus_m0_sf));
@@ -690,8 +690,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                   v_p_row0_hf = hvx_my_wsf_to_vhf(v_p_row01_sf, v_p_row00_sf);
                   v_p_row1_hf = hvx_my_wsf_to_vhf(v_p_row11_sf, v_p_row10_sf);
                 } else {
-                  v_p_row0_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m0);
-                  v_p_row1_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m1);
+                  v_p_row0_hf = hvx_my_exp2_xqf_vhf(v_s_minus_m0_hf);
+                  v_p_row1_hf = hvx_my_exp2_xqf_vhf(v_s_minus_m1_hf);
                 }
               }
 
@@ -731,16 +731,21 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
 #pragma unroll
             for (int s = 64; s >= 4; s >>= 1) {
-              v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vlalign_VVR(v_p_rowsum0, v_zero, s));
-              v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vlalign_VVR(v_p_rowsum1, v_zero, s));
+              v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vror_VR(v_p_rowsum0, s));
+              v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vror_VR(v_p_rowsum1, s));
             }
             HVX_Vector v_p_rowsum_pack2 = Q6_Vhf_equals_Wqf32(Q6_W_vcombine_VV(v_p_rowsum1, v_p_rowsum0));
+#if __HVX_ARCH__ >= 79
+            v_p_rowsum_pack2 = Q6_Vhf_vadd_VhfVhf(v_p_rowsum_pack2, v_p_rowsum_pack2);
+#endif
 
             // shift rowsum(P) into v_p_rowsum_local
             // HVX_Vector v_p_rowsum_pack2     = Q6_V_hi_W(Q6_W_vshuff_VVR(v_p_rowsum1, v_p_rowsum0, -2));
             HVX_Vector v_p_rowsum_pack2_rot = Q6_V_vror_VR(v_p_rowsum_pack2, VLEN - 2 * sizeof(__fp16));
             HVX_Vector v_p_rowsum_local_rot = Q6_V_vror_VR(v_p_rowsum_local, r_vec_off * sizeof(__fp16));
-            v_p_rowsum_local = Q6_V_vlalign_VVR(v_p_rowsum_pack2_rot, v_p_rowsum_local_rot, r_vec_off * sizeof(__fp16));
+            v_p_rowsum_local_rot = Q6_V_vmux_QVV(q_two_rows, v_p_rowsum_pack2_rot, v_p_rowsum_local_rot);
+            v_p_rowsum_local = Q6_V_vror_VR(v_p_rowsum_local_rot,
+                                             (VLEN - r_vec_off * sizeof(__fp16)) % VLEN);
           }
 
           // write local vector registers back to VTCM
@@ -824,13 +829,25 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         for (int i = 0; i < n_row_vec_cnt; ++i) {  // i => r_vec_idx?
           HVX_Vector v_m_prev = mvec_m[i];
           HVX_Vector v_m_curr = Q6_Vhf_vmax_VhfVhf(v_m_prev, mvec_s_rowmax[i]);
-          HVX_Vector v_m_diff = Q6_Vqf16_vsub_VhfVhf(v_m_prev, v_m_curr);  // qf16
+          HVX_Vector v_m_diff_hf = hvx_attention_sub_vhf(v_m_prev, v_m_curr);
 
-          HVX_Vector v_exp_m_diff_hf = hvx_my_exp2_vhf_vqf16(v_m_diff);    // fp16
+          HVX_Vector v_exp_m_diff_hf;
+          if (use_fp32_exp) {
+            HVX_VectorPair vp_m_diff_sf = hvx_my_vhf_to_wsf(v_m_diff_hf);
+            HVX_Vector v_exp_lo_sf = hvx_my_exp2_vsf(Q6_V_lo_W(vp_m_diff_sf));
+            HVX_Vector v_exp_hi_sf = hvx_my_exp2_vsf(Q6_V_hi_W(vp_m_diff_sf));
+            v_exp_m_diff_hf = hvx_my_wsf_to_vhf(v_exp_hi_sf, v_exp_lo_sf);
+          } else {
+            v_exp_m_diff_hf = hvx_my_exp2_xqf_vhf(v_m_diff_hf);
+          }
 
           // l_i^j = exp(m_i^{j-1} - m_i^j) * l_i^{j-1} + rowsum(P_i^j)
-          HVX_Vector v_l_curr = Q6_Vqf16_vmpy_Vqf16Vhf(mvec_l[i], v_exp_m_diff_hf);  // qf16
-          v_l_curr            = Q6_Vqf16_vadd_Vqf16Vhf(v_l_curr, mvec_p_rowsum[i]);
+#if __HVX_ARCH__ >= 79
+          HVX_Vector v_l_curr = Q6_Vhf_vmpyacc_VhfVhfVhf(mvec_p_rowsum[i], mvec_l[i], v_exp_m_diff_hf);
+#else
+          HVX_Vector v_l_curr = Q6_Vqf16_vmpy_Vqf16Vhf(mvec_l[i], v_exp_m_diff_hf);
+          v_l_curr = Q6_Vqf16_vadd_Vqf16Vhf(v_l_curr, mvec_p_rowsum[i]);
+#endif
 
           mvec_m[i] = v_m_curr;
           mvec_l[i] = v_l_curr;
@@ -906,7 +923,11 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
       HVX_Vector v_content;
       for (int i = 0; i < n_row_tiles; ++i) {
         if ((i % 2) == 0) {
+#if __HVX_ARCH__ >= 79
+          v_content = hvx_my_inv_vhf(mvec_l[i / 2]);
+#else
           v_content = hvx_my_inv_vhf(Q6_Vhf_equals_Vqf16(mvec_l[i / 2]));
+#endif
         } else {
           v_content = Q6_V_vror_VR(v_content, 64);
         }

@@ -1,0 +1,6 @@
+ M src/htp-ops-lib-main/include/dsp/hvx_math.h
+ M src/htp-ops-lib-main/src/dsp/ops/flash_attn.c
+?? results/v81/scna/numeric-fix-performance-20260811_154043/
+?? results/v81/scna/numeric-fix-performance-20260811_154229/
+?? scripts/run_numeric_fix_abba_v81.sh
+?? tools/analyze_numeric_fix_performance.py

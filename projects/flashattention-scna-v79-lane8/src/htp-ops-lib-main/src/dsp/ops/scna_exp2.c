@@ -6,6 +6,7 @@
 #include <HAP_perf.h>
 
 #include "dsp/hvx_convert.h"
+#include "dsp/hvx_math.h"
 #include "dsp/scna_exp2.h"
 #include "dsp/utils.h"
 
@@ -140,6 +141,67 @@ static __attribute__((noinline)) void hvx_scna_exp2_lane8_pair_d8_vhf(
   *out1 = output1;
 }
 
+static __attribute__((noinline)) void hvx_scna_exp2_lane8_sequential_pair_d8_vhf(
+    HVX_Vector x0, HVX_Vector x1, HVX_Vector *out0, HVX_Vector *out1) {
+  *out0 = hvx_scna_exp2_lane8_d8_vhf(x0);
+  *out1 = hvx_scna_exp2_lane8_d8_vhf(x1);
+}
+
+static __attribute__((noinline)) void hvx_scna_exp2_lane8_split4_pair_d8_vhf(
+    HVX_Vector x0, HVX_Vector x1, HVX_Vector *out0, HVX_Vector *out1) {
+  const HVX_Vector zero = Q6_V_vzero();
+  const HVX_Vector weights = *(const HVX_Vector *) scna_d8_weight_pattern;
+  const HVX_Vector biases = *(const HVX_Vector *) scna_d8_bias_pattern;
+  HVX_Vector output0 = zero, output1 = zero;
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+  const HVX_Vector table0 = Q6_Vh_vshuff_Vh(x0);
+  const HVX_Vector table1 = Q6_Vh_vshuff_Vh(x1);
+#pragma unroll
+  for (int batch = 0; batch < 4; ++batch) {
+    HVX_Vector affine0 = Q6_Vhf_vmpyacc_VhfVhfVhf(biases, hvx_scna_lane8_expand(table0, batch), weights);
+    HVX_Vector affine1 = Q6_Vhf_vmpyacc_VhfVhfVhf(biases, hvx_scna_lane8_expand(table1, batch), weights);
+    output0 = Q6_V_vor_VV(output0, hvx_scna_lane8_reduce_to_block(Q6_Vhf_vmax_VhfVhf(affine0, zero), batch));
+    output1 = Q6_V_vor_VV(output1, hvx_scna_lane8_reduce_to_block(Q6_Vhf_vmax_VhfVhf(affine1, zero), batch));
+  }
+#pragma unroll
+  for (int batch = 4; batch < 8; ++batch) {
+    HVX_Vector affine0 = Q6_Vhf_vmpyacc_VhfVhfVhf(biases, hvx_scna_lane8_expand(table0, batch), weights);
+    HVX_Vector affine1 = Q6_Vhf_vmpyacc_VhfVhfVhf(biases, hvx_scna_lane8_expand(table1, batch), weights);
+    output0 = Q6_V_vor_VV(output0, hvx_scna_lane8_reduce_to_block(Q6_Vhf_vmax_VhfVhf(affine0, zero), batch));
+    output1 = Q6_V_vor_VV(output1, hvx_scna_lane8_reduce_to_block(Q6_Vhf_vmax_VhfVhf(affine1, zero), batch));
+  }
+  *out0 = output0;
+  *out1 = output1;
+}
+
+static __attribute__((noinline)) void hvx_scna_exp2_lane8_pack_once_pair_d8_vhf(
+    HVX_Vector x0, HVX_Vector x1, HVX_Vector *out0, HVX_Vector *out1) {
+  const HVX_Vector zero = Q6_V_vzero();
+  const HVX_Vector weights = *(const HVX_Vector *) scna_d8_weight_pattern;
+  const HVX_Vector biases = *(const HVX_Vector *) scna_d8_bias_pattern;
+  HVX_Vector reduced0[8], reduced1[8];
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+  const HVX_Vector table0 = Q6_Vh_vshuff_Vh(x0);
+  const HVX_Vector table1 = Q6_Vh_vshuff_Vh(x1);
+#pragma unroll
+  for (int batch = 0; batch < 8; ++batch) {
+    HVX_Vector affine0 = Q6_Vhf_vmpyacc_VhfVhfVhf(biases, hvx_scna_lane8_expand(table0, batch), weights);
+    HVX_Vector affine1 = Q6_Vhf_vmpyacc_VhfVhfVhf(biases, hvx_scna_lane8_expand(table1, batch), weights);
+    reduced0[batch] = hvx_scna_lane8_reduce_to_block(Q6_Vhf_vmax_VhfVhf(affine0, zero), batch);
+    reduced1[batch] = hvx_scna_lane8_reduce_to_block(Q6_Vhf_vmax_VhfVhf(affine1, zero), batch);
+  }
+  HVX_Vector output0 = zero, output1 = zero;
+#pragma unroll
+  for (int batch = 0; batch < 8; ++batch) {
+    output0 = Q6_V_vor_VV(output0, reduced0[batch]);
+    output1 = Q6_V_vor_VV(output1, reduced1[batch]);
+  }
+  *out0 = output0;
+  *out1 = output1;
+}
+
 HVX_Vector hvx_scna_exp2_vhf(HVX_Vector input, const scna_exp2_hvx_params_t *params) {
   if (params->width != 8) return Q6_V_vzero();
   return params->layout == SCNA_LAYOUT_LANE8
@@ -154,7 +216,20 @@ void hvx_scna_exp2_pair_vhf(HVX_Vector input0, HVX_Vector input1,
     *output0 = Q6_V_vzero();
     *output1 = Q6_V_vzero();
   } else if (params->layout == SCNA_LAYOUT_LANE8) {
-    hvx_scna_exp2_lane8_pair_d8_vhf(input0, input1, output0, output1);
+    switch (params->variant) {
+      case SCNA_LANE8_VARIANT_SEQUENTIAL_PAIR:
+        hvx_scna_exp2_lane8_sequential_pair_d8_vhf(input0, input1, output0, output1);
+        break;
+      case SCNA_LANE8_VARIANT_SPLIT4_PAIR:
+        hvx_scna_exp2_lane8_split4_pair_d8_vhf(input0, input1, output0, output1);
+        break;
+      case SCNA_LANE8_VARIANT_PACK_ONCE:
+        hvx_scna_exp2_lane8_pack_once_pair_d8_vhf(input0, input1, output0, output1);
+        break;
+      default:
+        hvx_scna_exp2_lane8_pair_d8_vhf(input0, input1, output0, output1);
+        break;
+    }
   } else {
     *output0 = hvx_scna_exp2_serial_d8_vhf(input0);
     *output1 = hvx_scna_exp2_serial_d8_vhf(input1);
@@ -183,12 +258,26 @@ static int scna_lane8_oracle(void) {
   return mismatches;
 }
 
-int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout,
+static void scna_scalar_fp16_oracle(const __fp16 *input, __fp16 *output) {
+  __fp16 x = *input;
+  if ((float) x < SCNA_MIN_INPUT) x = (__fp16) SCNA_MIN_INPUT;
+  if ((float) x > 0.0f) x = (__fp16) 0.0f;
+  __fp16 sum = (__fp16) 0.0f;
+  for (int i = 0; i < SCNA_D8_WIDTH; ++i) {
+    __fp16 affine = (__fp16) (scna_exp2_d8_bk[i] + x * scna_exp2_d8_wk[i]);
+    if ((float) affine < 0.0f) affine = (__fp16) 0.0f;
+    sum = (__fp16) (sum + affine);
+  }
+  *output = sum;
+}
+
+int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout, int variant,
                         int warmup, int iters) {
   if (result == NULL || width != 8 || (layout != SCNA_LAYOUT_SERIAL && layout != SCNA_LAYOUT_LANE8) ||
-      warmup < 0 || iters <= 0) return -1;
+      variant < 0 || variant > 3 || warmup < 0 || iters <= 0) return -1;
   _Alignas(VLEN) __fp16 input0[64], input1[64], output0[64], output1[64];
-  scna_exp2_hvx_params_t params = { .width = width, .layout = layout };
+  _Alignas(VLEN) __fp16 single0[64], single1[64];
+  scna_exp2_hvx_params_t params = { .width = width, .layout = layout, .variant = variant };
   for (int lane = 0; lane < 64; ++lane) {
     input0[lane] = (__fp16) (-256.0f + 256.0f * lane / 63.0f);
     input1[lane] = (__fp16) (-16.0f + 16.0f * lane / 63.0f);
@@ -203,6 +292,8 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layou
     __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) output0) : "memory");
   }
   const int64_t elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - t0);
+  vmem(single0) = hvx_scna_exp2_vhf(vmem(input0), &params);
+  vmem(single1) = hvx_scna_exp2_vhf(vmem(input1), &params);
   for (int i = 0; i < warmup; ++i) {
     hvx_scna_exp2_pair_vhf(vmem(input0), vmem(input1), &params,
                            (HVX_Vector *) output0, (HVX_Vector *) output1);
@@ -217,6 +308,26 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layou
                                   "m"(*(const __fp16 (*)[64]) output1) : "memory");
   }
   const int64_t pair_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - pt0);
+
+  int64_t expand_elapsed = 0, affine_relu_elapsed = 0, reduce_elapsed = 0, pack_elapsed = 0;
+
+  int paired_single_mismatches = 0;
+  float pair_max_abs_diff = 0.0f;
+  for (int lane = 0; lane < 64; ++lane) {
+    if (memcmp(&output0[lane], &single0[lane], sizeof(__fp16)) != 0) ++paired_single_mismatches;
+    if (memcmp(&output1[lane], &single1[lane], sizeof(__fp16)) != 0) ++paired_single_mismatches;
+    const float diff0 = fabsf((float) output0[lane] - (float) single0[lane]);
+    const float diff1 = fabsf((float) output1[lane] - (float) single1[lane]);
+    if (diff0 > pair_max_abs_diff) pair_max_abs_diff = diff0;
+    if (diff1 > pair_max_abs_diff) pair_max_abs_diff = diff1;
+  }
+  int canonical_oracle_mismatches = 0;
+  for (int lane = 0; lane < 64; ++lane) {
+    const __fp16 canonical_input = (__fp16) (-256.0f + 256.0f * lane / 63.0f);
+    __fp16 expected;
+    scna_scalar_fp16_oracle(&canonical_input, &expected);
+    if (memcmp(&single0[lane], &expected, sizeof(__fp16)) != 0) ++canonical_oracle_mismatches;
+  }
 
   double sq = 0.0;
   float max_abs = 0.0f;
@@ -253,15 +364,95 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layou
       previous = actual;
     }
   }
+
+  double native_sq = 0.0;
+  float native_max_abs = 0.0f;
+  for (int lane = 0; lane < 64; ++lane) {
+    input0[lane] = (__fp16) (-16.0f + 16.0f * lane / 63.0f);
+  }
+  vmem(output0) = hvx_my_exp2_xqf_vhf(vmem(input0));
+  for (int lane = 0; lane < 64; ++lane) {
+    const float error = (float) output0[lane] - exp2f((float) input0[lane]);
+    native_sq += (double) error * error;
+    if (fabsf(error) > native_max_abs) native_max_abs = fabsf(error);
+  }
+  double native_qf16_sq = 0.0;
+  float native_qf16_max_abs = 0.0f;
+  const HVX_Vector native_qf16_input = Q6_Vqf16_vsub_VhfVhf(vmem(input0), Q6_V_vzero());
+  vmem(output0) = hvx_my_exp2_vhf_vqf16(native_qf16_input);
+  for (int lane = 0; lane < 64; ++lane) {
+    const float error = (float) output0[lane] - exp2f((float) input0[lane]);
+    native_qf16_sq += (double) error * error;
+    if (fabsf(error) > native_qf16_max_abs) native_qf16_max_abs = fabsf(error);
+  }
+
+  for (int lane = 0; lane < 64; ++lane) input0[lane] = (__fp16) 1.0f;
+  HVX_VectorPair ones_pair = hvx_my_vhf_to_wqf32(vmem(input0));
+  HVX_Vector ones_sum = Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(ones_pair), Q6_V_hi_W(ones_pair));
+  for (int shift = 64; shift >= 4; shift >>= 1) {
+    ones_sum = Q6_Vqf32_vadd_Vqf32Vqf32(ones_sum, Q6_V_vror_VR(ones_sum, shift));
+  }
+  _Alignas(VLEN) float rowsum_probe_lanes[32];
+  vmem(rowsum_probe_lanes) = Q6_Vsf_equals_Vqf32(ones_sum);
+  const float rowsum_ones_probe = rowsum_probe_lanes[31];
+
+  /* Exercise the reciprocal used by the common Attention output-scale path.
+   * The largest FP16 subnormal has a finite FP16 reciprocal; zero is the only
+   * input in this probe for which infinity is the required result. */
+  for (int lane = 0; lane < 64; ++lane) input0[lane] = (__fp16) 1.0f;
+  {
+    const uint16_t largest_subnormal_bits = 0x03ff;
+    memcpy(&input0[0], &largest_subnormal_bits, sizeof(largest_subnormal_bits));
+  }
+  input0[1] = (__fp16) 0.0f;
+  for (int exponent = -10; exponent <= 10; ++exponent) {
+    input0[exponent + 12] = (__fp16) ldexpf(1.0f, exponent);
+  }
+  input0[33] = (__fp16) 1.5f;
+  input0[34] = (__fp16) 7.75f;
+  input0[35] = (__fp16) 64.0f;
+  input0[36] = (__fp16) 511.5f;
+  input0[37] = (__fp16) 4096.0f;
+  vmem(output0) = hvx_my_inv_vhf(vmem(input0));
+  float reciprocal_max_relative_error = 0.0f;
+  int reciprocal_nonfinite_count = 0;
+  for (int lane = 0; lane < 64; ++lane) {
+    const float x = (float) input0[lane];
+    const float actual = (float) output0[lane];
+    if (x == 0.0f) continue;
+    if (!isfinite(actual)) {
+      ++reciprocal_nonfinite_count;
+      continue;
+    }
+    const float expected = 1.0f / x;
+    const float relative_error = fabsf(actual - expected) / expected;
+    if (relative_error > reciprocal_max_relative_error) {
+      reciprocal_max_relative_error = relative_error;
+    }
+  }
+  const int reciprocal_zero_inf_pass = isinf((float) output0[1]) ? 1 : 0;
+
   *result = (struct ScnaExp2BenchResult) {
-    .width = width, .layout = layout, .lanes = 64, .iters = iters,
+    .width = width, .layout = layout, .variant = variant, .lanes = 64, .iters = iters,
     .elapsed_us = elapsed, .pair_elapsed_us = pair_elapsed,
+    .expand_elapsed_us = expand_elapsed, .affine_relu_elapsed_us = affine_relu_elapsed,
+    .reduce_elapsed_us = reduce_elapsed, .pack_elapsed_us = pack_elapsed,
     .rmse = (float) sqrt(sq / 64.0), .max_abs_error = max_abs,
     .dense_rmse = (float) sqrt(dense_sq / (dense_blocks * 64)),
-    .dense_max_abs_error = dense_max_abs, .pair_max_abs_diff = 0.0f,
+    .dense_max_abs_error = dense_max_abs, .pair_max_abs_diff = pair_max_abs_diff,
     .dense_samples = dense_blocks * 64, .monotonic_violations = monotonic,
     .negative_count = negative, .nan_count = nan_count,
     .lane_oracle_mismatches = layout == SCNA_LAYOUT_LANE8 ? scna_lane8_oracle() : 0,
+    .canonical_oracle_mismatches = canonical_oracle_mismatches,
+    .paired_single_mismatches = paired_single_mismatches,
+    .native_exp2_rmse = (float) sqrt(native_sq / 64.0),
+    .native_exp2_max_abs_error = native_max_abs,
+    .native_qf16_exp2_rmse = (float) sqrt(native_qf16_sq / 64.0),
+    .native_qf16_exp2_max_abs_error = native_qf16_max_abs,
+    .rowsum_ones_probe = rowsum_ones_probe,
+    .reciprocal_max_relative_error = reciprocal_max_relative_error,
+    .reciprocal_nonfinite_count = reciprocal_nonfinite_count,
+    .reciprocal_zero_inf_pass = reciprocal_zero_inf_pass,
     .checksum_bits = checksum,
   };
   return 0;

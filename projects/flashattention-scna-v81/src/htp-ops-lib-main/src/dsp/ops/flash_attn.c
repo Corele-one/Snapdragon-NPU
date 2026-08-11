@@ -846,8 +846,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             // reduction phase 2: intra-vector
             #pragma unroll
             for (int s = 64; s >= 2; s >>= 1) {
-              v_s_rowmax0 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax0, Q6_V_vlalign_VVR(v_s_rowmax0, v_neg_inf, s));
-              v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, Q6_V_vlalign_VVR(v_s_rowmax1, v_neg_inf, s));
+              v_s_rowmax0 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax0, Q6_V_vror_VR(v_s_rowmax0, s));
+              v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, Q6_V_vror_VR(v_s_rowmax1, s));
             }
             // clang-format on
             // now, v_s_rowmax0[63] = rowmax(S)_0, v_s_rowmax1[63] = rowmax(S)_1
@@ -881,11 +881,11 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
             if (enable_vgather_exp) {
               for (int c = 0; c < n_cols; c += 64) {
-                HVX_Vector v_s_minus_m0 = Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0);
-                HVX_Vector v_s_minus_m1 = Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1);
-
-                HVX_Vector v_s_minus_m0_hf = Q6_Vhf_equals_Vqf16(v_s_minus_m0);
-                HVX_Vector v_s_minus_m1_hf = Q6_Vhf_equals_Vqf16(v_s_minus_m1);
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
                 HVX_Vector v_gather_input0 = Q6_Vh_vasl_VhR(v_s_minus_m0_hf, 1);
                 HVX_Vector v_gather_input1 = Q6_Vh_vasl_VhR(v_s_minus_m1_hf, 1);
 
@@ -907,10 +907,11 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               HVX_Vector v_p_row0_hf, v_p_row1_hf;
 
               if (enable_scna_exp) {
-                HVX_Vector v_s_minus_m0 = Q6_Vhf_equals_Vqf16(
-                  Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0));
-                HVX_Vector v_s_minus_m1 = Q6_Vhf_equals_Vqf16(
-                  Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1));
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0 =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1 =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
                 const HVX_VectorPred q_valid0 = Q6_Q_vcmp_gt_VhfVhf(row_buffer0[c / 64], v_neg_inf);
                 const HVX_VectorPred q_valid1 = Q6_Q_vcmp_gt_VhfVhf(row_buffer1[c / 64], v_neg_inf);
                 const HVX_Vector v_zero = Q6_V_vzero();
@@ -927,12 +928,15 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                 v_p_row0_hf = row_buffer0[c / 64];
                 v_p_row1_hf = row_buffer1[c / 64];
               } else {
-                HVX_Vector v_s_minus_m0 = Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0);  // qf16
-                HVX_Vector v_s_minus_m1 = Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1);  // qf16
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
 
                 if (use_fp32_exp) {
-                  HVX_VectorPair vp_s_minus_m0_sf = hvx_my_vqf16_to_wsf(v_s_minus_m0);
-                  HVX_VectorPair vp_s_minus_m1_sf = hvx_my_vqf16_to_wsf(v_s_minus_m1);
+                  HVX_VectorPair vp_s_minus_m0_sf = hvx_my_vhf_to_wsf(v_s_minus_m0_hf);
+                  HVX_VectorPair vp_s_minus_m1_sf = hvx_my_vhf_to_wsf(v_s_minus_m1_hf);
 
                   HVX_Vector v_p_row00_sf = hvx_my_exp2_vsf(Q6_V_lo_W(vp_s_minus_m0_sf));
                   HVX_Vector v_p_row01_sf = hvx_my_exp2_vsf(Q6_V_hi_W(vp_s_minus_m0_sf));
@@ -942,8 +946,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                   v_p_row0_hf = hvx_my_wsf_to_vhf(v_p_row01_sf, v_p_row00_sf);
                   v_p_row1_hf = hvx_my_wsf_to_vhf(v_p_row11_sf, v_p_row10_sf);
                 } else {
-                  v_p_row0_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m0);
-                  v_p_row1_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m1);
+                  v_p_row0_hf = hvx_my_exp2_xqf_vhf(v_s_minus_m0_hf);
+                  v_p_row1_hf = hvx_my_exp2_xqf_vhf(v_s_minus_m1_hf);
                 }
               }
 
@@ -992,8 +996,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
 #pragma unroll
             for (int s = 64; s >= 4; s >>= 1) {
-              v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vlalign_VVR(v_p_rowsum0, v_zero, s));
-              v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vlalign_VVR(v_p_rowsum1, v_zero, s));
+              v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vror_VR(v_p_rowsum0, s));
+              v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vror_VR(v_p_rowsum1, s));
             }
             if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && r == 0) {
               _Alignas(VLEN) uint32_t debug_sum[32];
@@ -1002,6 +1006,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               debug_sum0_last_bits = debug_sum[31];
             }
             HVX_Vector v_p_rowsum_pack2 = Q6_Vhf_equals_Wqf32(Q6_W_vcombine_VV(v_p_rowsum1, v_p_rowsum0));
+            /* This interleaved FP16-to-qf32 reduction is half-scaled on the
+             * v79+ path. Restore the rowsum used by online softmax. */
+            v_p_rowsum_pack2 = Q6_Vhf_vadd_VhfVhf(v_p_rowsum_pack2, v_p_rowsum_pack2);
 
             // shift rowsum(P) into v_p_rowsum_local
             // HVX_Vector v_p_rowsum_pack2     = Q6_V_hi_W(Q6_W_vshuff_VVR(v_p_rowsum1, v_p_rowsum0, -2));
@@ -1127,10 +1134,10 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         for (int i = 0; i < n_row_vec_cnt; ++i) {  // i => r_vec_idx?
           HVX_Vector v_m_prev = mvec_m[i];
           HVX_Vector v_m_curr = Q6_Vhf_vmax_VhfVhf(v_m_prev, mvec_s_rowmax[i]);
-          HVX_Vector v_m_diff = Q6_Vqf16_vsub_VhfVhf(v_m_prev, v_m_curr);  // qf16
+          const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+          HVX_Vector v_m_diff_hf = Q6_Vhf_vadd_VhfVhf(v_m_prev, Q6_V_vxor_VV(v_m_curr, v_sign));
 
           const int64_t scna_exp_t0 = enable_scna_exp ? HAP_perf_get_qtimer_count() : 0;
-          HVX_Vector v_m_diff_hf = Q6_Vhf_equals_Vqf16(v_m_diff);
           if (enable_scna_exp) {
             __fp16 scna_min_hf = (__fp16) SCNA_MIN_INPUT;
             const HVX_Vector v_scna_min = Q6_Vh_vsplat_R(fp16_to_bits(&scna_min_hf));
@@ -1138,19 +1145,26 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             const HVX_VectorPred q_finite = Q6_Q_vcmp_gt_VhfVhf(v_m_diff_hf, v_scna_neg_inf);
             v_m_diff_hf = Q6_V_vmux_QVV(q_finite, v_m_diff_hf, v_scna_min);
           }
-          HVX_Vector v_exp_m_diff_hf = enable_scna_exp
-              ? hvx_scna_exp2_vhf(v_m_diff_hf, &scna_hvx_params)
-              : hvx_my_exp2_vhf_vqf16(v_m_diff);    // fp16
+          HVX_Vector v_exp_m_diff_hf;
+          if (enable_scna_exp) {
+            v_exp_m_diff_hf = hvx_scna_exp2_vhf(v_m_diff_hf, &scna_hvx_params);
+          } else if (use_fp32_exp) {
+            HVX_VectorPair vp_m_diff_sf = hvx_my_vhf_to_wsf(v_m_diff_hf);
+            HVX_Vector v_exp_lo_sf = hvx_my_exp2_vsf(Q6_V_lo_W(vp_m_diff_sf));
+            HVX_Vector v_exp_hi_sf = hvx_my_exp2_vsf(Q6_V_hi_W(vp_m_diff_sf));
+            v_exp_m_diff_hf = hvx_my_wsf_to_vhf(v_exp_hi_sf, v_exp_lo_sf);
+          } else {
+            v_exp_m_diff_hf = hvx_my_exp2_xqf_vhf(v_m_diff_hf);
+          }
           if (enable_scna_exp) scna_exp_ticks += HAP_perf_get_qtimer_count() - scna_exp_t0;
 
           // l_i^j = exp(m_i^{j-1} - m_i^j) * l_i^{j-1} + rowsum(P_i^j)
-          HVX_Vector v_l_curr = Q6_Vqf16_vmpy_Vqf16Vhf(mvec_l[i], v_exp_m_diff_hf);  // qf16
-          v_l_curr            = Q6_Vqf16_vadd_Vqf16Vhf(v_l_curr, mvec_p_rowsum[i]);
+          HVX_Vector v_l_curr = Q6_Vhf_vmpyacc_VhfVhfVhf(mvec_p_rowsum[i], mvec_l[i], v_exp_m_diff_hf);
 
           if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && i == 0) {
             _Alignas(VLEN) __fp16 debug_rowsum[64], debug_l[64], debug_exp[64];
             vmem(debug_rowsum) = mvec_p_rowsum[i];
-            vmem(debug_l) = Q6_Vhf_equals_Vqf16(v_l_curr);
+            vmem(debug_l) = v_l_curr;
             vmem(debug_exp) = v_exp_m_diff_hf;
             debug_rowsum0_bits = fp16_to_bits(&debug_rowsum[0]);
             debug_l0_bits = fp16_to_bits(&debug_l[0]);
@@ -1234,7 +1248,7 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
       HVX_Vector v_content;
       for (int i = 0; i < n_row_tiles; ++i) {
         if ((i % 2) == 0) {
-          v_content = hvx_my_inv_vhf(Q6_Vhf_equals_Vqf16(mvec_l[i / 2]));
+          v_content = hvx_my_inv_vhf(mvec_l[i / 2]);
           if (numeric_debug && kv_head_idx == 0 && ir == 0 && i == 0) {
             _Alignas(VLEN) __fp16 debug_inv[64];
             vmem(debug_inv) = v_content;

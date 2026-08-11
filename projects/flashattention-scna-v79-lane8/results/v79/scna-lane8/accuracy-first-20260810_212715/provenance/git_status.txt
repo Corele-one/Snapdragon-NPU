@@ -1,0 +1,15 @@
+ M src/htp-ops-lib-main/include/dsp/hvx_convert.h
+ M src/htp-ops-lib-main/include/dsp/hvx_math.h
+ M src/htp-ops-lib-main/include/dsp/ops.h
+ M src/htp-ops-lib-main/include/dsp/scna_exp2.h
+ M src/htp-ops-lib-main/include/op_reg.h
+ M src/htp-ops-lib-main/src/dsp/op_executor.cc
+ M src/htp-ops-lib-main/src/dsp/ops/flash_attn.c
+ M src/htp-ops-lib-main/src/dsp/ops/scna_exp2.c
+ M src/htp-ops-lib-main/src/host/test.c
+ M tools/analyze_scna_disassembly.py
+ M tools/combine_scna_perfetto_traces.py
+ M tools/generate_figure8_perfetto_trace.py
+?? results/v79/scna-lane8/accuracy-first-20260810_212715/
+?? scripts/run_scna_accuracy_gate.sh
+?? tools/analyze_accuracy_first.py

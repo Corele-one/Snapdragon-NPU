@@ -1,0 +1,1 @@
+ACCURACY_STAGE_RESULT stage=baseline cases=72 failures=0 pass=1

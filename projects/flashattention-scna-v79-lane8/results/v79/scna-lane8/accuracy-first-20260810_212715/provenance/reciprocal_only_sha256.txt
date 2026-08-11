@@ -1,0 +1,2 @@
+bb836b1170f52462c3beed3bc7fe4bc5a45b7fda1c950eb39198bd1a8d093675  src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libhtp_ops_skel.so
+e1d87d3038462eae35b9683a5fe1c404804478ee0917a7a398a6ac8e405fc3f8  src/htp-ops-lib-main/include/dsp/hvx_math.h

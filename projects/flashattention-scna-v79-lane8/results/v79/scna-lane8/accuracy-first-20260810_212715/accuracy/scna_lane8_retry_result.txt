@@ -1,0 +1,1 @@
+ACCURACY_STAGE_RETRY_RESULT stage=scna_lane8 original_cases=72 transient_adb_failures=1 retried_cases=1 retry_failures=0 final_cases=72 final_failures=0 pass=1

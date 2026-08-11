@@ -119,6 +119,45 @@ static HVX_INLINE_ALWAYS HVX_Vector hvx_my_exp2_vhf(HVX_Vector x_v) {
   return y_v;
 }
 
+/* v79+ XQF range reduction from Qualcomm's qhmath HVX exp2 path. */
+/* Keep this evaluator out of the already large v81 Attention frame. Inlining
+ * it at every score/online-reciprocal call grew the core frame past the 8 KiB
+ * FastRPC receiver-thread stack budget and faulted in the function prologue. */
+static __attribute__((noinline)) HVX_Vector hvx_my_exp2_xqf_vhf(HVX_Vector input) {
+#if __HVX_ARCH__ >= 79
+  const HVX_Vector half = Q6_Vh_vsplat_R(0x3800);
+  const HVX_Vector one_h = Q6_Vh_vsplat_R(0x0001);
+  const HVX_Vector zero = Q6_V_vzero();
+  const HVX_Vector one = Q6_Vh_vsplat_R(0x3c00);
+  HVX_Vector integer_hf;
+  HVX_Vector exponent = Q6_Vh_vfloor_VhfVhf(input, &integer_hf);
+  HVX_Vector residual_qf16 = Q6_Vqf16_vsub_Vqf16Vhf(Q6_Vqf16_vadd_VhfVhf(input, zero), integer_hf);
+  HVX_Vector residual = Q6_Vhf_equals_Vqf16(residual_qf16);
+  const HVX_VectorPred q_larger = Q6_Q_vcmp_gt_VhfVhf(residual, half);
+  exponent = Q6_Vh_condacc_QVhVh(q_larger, exponent, one_h);
+  const HVX_Vector adjusted_qf16 = Q6_Vqf16_vsub_Vqf16Vhf(residual_qf16, one);
+  residual = Q6_V_vmux_QVV(q_larger, Q6_Vhf_equals_Vqf16(adjusted_qf16), residual);
+
+  HVX_Vector y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(Q6_Vh_vsplat_R(0x0908), residual));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(y, Q6_Vh_vsplat_R(0x157d)));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(y, residual));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(y, Q6_Vh_vsplat_R(0x20ed)));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(y, residual));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(y, Q6_Vh_vsplat_R(0x2b1b)));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(y, residual));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(y, Q6_Vh_vsplat_R(0x33b0)));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(y, residual));
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(y, Q6_Vh_vsplat_R(0x398c)));
+  y = Q6_Vqf16_vmpy_VhfVhf(y, residual);
+  y = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_Vqf16Vhf(y, one));
+  y = Q6_Vh_vadd_VhVh(y, Q6_Vh_vasl_VhR(exponent, 10));
+  const HVX_Vector min_supported = Q6_Vh_vsplat_R(0xcb00);
+  return Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(min_supported, input), zero, y);
+#else
+  return hvx_my_exp2_vhf(input);
+#endif
+}
+
 // adapted from libs/qhl_hvx/src/qhmath_hvx/qhmath_hvx_log2_ahf.c
 static HVX_INLINE_ALWAYS HVX_Vector hvx_my_log2_vqf16_vhf(HVX_Vector x_v) {
   const uint16_t sqrt_half_hf = 0x39a8;  // 0.707107 sqrt(2)/2
@@ -236,12 +275,22 @@ static HVX_INLINE_ALWAYS HVX_Vector hvx_my_inv_vhf(HVX_Vector x_v) {
   const HVX_Vector v_abs_mask = Q6_Vh_vsplat_R(0x7fff);
   const HVX_Vector v_sign_mask = Q6_Vh_vsplat_R(0x8000);
   const HVX_Vector v_inf = Q6_Vh_vsplat_R(0x7c00);
+  const HVX_Vector v_min_normal = Q6_Vh_vsplat_R(0x0400);
+  const HVX_Vector v_scale_1024 = Q6_Vh_vsplat_R(0x6400);
 
   const HVX_Vector v_abs = Q6_V_vand_VV(x_v, v_abs_mask);
   const HVX_Vector v_sign = Q6_V_vand_VV(x_v, v_sign_mask);
-  const HVX_Vector v_log2_hf = Q6_Vhf_equals_Vqf16(hvx_my_log2_vqf16_vhf(v_abs));
+  const HVX_VectorPred q_nonzero = Q6_Q_vcmp_gt_VhfVhf(v_abs, v_zero);
+  const HVX_VectorPred q_subnormal = Q6_Q_and_QQ(q_nonzero, Q6_Q_vcmp_gt_VhfVhf(v_min_normal, v_abs));
+  const HVX_Vector v_normalized_subnormal =
+    Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(v_abs, v_scale_1024));
+  const HVX_Vector v_log_input = Q6_V_vmux_QVV(q_subnormal, v_normalized_subnormal, v_abs);
+  const HVX_Vector v_log2_hf = Q6_Vhf_equals_Vqf16(hvx_my_log2_vqf16_vhf(v_log_input));
   const HVX_Vector v_neg_log2 = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vsub_VhfVhf(v_zero, v_log2_hf));
-  const HVX_Vector v_magnitude = hvx_my_exp2_vhf(v_neg_log2);
+  HVX_Vector v_magnitude = hvx_my_exp2_xqf_vhf(v_neg_log2);
+  const HVX_Vector v_scaled_subnormal =
+    Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfVhf(v_magnitude, v_scale_1024));
+  v_magnitude = Q6_V_vmux_QVV(q_subnormal, v_scaled_subnormal, v_magnitude);
   const HVX_Vector v_signed = Q6_V_vor_VV(v_magnitude, v_sign);
   return Q6_V_vmux_QVV(Q6_Q_vcmp_eq_VhVh(x_v, v_zero), v_inf, v_signed);
 #else
@@ -531,7 +580,7 @@ static HVX_INLINE_ALWAYS HVX_Vector hvx_my_inv_vhf(HVX_Vector x_v) {
 }
 
 static HVX_INLINE_ALWAYS HVX_Vector hvx_my_exp2_vhf_vqf16(HVX_Vector x) {
-  return hvx_my_exp2_vhf(Q6_Vhf_equals_Vqf16(x));
+  return hvx_my_exp2_xqf_vhf(Q6_Vhf_equals_Vqf16(x));
 }
 
 static HVX_INLINE_ALWAYS HVX_Vector hvx_my_log2_vqf16(HVX_Vector x) {

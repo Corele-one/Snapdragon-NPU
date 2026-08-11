@@ -63,6 +63,7 @@ struct Figure8AttnConfig {
   int         enabled;
   const char *mode;
   const char *scna_layout;
+  const char *scna_lane8_variant;
   const char *mask_mode;
   int         qo_len;
   int         kv_len;
@@ -73,6 +74,10 @@ struct Figure8AttnConfig {
   int         iters;
   int         print_events;
   int         compare_reference;
+  int         compare_scna_layout;
+  int         numeric_debug;
+  uint32_t    seed;
+  const char *seed_label;
   const char *csv_out;
   int         hmx_int8_gate;
   int         hmx_int8_gate_search;
@@ -105,9 +110,11 @@ struct Figure8AttnConfig {
 static void figure8_print_usage(const char *prog) {
   fprintf(stderr,
           "Usage: %s --figure8-attn [--mode baseline|lut-exp|scna-fp16] [--scna-layout serial|lane8]\n"
+          "          [--scna-lane8-variant current|sequential-pair|split4-pair|pack-once]\n"
           "          [--scna-width 8|16|32] [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
           "          [--n-heads N] [--n-kv-heads N] [--head-dim N] [--warmup N] [--iters N]\n"
-          "          [--no-events] [--compare-reference] [--csv-out PATH]\n"
+          "          [--no-events] [--compare-reference] [--compare-scna-layout] [--numeric-debug]\n"
+          "          [--seed figure8_fixed|UINT32] [--csv-out PATH]\n"
           "       %s --hmx-int8-gate\n"
           "       %s --hmx-int8-search-gate\n"
           "       %s --hmx-int8-bitplane-gate\n"
@@ -173,6 +180,7 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .enabled    = 0,
     .mode       = "baseline",
     .scna_layout = "serial",
+    .scna_lane8_variant = "current",
     .mask_mode  = "full",
     .qo_len     = 4,
     .kv_len     = 4096,
@@ -183,6 +191,10 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .iters      = 20,
     .print_events = 1,
     .compare_reference = 0,
+    .compare_scna_layout = 0,
+    .numeric_debug = 0,
+    .seed = 0,
+    .seed_label = "figure8_fixed",
     .csv_out    = NULL,
     .hmx_int8_gate = 0,
     .hmx_int8_gate_search = 0,
@@ -279,6 +291,12 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
         return -1;
       }
       cfg->scna_layout = argv[i];
+    } else if (strcmp(arg, "--scna-lane8-variant") == 0) {
+      if (++i >= argc) {
+        fprintf(stderr, "Missing value for --scna-lane8-variant\n");
+        return -1;
+      }
+      cfg->scna_lane8_variant = argv[i];
     } else if (strcmp(arg, "--mask-mode") == 0) {
       if (++i >= argc) {
         fprintf(stderr, "Missing value for --mask-mode\n");
@@ -307,6 +325,27 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
       cfg->print_events = 0;
     } else if (strcmp(arg, "--compare-reference") == 0) {
       cfg->compare_reference = 1;
+    } else if (strcmp(arg, "--compare-scna-layout") == 0) {
+      cfg->compare_scna_layout = 1;
+    } else if (strcmp(arg, "--numeric-debug") == 0) {
+      cfg->numeric_debug = 1;
+    } else if (strcmp(arg, "--seed") == 0) {
+      if (++i >= argc) {
+        fprintf(stderr, "Missing value for --seed\n");
+        return -1;
+      }
+      cfg->seed_label = argv[i];
+      if (strcmp(argv[i], "figure8_fixed") == 0) {
+        cfg->seed = 0;
+      } else {
+        char *end = NULL;
+        unsigned long value = strtoul(argv[i], &end, 10);
+        if (!argv[i][0] || *end != '\0' || value > UINT32_MAX) {
+          fprintf(stderr, "Invalid seed: %s\n", argv[i]);
+          return -1;
+        }
+        cfg->seed = (uint32_t) value;
+      }
     } else if (strcmp(arg, "--csv-out") == 0) {
       if (++i >= argc) {
         fprintf(stderr, "Missing value for --csv-out\n");
@@ -336,6 +375,13 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     fprintf(stderr, "--scna-layout must be serial or lane8\n");
     return -1;
   }
+  if (strcmp(cfg->scna_lane8_variant, "current") != 0 &&
+      strcmp(cfg->scna_lane8_variant, "sequential-pair") != 0 &&
+      strcmp(cfg->scna_lane8_variant, "split4-pair") != 0 &&
+      strcmp(cfg->scna_lane8_variant, "pack-once") != 0) {
+    fprintf(stderr, "Unsupported --scna-lane8-variant: %s\n", cfg->scna_lane8_variant);
+    return -1;
+  }
   if (strcmp(cfg->mask_mode, "full") != 0 && strcmp(cfg->mask_mode, "causal") != 0 &&
       strcmp(cfg->mask_mode, "padding") != 0) {
     fprintf(stderr, "--mask-mode must be full, causal, or padding\n");
@@ -349,24 +395,57 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     fprintf(stderr, "n_heads must be divisible by n_kv_heads\n");
     return -1;
   }
+  if (cfg->compare_scna_layout && strcmp(cfg->mode, "scna-fp16") != 0) {
+    fprintf(stderr, "--compare-scna-layout requires --mode scna-fp16\n");
+    return -1;
+  }
   return 0;
 }
 
+static int scna_lane8_variant_id(const char *variant) {
+  if (strcmp(variant, "sequential-pair") == 0) return SCNA_LANE8_VARIANT_SEQUENTIAL_PAIR;
+  if (strcmp(variant, "split4-pair") == 0) return SCNA_LANE8_VARIANT_SPLIT4_PAIR;
+  if (strcmp(variant, "pack-once") == 0) return SCNA_LANE8_VARIANT_PACK_ONCE;
+  return SCNA_LANE8_VARIANT_CURRENT;
+}
+
+static uint32_t figure8_mix32(uint32_t value) {
+  value ^= value >> 16;
+  value *= UINT32_C(0x7feb352d);
+  value ^= value >> 15;
+  value *= UINT32_C(0x846ca68b);
+  value ^= value >> 16;
+  return value;
+}
+
 static void figure8_fill_inputs(float *q, __fp16 *k, __fp16 *v, __fp16 *mask, int qo_len, int kv_len, int kv_pad_len,
-                                int n_heads, int n_kv_heads, int head_dim, const char *mask_mode) {
+                                int n_heads, int n_kv_heads, int head_dim, const char *mask_mode, uint32_t seed) {
   const size_t q_elems    = (size_t) qo_len * n_heads * head_dim;
   const size_t kv_elems   = (size_t) kv_len * n_kv_heads * head_dim;
   const size_t mask_elems = (size_t) qo_len * kv_pad_len;
 
-  for (size_t i = 0; i < q_elems; ++i) {
-    int val = (int) ((i * 13u + 7u) % 251u) - 125;
-    q[i]    = (float) val * 0.0078125f;
-  }
-  for (size_t i = 0; i < kv_elems; ++i) {
-    int kval = (int) ((i * 17u + 3u) % 257u) - 128;
-    int vval = (int) ((i * 19u + 5u) % 263u) - 131;
-    k[i]     = (__fp16) ((float) kval * 0.00390625f);
-    v[i]     = (__fp16) ((float) vval * 0.00390625f);
+  if (seed == 0) {
+    for (size_t i = 0; i < q_elems; ++i) {
+      int val = (int) ((i * 13u + 7u) % 251u) - 125;
+      q[i]    = (float) val * 0.0078125f;
+    }
+    for (size_t i = 0; i < kv_elems; ++i) {
+      int kval = (int) ((i * 17u + 3u) % 257u) - 128;
+      int vval = (int) ((i * 19u + 5u) % 263u) - 131;
+      k[i]     = (__fp16) ((float) kval * 0.00390625f);
+      v[i]     = (__fp16) ((float) vval * 0.00390625f);
+    }
+  } else {
+    for (size_t i = 0; i < q_elems; ++i) {
+      const int value = (int) (figure8_mix32(seed ^ (uint32_t) i) & 0xffffu) - 32768;
+      q[i] = (float) value / 32768.0f;
+    }
+    for (size_t i = 0; i < kv_elems; ++i) {
+      const int kval = (int) (figure8_mix32(seed ^ UINT32_C(0x51ed270b) ^ (uint32_t) i) & 0xffffu) - 32768;
+      const int vval = (int) (figure8_mix32(seed ^ UINT32_C(0x9e3779b9) ^ (uint32_t) i) & 0xffffu) - 32768;
+      k[i] = (__fp16) ((float) kval / 65536.0f);
+      v[i] = (__fp16) ((float) vval / 65536.0f);
+    }
   }
   for (size_t i = 0; i < mask_elems; ++i) {
     mask[i] = (__fp16) -65504.0f;
@@ -458,12 +537,62 @@ static void figure8_report_comparison(const struct Figure8AttnConfig *cfg, const
   const int pass = rmse <= 0.002f && max_abs <= 0.01f && candidate_nonfinite == 0 && reference_nonfinite == 0;
   fprintf(stderr,
           "FIG8_ATTENTION_COMPARE candidate_mode=%s layout=%s scna_width=%d reference_mode=host-fp32 "
-          "mask_mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d elements=%zu "
+          "seed=%s mask_mode=%s qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d elements=%zu "
           "rmse=%.9g relative_l2=%.9g max_abs_error=%.9g candidate_nonfinite=%d reference_nonfinite=%d "
           "rmse_limit=0.002 max_abs_limit=0.01 pass=%d\n",
-          cfg->mode, cfg->scna_layout, cfg->scna_width, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
+          cfg->mode, cfg->scna_layout, cfg->scna_width, cfg->seed_label, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
           cfg->n_kv_heads, cfg->head_dim, count, rmse, relative_l2, max_abs, candidate_nonfinite,
           reference_nonfinite, pass);
+  if (cfg->numeric_debug) {
+    for (int h = 0; h < cfg->n_heads; ++h) {
+      double head_sq = 0.0;
+      float head_max_abs = 0.0f;
+      size_t head_count = 0;
+      for (int q_idx = 0; q_idx < cfg->qo_len; ++q_idx) {
+        const size_t base = ((size_t) q_idx * cfg->n_heads + h) * cfg->head_dim;
+        for (int d = 0; d < cfg->head_dim; ++d) {
+          const float error = candidate[base + d] - reference[base + d];
+          head_sq += (double) error * error;
+          if (fabsf(error) > head_max_abs) head_max_abs = fabsf(error);
+          ++head_count;
+        }
+      }
+      const size_t first = (size_t) h * cfg->head_dim;
+      fprintf(stderr,
+              "FIG8_ATTENTION_COMPARE_HEAD seed=%s mode=%s layout=%s head=%d rmse=%.9g max_abs_error=%.9g "
+              "candidate_first=%.9g reference_first=%.9g\n",
+              cfg->seed_label, cfg->mode, cfg->scna_layout, h, (float) sqrt(head_sq / head_count),
+              head_max_abs, candidate[first], reference[first]);
+    }
+  }
+}
+
+static int figure8_report_layout_comparison(const struct Figure8AttnConfig *cfg, const float *serial,
+                                            const float *lane8, size_t count) {
+  double sq_error = 0.0;
+  float max_abs = 0.0f;
+  int serial_nonfinite = 0, lane8_nonfinite = 0;
+  for (size_t i = 0; i < count; ++i) {
+    if (!isfinite(serial[i])) ++serial_nonfinite;
+    if (!isfinite(lane8[i])) ++lane8_nonfinite;
+    if (!isfinite(serial[i]) || !isfinite(lane8[i])) continue;
+    const float error = lane8[i] - serial[i];
+    sq_error += (double) error * error;
+    if (fabsf(error) > max_abs) max_abs = fabsf(error);
+  }
+  const float rmse = (float) sqrt(sq_error / count);
+  const int pass = rmse <= 1.0e-4f && max_abs <= 1.0e-3f && serial_nonfinite == 0 && lane8_nonfinite == 0;
+  fprintf(stderr,
+          "FIG8_ATTENTION_LAYOUT_COMPARE seed=%s width=%d mask_mode=%s qo_len=%d kv_len=%d n_heads=%d "
+          "n_kv_heads=%d head_dim=%d elements=%zu serial_checksum=0x%016llx lane8_checksum=0x%016llx "
+          "rmse=%.9g max_abs_error=%.9g serial_nonfinite=%d lane8_nonfinite=%d "
+          "rmse_limit=0.0001 max_abs_limit=0.001 pass=%d\n",
+          cfg->seed_label, cfg->scna_width, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
+          cfg->n_kv_heads, cfg->head_dim, count,
+          (unsigned long long) figure8_checksum(serial, count),
+          (unsigned long long) figure8_checksum(lane8, count), rmse, max_abs,
+          serial_nonfinite, lane8_nonfinite, pass);
+  return pass ? 0 : -1;
 }
 
 static int figure8_wait_channel(struct MessageHeader *msg, int64_t timeout_us) {
@@ -597,6 +726,7 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
     .output = { .fd = result_fd, .offset = 0 },
     .width = cfg->scna_width,
     .layout = strcmp(cfg->scna_layout, "lane8") == 0 ? SCNA_LAYOUT_LANE8 : SCNA_LAYOUT_SERIAL,
+    .variant = scna_lane8_variant_id(cfg->scna_lane8_variant),
     .warmup = cfg->warmup,
     .iters = cfg->iters,
   };
@@ -609,16 +739,35 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
   const double single_ns = result->iters > 0 ? 1000.0 * result->elapsed_us / result->iters : 0.0;
   const double paired_ns = result->iters > 0 ? 1000.0 * result->pair_elapsed_us / result->iters : 0.0;
   fprintf(stderr,
-          "SCNA_EXP_BENCH layout=%s width=%d lanes=%d warmup=%d iters=%d elapsed_us=%lld "
+          "SCNA_EXP_BENCH layout=%s variant=%s variant_id=%d width=%d lanes=%d warmup=%d iters=%d elapsed_us=%lld "
           "single_ns_per_64=%.6f pair_elapsed_us=%lld paired_ns_per_2x64=%.6f paired_ns_per_64=%.6f "
+          "expand_ns_per_64=%.6f affine_relu_ns_per_64=%.6f reduce_ns_per_64=%.6f pack_ns_per_64=%.6f "
           "rmse=%.9g max_abs=%.9g dense_samples=%d dense_rmse=%.9g dense_max_abs=%.9g "
           "pair_max_abs_diff=%.9g monotonic_violations=%d negative_count=%d nan_count=%d "
-          "lane_oracle_mismatches=%d checksum=0x%08x\n",
-          cfg->scna_layout, result->width, result->lanes, cfg->warmup, result->iters,
+          "lane_oracle_mismatches=%d canonical_oracle_mismatches=%d paired_single_mismatches=%d "
+          "native_exp2_rmse=%.9g native_exp2_max_abs=%.9g native_qf16_exp2_rmse=%.9g "
+          "native_qf16_exp2_max_abs=%.9g rowsum_ones_probe=%.9g "
+          "reciprocal_max_relative_error=%.9g "
+          "reciprocal_nonfinite_count=%d reciprocal_zero_inf_pass=%d reciprocal_pass=%d checksum=0x%08x\n",
+          cfg->scna_layout, cfg->scna_lane8_variant, result->variant, result->width, result->lanes,
+          cfg->warmup, result->iters,
           (long long) result->elapsed_us, single_ns, (long long) result->pair_elapsed_us, paired_ns,
-          paired_ns * 0.5, result->rmse, result->max_abs_error, result->dense_samples, result->dense_rmse,
+          paired_ns * 0.5,
+          result->iters > 0 ? 1000.0 * result->expand_elapsed_us / result->iters : 0.0,
+          result->iters > 0 ? 1000.0 * result->affine_relu_elapsed_us / result->iters : 0.0,
+          result->iters > 0 ? 1000.0 * result->reduce_elapsed_us / result->iters : 0.0,
+          result->iters > 0 ? 1000.0 * result->pack_elapsed_us / result->iters : 0.0,
+          result->rmse, result->max_abs_error, result->dense_samples, result->dense_rmse,
           result->dense_max_abs_error, result->pair_max_abs_diff, result->monotonic_violations,
-          result->negative_count, result->nan_count, result->lane_oracle_mismatches, result->checksum_bits);
+          result->negative_count, result->nan_count, result->lane_oracle_mismatches,
+          result->canonical_oracle_mismatches, result->paired_single_mismatches,
+          result->native_exp2_rmse, result->native_exp2_max_abs_error, result->native_qf16_exp2_rmse,
+          result->native_qf16_exp2_max_abs_error, result->rowsum_ones_probe,
+          result->reciprocal_max_relative_error, result->reciprocal_nonfinite_count,
+          result->reciprocal_zero_inf_pass,
+          result->reciprocal_max_relative_error <= 0.01f && result->reciprocal_nonfinite_count == 0 &&
+              result->reciprocal_zero_inf_pass,
+          result->checksum_bits);
   {
     int fd = result_fd;
     (void) figure8_release_dsp_maps(msg, max_msg_size, &fd, 1);
@@ -1428,7 +1577,7 @@ end:
 
 static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   float  *q = NULL, *o = NULL;
-  float  *reference_output = NULL, *reference_scores = NULL;
+  float  *reference_output = NULL, *reference_scores = NULL, *primary_output = NULL;
   __fp16 *k = NULL, *v = NULL, *mask = NULL;
   void   *chan = NULL, *profile = NULL;
   int     q_fd = -1, k_fd = -1, v_fd = -1, o_fd = -1, mask_fd = -1, chan_fd = -1, profile_fd = -1;
@@ -1464,9 +1613,13 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     reference_scores = (float *) malloc((size_t) cfg->kv_len * sizeof(float));
     if (!reference_output || !reference_scores) goto end;
   }
+  if (cfg->compare_scna_layout) {
+    primary_output = (float *) malloc((size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim * sizeof(float));
+    if (!primary_output) goto end;
+  }
 
   figure8_fill_inputs(q, k, v, mask, cfg->qo_len, cfg->kv_len, kv_pad_len, cfg->n_heads, cfg->n_kv_heads,
-                      cfg->head_dim, cfg->mask_mode);
+                      cfg->head_dim, cfg->mask_mode, cfg->seed);
   memset(o, 0, q_size);
 
   int err = create_htp_message_channel(chan_fd, max_msg_size);
@@ -1487,10 +1640,12 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   int mode_flags = strcmp(cfg->mode, "lut-exp") == 0 ? LLM_NPU_MODE_LUT_EXP : 0;
   if (strcmp(cfg->mode, "scna-fp16") == 0) {
     mode_flags |= LLM_NPU_MODE_SCNA_FP16 | LLM_NPU_MODE_SCNA_D8;
+    mode_flags |= scna_lane8_variant_id(cfg->scna_lane8_variant) << 10;
     if (strcmp(cfg->scna_layout, "lane8") == 0) {
       mode_flags |= LLM_NPU_MODE_SCNA_LANE8;
     }
   }
+  if (cfg->numeric_debug) mode_flags |= LLM_NPU_MODE_NUMERIC_DEBUG;
   struct FlashAttnProfileParams params = {
     .attn = {
       .o          = { .fd = o_fd, .offset = 0, },
@@ -1512,11 +1667,12 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   };
 
   fprintf(stderr,
-          "FIG8_ATTENTION_CONFIG mode=%s layout=%s scna_width=%d mask_mode=%s qo_len=%d kv_len=%d "
+          "FIG8_ATTENTION_CONFIG mode=%s layout=%s variant=%s scna_width=%d seed=%s mask_mode=%s qo_len=%d kv_len=%d "
           "kv_pad_len=%d n_heads=%d n_kv_heads=%d head_dim=%d warmup=%d "
           "iters=%d q_size=%zu kv_size=%zu mask_size=%zu profile_size=%zu profile_max_records=%d "
           "profile_max_events=%d mode_flags=%d print_events=%d\n",
-          cfg->mode, cfg->scna_layout, cfg->scna_width, cfg->mask_mode, cfg->qo_len, cfg->kv_len, kv_pad_len,
+          cfg->mode, cfg->scna_layout, cfg->scna_lane8_variant, cfg->scna_width, cfg->seed_label,
+          cfg->mask_mode, cfg->qo_len, cfg->kv_len, kv_pad_len,
           cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, cfg->warmup, cfg->iters,
           q_size, kv_size, mask_size, profile_size, profile_max_records, profile_max_events, mode_flags,
           cfg->print_events);
@@ -1534,10 +1690,10 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
     int64_t elapsed = get_time_us() - t0;
 
     fprintf(stderr,
-            "FIG8_ATTENTION_HOST_TIMING mode=%s layout=%s scna_width=%d mask_mode=%s qo_len=%d kv_len=%d "
+            "FIG8_ATTENTION_HOST_TIMING mode=%s layout=%s scna_width=%d seed=%s mask_mode=%s qo_len=%d kv_len=%d "
             "n_heads=%d n_kv_heads=%d head_dim=%d phase=%s "
             "iteration=%d host_elapsed_us=%ld ret=%d\n",
-            cfg->mode, cfg->scna_layout, cfg->scna_width, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
+            cfg->mode, cfg->scna_layout, cfg->scna_width, cfg->seed_label, cfg->mask_mode, cfg->qo_len, cfg->kv_len, cfg->n_heads,
             cfg->n_kv_heads, cfg->head_dim, phase,
             is_warmup ? i : measured_idx, elapsed, req_ret);
     if (csv) {
@@ -1575,6 +1731,54 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
               rec->n_kv_heads, rec->head_dim, rec->kv_head, rec->worker, rec->profiled_total, rec->q_load,
               rec->k_load, rec->v_load, rec->qk_dot, rec->safe_sm, rec->scna_exp, rec->core_acc, rec->o_scale,
               rec->o_store);
+      if (cfg->numeric_debug) {
+        float score_min = 0.0f, score_max = 0.0f;
+        memcpy(&score_min, &rec->debug_score_min_bits, sizeof(score_min));
+        memcpy(&score_max, &rec->debug_score_max_bits, sizeof(score_max));
+        fprintf(stderr,
+                "FIG8_NUMERIC seed=%s mode=%s layout=%s kv_head=%d worker=%d qk0_bits=0x%x "
+                "rowmax0_bits=0x%x rowsum0_bits=0x%x l0_bits=0x%x core_o0_bits=0x%x "
+                "inv_l0_bits=0x%x scaled_o0_bits=0x%x p0_first_bits=0x%x p0_last_bits=0x%x "
+                "sum0_first_bits=0x%x sum0_last_bits=0x%x masked_p_nonzero=%d tail_p_nonzero=%d "
+                "scna_clamp_count=%d score_count=%d centered_score_min=%.9g centered_score_max=%.9g "
+                "final_m0_bits=0x%x final_l0_bits=0x%x final_core_o0_bits=0x%x "
+                "p_expected_sum_bits=0x%x p_max_abs_error_bits=0x%x\n",
+                cfg->seed_label, cfg->mode, cfg->scna_layout, rec->kv_head, rec->worker,
+                rec->debug_qk0_bits, rec->debug_rowmax0_bits, rec->debug_rowsum0_bits, rec->debug_l0_bits,
+                rec->debug_core_o0_bits, rec->debug_inv_l0_bits, rec->debug_scaled_o0_bits,
+                rec->debug_p0_first_bits, rec->debug_p0_last_bits, rec->debug_sum0_first_bits,
+                rec->debug_sum0_last_bits, rec->debug_masked_p_nonzero_count,
+                rec->debug_tail_p_nonzero_count, rec->debug_scna_clamp_count, rec->debug_score_count,
+                score_min, score_max, rec->debug_final_m0_bits, rec->debug_final_l0_bits,
+                rec->debug_final_core_o0_bits, rec->debug_p_expected_sum_bits,
+                rec->debug_p_max_abs_error_bits);
+        for (int block = 0; block < rec->debug_block_count && block < 8; ++block) {
+          fprintf(stderr,
+                  "FIG8_NUMERIC_BLOCK seed=%s mode=%s layout=%s kv_head=%d block=%d "
+                  "m0_bits=0x%x rowsum0_bits=0x%x l0_bits=0x%x p_scalar_sum_bits=0x%x "
+                  "reduction_min_bits=0x%x reduction_max_bits=0x%x\n",
+                  cfg->seed_label, cfg->mode, cfg->scna_layout, rec->kv_head, block,
+                  rec->debug_block_m0_bits[block], rec->debug_block_rowsum0_bits[block],
+                  rec->debug_block_l0_bits[block], rec->debug_block_p_scalar_sum_bits[block],
+                  rec->debug_block_reduction_min_bits[block], rec->debug_block_reduction_max_bits[block]);
+        }
+        fprintf(stderr, "FIG8_NUMERIC_QK8 seed=%s mode=%s layout=%s kv_head=%d bits=", cfg->seed_label,
+                cfg->mode, cfg->scna_layout, rec->kv_head);
+        for (int lane = 0; lane < 8; ++lane) {
+          fprintf(stderr, "%s0x%x", lane == 0 ? "" : ",", rec->debug_qk0_lane_bits[lane]);
+        }
+        fprintf(stderr, "\n");
+        fprintf(stderr, "FIG8_NUMERIC_P8 seed=%s mode=%s layout=%s kv_head=%d centered_bits=", cfg->seed_label,
+                cfg->mode, cfg->scna_layout, rec->kv_head);
+        for (int lane = 0; lane < 8; ++lane) {
+          fprintf(stderr, "%s0x%x", lane == 0 ? "" : ",", rec->debug_centered0_lane_bits[lane]);
+        }
+        fprintf(stderr, " p_bits=");
+        for (int lane = 0; lane < 8; ++lane) {
+          fprintf(stderr, "%s0x%x", lane == 0 ? "" : ",", rec->debug_p0_lane_bits[lane]);
+        }
+        fprintf(stderr, "\n");
+      }
     }
 
     int event_count = profile_hdr->event_count;
@@ -1601,9 +1805,30 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
       }
     }
     fprintf(stderr,
-            "FIG8_ATTENTION_CHECKSUM mode=%s layout=%s scna_width=%d phase=%s iteration=%d checksum=0x%016llx\n",
-            cfg->mode, cfg->scna_layout, cfg->scna_width, phase, is_warmup ? i : measured_idx,
+            "FIG8_ATTENTION_CHECKSUM mode=%s layout=%s scna_width=%d seed=%s phase=%s iteration=%d checksum=0x%016llx\n",
+            cfg->mode, cfg->scna_layout, cfg->scna_width, cfg->seed_label, phase, is_warmup ? i : measured_idx,
             (unsigned long long) figure8_checksum(o, (size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim));
+  }
+
+  const size_t output_elements = (size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim;
+  if (cfg->compare_scna_layout) {
+    memcpy(primary_output, o, output_elements * sizeof(float));
+    const int primary_is_lane8 = strcmp(cfg->scna_layout, "lane8") == 0;
+    if (primary_is_lane8) {
+      params.attn.mode_flags &= ~LLM_NPU_MODE_SCNA_LANE8;
+    } else {
+      params.attn.mode_flags |= LLM_NPU_MODE_SCNA_LANE8;
+    }
+    memset(o, 0, q_size);
+    memset(profile, 0, profile_size);
+    const int alternate_ret = figure8_send_attn_request(msg, max_msg_size, &params);
+    fprintf(stderr,
+            "FIG8_ATTENTION_LAYOUT_REPLAY seed=%s primary_layout=%s alternate_layout=%s ret=%d\n",
+            cfg->seed_label, cfg->scna_layout, primary_is_lane8 ? "serial" : "lane8", alternate_ret);
+    if (alternate_ret) goto end;
+    const float *serial_output = primary_is_lane8 ? o : primary_output;
+    const float *lane8_output = primary_is_lane8 ? primary_output : o;
+    if (figure8_report_layout_comparison(cfg, serial_output, lane8_output, output_elements)) goto end;
   }
 
   if (cfg->compare_reference) {
@@ -1617,7 +1842,8 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
             "FIG8_ATTENTION_REFERENCE_TIMING reference_mode=host-fp32 qo_len=%d kv_len=%d n_heads=%d "
             "n_kv_heads=%d head_dim=%d elapsed_us=%ld ret=0\n",
             cfg->qo_len, cfg->kv_len, cfg->n_heads, cfg->n_kv_heads, cfg->head_dim, get_time_us() - t0);
-    figure8_report_comparison(cfg, o, reference_output, (size_t) cfg->qo_len * cfg->n_heads * cfg->head_dim);
+    figure8_report_comparison(cfg, cfg->compare_scna_layout ? primary_output : o, reference_output,
+                              output_elements);
   }
 
   {
@@ -1628,6 +1854,7 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
   ret = 0;
 
 end:
+  free(primary_output);
   free(reference_scores);
   free(reference_output);
   if (csv) {

@@ -3077,14 +3077,14 @@ int execute_op_simple(struct OpComputeRequest *req) {
         auto params = reinterpret_cast<ScnaExp2BenchParams *>(req->payload);
         if (params->width != 8 ||
             (params->layout != SCNA_LAYOUT_SERIAL && params->layout != SCNA_LAYOUT_LANE8) ||
-            params->warmup < 0 || params->iters <= 0) {
+            params->variant < 0 || params->variant > 3 || params->warmup < 0 || params->iters <= 0) {
           ret = -1;
           break;
         }
         add_buffer(out_bufs, params->output, sizeof(ScnaExp2BenchResult));
         validate_in_bufs();
         ret = scna_exp2_bench_run((ScnaExp2BenchResult *) OUT_PTR(0), params->width,
-                                  params->layout, params->warmup, params->iters);
+                                  params->layout, params->variant, params->warmup, params->iters);
         validate_out_bufs();
       }
       break;

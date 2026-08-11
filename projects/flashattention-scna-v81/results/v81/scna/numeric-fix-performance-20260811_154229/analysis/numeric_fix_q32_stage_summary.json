@@ -1,0 +1,182 @@
+[
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "q_load",
+    "samples_per_revision": 90,
+    "pre_median_us": 15.0,
+    "post_median_us": 16.0,
+    "post_minus_pre_us": 1.0,
+    "post_minus_pre_pct": 6.666666666666665
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "k_load",
+    "samples_per_revision": 90,
+    "pre_median_us": 346.5,
+    "post_median_us": 412.0,
+    "post_minus_pre_us": 65.5,
+    "post_minus_pre_pct": 18.90331890331891
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "qk_dot",
+    "samples_per_revision": 90,
+    "pre_median_us": 26.0,
+    "post_median_us": 26.0,
+    "post_minus_pre_us": 0.0,
+    "post_minus_pre_pct": 0.0
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "safe_sm",
+    "samples_per_revision": 90,
+    "pre_median_us": 1264.0,
+    "post_median_us": 2254.0,
+    "post_minus_pre_us": 990.0,
+    "post_minus_pre_pct": 78.32278481012658
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "scna_exp",
+    "samples_per_revision": 90,
+    "pre_median_us": 0.0,
+    "post_median_us": 0.0,
+    "post_minus_pre_us": 0.0,
+    "post_minus_pre_pct": null
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "v_load",
+    "samples_per_revision": 90,
+    "pre_median_us": 335.0,
+    "post_median_us": 337.0,
+    "post_minus_pre_us": 2.0,
+    "post_minus_pre_pct": 0.5970149253731405
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "core_acc",
+    "samples_per_revision": 90,
+    "pre_median_us": 21.0,
+    "post_median_us": 23.0,
+    "post_minus_pre_us": 2.0,
+    "post_minus_pre_pct": 9.523809523809534
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "o_scale",
+    "samples_per_revision": 90,
+    "pre_median_us": 3.0,
+    "post_median_us": 3.0,
+    "post_minus_pre_us": 0.0,
+    "post_minus_pre_pct": 0.0
+  },
+  {
+    "mode": "baseline",
+    "qo_len": 32,
+    "stage": "o_store",
+    "samples_per_revision": 90,
+    "pre_median_us": 22.0,
+    "post_median_us": 21.0,
+    "post_minus_pre_us": -1.0,
+    "post_minus_pre_pct": -4.545454545454541
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "q_load",
+    "samples_per_revision": 90,
+    "pre_median_us": 15.0,
+    "post_median_us": 16.0,
+    "post_minus_pre_us": 1.0,
+    "post_minus_pre_pct": 6.666666666666665
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "k_load",
+    "samples_per_revision": 90,
+    "pre_median_us": 281.0,
+    "post_median_us": 380.0,
+    "post_minus_pre_us": 99.0,
+    "post_minus_pre_pct": 35.23131672597866
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "qk_dot",
+    "samples_per_revision": 90,
+    "pre_median_us": 26.0,
+    "post_median_us": 26.0,
+    "post_minus_pre_us": 0.0,
+    "post_minus_pre_pct": 0.0
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "safe_sm",
+    "samples_per_revision": 90,
+    "pre_median_us": 1620.5,
+    "post_median_us": 1655.0,
+    "post_minus_pre_us": 34.5,
+    "post_minus_pre_pct": 2.128972539339702
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "scna_exp",
+    "samples_per_revision": 90,
+    "pre_median_us": 1247.0,
+    "post_median_us": 1281.0,
+    "post_minus_pre_us": 34.0,
+    "post_minus_pre_pct": 2.7265437048917374
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "v_load",
+    "samples_per_revision": 90,
+    "pre_median_us": 339.0,
+    "post_median_us": 334.0,
+    "post_minus_pre_us": -5.0,
+    "post_minus_pre_pct": -1.4749262536873142
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "core_acc",
+    "samples_per_revision": 90,
+    "pre_median_us": 22.0,
+    "post_median_us": 24.0,
+    "post_minus_pre_us": 2.0,
+    "post_minus_pre_pct": 9.090909090909083
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "o_scale",
+    "samples_per_revision": 90,
+    "pre_median_us": 3.0,
+    "post_median_us": 4.0,
+    "post_minus_pre_us": 1.0,
+    "post_minus_pre_pct": 33.33333333333333
+  },
+  {
+    "mode": "scna-d8",
+    "qo_len": 32,
+    "stage": "o_store",
+    "samples_per_revision": 90,
+    "pre_median_us": 22.0,
+    "post_median_us": 21.0,
+    "post_minus_pre_us": -1.0,
+    "post_minus_pre_pct": -4.545454545454541
+  }
+]

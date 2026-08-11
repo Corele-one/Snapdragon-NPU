@@ -8,6 +8,7 @@
 typedef struct {
   int width;
   int layout;
+  int variant;
 } scna_exp2_hvx_params_t;
 
 static inline bool scna_exp2_enabled(int mode_flags) {
@@ -27,11 +28,12 @@ static inline int scna_exp2_width_from_mode(int mode_flags) {
 static inline void scna_exp2_prepare_hvx_params(scna_exp2_hvx_params_t *params, int mode_flags) {
   params->width = scna_exp2_width_from_mode(mode_flags);
   params->layout = scna_exp2_layout_from_mode(mode_flags);
+  params->variant = (mode_flags >> 10) & 3;
 }
 
 HVX_Vector hvx_scna_exp2_vhf(HVX_Vector input, const scna_exp2_hvx_params_t *params);
 void hvx_scna_exp2_pair_vhf(HVX_Vector input0, HVX_Vector input1,
                             const scna_exp2_hvx_params_t *params,
                             HVX_Vector *output0, HVX_Vector *output1);
-int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout,
+int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout, int variant,
                         int warmup, int iters);

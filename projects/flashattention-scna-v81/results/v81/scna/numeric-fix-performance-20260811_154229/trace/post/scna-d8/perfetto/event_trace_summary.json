@@ -1,0 +1,40 @@
+{
+  "by_qo_len": {
+    "32": {
+      "component_event_counts": {
+        "core_acc": 6,
+        "k_load": 6,
+        "o_scale": 6,
+        "o_store": 6,
+        "q_load": 6,
+        "qk_dot": 6,
+        "safe_sm": 6,
+        "v_load": 6
+      },
+      "component_event_duration_us": {
+        "core_acc": 78,
+        "k_load": 992,
+        "o_scale": 13,
+        "o_store": 66,
+        "q_load": 51,
+        "qk_dot": 81,
+        "safe_sm": 4793,
+        "v_load": 883
+      },
+      "event_count_max": 16,
+      "event_count_min": 16,
+      "event_count_rows": 3,
+      "event_overflow_total": 0,
+      "event_rows": 48,
+      "measured_iterations": 3
+    }
+  },
+  "hardware_trace": false,
+  "lut_exp_values": [
+    0
+  ],
+  "modes": [
+    "scna-fp16"
+  ],
+  "timeline_source": "FIG8_ATTENTION_EVENT DSP qtimer start/end records"
+}

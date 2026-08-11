@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "dsp/dma_utils.h"
 #include "dsp/hmx_mgr.h"
@@ -274,7 +275,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
   const bool enable_vgather_exp = (mode_flags & LLM_NPU_MODE_LUT_EXP) != 0;  // use table lookup (vgather) to compute exp
   const bool enable_scna_exp    = scna_exp2_enabled(mode_flags);
-  const bool use_fp32_exp       = false;  // compute FP32 exp
+  const bool numeric_debug      = (mode_flags & LLM_NPU_MODE_NUMERIC_DEBUG) != 0;
+  const bool use_fp32_exp       = false;
   scna_exp2_hvx_params_t scna_hvx_params;
   scna_exp2_prepare_hvx_params(&scna_hvx_params, mode_flags);
   assert(!enable_scna_exp || scna_hvx_params.width == 8);
@@ -372,6 +374,38 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   TIMER_DEFINE(o_scale);
   TIMER_DEFINE(o_store);
   TIMER_DEFINE(scna_exp);
+  int debug_qk0_bits = 0;
+  int debug_rowmax0_bits = 0;
+  int debug_rowsum0_bits = 0;
+  int debug_l0_bits = 0;
+  int debug_core_o0_bits = 0;
+  int debug_inv_l0_bits = 0;
+  int debug_scaled_o0_bits = 0;
+  int debug_p0_first_bits = 0;
+  int debug_p0_last_bits = 0;
+  int debug_sum0_first_bits = 0;
+  int debug_sum0_last_bits = 0;
+  int debug_masked_p_nonzero_count = 0;
+  int debug_tail_p_nonzero_count = 0;
+  int debug_scna_clamp_count = 0;
+  int debug_score_count = 0;
+  float debug_score_min = INFINITY;
+  float debug_score_max = -INFINITY;
+  int debug_final_m0_bits = 0;
+  int debug_final_l0_bits = 0;
+  int debug_final_core_o0_bits = 0;
+  int debug_block_count = 0;
+  int debug_block_m0_bits[8] = {0};
+  int debug_block_rowsum0_bits[8] = {0};
+  int debug_block_l0_bits[8] = {0};
+  int debug_block_p_scalar_sum_bits[8] = {0};
+  int debug_block_reduction_min_bits[8] = {0};
+  int debug_block_reduction_max_bits[8] = {0};
+  int debug_qk0_lane_bits[8] = {0};
+  float debug_p_expected_sum = 0.0f;
+  float debug_p_max_abs_error = 0.0f;
+  int debug_centered0_lane_bits[8] = {0};
+  int debug_p0_lane_bits[8] = {0};
 
   /////////////// CORE LOGIC BEGIN
 
@@ -620,15 +654,30 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, v_s_row1);
             }
 
+            if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && r == 0) {
+              _Alignas(VLEN) __fp16 debug_qk[64];
+              vmem(debug_qk) = row_buffer0[0];
+              debug_qk0_bits = fp16_to_bits(&debug_qk[0]);
+              for (int lane = 0; lane < 8; ++lane) {
+                debug_qk0_lane_bits[lane] = fp16_to_bits(&debug_qk[lane]);
+              }
+            }
+
             // clang-format off
             // reduction phase 2: intra-vector
             #pragma unroll
             for (int s = 64; s >= 2; s >>= 1) {
-              v_s_rowmax0 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax0, Q6_V_vlalign_VVR(v_s_rowmax0, v_neg_inf, s));
-              v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, Q6_V_vlalign_VVR(v_s_rowmax1, v_neg_inf, s));
+              v_s_rowmax0 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax0, Q6_V_vror_VR(v_s_rowmax0, s));
+              v_s_rowmax1 = Q6_Vhf_vmax_VhfVhf(v_s_rowmax1, Q6_V_vror_VR(v_s_rowmax1, s));
             }
             // clang-format on
             // now, v_s_rowmax0[63] = rowmax(S)_0, v_s_rowmax1[63] = rowmax(S)_1
+
+            if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && r == 0) {
+              _Alignas(VLEN) __fp16 debug_rowmax[64];
+              vmem(debug_rowmax) = v_s_rowmax0;
+              debug_rowmax0_bits = fp16_to_bits(&debug_rowmax[63]);
+            }
 
             // shift rowmax(S_i^j) into v_s_rowmax_local
             HVX_Vector v_s_rowmax_pack2 =
@@ -654,16 +703,17 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             // write permuted rows of P tile into VTCM
             // compute rowsum(P)
             const HVX_Vector v_zero      = Q6_V_vzero();
-            HVX_Vector       v_p_rowsum0 = v_zero;  // qfloat
-            HVX_Vector       v_p_rowsum1 = v_zero;  // qfloat
+            HVX_Vector       v_p_rowsum0 = v_zero;  // qf32
+            HVX_Vector       v_p_rowsum1 = v_zero;  // qf32
+            float debug_p0_scalar_sum = 0.0f;
 
             if (enable_vgather_exp) {
               for (int c = 0; c < n_cols; c += 64) {
-                HVX_Vector v_s_minus_m0 = Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0);
-                HVX_Vector v_s_minus_m1 = Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1);
-
-                HVX_Vector v_s_minus_m0_hf = Q6_Vhf_equals_Vqf16(v_s_minus_m0);
-                HVX_Vector v_s_minus_m1_hf = Q6_Vhf_equals_Vqf16(v_s_minus_m1);
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
                 HVX_Vector v_gather_input0 = Q6_Vh_vasl_VhR(v_s_minus_m0_hf, 1);
                 HVX_Vector v_gather_input1 = Q6_Vh_vasl_VhR(v_s_minus_m1_hf, 1);
 
@@ -685,10 +735,11 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               HVX_Vector v_p_row0_hf, v_p_row1_hf;
 
               if (enable_scna_exp) {
-                HVX_Vector v_s_minus_m0 = Q6_Vhf_equals_Vqf16(
-                  Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0));
-                HVX_Vector v_s_minus_m1 = Q6_Vhf_equals_Vqf16(
-                  Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1));
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0 =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1 =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
                 const HVX_VectorPred q_valid0 = Q6_Q_vcmp_gt_VhfVhf(row_buffer0[c / 64], v_neg_inf);
                 const HVX_VectorPred q_valid1 = Q6_Q_vcmp_gt_VhfVhf(row_buffer1[c / 64], v_neg_inf);
                 const HVX_Vector v_zero_scna = Q6_V_vzero();
@@ -705,12 +756,15 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                 v_p_row0_hf = row_buffer0[c / 64];
                 v_p_row1_hf = row_buffer1[c / 64];
               } else {
-                HVX_Vector v_s_minus_m0 = Q6_Vqf16_vsub_VhfVhf(row_buffer0[c / 64], v_dup_m0);  // qf16
-                HVX_Vector v_s_minus_m1 = Q6_Vqf16_vsub_VhfVhf(row_buffer1[c / 64], v_dup_m1);  // qf16
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1_hf =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
 
                 if (use_fp32_exp) {
-                  HVX_VectorPair vp_s_minus_m0_sf = hvx_my_vqf16_to_wsf(v_s_minus_m0);
-                  HVX_VectorPair vp_s_minus_m1_sf = hvx_my_vqf16_to_wsf(v_s_minus_m1);
+                  HVX_VectorPair vp_s_minus_m0_sf = hvx_my_vhf_to_wsf(v_s_minus_m0_hf);
+                  HVX_VectorPair vp_s_minus_m1_sf = hvx_my_vhf_to_wsf(v_s_minus_m1_hf);
 
                   HVX_Vector v_p_row00_sf = hvx_my_exp2_vsf(Q6_V_lo_W(vp_s_minus_m0_sf));
                   HVX_Vector v_p_row01_sf = hvx_my_exp2_vsf(Q6_V_hi_W(vp_s_minus_m0_sf));
@@ -720,8 +774,50 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                   v_p_row0_hf = hvx_my_wsf_to_vhf(v_p_row01_sf, v_p_row00_sf);
                   v_p_row1_hf = hvx_my_wsf_to_vhf(v_p_row11_sf, v_p_row10_sf);
                 } else {
-                  v_p_row0_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m0);
-                  v_p_row1_hf = hvx_my_exp2_vhf_vqf16(v_s_minus_m1);
+                  v_p_row0_hf = hvx_my_exp2_xqf_vhf(v_s_minus_m0_hf);
+                  v_p_row1_hf = hvx_my_exp2_xqf_vhf(v_s_minus_m1_hf);
+                }
+              }
+
+              if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc + n_cols >= kv_len && r == 0 &&
+                  c + 64 >= n_cols) {
+                _Alignas(VLEN) __fp16 debug_p[64];
+                vmem(debug_p) = v_p_row0_hf;
+                debug_p0_first_bits = fp16_to_bits(&debug_p[0]);
+                debug_p0_last_bits = fp16_to_bits(&debug_p[63]);
+              }
+              if (numeric_debug && kv_head_idx == 0 && ir == 0 && r == 0) {
+                _Alignas(VLEN) __fp16 debug_p[64], debug_score[64], debug_m[64];
+                vmem(debug_p) = v_p_row0_hf;
+                vmem(debug_score) = row_buffer0[c / 64];
+                vmem(debug_m) = v_dup_m0;
+                for (int lane = 0; lane < 64; ++lane) {
+                  const int k_index = jc + c + lane;
+                  const float score = (float) debug_score[lane];
+                  const float p_value = (float) debug_p[lane];
+                  debug_p0_scalar_sum += p_value;
+                  if (k_index >= kv_len) {
+                    if (p_value != 0.0f) ++debug_tail_p_nonzero_count;
+                    continue;
+                  }
+                  if (score <= -65000.0f) {
+                    if (p_value != 0.0f) ++debug_masked_p_nonzero_count;
+                    continue;
+                  }
+                  const float centered_score = score - (float) debug_m[lane];
+                  const float expected_p = exp2f(centered_score);
+                  const float p_abs_error = fabsf(p_value - expected_p);
+                  debug_p_expected_sum += expected_p;
+                  if (p_abs_error > debug_p_max_abs_error) debug_p_max_abs_error = p_abs_error;
+                  if (centered_score < debug_score_min) debug_score_min = centered_score;
+                  if (centered_score > debug_score_max) debug_score_max = centered_score;
+                  ++debug_score_count;
+                  if (enable_scna_exp && centered_score <= SCNA_MIN_INPUT) ++debug_scna_clamp_count;
+                  if (jc == 0 && c == 0 && lane < 8) {
+                    __fp16 centered_hf = (__fp16) centered_score;
+                    debug_centered0_lane_bits[lane] = fp16_to_bits(&centered_hf);
+                    debug_p0_lane_bits[lane] = fp16_to_bits(&debug_p[lane]);
+                  }
                 }
               }
 
@@ -739,10 +835,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
               // v_p_rowsum0 = Q6_Vqf16_vadd_Vqf16Vhf(v_p_rowsum0, v_p_row0_hf);
               // v_p_rowsum1 = Q6_Vqf16_vadd_Vqf16Vhf(v_p_rowsum1, v_p_row1_hf);
 
-              // reduce sum using qf32 precision
               HVX_VectorPair vp_p_row0 = hvx_my_vhf_to_wqf32(v_p_row0_hf);
               HVX_VectorPair vp_p_row1 = hvx_my_vhf_to_wqf32(v_p_row1_hf);
-
               v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(
                 v_p_rowsum0, Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(vp_p_row0), Q6_V_hi_W(vp_p_row0)));
               v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(
@@ -769,10 +863,38 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
 #pragma unroll
             for (int s = 64; s >= 4; s >>= 1) {
-              v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vlalign_VVR(v_p_rowsum0, v_zero, s));
-              v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vlalign_VVR(v_p_rowsum1, v_zero, s));
+              v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum0, Q6_V_vror_VR(v_p_rowsum0, s));
+              v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(v_p_rowsum1, Q6_V_vror_VR(v_p_rowsum1, s));
+            }
+            if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && r == 0) {
+              _Alignas(VLEN) uint32_t debug_sum[32];
+              vmem(debug_sum) = Q6_Vsf_equals_Vqf32(v_p_rowsum0);
+              debug_sum0_first_bits = debug_sum[0];
+              debug_sum0_last_bits = debug_sum[31];
+            }
+            if (numeric_debug && kv_head_idx == 0 && ir == 0 && r == 0) {
+              const int block_index = (int) (jc / blk_sz_c);
+              if (block_index >= 0 && block_index < 8) {
+                _Alignas(VLEN) float debug_reduction[32];
+                vmem(debug_reduction) = Q6_Vsf_equals_Vqf32(v_p_rowsum0);
+                float reduction_min = debug_reduction[0];
+                float reduction_max = debug_reduction[0];
+                for (int lane = 1; lane < 32; ++lane) {
+                  if (debug_reduction[lane] < reduction_min) reduction_min = debug_reduction[lane];
+                  if (debug_reduction[lane] > reduction_max) reduction_max = debug_reduction[lane];
+                }
+                memcpy(&debug_block_p_scalar_sum_bits[block_index], &debug_p0_scalar_sum,
+                       sizeof(debug_p0_scalar_sum));
+                memcpy(&debug_block_reduction_min_bits[block_index], &reduction_min, sizeof(reduction_min));
+                memcpy(&debug_block_reduction_max_bits[block_index], &reduction_max, sizeof(reduction_max));
+              }
             }
             HVX_Vector v_p_rowsum_pack2 = Q6_Vhf_equals_Wqf32(Q6_W_vcombine_VV(v_p_rowsum1, v_p_rowsum0));
+            /* The qf32 conversion/reduction represents each FP16 probability at
+             * half scale on v79.  Restore the FP16 sum consumed by online
+             * softmax; numeric-debug independently audits it against a scalar
+             * sum of the exact P vector. */
+            v_p_rowsum_pack2 = Q6_Vhf_vadd_VhfVhf(v_p_rowsum_pack2, v_p_rowsum_pack2);
 
             // shift rowsum(P) into v_p_rowsum_local
             // HVX_Vector v_p_rowsum_pack2     = Q6_V_hi_W(Q6_W_vshuff_VVR(v_p_rowsum1, v_p_rowsum0, -2));
@@ -864,12 +986,12 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         for (int i = 0; i < n_row_vec_cnt; ++i) {  // i => r_vec_idx?
           HVX_Vector v_m_prev = mvec_m[i];
           HVX_Vector v_m_curr = Q6_Vhf_vmax_VhfVhf(v_m_prev, mvec_s_rowmax[i]);
-          HVX_Vector v_m_diff = Q6_Vqf16_vsub_VhfVhf(v_m_prev, v_m_curr);  // qf16
+          const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+          HVX_Vector v_m_diff_hf = Q6_Vhf_vadd_VhfVhf(v_m_prev, Q6_V_vxor_VV(v_m_curr, v_sign));
 
           HVX_Vector v_exp_m_diff_hf;
           if (enable_scna_exp) {
             const int64_t scna_online_t0 = HAP_perf_get_qtimer_count();
-            HVX_Vector v_m_diff_hf = Q6_Vhf_equals_Vqf16(v_m_diff);
             __fp16 scna_min_hf = (__fp16) SCNA_MIN_INPUT;
             const HVX_Vector v_scna_min = Q6_Vh_vsplat_R(fp16_to_bits(&scna_min_hf));
             const HVX_Vector v_scna_neg_inf = Q6_Vh_vsplat_R(0xfc00);
@@ -882,13 +1004,35 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                                          n_kv_heads, head_dim, kv_head_idx, worker_index, ir + i * 64, jc,
                                          scna_online_t0, scna_online_t1, scna_hvx_params.layout,
                                          scna_hvx_params.width);
+          } else if (use_fp32_exp) {
+            HVX_VectorPair vp_m_diff_sf = hvx_my_vhf_to_wsf(v_m_diff_hf);
+            HVX_Vector v_exp_lo_sf = hvx_my_exp2_vsf(Q6_V_lo_W(vp_m_diff_sf));
+            HVX_Vector v_exp_hi_sf = hvx_my_exp2_vsf(Q6_V_hi_W(vp_m_diff_sf));
+            v_exp_m_diff_hf = hvx_my_wsf_to_vhf(v_exp_hi_sf, v_exp_lo_sf);
           } else {
-            v_exp_m_diff_hf = hvx_my_exp2_vhf_vqf16(v_m_diff);    // fp16
+            v_exp_m_diff_hf = hvx_my_exp2_xqf_vhf(v_m_diff_hf);    // fp16
           }
 
           // l_i^j = exp(m_i^{j-1} - m_i^j) * l_i^{j-1} + rowsum(P_i^j)
-          HVX_Vector v_l_curr = Q6_Vqf16_vmpy_Vqf16Vhf(mvec_l[i], v_exp_m_diff_hf);  // qf16
-          v_l_curr            = Q6_Vqf16_vadd_Vqf16Vhf(v_l_curr, mvec_p_rowsum[i]);
+          HVX_Vector v_l_curr = Q6_Vhf_vmpyacc_VhfVhfVhf(mvec_p_rowsum[i], mvec_l[i], v_exp_m_diff_hf);
+
+          if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0 && i == 0) {
+            _Alignas(VLEN) __fp16 debug_rowsum[64], debug_l[64];
+            vmem(debug_rowsum) = mvec_p_rowsum[i];
+            vmem(debug_l) = v_l_curr;
+            debug_rowsum0_bits = fp16_to_bits(&debug_rowsum[0]);
+            debug_l0_bits = fp16_to_bits(&debug_l[0]);
+          }
+          if (numeric_debug && kv_head_idx == 0 && ir == 0 && i == 0 && debug_block_count < 8) {
+            _Alignas(VLEN) __fp16 debug_m[64], debug_rowsum[64], debug_l[64];
+            vmem(debug_m) = v_m_curr;
+            vmem(debug_rowsum) = mvec_p_rowsum[i];
+            vmem(debug_l) = v_l_curr;
+            debug_block_m0_bits[debug_block_count] = fp16_to_bits(&debug_m[0]);
+            debug_block_rowsum0_bits[debug_block_count] = fp16_to_bits(&debug_rowsum[0]);
+            debug_block_l0_bits[debug_block_count] = fp16_to_bits(&debug_l[0]);
+            ++debug_block_count;
+          }
 
           mvec_m[i] = v_m_curr;
           mvec_l[i] = v_l_curr;
@@ -944,6 +1088,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         hmx_unit_release();
 
         swap_ptr(&o_tile_curr, &o_tile_prev);
+        if (numeric_debug && kv_head_idx == 0 && ir == 0 && jc == 0) {
+          debug_core_o0_bits = fp16_to_bits(&o_tile_prev[0]);
+        }
       }
       int64_t core_acc_hmx_stage_t1 = HAP_perf_get_qtimer_count();
       llm_trace_profile_record_flash_event(llm_profile, trace_id, mode_flags, op_index,
@@ -955,6 +1102,14 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
     }
 
     // generate final output: scale O_i = diag(l_i^{-1}) O_i
+    if (numeric_debug && kv_head_idx == 0 && ir == 0) {
+      _Alignas(VLEN) __fp16 debug_final_m[64], debug_final_l[64];
+      vmem(debug_final_m) = mvec_m[0];
+      vmem(debug_final_l) = mvec_l[0];
+      debug_final_m0_bits = fp16_to_bits(&debug_final_m[0]);
+      debug_final_l0_bits = fp16_to_bits(&debug_final_l[0]);
+      debug_final_core_o0_bits = fp16_to_bits(&o_tile_prev[0]);
+    }
     TIMER_START(o_scale);
     int64_t o_scale_stage_t0 = HAP_perf_get_qtimer_count();
     {
@@ -964,7 +1119,12 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
       HVX_Vector v_content;
       for (int i = 0; i < n_row_tiles; ++i) {
         if ((i % 2) == 0) {
-          v_content = hvx_my_inv_vhf(Q6_Vhf_equals_Vqf16(mvec_l[i / 2]));
+          v_content = hvx_my_inv_vhf(mvec_l[i / 2]);
+          if (numeric_debug && kv_head_idx == 0 && ir == 0 && i == 0) {
+            _Alignas(VLEN) __fp16 debug_inv[64];
+            vmem(debug_inv) = v_content;
+            debug_inv_l0_bits = fp16_to_bits(&debug_inv[0]);
+          }
         } else {
           v_content = Q6_V_vror_VR(v_content, 64);
         }
@@ -989,6 +1149,9 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
         }
       }
       hmx_unit_release();
+      if (numeric_debug && kv_head_idx == 0 && ir == 0) {
+        debug_scaled_o0_bits = fp16_to_bits(&o_tile_curr[0]);
+      }
     }
     int64_t o_scale_stage_t1 = HAP_perf_get_qtimer_count();
     llm_trace_profile_record_flash_event(llm_profile, trace_id, mode_flags, op_index, LLM_TRACE_STAGE_FLASH_O_SCALE,
@@ -1093,6 +1256,14 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
       int idx = __sync_fetch_and_add(&(profile->record_count), 1);
       if (idx >= 0 && idx < profile->max_records) {
         struct Figure8ProfileRecord *record = (struct Figure8ProfileRecord *) (profile + 1);
+        int32_t debug_score_min_bits = 0, debug_score_max_bits = 0;
+        int32_t debug_p_expected_sum_bits = 0, debug_p_max_abs_error_bits = 0;
+        if (debug_score_count > 0) {
+          memcpy(&debug_score_min_bits, &debug_score_min, sizeof(debug_score_min_bits));
+          memcpy(&debug_score_max_bits, &debug_score_max, sizeof(debug_score_max_bits));
+        }
+        memcpy(&debug_p_expected_sum_bits, &debug_p_expected_sum, sizeof(debug_p_expected_sum_bits));
+        memcpy(&debug_p_max_abs_error_bits, &debug_p_max_abs_error, sizeof(debug_p_max_abs_error_bits));
         record[idx]                         = (struct Figure8ProfileRecord) {
           .lut_exp        = enable_vgather_exp ? 1 : 0,
           .qo_len         = qo_len,
@@ -1114,7 +1285,43 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
           .scna_exp       = scna_exp_us,
           .scna_layout    = enable_scna_exp ? scna_hvx_params.layout : SCNA_LAYOUT_SERIAL,
           .scna_width     = enable_scna_exp ? scna_hvx_params.width : 0,
+          .debug_qk0_bits = debug_qk0_bits,
+          .debug_rowmax0_bits = debug_rowmax0_bits,
+          .debug_rowsum0_bits = debug_rowsum0_bits,
+          .debug_l0_bits = debug_l0_bits,
+          .debug_core_o0_bits = debug_core_o0_bits,
+          .debug_inv_l0_bits = debug_inv_l0_bits,
+          .debug_scaled_o0_bits = debug_scaled_o0_bits,
+          .debug_p0_first_bits = debug_p0_first_bits,
+          .debug_p0_last_bits = debug_p0_last_bits,
+          .debug_sum0_first_bits = debug_sum0_first_bits,
+          .debug_sum0_last_bits = debug_sum0_last_bits,
+          .debug_masked_p_nonzero_count = debug_masked_p_nonzero_count,
+          .debug_tail_p_nonzero_count = debug_tail_p_nonzero_count,
+          .debug_scna_clamp_count = debug_scna_clamp_count,
+          .debug_score_count = debug_score_count,
+          .debug_score_min_bits = debug_score_min_bits,
+          .debug_score_max_bits = debug_score_max_bits,
+          .debug_final_m0_bits = debug_final_m0_bits,
+          .debug_final_l0_bits = debug_final_l0_bits,
+          .debug_final_core_o0_bits = debug_final_core_o0_bits,
+          .debug_block_count = debug_block_count,
+          .debug_p_expected_sum_bits = debug_p_expected_sum_bits,
+          .debug_p_max_abs_error_bits = debug_p_max_abs_error_bits,
         };
+        for (int block = 0; block < debug_block_count && block < 8; ++block) {
+          record[idx].debug_block_m0_bits[block] = debug_block_m0_bits[block];
+          record[idx].debug_block_rowsum0_bits[block] = debug_block_rowsum0_bits[block];
+          record[idx].debug_block_l0_bits[block] = debug_block_l0_bits[block];
+          record[idx].debug_block_p_scalar_sum_bits[block] = debug_block_p_scalar_sum_bits[block];
+          record[idx].debug_block_reduction_min_bits[block] = debug_block_reduction_min_bits[block];
+          record[idx].debug_block_reduction_max_bits[block] = debug_block_reduction_max_bits[block];
+        }
+        for (int lane = 0; lane < 8; ++lane) {
+          record[idx].debug_qk0_lane_bits[lane] = debug_qk0_lane_bits[lane];
+          record[idx].debug_centered0_lane_bits[lane] = debug_centered0_lane_bits[lane];
+          record[idx].debug_p0_lane_bits[lane] = debug_p0_lane_bits[lane];
+        }
       }
     }
   }

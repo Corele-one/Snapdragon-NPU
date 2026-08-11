@@ -27,6 +27,15 @@ enum LlmNpuModeFlags {
   LLM_NPU_MODE_NUMERIC_DEBUG    = 1 << 6,
   LLM_NPU_MODE_TRACE            = 1 << 8,
   LLM_NPU_MODE_DETAILED_TRACE   = 1 << 9,
+  LLM_NPU_MODE_SCNA_VARIANT_BIT0 = 1 << 10,
+  LLM_NPU_MODE_SCNA_VARIANT_BIT1 = 1 << 11,
+};
+
+enum ScnaLane8Variant {
+  SCNA_LANE8_VARIANT_CURRENT = 0,
+  SCNA_LANE8_VARIANT_SEQUENTIAL_PAIR = 1,
+  SCNA_LANE8_VARIANT_SPLIT4_PAIR = 2,
+  SCNA_LANE8_VARIANT_PACK_ONCE = 3,
 };
 
 struct RpcmemBufAddr {
@@ -251,6 +260,7 @@ struct ScnaExp2BenchParams {
   struct RpcmemBufAddr output;
   int32_t width;
   int32_t layout;
+  int32_t variant;
   int32_t warmup;
   int32_t iters;
 } __attribute__((packed));
@@ -258,10 +268,15 @@ struct ScnaExp2BenchParams {
 struct ScnaExp2BenchResult {
   int32_t width;
   int32_t layout;
+  int32_t variant;
   int32_t lanes;
   int32_t iters;
   int64_t elapsed_us;
   int64_t pair_elapsed_us;
+  int64_t expand_elapsed_us;
+  int64_t affine_relu_elapsed_us;
+  int64_t reduce_elapsed_us;
+  int64_t pack_elapsed_us;
   float rmse;
   float max_abs_error;
   float dense_rmse;
@@ -272,6 +287,16 @@ struct ScnaExp2BenchResult {
   int32_t negative_count;
   int32_t nan_count;
   int32_t lane_oracle_mismatches;
+  int32_t canonical_oracle_mismatches;
+  int32_t paired_single_mismatches;
+  float native_exp2_rmse;
+  float native_exp2_max_abs_error;
+  float native_qf16_exp2_rmse;
+  float native_qf16_exp2_max_abs_error;
+  float rowsum_ones_probe;
+  float reciprocal_max_relative_error;
+  int32_t reciprocal_nonfinite_count;
+  int32_t reciprocal_zero_inf_pass;
   uint32_t checksum_bits;
 } __attribute__((packed));
 
@@ -420,6 +445,38 @@ struct Figure8ProfileRecord {
   int64_t scna_exp;
   int32_t scna_layout;
   int32_t scna_width;
+  int32_t debug_qk0_bits;
+  int32_t debug_rowmax0_bits;
+  int32_t debug_rowsum0_bits;
+  int32_t debug_l0_bits;
+  int32_t debug_core_o0_bits;
+  int32_t debug_inv_l0_bits;
+  int32_t debug_scaled_o0_bits;
+  int32_t debug_p0_first_bits;
+  int32_t debug_p0_last_bits;
+  int32_t debug_sum0_first_bits;
+  int32_t debug_sum0_last_bits;
+  int32_t debug_masked_p_nonzero_count;
+  int32_t debug_tail_p_nonzero_count;
+  int32_t debug_scna_clamp_count;
+  int32_t debug_score_count;
+  int32_t debug_score_min_bits;
+  int32_t debug_score_max_bits;
+  int32_t debug_final_m0_bits;
+  int32_t debug_final_l0_bits;
+  int32_t debug_final_core_o0_bits;
+  int32_t debug_block_count;
+  int32_t debug_block_m0_bits[8];
+  int32_t debug_block_rowsum0_bits[8];
+  int32_t debug_block_l0_bits[8];
+  int32_t debug_block_p_scalar_sum_bits[8];
+  int32_t debug_block_reduction_min_bits[8];
+  int32_t debug_block_reduction_max_bits[8];
+  int32_t debug_qk0_lane_bits[8];
+  int32_t debug_p_expected_sum_bits;
+  int32_t debug_p_max_abs_error_bits;
+  int32_t debug_centered0_lane_bits[8];
+  int32_t debug_p0_lane_bits[8];
 };
 
 struct Figure8ProfileEvent {

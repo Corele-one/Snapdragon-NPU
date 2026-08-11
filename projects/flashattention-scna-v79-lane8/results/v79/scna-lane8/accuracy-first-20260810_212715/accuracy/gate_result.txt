@@ -1,0 +1,1 @@
+ACCURACY_GATE_PASS total_cases=216 phase2_allowed=1 transient_adb_retries=1

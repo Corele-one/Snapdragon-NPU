@@ -1,0 +1,7 @@
+variant,instructions,shuffle_reduction,spill_memory_ops,vector_load_store
+serial,100,0,0,0
+lane8-single,216,72,0,11
+sequential-pair-wrapper,15,0,2,4
+split4-pair,503,144,34,55
+pack-once-pair,444,144,18,35
+current-pair,454,144,28,41

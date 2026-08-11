@@ -74,7 +74,7 @@ int hmx_int8_gate_run(struct HmxInt8GateResult *results, int max_results, int mo
 
 int qk_os_debug_probe_run(struct HmxInt8GateResult *results, int max_results, int mode);
 
-int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout,
+int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout, int variant,
                         int warmup, int iters);
 
 int hvx_mat_mul_int16_core(int16_t *restrict __vtcm c, const int16_t *restrict __vtcm a,

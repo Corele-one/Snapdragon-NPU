@@ -40,7 +40,7 @@ COLOR_BY_COMPONENT = {
     "o_store": "cq_build_running",
 }
 
-TEXT_FIELDS = {"mode", "phase", "component"}
+TEXT_FIELDS = {"mode", "phase", "component", "scna_function", "scna_kernel", "scna_pipeline"}
 
 TIMER_RE = re.compile(r"FIG8_ATTENTION_TIMERS\s+(.*)")
 HOST_RE = re.compile(r"FIG8_ATTENTION_HOST_TIMING\s+(.*)")

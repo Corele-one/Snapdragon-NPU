@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="450" viewBox="0 0 1120 450">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#222}.axis{stroke:#333;stroke-width:1}.grid{stroke:#ddd;stroke-width:1}.small{font-size:12px}.label{font-size:13px}.title{font-size:16px;font-weight:600}</style>
+<text class="title" x="560" y="25" text-anchor="middle">Qo=32 DSP stage medians (sum across KV heads)</text>
+<text class="label" x="310.0" y="45" text-anchor="middle">Origin-HVX</text>
+<line class="grid" x1="65" y1="355.0" x2="555" y2="355.0"/>
+<text class="small" x="58" y="359.0" text-anchor="end">0</text>
+<line class="grid" x1="65" y1="328.9" x2="555" y2="328.9"/>
+<text class="small" x="58" y="332.9" text-anchor="end">200</text>
+<line class="grid" x1="65" y1="302.8" x2="555" y2="302.8"/>
+<text class="small" x="58" y="306.8" text-anchor="end">400</text>
+<line class="grid" x1="65" y1="276.7" x2="555" y2="276.7"/>
+<text class="small" x="58" y="280.7" text-anchor="end">600</text>
+<line class="grid" x1="65" y1="250.7" x2="555" y2="250.7"/>
+<text class="small" x="58" y="254.7" text-anchor="end">800</text>
+<line class="grid" x1="65" y1="224.6" x2="555" y2="224.6"/>
+<text class="small" x="58" y="228.6" text-anchor="end">1000</text>
+<line class="grid" x1="65" y1="198.5" x2="555" y2="198.5"/>
+<text class="small" x="58" y="202.5" text-anchor="end">1200</text>
+<line class="grid" x1="65" y1="172.4" x2="555" y2="172.4"/>
+<text class="small" x="58" y="176.4" text-anchor="end">1400</text>
+<line class="grid" x1="65" y1="146.3" x2="555" y2="146.3"/>
+<text class="small" x="58" y="150.3" text-anchor="end">1600</text>
+<line class="grid" x1="65" y1="120.2" x2="555" y2="120.2"/>
+<text class="small" x="58" y="124.2" text-anchor="end">1800</text>
+<line class="grid" x1="65" y1="94.1" x2="555" y2="94.1"/>
+<text class="small" x="58" y="98.1" text-anchor="end">2000</text>
+<line class="grid" x1="65" y1="68.0" x2="555" y2="68.0"/>
+<text class="small" x="58" y="72.0" text-anchor="end">2200</text>
+<rect x="73.22222222222223" y="353.0" width="18" height="2.0" fill="#4c78a8"/>
+<rect x="93.22222222222223" y="352.9" width="18" height="2.1" fill="#e45756"/>
+<text class="small" x="92.22222222222223" y="370" text-anchor="middle" transform="rotate(35 92.22222222222223 370)">q_load</text>
+<rect x="127.66666666666666" y="309.8" width="18" height="45.2" fill="#4c78a8"/>
+<rect x="147.66666666666666" y="301.3" width="18" height="53.7" fill="#e45756"/>
+<text class="small" x="146.66666666666666" y="370" text-anchor="middle" transform="rotate(35 146.66666666666666 370)">k_load</text>
+<rect x="182.11111111111111" y="351.6" width="18" height="3.4" fill="#4c78a8"/>
+<rect x="202.11111111111111" y="351.6" width="18" height="3.4" fill="#e45756"/>
+<text class="small" x="201.11111111111111" y="370" text-anchor="middle" transform="rotate(35 201.11111111111111 370)">qk_dot</text>
+<rect x="236.55555555555554" y="190.1" width="18" height="164.9" fill="#4c78a8"/>
+<rect x="256.55555555555554" y="61.0" width="18" height="294.0" fill="#e45756"/>
+<text class="small" x="255.55555555555554" y="370" text-anchor="middle" transform="rotate(35 255.55555555555554 370)">safe_sm</text>
+<rect x="291.0" y="355.0" width="18" height="0.0" fill="#4c78a8"/>
+<rect x="311.0" y="355.0" width="18" height="0.0" fill="#e45756"/>
+<text class="small" x="310.0" y="370" text-anchor="middle" transform="rotate(35 310.0 370)">scna_exp</text>
+<rect x="345.44444444444446" y="311.3" width="18" height="43.7" fill="#4c78a8"/>
+<rect x="365.44444444444446" y="311.0" width="18" height="44.0" fill="#e45756"/>
+<text class="small" x="364.44444444444446" y="370" text-anchor="middle" transform="rotate(35 364.44444444444446 370)">v_load</text>
+<rect x="399.88888888888886" y="352.3" width="18" height="2.7" fill="#4c78a8"/>
+<rect x="419.88888888888886" y="352.0" width="18" height="3.0" fill="#e45756"/>
+<text class="small" x="418.88888888888886" y="370" text-anchor="middle" transform="rotate(35 418.88888888888886 370)">core_acc</text>
+<rect x="454.3333333333333" y="354.6" width="18" height="0.4" fill="#4c78a8"/>
+<rect x="474.3333333333333" y="354.6" width="18" height="0.4" fill="#e45756"/>
+<text class="small" x="473.3333333333333" y="370" text-anchor="middle" transform="rotate(35 473.3333333333333 370)">o_scale</text>
+<rect x="508.7777777777778" y="352.1" width="18" height="2.9" fill="#4c78a8"/>
+<rect x="528.7777777777778" y="352.3" width="18" height="2.7" fill="#e45756"/>
+<text class="small" x="527.7777777777778" y="370" text-anchor="middle" transform="rotate(35 527.7777777777778 370)">o_store</text>
+<text class="label" x="860.0" y="45" text-anchor="middle">SCNA direct d8</text>
+<line class="grid" x1="615" y1="355.0" x2="1105" y2="355.0"/>
+<line class="grid" x1="615" y1="328.9" x2="1105" y2="328.9"/>
+<line class="grid" x1="615" y1="302.8" x2="1105" y2="302.8"/>
+<line class="grid" x1="615" y1="276.7" x2="1105" y2="276.7"/>
+<line class="grid" x1="615" y1="250.7" x2="1105" y2="250.7"/>
+<line class="grid" x1="615" y1="224.6" x2="1105" y2="224.6"/>
+<line class="grid" x1="615" y1="198.5" x2="1105" y2="198.5"/>
+<line class="grid" x1="615" y1="172.4" x2="1105" y2="172.4"/>
+<line class="grid" x1="615" y1="146.3" x2="1105" y2="146.3"/>
+<line class="grid" x1="615" y1="120.2" x2="1105" y2="120.2"/>
+<line class="grid" x1="615" y1="94.1" x2="1105" y2="94.1"/>
+<line class="grid" x1="615" y1="68.0" x2="1105" y2="68.0"/>
+<rect x="623.2222222222222" y="353.0" width="18" height="2.0" fill="#4c78a8"/>
+<rect x="643.2222222222222" y="352.9" width="18" height="2.1" fill="#e45756"/>
+<text class="small" x="642.2222222222222" y="370" text-anchor="middle" transform="rotate(35 642.2222222222222 370)">q_load</text>
+<rect x="677.6666666666666" y="318.3" width="18" height="36.7" fill="#4c78a8"/>
+<rect x="697.6666666666666" y="305.4" width="18" height="49.6" fill="#e45756"/>
+<text class="small" x="696.6666666666666" y="370" text-anchor="middle" transform="rotate(35 696.6666666666666 370)">k_load</text>
+<rect x="732.1111111111111" y="351.6" width="18" height="3.4" fill="#4c78a8"/>
+<rect x="752.1111111111111" y="351.6" width="18" height="3.4" fill="#e45756"/>
+<text class="small" x="751.1111111111111" y="370" text-anchor="middle" transform="rotate(35 751.1111111111111 370)">qk_dot</text>
+<rect x="786.5555555555555" y="143.6" width="18" height="211.4" fill="#4c78a8"/>
+<rect x="806.5555555555555" y="139.1" width="18" height="215.9" fill="#e45756"/>
+<text class="small" x="805.5555555555555" y="370" text-anchor="middle" transform="rotate(35 805.5555555555555 370)">safe_sm</text>
+<rect x="841.0" y="192.3" width="18" height="162.7" fill="#4c78a8"/>
+<rect x="861.0" y="187.9" width="18" height="167.1" fill="#e45756"/>
+<text class="small" x="860.0" y="370" text-anchor="middle" transform="rotate(35 860.0 370)">scna_exp</text>
+<rect x="895.4444444444445" y="310.8" width="18" height="44.2" fill="#4c78a8"/>
+<rect x="915.4444444444445" y="311.4" width="18" height="43.6" fill="#e45756"/>
+<text class="small" x="914.4444444444445" y="370" text-anchor="middle" transform="rotate(35 914.4444444444445 370)">v_load</text>
+<rect x="949.8888888888889" y="352.1" width="18" height="2.9" fill="#4c78a8"/>
+<rect x="969.8888888888889" y="351.9" width="18" height="3.1" fill="#e45756"/>
+<text class="small" x="968.8888888888889" y="370" text-anchor="middle" transform="rotate(35 968.8888888888889 370)">core_acc</text>
+<rect x="1004.3333333333333" y="354.6" width="18" height="0.4" fill="#4c78a8"/>
+<rect x="1024.3333333333333" y="354.5" width="18" height="0.5" fill="#e45756"/>
+<text class="small" x="1023.3333333333333" y="370" text-anchor="middle" transform="rotate(35 1023.3333333333333 370)">o_scale</text>
+<rect x="1058.7777777777778" y="352.1" width="18" height="2.9" fill="#4c78a8"/>
+<rect x="1078.7777777777778" y="352.3" width="18" height="2.7" fill="#e45756"/>
+<text class="small" x="1077.7777777777778" y="370" text-anchor="middle" transform="rotate(35 1077.7777777777778 370)">o_store</text>
+<text class="label" x="18" y="210" text-anchor="middle" transform="rotate(-90 18 210)">DSP qtimer median (us)</text>
+<rect x="470" y="420" width="14" height="14" fill="#4c78a8"/><text class="small" x="490" y="432">Pre-fix</text>
+<rect x="570" y="420" width="14" height="14" fill="#e45756"/><text class="small" x="590" y="432">Post-fix</text>
+</svg>

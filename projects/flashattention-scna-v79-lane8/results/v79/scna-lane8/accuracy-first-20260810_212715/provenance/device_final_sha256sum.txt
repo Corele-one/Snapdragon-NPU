@@ -1,0 +1,2 @@
+e7e92f0844244257f736e4af9df5fa85e069cc531b7722b1c27dcebb1d2f310f  /data/local/tmp/scna_v79_accuracy/dsp/libhtp_ops_skel.so
+cb266c4a825450b84f9b1cc6a93722a4bf5984ddec807af955c13c773bca6288  /data/local/tmp/scna_v79_accuracy/htp_ops_test

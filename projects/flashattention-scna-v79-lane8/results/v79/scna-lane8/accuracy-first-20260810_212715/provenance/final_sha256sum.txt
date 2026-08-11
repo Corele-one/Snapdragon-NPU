@@ -1,0 +1,5 @@
+1c1432c986aa0572c9c5f9179f25e9c5dca37e065e8733d700c46cc87cac7c8a  src/htp-ops-lib-main/src/dsp/ops/scna_exp2.c
+01fb50cd94b5cc6fe7b3b8e98d9eec485821638db920214f0c70d02eecae929a  src/htp-ops-lib-main/include/dsp/scna_exp2.h
+41b4153195ee11b7c19f8ab4f41bc40bfc493dc5be1a8b0b4403c7272cd6db14  src/htp-ops-lib-main/include/dsp/scna_params.h
+e7e92f0844244257f736e4af9df5fa85e069cc531b7722b1c27dcebb1d2f310f  src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libhtp_ops_skel.so
+cb266c4a825450b84f9b1cc6a93722a4bf5984ddec807af955c13c773bca6288  src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/htp_ops_test

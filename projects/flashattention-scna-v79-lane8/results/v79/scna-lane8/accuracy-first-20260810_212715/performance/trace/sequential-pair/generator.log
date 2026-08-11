@@ -1,0 +1,15 @@
+parsed_timer_rows=24
+parsed_event_count_rows=12
+parsed_event_rows=7866
+generated_traces=11
+scna_lane8_q4.ntff	416996
+scna_lane8_q4.perfetto.json	416996
+scna_lane8_q8.ntff	648030
+scna_lane8_q8.perfetto.json	648030
+scna_lane8_q16.ntff	1409482
+scna_lane8_q16.perfetto.json	1409482
+scna_lane8_q32.ntff	4151441
+scna_lane8_q32.perfetto.json	4151441
+scna_lane8_all_q.ntff	6626202
+scna_lane8_all_q.perfetto.json	6626202
+event_trace_summary.json	3448

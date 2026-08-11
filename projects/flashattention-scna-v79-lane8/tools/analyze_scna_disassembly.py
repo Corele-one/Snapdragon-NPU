@@ -13,6 +13,9 @@ from pathlib import Path
 FUNCTIONS = (
     "hvx_scna_exp2_serial_d8_vhf",
     "hvx_scna_exp2_lane8_d8_vhf",
+    "hvx_scna_exp2_lane8_sequential_pair_d8_vhf",
+    "hvx_scna_exp2_lane8_split4_pair_d8_vhf",
+    "hvx_scna_exp2_lane8_pack_once_pair_d8_vhf",
     "hvx_scna_exp2_lane8_pair_d8_vhf",
 )
 LABEL = re.compile(r"^[0-9a-f]+ <([^>]+)>:$")
@@ -103,7 +106,14 @@ def main():
             if "}" in line:
                 packet_sizes[current_packet] += 1
                 current_packet = 0
-        variant = name.replace("hvx_scna_exp2_", "").replace("_d8_vhf", "").replace("lane8_pair", "lane8-paired")
+        variant = name.replace("hvx_scna_exp2_", "").replace("_d8_vhf", "")
+        variant = {
+            "lane8": "lane8-single",
+            "lane8_pair": "current-pair",
+            "lane8_sequential_pair": "sequential-pair-wrapper",
+            "lane8_split4_pair": "split4-pair",
+            "lane8_pack_once_pair": "pack-once-pair",
+        }.get(variant, variant)
         row = {
             "function": name, "variant": variant, "instructions": len(selected[name]), "spill_memory_ops": spills,
             **{cat: counts[cat] for cat in ("vector_compute", "shuffle_reduction", "vector_load_store", "scalar_other", "control")},

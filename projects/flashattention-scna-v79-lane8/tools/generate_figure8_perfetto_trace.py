@@ -50,6 +50,8 @@ TEXT_FIELDS = {
     "layout",
     "mask_mode",
     "binary_sha256",
+    "host_sha256",
+    "header_sha256",
     "isa",
     "seed",
     "sdk",
@@ -277,6 +279,7 @@ def build_trace_for_qo(qo_len, event_rows, host_rows, pid, provenance):
         "scna_layout": first.get("scna_layout", -1),
         "scna_width": first.get("scna_width", 0),
         "binary_sha256": provenance.get("binary_sha256", "unknown"),
+        "lane8_variant": provenance.get("lane8_variant", "current"),
         "isa": provenance.get("isa", "v79"),
         "qo_len": qo_len,
         "kv_len": first["kv_len"],
@@ -457,6 +460,7 @@ def main():
     parser.add_argument("--input-dir", type=Path, required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--binary-sha256", default="")
+    parser.add_argument("--lane8-variant", default="current")
     args = parser.parse_args()
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -464,6 +468,7 @@ def main():
     provenance = dict(provenance_rows[-1]) if provenance_rows else {}
     if args.binary_sha256:
         provenance["binary_sha256"] = args.binary_sha256
+    provenance["lane8_variant"] = args.lane8_variant
     provenance.setdefault("isa", "v79")
     qo_lens = sorted({row["qo_len"] for row in event_rows})
     if not qo_lens:

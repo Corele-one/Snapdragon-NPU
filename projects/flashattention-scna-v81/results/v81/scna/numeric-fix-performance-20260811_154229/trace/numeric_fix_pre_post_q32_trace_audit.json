@@ -1,0 +1,49 @@
+{
+  "trace_file": "results/v81/scna/numeric-fix-performance-20260811_154229/trace/numeric_fix_pre_post_q32.perfetto.json",
+  "sources": [
+    {
+      "revision": "pre",
+      "mode": "Origin-HVX",
+      "source": "results/v81/scna/numeric-fix-performance-20260811_154229/trace/pre/baseline/perfetto/baseline_q32.perfetto.json",
+      "binary_sha256": "4aedb2ed4670eb3285c185876d4209175fc7123968733c0583c8cc5e5c7a4da8",
+      "process_metadata": 1,
+      "thread_metadata": 14,
+      "duration_events": 83,
+      "negative_durations": 0,
+      "hardware_trace": false
+    },
+    {
+      "revision": "post",
+      "mode": "Origin-HVX",
+      "source": "results/v81/scna/numeric-fix-performance-20260811_154229/trace/post/baseline/perfetto/baseline_q32.perfetto.json",
+      "binary_sha256": "84a0e3d30d0a72bdbdbb0a08208cdf49e49e774f6229348a2a01212bcce19051",
+      "process_metadata": 1,
+      "thread_metadata": 14,
+      "duration_events": 84,
+      "negative_durations": 0,
+      "hardware_trace": false
+    },
+    {
+      "revision": "pre",
+      "mode": "SCNA direct d8",
+      "source": "results/v81/scna/numeric-fix-performance-20260811_154229/trace/pre/scna-d8/perfetto/scna_fp16_q32.perfetto.json",
+      "binary_sha256": "4aedb2ed4670eb3285c185876d4209175fc7123968733c0583c8cc5e5c7a4da8",
+      "process_metadata": 1,
+      "thread_metadata": 14,
+      "duration_events": 83,
+      "negative_durations": 0,
+      "hardware_trace": false
+    },
+    {
+      "revision": "post",
+      "mode": "SCNA direct d8",
+      "source": "results/v81/scna/numeric-fix-performance-20260811_154229/trace/post/scna-d8/perfetto/scna_fp16_q32.perfetto.json",
+      "binary_sha256": "84a0e3d30d0a72bdbdbb0a08208cdf49e49e774f6229348a2a01212bcce19051",
+      "process_metadata": 1,
+      "thread_metadata": 14,
+      "duration_events": 84,
+      "negative_durations": 0,
+      "hardware_trace": false
+    }
+  ]
+}
