@@ -1,0 +1,10 @@
+affine_ns_per_vector,ci_high_ns,ci_low_ns,effective_tops,fence_ns_per_vector,label,mode,overlap_speedup,p_store_ns_per_vector,pack_ns_per_vector,reduction_ns_per_vector,samples,total_ns_per_vector,transpose_ns_per_vector
+0.0,46.0,45.5,0.0,0.0,HVX SCNA d8,scna-hvx-fp16-d8,0.0,0.0,0.0,0.0,2,45.75,0.0
+252.25,15187.5,15187.0,0.0002071969580307611,221.75,Hybrid current,scna-hmx-fp16-d8-hybrid,0.0,0.0,17.0,9.5,2,15187.25,0.0
+252.25,2442.0,2441.5,0.002577456359567357,420.0,Two-pass current,scna-hmx-fp16-d8-two-pass,0.0,0.0,17.5,227.75,2,2441.75,0.0
+258.75,425.5,425.0,0.007399772104790212,227.0,Hybrid + vtranspose,scna-hmx-fp16-d8-hybrid-vtranspose,1.33019,0.0,17.25,0.0,2,425.25,90.0
+256.75,637.5,637.0,0.009876037612583495,424.75,Two-pass + vtranspose,scna-hmx-fp16-d8-two-pass-vtranspose,1.33094,0.0,16.5,227.25,2,637.25,69.75
+124.75,281.5,281.0,0.011188460395820561,110.5,Hybrid + batch4,scna-hmx-fp16-d8-hybrid-batch4,1.32967,0.0,8.0,0.0,2,281.25,111.0
+123.0,319.0,318.5,0.01974433842020049,211.25,Two-pass + batch4,scna-hmx-fp16-d8-two-pass-batch4,1.331165,0.0,6.5,116.0,2,318.75,30.5
+124.25,270.5,270.5,0.01163309426987061,109.0,Hybrid + direct-P,scna-hmx-fp16-d8-hybrid-direct-p,1.3310149999999998,0.0,6.0,0.0,2,270.5,110.0
+124.5,309.5,309.5,0.020334423263327947,211.0,Two-pass + direct-P,scna-hmx-fp16-d8-two-pass-direct-p,1.3284799999999999,0.0,8.0,117.0,2,309.5,30.0

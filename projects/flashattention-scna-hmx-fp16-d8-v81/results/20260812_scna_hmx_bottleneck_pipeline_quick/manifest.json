@@ -1,0 +1,173 @@
+{
+  "architecture": "v81",
+  "artifacts_sha256": {
+    "htp_ops_test": "f045e49f063edd30e128e31335a41ebf08245a6f8e7d9a46be9d8735fc83ee7d",
+    "libhtp_ops.so": "283f83fea80273d51a543644b73d314d09c123d068aee7b076afe5236304c8f8",
+    "libhtp_ops_skel.so": "503095dc33311d87094c6fc590d5445829a9499a8ebb0671a08b87aaba479bfe"
+  },
+  "compile_flags": [
+    "-mv81",
+    "-mhmx",
+    "-mhvx",
+    "-mhvx-length=128B"
+  ],
+  "created_at": "2026-08-12T11:25:54.835448+00:00",
+  "device": {
+    "android": "16",
+    "fingerprint": "Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys",
+    "product_model": "25091RP04C",
+    "serial": "bde3ddde",
+    "soc_model": "SM8750P"
+  },
+  "git_head": "1d620801278af90e1c2efb01bf869332bd39e6f5",
+  "git_note": "The independent project is intentionally untracked in the parent repository during this experiment.",
+  "git_status": [
+    " M ../../.gitignore",
+    " M .gitignore",
+    " M experiment_spec.json",
+    " D reports/SCNA_HMX_FP16_D8_V81_REPORT.md",
+    " M scripts/deploy_and_smoke.sh",
+    " M scripts/run_scna_hmx_v81_experiment.py",
+    " M src/htp-ops-lib-main/include/dsp/scna_hmx.h",
+    " M src/htp-ops-lib-main/include/op_reg.h",
+    " M src/htp-ops-lib-main/src/dsp/ops/flash_attn.c",
+    " M src/htp-ops-lib-main/src/dsp/ops/scna_exp2.c",
+    " M src/htp-ops-lib-main/src/dsp/ops/scna_hmx.c",
+    " M src/htp-ops-lib-main/src/host/test.c",
+    "?? experiment_bottleneck_pipeline_spec.json",
+    "?? results/20260812_scna_hmx_bottleneck_pipeline_quick/",
+    "?? ../flashattention-scna-v79-lane8/tools/render_attention_latency_naive.py"
+  ],
+  "hexagon_sdk": "6.6.0.0",
+  "hexagon_tools": "19.0.07",
+  "power": {
+    "dsp_frequency_observable_from_android": false,
+    "requested_mode": "HAP_DCVS_V2_PERFORMANCE_MODE",
+    "target_corner": "HAP_DCVS_VCORNER_TURBO_L3"
+  },
+  "project": "/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-hmx-fp16-d8-v81",
+  "schema_version": 1,
+  "scna_params_sha256": "573a381793ab677b3bd72261d5d9c2b27844593c39e8a6b1119c257b039cccad",
+  "scna_params_source": "/home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v81/src/htp-ops-lib-main/include/dsp/scna_params.h",
+  "scna_params_source_sha256": "573a381793ab677b3bd72261d5d9c2b27844593c39e8a6b1119c257b039cccad",
+  "spec": {
+    "architecture": "v81",
+    "compiler_flags": [
+      "-mv81",
+      "-mhmx",
+      "-mhvx",
+      "-mhvx-length=128B"
+    ],
+    "correctness": {
+      "head_dim": [
+        64,
+        128
+      ],
+      "kv_len": [
+        4093,
+        4096
+      ],
+      "mask_mode": [
+        "full",
+        "padding",
+        "causal"
+      ],
+      "max_abs_error_limit": 0.01,
+      "modes": [
+        "scna-hmx-fp16-d8-hybrid-vtranspose",
+        "scna-hmx-fp16-d8-two-pass-vtranspose",
+        "scna-hmx-fp16-d8-hybrid-batch4",
+        "scna-hmx-fp16-d8-two-pass-batch4",
+        "scna-hmx-fp16-d8-hybrid-direct-p",
+        "scna-hmx-fp16-d8-two-pass-direct-p",
+        "scna-hmx-fp16-d8-hybrid-attn-pipeline",
+        "scna-hmx-fp16-d8-two-pass-attn-pipeline"
+      ],
+      "n_heads": 12,
+      "n_kv_heads": 2,
+      "qo_len": 4,
+      "rmse_limit": 0.002
+    },
+    "microkernel": {
+      "implementation_max_abs_error_limit": 0.002,
+      "implementation_rmse_limit": 0.001,
+      "iterations": {
+        "scna-hmx-fp16-d8-hybrid": 5000,
+        "scna-hmx-fp16-d8-hybrid-batch4": 200000,
+        "scna-hmx-fp16-d8-hybrid-direct-p": 200000,
+        "scna-hmx-fp16-d8-hybrid-vtranspose": 120000,
+        "scna-hmx-fp16-d8-two-pass": 20000,
+        "scna-hmx-fp16-d8-two-pass-batch4": 180000,
+        "scna-hmx-fp16-d8-two-pass-direct-p": 180000,
+        "scna-hmx-fp16-d8-two-pass-vtranspose": 90000,
+        "scna-hvx-fp16-d8": 1000000
+      },
+      "minimum_sample_ms": 50,
+      "modes": [
+        "scna-hvx-fp16-d8",
+        "scna-hmx-fp16-d8-hybrid",
+        "scna-hmx-fp16-d8-two-pass",
+        "scna-hmx-fp16-d8-hybrid-vtranspose",
+        "scna-hmx-fp16-d8-two-pass-vtranspose",
+        "scna-hmx-fp16-d8-hybrid-batch4",
+        "scna-hmx-fp16-d8-two-pass-batch4",
+        "scna-hmx-fp16-d8-hybrid-direct-p",
+        "scna-hmx-fp16-d8-two-pass-direct-p"
+      ],
+      "samples": 30
+    },
+    "modes": [
+      "baseline",
+      "lut-exp",
+      "scna-hvx-fp16-d8",
+      "scna-hmx-fp16-d8-hybrid",
+      "scna-hmx-fp16-d8-two-pass",
+      "scna-hmx-fp16-d8-hybrid-vtranspose",
+      "scna-hmx-fp16-d8-two-pass-vtranspose",
+      "scna-hmx-fp16-d8-hybrid-batch4",
+      "scna-hmx-fp16-d8-two-pass-batch4",
+      "scna-hmx-fp16-d8-hybrid-direct-p",
+      "scna-hmx-fp16-d8-two-pass-direct-p",
+      "scna-hmx-fp16-d8-hybrid-attn-pipeline",
+      "scna-hmx-fp16-d8-two-pass-attn-pipeline"
+    ],
+    "performance": {
+      "head_dim": 128,
+      "iterations": 20,
+      "kv_len": 4096,
+      "kv_pipeline": "off",
+      "mask_mode": "full",
+      "max_attempts_per_session": 3,
+      "max_start_temperature_span_c": 5.0,
+      "n_heads": 12,
+      "n_kv_heads": 2,
+      "qo_len": [
+        4,
+        8,
+        16,
+        32
+      ],
+      "sessions": 5,
+      "warmup": 5,
+      "workers": 1
+    },
+    "pipeline": {
+      "end_to_end_status": "serial-fallback-after-timeout",
+      "overlap_speedup_lower_bound": 1.05,
+      "requested_bc": [
+        256,
+        512,
+        1024,
+        2048,
+        4096
+      ]
+    },
+    "remote_dir": "/data/local/tmp/scna_hmx_fp16_d8_v81",
+    "schema_version": 2,
+    "seed": 8108,
+    "statistics": {
+      "bootstrap_samples": 10000,
+      "confidence": 0.95
+    }
+  }
+}

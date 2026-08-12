@@ -1,0 +1,7 @@
+{
+  "expected": 96,
+  "max_abs_error_limit": 0.01,
+  "pass": false,
+  "passed": 0,
+  "rmse_limit": 0.002
+}

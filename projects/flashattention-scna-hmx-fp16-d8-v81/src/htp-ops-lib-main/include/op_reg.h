@@ -32,6 +32,10 @@ enum LlmNpuModeFlags {
   LLM_NPU_MODE_SCNA_KV_PIPELINE = 1 << 11,
   LLM_NPU_MODE_SCNA_HMX_HYBRID  = 1 << 12,
   LLM_NPU_MODE_SCNA_HMX_TWO_PASS = 1 << 13,
+  LLM_NPU_MODE_SCNA_HMX_VTRANSPOSE = 1 << 14,
+  LLM_NPU_MODE_SCNA_HMX_BATCH4     = 1 << 15,
+  LLM_NPU_MODE_SCNA_HMX_DIRECT_P   = 1 << 16,
+  LLM_NPU_MODE_SCNA_HMX_ATTN_PIPELINE = 1 << 17,
 };
 
 struct RpcmemBufAddr {
@@ -320,6 +324,17 @@ struct ScnaExp2BenchResult {
   float random_implementation_rmse;
   float random_implementation_max_abs_error;
   float tail_implementation_max_abs_error;
+  int64_t transpose_us;
+  int64_t p_store_us;
+  int64_t lock_us;
+  int64_t completion_fence_us;
+  int64_t pipeline_overlap_us;
+  int64_t hmx_command_count;
+  int64_t physical_macs;
+  int64_t useful_macs;
+  int32_t layout_mismatches;
+  int32_t overlap_mismatches;
+  float overlap_speedup;
 } __attribute__((packed));
 
 struct FlashAttnParams {
@@ -491,6 +506,16 @@ struct Figure8ProfileRecord {
   int64_t scna_hmx_affine_relu;
   int64_t scna_reduction;
   int64_t scna_unpack;
+  int64_t scna_transpose;
+  int64_t scna_p_store;
+  int64_t scna_lock;
+  int64_t scna_completion_fence;
+  int64_t scna_pipeline_overlap;
+  int64_t scna_hmx_commands;
+  int64_t scna_physical_macs;
+  int64_t scna_useful_macs;
+  int32_t scna_variant_flags;
+  int32_t scna_pipeline_supported;
 };
 
 struct Figure8ProfileEvent {

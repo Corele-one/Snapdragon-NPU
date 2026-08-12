@@ -1,0 +1,9 @@
+baseline,candidate,status
+scna-hmx-fp16-d8-hybrid,scna-hmx-fp16-d8-hybrid-direct-p,missing
+scna-hmx-fp16-d8-two-pass,scna-hmx-fp16-d8-two-pass-direct-p,missing
+scna-hvx-fp16-d8,scna-hmx-fp16-d8-hybrid-direct-p,missing
+scna-hvx-fp16-d8,scna-hmx-fp16-d8-two-pass-direct-p,missing
+lut-exp,scna-hmx-fp16-d8-hybrid-direct-p,missing
+lut-exp,scna-hmx-fp16-d8-two-pass-direct-p,missing
+scna-hmx-fp16-d8-hybrid-direct-p,scna-hmx-fp16-d8-hybrid-attn-pipeline,missing
+scna-hmx-fp16-d8-two-pass-direct-p,scna-hmx-fp16-d8-two-pass-attn-pipeline,missing

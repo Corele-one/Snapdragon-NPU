@@ -1,0 +1,11 @@
+{
+  "evidence": {
+    "activation.hf": true,
+    "bias = mxmem2": true,
+    "cvt.hf": true,
+    "hybrid_hvx_vadd": true,
+    "mxmem": true,
+    "weight.hf": true
+  },
+  "pass": true
+}

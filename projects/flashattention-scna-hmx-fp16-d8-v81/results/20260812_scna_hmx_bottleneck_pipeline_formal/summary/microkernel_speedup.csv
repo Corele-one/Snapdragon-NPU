@@ -1,0 +1,11 @@
+baseline,baseline_label,baseline_samples,candidate,candidate_label,candidate_samples,ci_high,ci_low,speedup,status
+scna-hmx-fp16-d8-hybrid,Hybrid current,30,scna-hmx-fp16-d8-hybrid-vtranspose,Hybrid + vtranspose,30,36.33534535223634,36.33498283981164,36.33534535223634,faster
+scna-hmx-fp16-d8-hybrid-vtranspose,Hybrid + vtranspose,30,scna-hmx-fp16-d8-hybrid-batch4,Hybrid + batch4,30,2.087253493263364,2.0872065903676678,2.087232669040628,faster
+scna-hmx-fp16-d8-hybrid-batch4,Hybrid + batch4,30,scna-hmx-fp16-d8-hybrid-direct-p,Hybrid + direct-P,30,1.0307738869499143,1.0307545687534612,1.0307545687534612,faster
+scna-hmx-fp16-d8-hybrid,Hybrid current,30,scna-hmx-fp16-d8-hybrid-direct-p,Hybrid + direct-P,30,78.17376297555573,78.17275619148197,78.17275619148197,faster
+scna-hmx-fp16-d8-two-pass,Two-pass current,30,scna-hmx-fp16-d8-two-pass-vtranspose,Two-pass + vtranspose,30,4.0289320170518295,4.028860697959221,4.028894352569436,faster
+scna-hmx-fp16-d8-two-pass-vtranspose,Two-pass + vtranspose,30,scna-hmx-fp16-d8-two-pass-batch4,Two-pass + batch4,30,3.590286634892932,3.5902530710881386,3.590286634892932,faster
+scna-hmx-fp16-d8-two-pass-batch4,Two-pass + batch4,30,scna-hmx-fp16-d8-two-pass-direct-p,Two-pass + direct-P,30,1.0369622720311846,1.0369442269207343,1.0369442269207343,faster
+scna-hmx-fp16-d8-two-pass,Two-pass current,30,scna-hmx-fp16-d8-two-pass-direct-p,Two-pass + direct-P,30,14.999540581929557,14.999154267815191,14.999279561472202,faster
+scna-hvx-fp16-d8,HVX SCNA d8,30,scna-hmx-fp16-d8-hybrid-direct-p,Hybrid + direct-P,30,0.1567477182769664,0.15674569955482287,0.15674569955482287,slower
+scna-hvx-fp16-d8,HVX SCNA d8,30,scna-hmx-fp16-d8-two-pass-direct-p,Two-pass + direct-P,30,0.19061934428511762,0.19061602714695902,0.19061602714695902,slower

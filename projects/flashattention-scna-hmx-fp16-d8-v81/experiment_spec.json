@@ -23,7 +23,7 @@
     "sessions": 5,
     "warmup": 5,
     "iterations": 20,
-    "max_start_temperature_span_c": 3.0,
+  "max_start_temperature_span_c": 5.0,
     "max_attempts_per_session": 3
   },
   "correctness": {

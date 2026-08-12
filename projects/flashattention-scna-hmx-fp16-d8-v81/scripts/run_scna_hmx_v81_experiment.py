@@ -112,12 +112,15 @@ def verify_single_binary(spec: dict[str, Any], expected: dict[str, str]) -> None
     remote = spec["remote_dir"]
     result = adb_shell(
         f"sha256sum '{remote}/htp_ops_test' '{remote}/libhtp_ops.so' "
-        f"'{remote}/cdsp/libhtp_ops_skel.so'", timeout=15)
+        f"'{remote}/cdsp/libhtp_ops_skel_bp4.so'", timeout=15)
     found: dict[str, str] = {}
     for line in result.stdout.splitlines():
         parts = line.split()
         if len(parts) == 2:
-            found[Path(parts[1]).name] = parts[0]
+            name = Path(parts[1]).name
+            if name == "libhtp_ops_skel_bp4.so":
+                name = "libhtp_ops_skel.so"
+            found[name] = parts[0]
     ensure_digest_match(expected, found)
 
 
@@ -125,6 +128,13 @@ def ensure_digest_match(expected: dict[str, str], found: dict[str, str]) -> None
     for name, digest in expected.items():
         if found.get(name) != digest:
             raise RuntimeError(f"mixed/stale binary rejected: {name}: expected {digest}, got {found.get(name)}")
+
+
+def merge_manifest(previous: dict[str, Any], current: dict[str, Any]) -> dict[str, Any]:
+    """Refresh discovered state without discarding phase-specific evidence."""
+    merged = dict(previous)
+    merged.update(current)
+    return merged
 
 
 def collect_manifest(spec: dict[str, Any], out: Path) -> dict[str, Any]:
@@ -145,9 +155,15 @@ def collect_manifest(spec: dict[str, Any], out: Path) -> dict[str, Any]:
         "getprop ro.build.fingerprint", timeout=15).stdout.splitlines()
     params = ROOT / "src/htp-ops-lib-main/include/dsp/scna_params.h"
     source_params = ROOT.parent / "flashattention-scna-v81/src/htp-ops-lib-main/include/dsp/scna_params.h"
-    manifest = {
+    manifest_path = out / "manifest.json"
+    previous = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else {}
+    if previous:
+        ensure_digest_match(previous.get("artifacts_sha256", {}), digests)
+    now = dt.datetime.now(dt.timezone.utc).isoformat()
+    current = {
         "schema_version": 1,
-        "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "created_at": previous.get("created_at", now),
+        "updated_at": now,
         "project": str(ROOT),
         "architecture": "v81",
         "hexagon_sdk": "6.6.0.0",
@@ -173,8 +189,14 @@ def collect_manifest(spec: dict[str, Any], out: Path) -> dict[str, Any]:
             "dsp_frequency_observable_from_android": False,
         },
         "spec": spec,
+        "collection_events": previous.get("collection_events", []) + [{
+            "at": now,
+            "event": "manifest-refreshed",
+            "artifacts_sha256": digests,
+        }],
     }
-    (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    manifest = merge_manifest(previous, current)
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
     return manifest
 
 
@@ -185,7 +207,8 @@ def collect_disassembly(out: Path) -> None:
     full = out / "verification/disassembly_full.txt"
     full.write_text(result.stdout, encoding="utf-8")
     wanted = ("scna_hmx_fp16_d8_affine_relu_kernel", "scna_hmx_fp16_d8_reduce_kernel",
-              "scna_hmx_fp16_d8_hybrid_reduce_hvx")
+              "scna_hmx_hybrid_reduce_hvx", "scna_hmx_fp16_d8_pair_consume",
+              "scna_hmx_fp16_d8_pair_issue")
     lines = result.stdout.splitlines()
     excerpts: list[str] = []
     for index, line in enumerate(lines):
@@ -203,11 +226,12 @@ def collect_disassembly(out: Path) -> None:
         raise RuntimeError(f"HMX disassembly gate failed: {evidence}")
 
 
-def collect_micro(spec: dict[str, Any], out: Path, quick: bool) -> None:
+def collect_micro(spec: dict[str, Any], out: Path, quick: bool,
+                  mode_override: list[str] | None = None) -> None:
     cfg = spec["microkernel"]
     samples = 2 if quick else int(cfg["samples"])
     path = out / "raw/microkernel.jsonl"
-    for mode in spec["correctness"]["modes"]:
+    for mode in mode_override or cfg.get("modes", spec["correctness"]["modes"]):
         iterations = int(cfg["iterations"][mode])
         if quick:
             iterations = min(iterations, 2000)
@@ -235,7 +259,9 @@ def collect_micro(spec: dict[str, Any], out: Path, quick: bool) -> None:
             append_jsonl(path, row)
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     evidence: dict[str, Any] = {}
-    for mode in spec["correctness"]["modes"][-2:]:
+    hmx_modes = [mode for mode in cfg.get("modes", spec["correctness"]["modes"])
+                 if mode.startswith("scna-hmx-")]
+    for mode in hmx_modes:
         mode_rows = [row for row in rows if row["mode"] == mode and row.get("record")]
         checks: list[dict[str, Any]] = []
         for row in mode_rows:
@@ -280,9 +306,17 @@ def collect_correctness(spec: dict[str, Any], out: Path, quick: bool) -> None:
     log_dir = out / "raw/correctness_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     for mode in modes:
+        mode_gate_failed = False
         for mask in masks:
             for kv_len in kvs:
                 for head_dim in dims:
+                    if mode_gate_failed:
+                        append_jsonl(path, {"mode": mode, "mask_mode": mask, "kv_len": kv_len,
+                                           "head_dim": head_dim, "returncode": None,
+                                           "status": "skipped-after-mode-gate-failure", "compare": None,
+                                           "tail_zero_required": int(kv_len) == 4093 or mask in ("padding", "causal"),
+                                           "numeric": []})
+                        continue
                     command = remote_command(spec, mode, qo_len=int(cfg["qo_len"]), kv_len=int(kv_len),
                                              head_dim=int(head_dim), mask_mode=mask, warmup=1,
                                              iterations=1, compare=True) + " --numeric-debug"
@@ -307,6 +341,17 @@ def collect_correctness(spec: dict[str, Any], out: Path, quick: bool) -> None:
                                        "head_dim": head_dim, "returncode": result.returncode,
                                        "status": status, "compare": compare,
                                        "tail_zero_required": expect_tail_zero, "numeric": numeric})
+                    if status != "pass":
+                        mode_gate_failed = True
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    expected = len(modes) * len(masks) * len(kvs) * len(dims)
+    passed = sum(row.get("status") == "pass" for row in rows[-expected:])
+    gate = {"pass": passed == expected, "passed": passed, "expected": expected,
+            "rmse_limit": cfg["rmse_limit"], "max_abs_error_limit": cfg["max_abs_error_limit"]}
+    (out / "verification/attention_correctness_gate.json").write_text(
+        json.dumps(gate, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if not gate["pass"]:
+        raise RuntimeError(f"FlashAttention correctness gate failed: {passed}/{expected}; performance collection stopped")
 
 
 def latin_order(modes: list[str], session: int) -> list[str]:
@@ -384,14 +429,18 @@ def collect_performance(spec: dict[str, Any], out: Path, digests: dict[str, str]
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-id", help="result directory name; default is UTC timestamp plus binary hash")
+    parser.add_argument("--spec", type=Path, default=SPEC_PATH,
+                        help="experiment JSON; defaults to experiment_spec.json")
     parser.add_argument("--quick", action="store_true", help="small plumbing check, not a reportable experiment")
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--skip-deploy", action="store_true")
     parser.add_argument("--phase", choices=("all", "micro", "correctness", "performance"), default="all")
     parser.add_argument("--resume-performance", action="store_true",
                         help="append only missing valid performance sessions in an existing run-id")
+    parser.add_argument("--micro-mode", action="append", default=[],
+                        help="collect only this micro mode; repeat to select multiple modes")
     args = parser.parse_args()
-    spec = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
+    spec = json.loads(args.spec.read_text(encoding="utf-8"))
     if not args.skip_build:
         run([str(ROOT / "scripts/build.sh"), "--dsp-arch", "v81"], timeout=300)
     if not args.skip_deploy:
@@ -405,7 +454,7 @@ def main() -> None:
     verify_single_binary(spec, manifest["artifacts_sha256"])
     collect_disassembly(out)
     if args.phase in ("all", "micro"):
-        collect_micro(spec, out, args.quick)
+        collect_micro(spec, out, args.quick, args.micro_mode or None)
     if args.phase in ("all", "correctness"):
         collect_correctness(spec, out, args.quick)
     if args.phase in ("all", "performance"):

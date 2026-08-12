@@ -4,6 +4,7 @@
 
 # Documentation is kept locally and is not versioned in this repository.
 **/docs/
+**/reports/
 # Do not use the old broad "**/models/" rule: MLLM contains source code under
 # reference/w4-w8-a16-mllm/mllm/models/.
 *.gguf

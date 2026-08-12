@@ -4,3 +4,4 @@ src/htp-ops-lib-main/hexagon_*/
 
 # Locally captured benchmark logs and derived analysis.
 results/local/
+**/reports/

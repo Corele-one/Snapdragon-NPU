@@ -344,6 +344,13 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   const int scna_kernel         = scna_kernel_from_mode(mode_flags);
   const int scna_engine         = scna_engine_from_mode(mode_flags);
   const bool enable_hmx_scna    = enable_scna_exp && scna_hmx_enabled(mode_flags);
+  const bool request_attn_pipeline = enable_hmx_scna &&
+      (mode_flags & LLM_NPU_MODE_SCNA_HMX_ATTN_PIPELINE) != 0;
+  /* The v81 end-to-end stability gate times out when an unfenced SCNA HMX
+   * store is overlapped with the following HVX consumer. Keep the code path
+   * for diagnosis, but formally fall back to serial execution until that
+   * gate passes on-device. */
+  const bool enable_attn_pipeline = false;
   // The bit name is retained for ABI compatibility, but K/V staging is
   // independent of the nonlinear evaluator.
   const bool enable_kv_pipeline = (mode_flags & LLM_NPU_MODE_SCNA_KV_PIPELINE) != 0;
@@ -459,7 +466,8 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
     return;
   }
   if (enable_hmx_scna &&
-      scna_hmx_context_init(scna_hmx_ctx, scna_hmx_context.base, SCNA_HMX_CONTEXT_BYTES, scna_engine) != 0) {
+      scna_hmx_context_init(scna_hmx_ctx, scna_hmx_context.base, SCNA_HMX_CONTEXT_BYTES,
+                            scna_engine, mode_flags) != 0) {
     if (profile) profile->reserved0 = 398;
     return;
   }
@@ -735,6 +743,7 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                                            (int64_t) n_cols * head_dim * (int64_t) sizeof(__fp16), k_load_stage_t0,
                                            k_load_stage_t1);
       TIMER_STOP_EVENT(k_load, FIGURE8_COMP_K_LOAD, ir, jc);
+      if (profile) profile->reserved0 = 412;
 
       // issue L2 prefetch of V tile
       {
@@ -775,6 +784,7 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
 
       // compute dot product of tiles: dot(Q[Br', D], K[Bc, D]) ==> [Br', Bc]
       TIMER_START(qk_dot);
+      if (profile) profile->reserved0 = 413;
       int64_t qk_dot_stage_t0 = HAP_perf_get_qtimer_count();
       {
         hmx_unit_acquire();
@@ -799,9 +809,14 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                                            head_dim, ir, jc, n_rows_g, n_cols,
                                            2LL * n_rows_g * n_cols * head_dim, qk_dot_stage_t0, qk_dot_stage_t1);
       TIMER_STOP_EVENT(qk_dot, FIGURE8_COMP_QK_DOT, ir, jc);
+      if (profile) {
+        profile->reserved0 = 414;
+        profile->reserved1 = 0;
+      }
 
       // core softmax computation
       TIMER_START(safe_sm);
+      if (profile) profile->reserved0 = 415;
       int64_t safe_sm_stage_t0 = HAP_perf_get_qtimer_count();
       {
         const HVX_Vector v_neg_inf = Q6_Vh_vsplat_R(0xfbff);  // fp16: -65504
@@ -933,7 +948,80 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
             }
 
             const int64_t scna_exp_t0 = enable_scna_exp ? HAP_perf_get_qtimer_count() : 0;
-            for (int c = 0; c < n_cols; c += 64) {
+            if (enable_attn_pipeline) {
+              HVX_VectorPred pending_valid0 = Q6_Q_vsetq_R(0);
+              HVX_VectorPred pending_valid1 = Q6_Q_vsetq_R(0);
+              int pending_c = -1;
+              int pending_slot = 0;
+
+              for (int c = 0; c < n_cols; c += 64) {
+                const HVX_Vector v_sign = Q6_Vh_vsplat_R(0x8000);
+                HVX_Vector v_s_minus_m0 =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer0[c / 64], Q6_V_vxor_VV(v_dup_m0, v_sign));
+                HVX_Vector v_s_minus_m1 =
+                  Q6_Vhf_vadd_VhfVhf(row_buffer1[c / 64], Q6_V_vxor_VV(v_dup_m1, v_sign));
+                const HVX_VectorPred q_valid0 = Q6_Q_vcmp_gt_VhfVhf(row_buffer0[c / 64], v_neg_inf);
+                const HVX_VectorPred q_valid1 = Q6_Q_vcmp_gt_VhfVhf(row_buffer1[c / 64], v_neg_inf);
+                __fp16 scna_min_hf = (__fp16) SCNA_MIN_INPUT;
+                const HVX_Vector v_scna_min = Q6_Vh_vsplat_R(fp16_to_bits(&scna_min_hf));
+                v_s_minus_m0 = Q6_V_vmux_QVV(q_valid0, v_s_minus_m0, v_scna_min);
+                v_s_minus_m1 = Q6_V_vmux_QVV(q_valid1, v_s_minus_m1, v_scna_min);
+
+                const int slot = (c / 64) & 1;
+                scna_hmx_fp16_d8_pair_issue(v_s_minus_m0, v_s_minus_m1, scna_hmx_ctx, slot);
+
+                if (pending_c >= 0) {
+                  const int64_t consume_t0 = HAP_perf_get_qtimer_count();
+                  HVX_Vector v_scna_row0, v_scna_row1;
+                  scna_hmx_fp16_d8_pair_consume(scna_hmx_ctx, pending_slot,
+                                                &v_scna_row0, &v_scna_row1);
+                  const HVX_Vector v_zero = Q6_V_vzero();
+                  const HVX_Vector v_p_row0_hf = Q6_V_vmux_QVV(pending_valid0, v_scna_row0, v_zero);
+                  const HVX_Vector v_p_row1_hf = Q6_V_vmux_QVV(pending_valid1, v_scna_row1, v_zero);
+                  __fp16 *out_dual_tile = p_st_base + (pending_c / 64) * HMX_FP16_TILE_N_ELMS * 2;
+                  HVX_Vector *pv_p_out0 = ((HVX_Vector *) out_dual_tile) + r1 / 2;
+                  HVX_Vector *pv_p_out1 = pv_p_out0 + 16;
+                  const HVX_VectorPair vp_p_dual_row = Q6_W_vshuff_VVR(v_p_row1_hf, v_p_row0_hf, -2);
+                  *pv_p_out0 = Q6_V_lo_W(vp_p_dual_row);
+                  *pv_p_out1 = Q6_V_hi_W(vp_p_dual_row);
+                  const HVX_VectorPair vp_p_row0 = hvx_my_vhf_to_wqf32(v_p_row0_hf);
+                  const HVX_VectorPair vp_p_row1 = hvx_my_vhf_to_wqf32(v_p_row1_hf);
+                  v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(
+                    v_p_rowsum0, Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(vp_p_row0), Q6_V_hi_W(vp_p_row0)));
+                  v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(
+                    v_p_rowsum1, Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(vp_p_row1), Q6_V_hi_W(vp_p_row1)));
+                  scna_hmx_ctx->p_store_ticks += HAP_perf_get_qtimer_count() - consume_t0;
+                }
+
+                pending_c = c;
+                pending_slot = slot;
+                pending_valid0 = q_valid0;
+                pending_valid1 = q_valid1;
+              }
+
+              if (pending_c >= 0) {
+                const int64_t consume_t0 = HAP_perf_get_qtimer_count();
+                HVX_Vector v_scna_row0, v_scna_row1;
+                scna_hmx_fp16_d8_pair_consume(scna_hmx_ctx, pending_slot,
+                                              &v_scna_row0, &v_scna_row1);
+                const HVX_Vector v_zero = Q6_V_vzero();
+                const HVX_Vector v_p_row0_hf = Q6_V_vmux_QVV(pending_valid0, v_scna_row0, v_zero);
+                const HVX_Vector v_p_row1_hf = Q6_V_vmux_QVV(pending_valid1, v_scna_row1, v_zero);
+                __fp16 *out_dual_tile = p_st_base + (pending_c / 64) * HMX_FP16_TILE_N_ELMS * 2;
+                HVX_Vector *pv_p_out0 = ((HVX_Vector *) out_dual_tile) + r1 / 2;
+                HVX_Vector *pv_p_out1 = pv_p_out0 + 16;
+                const HVX_VectorPair vp_p_dual_row = Q6_W_vshuff_VVR(v_p_row1_hf, v_p_row0_hf, -2);
+                *pv_p_out0 = Q6_V_lo_W(vp_p_dual_row);
+                *pv_p_out1 = Q6_V_hi_W(vp_p_dual_row);
+                const HVX_VectorPair vp_p_row0 = hvx_my_vhf_to_wqf32(v_p_row0_hf);
+                const HVX_VectorPair vp_p_row1 = hvx_my_vhf_to_wqf32(v_p_row1_hf);
+                v_p_rowsum0 = Q6_Vqf32_vadd_Vqf32Vqf32(
+                  v_p_rowsum0, Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(vp_p_row0), Q6_V_hi_W(vp_p_row0)));
+                v_p_rowsum1 = Q6_Vqf32_vadd_Vqf32Vqf32(
+                  v_p_rowsum1, Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(vp_p_row1), Q6_V_hi_W(vp_p_row1)));
+                scna_hmx_ctx->p_store_ticks += HAP_perf_get_qtimer_count() - consume_t0;
+              }
+            } else for (int c = 0; c < n_cols; c += 64) {
               HVX_Vector v_p_row0_hf, v_p_row1_hf;
 
               if (enable_scna_exp) {
@@ -951,8 +1039,10 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
                 v_s_minus_m1 = Q6_V_vmux_QVV(q_valid1, v_s_minus_m1, v_scna_min);
                 HVX_Vector v_scna_row0, v_scna_row1;
                 if (enable_hmx_scna) {
+                  if (profile) profile->reserved0 = 416;
                   scna_hmx_fp16_d8_pair_vhf(v_s_minus_m0, v_s_minus_m1, scna_hmx_ctx,
                                             &v_scna_row0, &v_scna_row1);
+                  if (profile) profile->reserved0 = 417;
                 } else {
                   hvx_scna_exp2_pair_vhf(v_s_minus_m0, v_s_minus_m1, &scna_hvx_params,
                                           &v_scna_row0, &v_scna_row1);
@@ -1410,6 +1500,11 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
     const int64_t scna_reduction_us = enable_hmx_scna
         ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->reduction_ticks) : 0;
     const int64_t scna_unpack_us = enable_hmx_scna ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->unpack_ticks) : 0;
+    const int64_t scna_transpose_us = enable_hmx_scna ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->transpose_ticks) : 0;
+    const int64_t scna_p_store_us = enable_hmx_scna ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->p_store_ticks) : 0;
+    const int64_t scna_lock_us = enable_hmx_scna ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->lock_ticks) : 0;
+    const int64_t scna_completion_fence_us = enable_hmx_scna
+        ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->completion_fence_ticks) : 0;
     const int64_t kv_dma_issue_us = TIMER_US(kv_dma_issue);
     const int64_t kv_dma_wait_us = TIMER_US(kv_dma_wait);
     const int64_t kv_transform_us = TIMER_US(kv_transform);
@@ -1420,15 +1515,25 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
          "FIG8_ATTENTION_TIMERS lut_exp=%d scna_mode=%d scna_width=%d scna_function=%d scna_kernel=%d scna_pipeline=%d qo_len=%d kv_len=%d n_heads=%d n_kv_heads=%d head_dim=%d kv_head=%d "
          "worker=%d profiled_total=%lld q_load=%lld k_load=%lld v_load=%lld qk_dot=%lld safe_sm=%lld core_acc=%lld "
          "o_scale=%lld o_store=%lld scna_exp=%lld scna_engine=%d profile_version=%d scna_pack=%lld "
-         "scna_hmx_affine_relu=%lld scna_reduction=%lld scna_unpack=%lld kv_dma_issue=%lld kv_dma_wait=%lld kv_transform=%lld",
+         "scna_hmx_affine_relu=%lld scna_reduction=%lld scna_unpack=%lld scna_transpose=%lld "
+         "scna_p_store=%lld scna_lock=%lld scna_completion_fence=%lld scna_pipeline_overlap=%lld "
+         "scna_hmx_commands=%lld scna_physical_macs=%lld scna_useful_macs=%lld scna_variant_flags=%d "
+         "scna_pipeline_supported=%d kv_dma_issue=%lld kv_dma_wait=%lld kv_transform=%lld",
          enable_vgather_exp ? 1 : 0, scna_exp2_profile_mode(mode_flags),
          enable_scna_exp ? scna_exp2_width_from_mode(mode_flags) : 0,
          enable_scna_exp ? scna_function : SCNA_FUNCTION_EXP2,
-         enable_scna_exp ? scna_kernel : SCNA_KERNEL_DIRECT, enable_kv_pipeline ? 1 : 0, qo_len,
+         enable_scna_exp ? scna_kernel : SCNA_KERNEL_DIRECT,
+         request_attn_pipeline ? 1 : (enable_kv_pipeline ? 1 : 0), qo_len,
          kv_len, n_heads, n_kv_heads, head_dim, kv_head_idx, worker_index,
          profiled_total_us, q_load_us, k_load_us, v_load_us, qk_dot_us, safe_sm_us, core_acc_us, o_scale_us,
          o_store_us, scna_exp_us, scna_engine, SCNA_HMX_PROFILE_VERSION, scna_pack_us,
-         scna_hmx_affine_relu_us, scna_reduction_us, scna_unpack_us,
+         scna_hmx_affine_relu_us, scna_reduction_us, scna_unpack_us, scna_transpose_us,
+         scna_p_store_us, scna_lock_us, scna_completion_fence_us,
+         enable_hmx_scna ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->pipeline_overlap_ticks) : 0,
+         enable_hmx_scna ? (long long) scna_hmx_ctx->hmx_command_count : 0,
+         enable_hmx_scna ? (long long) scna_hmx_ctx->physical_macs : 0,
+         enable_hmx_scna ? (long long) scna_hmx_ctx->useful_macs : 0,
+         enable_hmx_scna ? scna_hmx_ctx->variant_flags : 0, enable_attn_pipeline ? 1 : 0,
          kv_dma_issue_us, kv_dma_wait_us, kv_transform_us);
 
     if (profile != NULL) {
@@ -1458,7 +1563,7 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
           .scna_width     = enable_scna_exp ? scna_exp2_width_from_mode(mode_flags) : 0,
           .scna_function  = enable_scna_exp ? scna_function : SCNA_FUNCTION_EXP2,
           .scna_kernel    = enable_scna_exp ? scna_kernel : SCNA_KERNEL_DIRECT,
-          .scna_pipeline  = enable_kv_pipeline ? 1 : 0,
+          .scna_pipeline  = request_attn_pipeline ? 1 : (enable_kv_pipeline ? 1 : 0),
           .kv_dma_issue   = kv_dma_issue_us,
           .kv_dma_wait    = kv_dma_wait_us,
           .kv_transform   = kv_transform_us,
@@ -1477,6 +1582,17 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
           .scna_hmx_affine_relu = scna_hmx_affine_relu_us,
           .scna_reduction = scna_reduction_us,
           .scna_unpack = scna_unpack_us,
+          .scna_transpose = scna_transpose_us,
+          .scna_p_store = scna_p_store_us,
+          .scna_lock = scna_lock_us,
+          .scna_completion_fence = scna_completion_fence_us,
+          .scna_pipeline_overlap = enable_hmx_scna
+              ? HAP_perf_qtimer_count_to_us(scna_hmx_ctx->pipeline_overlap_ticks) : 0,
+          .scna_hmx_commands = enable_hmx_scna ? scna_hmx_ctx->hmx_command_count : 0,
+          .scna_physical_macs = enable_hmx_scna ? scna_hmx_ctx->physical_macs : 0,
+          .scna_useful_macs = enable_hmx_scna ? scna_hmx_ctx->useful_macs : 0,
+          .scna_variant_flags = enable_hmx_scna ? scna_hmx_ctx->variant_flags : 0,
+          .scna_pipeline_supported = 0,
         };
       }
     }

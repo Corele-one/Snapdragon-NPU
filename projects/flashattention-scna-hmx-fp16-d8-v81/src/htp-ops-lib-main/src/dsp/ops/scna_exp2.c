@@ -422,16 +422,33 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
   alternate_params.kernel = hvx_params.kernel == SCNA_KERNEL_TREE ? SCNA_KERNEL_DIRECT : SCNA_KERNEL_TREE;
   scna_hmx_context_t hmx_context;
   scna_hmx_context_t *hmx_ctx = NULL;
+  int layout_mismatches = 0;
+  int overlap_mismatches = 0;
+  int64_t overlap_serial_ticks = 0;
+  int64_t overlap_ticks = 0;
   if (engine != SCNA_ENGINE_HVX) {
     uintptr_t vtcm = (uintptr_t) vtcm_manager_get_vtcm_base();
     const uintptr_t vtcm_aligned = (vtcm + 2047u) & ~(uintptr_t) 2047u;
     const size_t total = vtcm_manager_get_total_size();
     if (vtcm == 0 || vtcm_aligned < vtcm || vtcm_aligned - vtcm + SCNA_HMX_CONTEXT_BYTES > total ||
-        scna_hmx_context_init(&hmx_context, (void *) vtcm_aligned, SCNA_HMX_CONTEXT_BYTES, engine) != 0) {
+        scna_hmx_context_init(&hmx_context, (void *) vtcm_aligned, SCNA_HMX_CONTEXT_BYTES,
+                              engine, mode_flags) != 0) {
       return -1;
     }
     hmx_manager_enable_execution();
     hmx_ctx = &hmx_context;
+    if ((mode_flags & LLM_NPU_MODE_SCNA_HMX_VTRANSPOSE) != 0) {
+      layout_mismatches = scna_hmx_vtranspose_layout_gate(hmx_ctx);
+      /* Keep the overlap probe long enough to amortize command/setup noise.  On
+       * SM8750P 500k iterations is slightly above the experiment's 50 ms
+       * minimum-sample gate. */
+      const int probe_iters = iters > 500000 ? iters : 500000;
+      if (scna_hmx_overlap_probe(hmx_ctx, warmup < 5 ? warmup : 5, probe_iters,
+                                 &overlap_serial_ticks, &overlap_ticks,
+                                 &overlap_mismatches) != 0) {
+        return -1;
+      }
+    }
   }
 
   _Alignas(VLEN) int16_t int8_pack_input[VLEN / sizeof(int16_t)];
@@ -463,6 +480,13 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
   const int64_t affine_relu_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->affine_relu_ticks) : 0;
   const int64_t reduction_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->reduction_ticks) : 0;
   const int64_t unpack_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->unpack_ticks) : 0;
+  const int64_t transpose_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->transpose_ticks) : 0;
+  const int64_t p_store_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->p_store_ticks) : 0;
+  const int64_t lock_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->lock_ticks) : 0;
+  const int64_t completion_fence_us = hmx_ctx != NULL
+      ? HAP_perf_qtimer_count_to_us(hmx_ctx->completion_fence_ticks) : 0;
+  const int64_t pipeline_overlap_us = overlap_ticks != 0
+      ? HAP_perf_qtimer_count_to_us(overlap_ticks) : 0;
   const int64_t kernel_total_us = hmx_ctx != NULL ? HAP_perf_qtimer_count_to_us(hmx_ctx->total_ticks) : elapsed_us;
 
   for (int i = 0; i < warmup; ++i) {
@@ -621,6 +645,17 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int mode_
         ? (float) sqrt(random_implementation_sq_error / random_samples) : 0.0f,
     .random_implementation_max_abs_error = random_implementation_max_abs_error,
     .tail_implementation_max_abs_error = tail_implementation_max_abs_error,
+    .transpose_us = transpose_us,
+    .p_store_us = p_store_us,
+    .lock_us = lock_us,
+    .completion_fence_us = completion_fence_us,
+    .pipeline_overlap_us = pipeline_overlap_us,
+    .hmx_command_count = hmx_ctx != NULL ? hmx_ctx->hmx_command_count : 0,
+    .physical_macs = hmx_ctx != NULL ? hmx_ctx->physical_macs : 0,
+    .useful_macs = hmx_ctx != NULL ? hmx_ctx->useful_macs : 0,
+    .layout_mismatches = layout_mismatches,
+    .overlap_mismatches = overlap_mismatches,
+    .overlap_speedup = overlap_ticks > 0 ? (float) overlap_serial_ticks / (float) overlap_ticks : 0.0f,
   };
   for (int i = 0; i < 8; ++i) {
     const int lane = int8_probe_lanes[i];

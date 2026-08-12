@@ -114,9 +114,29 @@ struct Figure8AttnConfig {
   int         scna_width;
 };
 
+static int figure8_is_hmx_scna_mode(const char *mode) {
+  static const char prefix[] = "scna-hmx-fp16-d8-";
+  return strncmp(mode, prefix, sizeof(prefix) - 1) == 0;
+}
+
+static int figure8_is_supported_mode(const char *mode) {
+  static const char *const modes[] = {
+    "baseline", "lut-exp", "scna-fp16", "scna-int8", "scna-hvx-fp16-d8",
+    "scna-hmx-fp16-d8-hybrid", "scna-hmx-fp16-d8-two-pass",
+    "scna-hmx-fp16-d8-hybrid-vtranspose", "scna-hmx-fp16-d8-two-pass-vtranspose",
+    "scna-hmx-fp16-d8-hybrid-batch4", "scna-hmx-fp16-d8-two-pass-batch4",
+    "scna-hmx-fp16-d8-hybrid-direct-p", "scna-hmx-fp16-d8-two-pass-direct-p",
+    "scna-hmx-fp16-d8-hybrid-attn-pipeline", "scna-hmx-fp16-d8-two-pass-attn-pipeline",
+  };
+  for (size_t i = 0; i < sizeof(modes) / sizeof(modes[0]); ++i) {
+    if (strcmp(mode, modes[i]) == 0) return 1;
+  }
+  return 0;
+}
+
 static void figure8_print_usage(const char *prog) {
   fprintf(stderr,
-          "Usage: %s --figure8-attn [--mode baseline|lut-exp|scna-hvx-fp16-d8|scna-hmx-fp16-d8-hybrid|scna-hmx-fp16-d8-two-pass]\n"
+          "Usage: %s --figure8-attn [--mode baseline|lut-exp|scna-hvx-fp16-d8|scna-hmx-fp16-d8-*]\n"
           "          [--scna-function exp2|exp] [--scna-kernel direct|tree] [--kv-pipeline on|off]\n"
           "          [--mask-mode full|causal|padding] [--qo-len N] [--kv-len N]\n"
           "          [--n-heads N] [--n-kv-heads N] [--head-dim N] [--warmup N] [--iters N]\n"
@@ -144,7 +164,7 @@ static void figure8_print_usage(const char *prog) {
           "       %s --roofline-mix-precision-bench [--roofline-case N] [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-int8-shape-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-signed-int8-zero-overhead-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
-          "       %s --scna-exp-bench [--mode scna-hvx-fp16-d8|scna-hmx-fp16-d8-hybrid|scna-hmx-fp16-d8-two-pass]\n"
+          "       %s --scna-exp-bench [--mode scna-hvx-fp16-d8|scna-hmx-fp16-d8-*]\n"
           "          [--scna-kernel direct|tree] [--scna-width 8|16|32] [--warmup N] [--iters N]\n",
           prog,
           prog,
@@ -368,11 +388,7 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
   if (!cfg->enabled && !cfg->scna_exp_bench) {
     return 0;
   }
-  if (strcmp(cfg->mode, "baseline") != 0 && strcmp(cfg->mode, "lut-exp") != 0 &&
-      strcmp(cfg->mode, "scna-fp16") != 0 && strcmp(cfg->mode, "scna-int8") != 0 &&
-      strcmp(cfg->mode, "scna-hvx-fp16-d8") != 0 &&
-      strcmp(cfg->mode, "scna-hmx-fp16-d8-hybrid") != 0 &&
-      strcmp(cfg->mode, "scna-hmx-fp16-d8-two-pass") != 0) {
+  if (!figure8_is_supported_mode(cfg->mode)) {
     fprintf(stderr, "Unsupported --mode: %s\n", cfg->mode);
     return -1;
   }
@@ -398,8 +414,7 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     return -1;
   }
   const int fixed_d8_mode = strcmp(cfg->mode, "scna-hvx-fp16-d8") == 0 ||
-                            strcmp(cfg->mode, "scna-hmx-fp16-d8-hybrid") == 0 ||
-                            strcmp(cfg->mode, "scna-hmx-fp16-d8-two-pass") == 0;
+                            figure8_is_hmx_scna_mode(cfg->mode);
   if (fixed_d8_mode && (cfg->scna_width != 8 || strcmp(cfg->scna_function, "exp2") != 0 ||
                         strcmp(cfg->scna_kernel, "direct") != 0 || strcmp(cfg->scna_pipeline, "off") != 0)) {
     fprintf(stderr, "The FP16 d8 experiment modes require --scna-width 8 --scna-function exp2 "
@@ -612,11 +627,22 @@ static int figure8_mode_flags(const struct Figure8AttnConfig *cfg) {
   int flags = 0;
   if (strcmp(cfg->mode, "lut-exp") == 0) flags |= LLM_NPU_MODE_LUT_EXP;
   if (strcmp(cfg->mode, "scna-fp16") == 0 || strcmp(cfg->mode, "scna-hvx-fp16-d8") == 0 ||
-      strcmp(cfg->mode, "scna-hmx-fp16-d8-hybrid") == 0 ||
-      strcmp(cfg->mode, "scna-hmx-fp16-d8-two-pass") == 0) flags |= LLM_NPU_MODE_SCNA_FP16;
+      figure8_is_hmx_scna_mode(cfg->mode)) flags |= LLM_NPU_MODE_SCNA_FP16;
   if (strcmp(cfg->mode, "scna-int8") == 0) flags |= LLM_NPU_MODE_SCNA_INT8;
-  if (strcmp(cfg->mode, "scna-hmx-fp16-d8-hybrid") == 0) flags |= LLM_NPU_MODE_SCNA_HMX_HYBRID;
-  if (strcmp(cfg->mode, "scna-hmx-fp16-d8-two-pass") == 0) flags |= LLM_NPU_MODE_SCNA_HMX_TWO_PASS;
+  if (figure8_is_hmx_scna_mode(cfg->mode) && strstr(cfg->mode, "-hybrid") != NULL)
+    flags |= LLM_NPU_MODE_SCNA_HMX_HYBRID;
+  if (figure8_is_hmx_scna_mode(cfg->mode) && strstr(cfg->mode, "-two-pass") != NULL)
+    flags |= LLM_NPU_MODE_SCNA_HMX_TWO_PASS;
+  if (strstr(cfg->mode, "-vtranspose") != NULL || strstr(cfg->mode, "-batch4") != NULL ||
+      strstr(cfg->mode, "-direct-p") != NULL || strstr(cfg->mode, "-attn-pipeline") != NULL)
+    flags |= LLM_NPU_MODE_SCNA_HMX_VTRANSPOSE;
+  if (strstr(cfg->mode, "-batch4") != NULL || strstr(cfg->mode, "-direct-p") != NULL ||
+      strstr(cfg->mode, "-attn-pipeline") != NULL)
+    flags |= LLM_NPU_MODE_SCNA_HMX_BATCH4;
+  if (strstr(cfg->mode, "-direct-p") != NULL || strstr(cfg->mode, "-attn-pipeline") != NULL)
+    flags |= LLM_NPU_MODE_SCNA_HMX_DIRECT_P;
+  if (strstr(cfg->mode, "-attn-pipeline") != NULL)
+    flags |= LLM_NPU_MODE_SCNA_HMX_ATTN_PIPELINE;
   if (cfg->scna_width == 8) flags |= LLM_NPU_MODE_SCNA_D8;
   if (cfg->scna_width == 32) flags |= LLM_NPU_MODE_SCNA_D32;
   if (strcmp(cfg->scna_function, "exp") == 0) flags |= LLM_NPU_MODE_SCNA_FUNCTION_EXP;
@@ -820,7 +846,10 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
          "y_min=%g y_minus12=%g y_minus4=%g y_zero=%g pack_us=%lld hmx_affine_relu_us=%lld "
          "reduction_us=%lld unpack_us=%lld kernel_total_us=%lld implementation_rmse=%g "
          "implementation_max_abs_error=%g random_samples=%d random_implementation_rmse=%g "
-         "random_implementation_max_abs_error=%g tail_implementation_max_abs_error=%g\n",
+         "random_implementation_max_abs_error=%g tail_implementation_max_abs_error=%g "
+         "transpose_us=%lld p_store_us=%lld lock_us=%lld completion_fence_us=%lld "
+         "pipeline_overlap_us=%lld hmx_command_count=%lld physical_macs=%lld useful_macs=%lld "
+         "layout_mismatches=%d overlap_mismatches=%d overlap_speedup=%g\n",
          cfg->mode, cfg->scna_function, cfg->scna_kernel, result->engine, result->profile_version,
          result->width, result->lanes, result->iters,
          (long long) result->elapsed_us,
@@ -834,7 +863,12 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
          (long long) result->kernel_total_us, result->implementation_rmse,
          result->implementation_max_abs_error, result->random_samples,
          result->random_implementation_rmse, result->random_implementation_max_abs_error,
-         result->tail_implementation_max_abs_error);
+         result->tail_implementation_max_abs_error,
+         (long long) result->transpose_us, (long long) result->p_store_us,
+         (long long) result->lock_us, (long long) result->completion_fence_us,
+         (long long) result->pipeline_overlap_us, (long long) result->hmx_command_count,
+         (long long) result->physical_macs, (long long) result->useful_macs,
+         result->layout_mismatches, result->overlap_mismatches, result->overlap_speedup);
   printf("HVX_FP16_TO_FP32_PROBE zero=%g one=%g quarter=%g neg_half=%g "
          "int8_s32_pack_mismatches=%d int8_s32_pack_max_abs_diff=%d\n", result->convert_zero,
          result->convert_one, result->convert_quarter, result->convert_neg_half,
@@ -849,8 +883,8 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
     if (!csv) goto end;
     fprintf(csv, "mode,function,kernel,engine,profile_version,width,lanes,iters,elapsed_us,pair_elapsed_us,rmse,max_abs_error,dense_samples,"
                  "dense_rmse,dense_max_abs_error,pair_max_abs_diff,direct_tree_max_abs_diff,monotonic_violations,negative_count,"
-                 "nan_count,y_min,y_minus12,y_minus4,y_zero,pack_us,hmx_affine_relu_us,reduction_us,unpack_us,kernel_total_us,implementation_rmse,implementation_max_abs_error,random_samples,random_implementation_rmse,random_implementation_max_abs_error,tail_implementation_max_abs_error\n");
-    fprintf(csv, "%s,%s,%s,%d,%d,%d,%d,%d,%lld,%lld,%g,%g,%d,%g,%g,%g,%g,%d,%d,%d,%g,%g,%g,%g,%lld,%lld,%lld,%lld,%lld,%g,%g,%d,%g,%g,%g\n", cfg->mode,
+                 "nan_count,y_min,y_minus12,y_minus4,y_zero,pack_us,hmx_affine_relu_us,reduction_us,unpack_us,kernel_total_us,implementation_rmse,implementation_max_abs_error,random_samples,random_implementation_rmse,random_implementation_max_abs_error,tail_implementation_max_abs_error,transpose_us,p_store_us,lock_us,completion_fence_us,pipeline_overlap_us,hmx_command_count,physical_macs,useful_macs,layout_mismatches,overlap_mismatches,overlap_speedup\n");
+    fprintf(csv, "%s,%s,%s,%d,%d,%d,%d,%d,%lld,%lld,%g,%g,%d,%g,%g,%g,%g,%d,%d,%d,%g,%g,%g,%g,%lld,%lld,%lld,%lld,%lld,%g,%g,%d,%g,%g,%g,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%d,%d,%g\n", cfg->mode,
             cfg->scna_function, cfg->scna_kernel, result->engine, result->profile_version,
             result->width, result->lanes, result->iters,
             (long long) result->elapsed_us,
@@ -864,7 +898,12 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
             (long long) result->kernel_total_us, result->implementation_rmse,
             result->implementation_max_abs_error, result->random_samples,
             result->random_implementation_rmse, result->random_implementation_max_abs_error,
-            result->tail_implementation_max_abs_error);
+            result->tail_implementation_max_abs_error,
+            (long long) result->transpose_us, (long long) result->p_store_us,
+            (long long) result->lock_us, (long long) result->completion_fence_us,
+            (long long) result->pipeline_overlap_us, (long long) result->hmx_command_count,
+            (long long) result->physical_macs, (long long) result->useful_macs,
+            result->layout_mismatches, result->overlap_mismatches, result->overlap_speedup);
     fclose(csv);
   }
   { int fds[] = { result_fd }; (void) figure8_release_dsp_maps((struct MessageHeader *) chan, max_msg_size, fds, 1); }
@@ -1791,7 +1830,10 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
       fprintf(stderr,
               "FIG8_ATTENTION_TIMERS mode=%s scna_function=%d scna_kernel=%d scna_pipeline=%d scna_engine=%d profile_version=%d phase=%s iteration=%d lut_exp=%d nonlinear_mode=%d scna_width=%d scna_exp=%lld scna_pack=%lld scna_hmx_affine_relu=%lld scna_reduction=%lld scna_unpack=%lld qo_len=%d kv_len=%d n_heads=%d "
               "n_kv_heads=%d head_dim=%d kv_head=%d worker=%d profiled_total=%ld q_load=%ld k_load=%ld v_load=%ld "
-              "qk_dot=%ld safe_sm=%ld core_acc=%ld o_scale=%ld o_store=%ld kv_dma_issue=%ld kv_dma_wait=%ld "
+              "qk_dot=%ld safe_sm=%ld core_acc=%ld o_scale=%ld o_store=%ld scna_transpose=%lld "
+              "scna_p_store=%lld scna_lock=%lld scna_completion_fence=%lld scna_pipeline_overlap=%lld "
+              "scna_hmx_commands=%lld scna_physical_macs=%lld scna_useful_macs=%lld "
+              "scna_variant_flags=%d scna_pipeline_supported=%d kv_dma_issue=%ld kv_dma_wait=%ld "
               "kv_transform=%ld\n",
               cfg->mode, rec->scna_function, rec->scna_kernel, rec->scna_pipeline,
               rec->scna_engine, rec->profile_version,
@@ -1802,6 +1844,11 @@ static int run_figure8_attn_benchmark(const struct Figure8AttnConfig *cfg) {
               (long long) rec->scna_unpack, rec->qo_len, rec->kv_len, rec->n_heads,
               rec->n_kv_heads, rec->head_dim, rec->kv_head, rec->worker, rec->profiled_total, rec->q_load,
               rec->k_load, rec->v_load, rec->qk_dot, rec->safe_sm, rec->core_acc, rec->o_scale, rec->o_store,
+              (long long) rec->scna_transpose, (long long) rec->scna_p_store,
+              (long long) rec->scna_lock, (long long) rec->scna_completion_fence,
+              (long long) rec->scna_pipeline_overlap, (long long) rec->scna_hmx_commands,
+              (long long) rec->scna_physical_macs, (long long) rec->scna_useful_macs,
+              rec->scna_variant_flags, rec->scna_pipeline_supported,
               rec->kv_dma_issue, rec->kv_dma_wait, rec->kv_transform);
       if (cfg->numeric_debug) {
         fprintf(stderr,

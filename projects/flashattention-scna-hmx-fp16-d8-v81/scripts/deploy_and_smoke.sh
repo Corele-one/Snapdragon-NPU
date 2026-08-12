@@ -22,7 +22,7 @@ Usage: deploy_and_smoke.sh [options]
 Deploys the FastRPC environment and both FlashAttention baseline artifacts.
 
 Options:
-  --mode ping|baseline|lut-exp|scna-hvx-fp16-d8|scna-hmx-fp16-d8-hybrid|scna-hmx-fp16-d8-two-pass
+  --mode ping|baseline|lut-exp|scna-hvx-fp16-d8|scna-hmx-fp16-d8-*
   --dsp-arch v81                DSP build target (default: v81)
   --remote-dir PATH             Device deployment directory
   --qo-len N --kv-len N         Figure 8 attention shape (baseline/lut-exp)
@@ -72,7 +72,11 @@ done
 [[ "$dsp_arch" == "v81" ]] || { echo "This project is v81-only." >&2; exit 2; }
 
 case "$mode" in
-  ping|baseline|lut-exp|scna-hvx-fp16-d8|scna-hmx-fp16-d8-hybrid|scna-hmx-fp16-d8-two-pass) ;;
+  ping|baseline|lut-exp|scna-hvx-fp16-d8|scna-hmx-fp16-d8-hybrid|scna-hmx-fp16-d8-two-pass|\
+  scna-hmx-fp16-d8-hybrid-vtranspose|scna-hmx-fp16-d8-two-pass-vtranspose|\
+  scna-hmx-fp16-d8-hybrid-batch4|scna-hmx-fp16-d8-two-pass-batch4|\
+  scna-hmx-fp16-d8-hybrid-direct-p|scna-hmx-fp16-d8-two-pass-direct-p|\
+  scna-hmx-fp16-d8-hybrid-attn-pipeline|scna-hmx-fp16-d8-two-pass-attn-pipeline) ;;
   *) echo "Unsupported --mode: $mode" >&2; exit 2 ;;
 esac
 
@@ -99,6 +103,8 @@ done
 for artifact in libhtp_ops_skel.so; do
   adb push "$dsp_ship/$artifact" "$remote_dir/cdsp/"
   adb push "$dsp_ship/$artifact" "$remote_dir/dsp/"
+  adb push "$dsp_ship/$artifact" "$remote_dir/cdsp/libhtp_ops_skel_bp4.so"
+  adb push "$dsp_ship/$artifact" "$remote_dir/dsp/libhtp_ops_skel_bp4.so"
 done
 adb shell "chmod 755 '$remote_dir/htp_ops_test'"
 
