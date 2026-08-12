@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "preregistered_at": "2026-08-11",
+  "experiment": "SCNA FP16 d8 progressive optimization on Hexagon v79",
+  "fixed_contract": {
+    "architecture": "v79",
+    "sdk": "6.6",
+    "scna": "FP16 direct, SCOPE frozen d8 coefficients",
+    "attention_dataflow": "identical QK, PV, mask, K/V load and tiling code across variants",
+    "kv_reuse_claim": false,
+    "main_matrix": {
+      "qo_len": [1, 4, 8, 16, 32],
+      "kv_len": 4096,
+      "heads": 12,
+      "kv_heads": 2,
+      "head_dim": 128,
+      "mask": "full"
+    },
+    "sessions": 5,
+    "warmup_per_session": 5,
+    "measured_per_session": 20,
+    "micro_samples": 30,
+    "micro_min_sample_ms": 50
+  },
+  "baselines": {
+    "horizontal": ["origin_hvx", "exp_lut"],
+    "vertical": "stage1_dynamic_row"
+  },
+  "variants": [
+    {
+      "id": "stage1_dynamic_row",
+      "build_id": 0,
+      "parent": null,
+      "only_change": "Clean reconstruction of unoptimized stage-one SCNA: runtime width, sequential rows, repeated coefficient lookup/conversion, qf16 multiply/add/convert, one worker.",
+      "hypothesis": "Establish the vertical baseline and quantify SCNA hot-path cost.",
+      "expected_metrics": ["micro_pair_ns", "scna_exp_us", "dsp_total_us", "host_us", "instruction_mix"],
+      "motivation_evidence_allowed": []
+    },
+    {
+      "id": "prepare_once_row",
+      "build_id": 1,
+      "parent": "stage1_dynamic_row",
+      "only_change": "Prepare and pack d8 coefficient bits once before Attention worker submission; row evaluation remains sequential, dynamic-width qf16.",
+      "hypothesis": "Remove repeated table lookup and fp16-float-fp16 conversion from each row.",
+      "expected_metrics": ["param_prepare_us", "micro_pair_ns", "scna_exp_us"],
+      "motivation_evidence_allowed": ["stage1_dynamic_row.micro", "stage1_dynamic_row.diagnostic", "stage1_dynamic_row.disassembly"]
+    },
+    {
+      "id": "pair_shared_dynamic",
+      "build_id": 2,
+      "parent": "prepare_once_row",
+      "only_change": "Evaluate row0/row1 together so one w/b load and splat feeds both independent qf16 chains.",
+      "hypothesis": "Reduce duplicate coefficient load/splat work; register pressure may offset the gain.",
+      "expected_metrics": ["micro_pair_ns", "scna_exp_us", "splat_count", "spill_count"],
+      "motivation_evidence_allowed": ["prepare_once_row.micro", "prepare_once_row.disassembly"]
+    },
+    {
+      "id": "pair_static_d8",
+      "build_id": 3,
+      "parent": "pair_shared_dynamic",
+      "only_change": "Replace runtime-width paired loop with compile-time d8 and unroll it.",
+      "hypothesis": "Remove width-loop control and expose scheduling; code size and pressure may increase.",
+      "expected_metrics": ["micro_pair_ns", "branch_count", "code_bytes", "spill_count"],
+      "motivation_evidence_allowed": ["pair_shared_dynamic.micro", "pair_shared_dynamic.disassembly", "fixed_contract"]
+    },
+    {
+      "id": "pair_d8_fma_noinline",
+      "build_id": 4,
+      "parent": "pair_static_d8",
+      "only_change": "Replace qf16 multiply/add/convert chain with IEEE FP16 vmpyacc, vmax and vadd; body is noinline.",
+      "hypothesis": "Shorten the dependent arithmetic chain while retaining an isolation call boundary.",
+      "expected_metrics": ["micro_pair_ns", "qf16_count", "fma_count", "stack_bytes", "spill_count"],
+      "motivation_evidence_allowed": ["pair_static_d8.micro", "pair_static_d8.disassembly"]
+    },
+    {
+      "id": "pair_d8_fma_inline",
+      "build_id": 5,
+      "parent": "pair_d8_fma_noinline",
+      "only_change": "Apply always_inline to the otherwise identical static d8 FP16 FMA pair body.",
+      "hypothesis": "Remove call/return overhead; expanded live ranges may increase stack or spills.",
+      "expected_metrics": ["micro_pair_ns", "dsp_total_us", "call_count", "stack_bytes", "spill_count"],
+      "motivation_evidence_allowed": ["pair_d8_fma_noinline.micro", "pair_d8_fma_noinline.disassembly"]
+    },
+    {
+      "id": "optimized",
+      "build_id": 6,
+      "parent": "inline_policy_winner",
+      "only_change": "Use the preregistered inline/noinline selection rule and enable capped multi-worker scheduling.",
+      "hypothesis": "Distribute q=32's 16 query-block/KV-head tasks across available HVX contexts within the VTCM cap.",
+      "expected_metrics": ["dsp_total_us", "host_us", "active_workers", "worker_timeline"],
+      "motivation_evidence_allowed": ["inline_policy_winner.attention", "inline_policy_winner.diagnostic", "worker_capability"]
+    }
+  ],
+  "inline_selection": {
+    "metric": "single-worker DSP total geometric mean over all qo_len",
+    "tie_rule": "Choose noinline when difference is below 1% or paired-bootstrap 95% CI crosses 1.0x.",
+    "gates": ["correctness", "stack", "spill"]
+  },
+  "statistics": {
+    "method": "paired bootstrap",
+    "confidence": 0.95,
+    "inconclusive_rule": "95% ratio CI crosses 1.0x"
+  },
+  "correctness_gates": {
+    "ret": 0,
+    "finite": true,
+    "masked_and_tail_zero": true,
+    "rmse_max": 0.002,
+    "max_abs_max": 0.01,
+    "worker_checksum_equal": true
+  },
+  "out_of_scope": ["KV DMA/VTCM pipeline", "KV tile reuse claim", "v81", "INT8", "lane8/tree", "parameter retraining", "llama.cpp end-to-end"]
+}
