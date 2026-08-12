@@ -1,0 +1,37 @@
+candidate_nonfinite,head_dim,kv_len,label,mask_mode,max_abs_error,mode,rmse,status,tail_zero,tail_zero_required
+0,64,4093,HVX SCNA d8,full,0.000124808,scna-hvx-fp16-d8,3.71412e-05,pass,True,True
+0,128,4093,HVX SCNA d8,full,0.000159818,scna-hvx-fp16-d8,4.46835e-05,pass,True,True
+0,64,4096,HVX SCNA d8,full,0.000124978,scna-hvx-fp16-d8,3.70702e-05,pass,False,False
+0,128,4096,HVX SCNA d8,full,0.000145009,scna-hvx-fp16-d8,4.43378e-05,pass,False,False
+0,64,4093,HVX SCNA d8,padding,0.000135989,scna-hvx-fp16-d8,3.76952e-05,pass,True,True
+0,128,4093,HVX SCNA d8,padding,0.000162772,scna-hvx-fp16-d8,4.55581e-05,pass,True,True
+0,64,4096,HVX SCNA d8,padding,0.000124808,scna-hvx-fp16-d8,3.71412e-05,pass,True,True
+0,128,4096,HVX SCNA d8,padding,0.000159818,scna-hvx-fp16-d8,4.46835e-05,pass,True,True
+0,64,4093,HVX SCNA d8,causal,0.0001383,scna-hvx-fp16-d8,3.73912e-05,pass,True,True
+0,128,4093,HVX SCNA d8,causal,0.000159565,scna-hvx-fp16-d8,4.52159e-05,pass,True,True
+0,64,4096,HVX SCNA d8,causal,0.000124978,scna-hvx-fp16-d8,3.69642e-05,pass,True,True
+0,128,4096,HVX SCNA d8,causal,0.000149302,scna-hvx-fp16-d8,4.46074e-05,pass,True,True
+0,64,4093,HMX Hybrid,full,0.000124808,scna-hmx-fp16-d8-hybrid,3.71412e-05,pass,True,True
+0,128,4093,HMX Hybrid,full,0.000159818,scna-hmx-fp16-d8-hybrid,4.46835e-05,pass,True,True
+0,64,4096,HMX Hybrid,full,0.000124978,scna-hmx-fp16-d8-hybrid,3.70702e-05,pass,False,False
+0,128,4096,HMX Hybrid,full,0.000145009,scna-hmx-fp16-d8-hybrid,4.43378e-05,pass,False,False
+0,64,4093,HMX Hybrid,padding,0.000135989,scna-hmx-fp16-d8-hybrid,3.76952e-05,pass,True,True
+0,128,4093,HMX Hybrid,padding,0.000162772,scna-hmx-fp16-d8-hybrid,4.55581e-05,pass,True,True
+0,64,4096,HMX Hybrid,padding,0.000124808,scna-hmx-fp16-d8-hybrid,3.71412e-05,pass,True,True
+0,128,4096,HMX Hybrid,padding,0.000159818,scna-hmx-fp16-d8-hybrid,4.46835e-05,pass,True,True
+0,64,4093,HMX Hybrid,causal,0.0001383,scna-hmx-fp16-d8-hybrid,3.73912e-05,pass,True,True
+0,128,4093,HMX Hybrid,causal,0.000159565,scna-hmx-fp16-d8-hybrid,4.52159e-05,pass,True,True
+0,64,4096,HMX Hybrid,causal,0.000124978,scna-hmx-fp16-d8-hybrid,3.69642e-05,pass,True,True
+0,128,4096,HMX Hybrid,causal,0.000149302,scna-hmx-fp16-d8-hybrid,4.46074e-05,pass,True,True
+0,64,4093,HMX Two-pass,full,0.000125046,scna-hmx-fp16-d8-two-pass,3.70962e-05,pass,True,True
+0,128,4093,HMX Two-pass,full,0.000154096,scna-hmx-fp16-d8-two-pass,4.44215e-05,pass,True,True
+0,64,4096,HMX Two-pass,full,0.00012343,scna-hmx-fp16-d8-two-pass,3.71512e-05,pass,False,False
+0,128,4096,HMX Two-pass,full,0.000145963,scna-hmx-fp16-d8-two-pass,4.42283e-05,pass,False,False
+0,64,4093,HMX Two-pass,padding,0.000134992,scna-hmx-fp16-d8-two-pass,3.77367e-05,pass,True,True
+0,128,4093,HMX Two-pass,padding,0.000155142,scna-hmx-fp16-d8-two-pass,4.52124e-05,pass,True,True
+0,64,4096,HMX Two-pass,padding,0.000125046,scna-hmx-fp16-d8-two-pass,3.70962e-05,pass,True,True
+0,128,4096,HMX Two-pass,padding,0.000154096,scna-hmx-fp16-d8-two-pass,4.44215e-05,pass,True,True
+0,64,4093,HMX Two-pass,causal,0.000137823,scna-hmx-fp16-d8-two-pass,3.73473e-05,pass,True,True
+0,128,4093,HMX Two-pass,causal,0.000153843,scna-hmx-fp16-d8-two-pass,4.49916e-05,pass,True,True
+0,64,4096,HMX Two-pass,causal,0.000122594,scna-hmx-fp16-d8-two-pass,3.69338e-05,pass,True,True
+0,128,4096,HMX Two-pass,causal,0.000149302,scna-hmx-fp16-d8-two-pass,4.43935e-05,pass,True,True

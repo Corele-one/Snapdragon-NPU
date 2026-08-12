@@ -1,0 +1,7 @@
+acceptance_status,affine_ns_per_vector,checkpoint,label,mode,pack_ns_per_vector,provenance,reduction_ns_per_vector,samples,total_ns_per_vector,unpack_ns_per_vector
+micro-only,181.0,naive-scalar-layout,HMX Hybrid,scna-hmx-fp16-d8-hybrid,5504.0,development checkpoint; one 1000-vector batch; no CI,,1,20036.0,14270.0
+micro-only,,naive-scalar-layout,HMX Two-pass,scna-hmx-fp16-d8-two-pass,5463.0,development checkpoint; one 1000-vector batch; no CI,,1,7785.0,1890.0
+rejected-long-sequence-timeout,486.0,vector-scatter-gather,HMX Hybrid,scna-hmx-fp16-d8-hybrid,68.0,development checkpoint; one 1000-vector batch; no CI,135.0,1,1426.0,546.0
+rejected-long-sequence-timeout,305.0,vector-scatter-gather,HMX Two-pass,scna-hmx-fp16-d8-two-pass,52.0,development checkpoint; one 1000-vector batch; no CI,179.0,1,635.0,23.0
+accepted,229.4,final-stable,HMX Hybrid,scna-hmx-fp16-d8-hybrid,18.8,formal run; median of 30 independent >=50 ms samples,10.4,30,17150.6,16832.2
+accepted,232.55,final-stable,HMX Two-pass,scna-hmx-fp16-d8-two-pass,18.55,formal run; median of 30 independent >=50 ms samples,189.0,30,2620.8,2114.125

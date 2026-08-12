@@ -1,0 +1,7 @@
+baseline_label,baseline_mode,ci_high,ci_low,hmx_label,hmx_mode,pairs,speedup,status
+Origin-HVX,baseline,0.014144528991566735,0.013910901996483293,HMX Hybrid,scna-hmx-fp16-d8-hybrid,20,0.014035600335751143,slower
+EXP-LUT,lut-exp,0.009737624915487237,0.009369822439844232,HMX Hybrid,scna-hmx-fp16-d8-hybrid,20,0.009561132824657807,slower
+HVX SCNA d8,scna-hvx-fp16-d8,0.012729692074643872,0.01240170945862531,HMX Hybrid,scna-hmx-fp16-d8-hybrid,20,0.012575517303618965,slower
+Origin-HVX,baseline,0.08571279426873257,0.08435338775670939,HMX Two-pass,scna-hmx-fp16-d8-two-pass,20,0.08503958957187677,slower
+EXP-LUT,lut-exp,0.05899599270169888,0.056829722026660055,HMX Two-pass,scna-hmx-fp16-d8-two-pass,20,0.057929464490382686,slower
+HVX SCNA d8,scna-hvx-fp16-d8,0.0772403045298777,0.07487572944540472,HMX Two-pass,scna-hmx-fp16-d8-two-pass,20,0.07619316627517513,slower
