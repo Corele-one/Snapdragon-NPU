@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "experiment": "Serial SCNA and Attention on Hexagon v79 simulator",
+  "scope": "Simulator diagnostic only; not Snapdragon device performance",
+  "simulator": {
+    "sdk_root_default": "/local/mnt/workspace/Qualcomm/Hexagon_SDK/6.6.0.0",
+    "tools_version": "19.0.07",
+    "model": "v79na_1",
+    "runtime": "QuRT runelf.pbn -> run_main_on_hexagon_sim -> DSP shared-object main",
+    "case_timeout_seconds": 600
+  },
+  "micro": {
+    "variants": [
+      "stage1_dynamic_row",
+      "prepare_once_row",
+      "pair_shared_dynamic",
+      "pair_static_d8",
+      "pair_d8_fma_noinline",
+      "pair_d8_fma_inline",
+      "optimized"
+    ],
+    "processes": 2,
+    "warmup": 5,
+    "measurement": 1000,
+    "numeric_limits": {
+      "rmse": 0.003,
+      "max_abs": 0.02,
+      "dense_rmse": 0.011,
+      "dense_max_abs": 0.16,
+      "random_rmse": 0.011,
+      "random_max_abs": 0.16,
+      "canonical_oracle_mismatches_max": 1,
+      "paired_single_mismatches": 0,
+      "monotonic_violations": 0,
+      "negative_count": 0,
+      "nonfinite_count": 0
+    }
+  },
+  "attention": {
+    "modes": ["origin", "exp-lut", "stage1", "optimized"],
+    "smoke": {"qo": 1, "kv": 64, "heads": 2, "kv_heads": 1, "head_dim": 64},
+    "tail": {"qo": 3, "kv": 65, "heads": 2, "kv_heads": 1, "head_dim": 64},
+    "sweep": {
+      "qo": [1, 4, 8, 16, 32],
+      "kv": 64,
+      "heads": 12,
+      "kv_heads": 2,
+      "head_dim": 128,
+      "mask": "full",
+      "workers": 1,
+      "warmup": 1,
+      "measurement": 5
+    },
+    "correctness": {
+      "rmse_max": 0.002,
+      "max_abs_max": 0.01,
+      "candidate_and_reference_finite": true,
+      "tail_and_mask_nonzero_count": 0,
+      "return_code": 0
+    }
+  },
+  "out_of_scope": [
+    "Android Host/rpcmem/FastRPC/driver simulation",
+    "KV=4096 Figure 8 matrix",
+    "device latency, throughput, or ranking",
+    "K/V tile reuse claim"
+  ]
+}

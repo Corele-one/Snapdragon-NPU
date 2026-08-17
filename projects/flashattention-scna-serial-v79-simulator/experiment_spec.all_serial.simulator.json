@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "experiment": "Matched Attention study for all seven serial SCNA variants",
+  "scope": "Hexagon Simulator diagnostic only; not Snapdragon device performance",
+  "variants": [
+    "stage1_dynamic_row", "prepare_once_row", "pair_shared_dynamic", "pair_static_d8",
+    "pair_d8_fma_noinline", "pair_d8_fma_inline", "optimized"
+  ],
+  "single_worker_performance": {
+    "schemes": ["origin", "exp-lut", "stage1_dynamic_row", "prepare_once_row", "pair_shared_dynamic", "pair_static_d8", "pair_d8_fma_noinline", "pair_d8_fma_inline", "optimized"],
+    "qo": [1, 4, 8, 16, 32], "kv": 64, "heads": 12, "kv_heads": 2, "head_dim": 128,
+    "warmup": 1, "measurements": 5
+  },
+  "tail_correctness": {"variants": 7, "qo": 3, "kv": 65, "heads": 2, "kv_heads": 1, "head_dim": 64},
+  "parallel_add_on": {"variant": "optimized", "workers": "auto", "qo": [1, 4, 8, 16, 32]},
+  "correctness": {"rmse_max": 0.002, "max_abs_max": 0.01, "finite": true, "tail_and_mask_nonzero_count": 0, "return_code": 0},
+  "research_integrity": {"real_logs_only": true, "interpolation": false, "smoothing": false, "device_extrapolation": false}
+}
