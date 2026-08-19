@@ -1,3 +1,0 @@
-83efdb2031678630cf2acc551149ca7f9ea5c04abd78c696739a9572b0eafe4b  src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libhtp_ops_skel.so
-c19a19a0ed792a70c9ea91e791e01caa60db36100941da5e33550ee45ec99bed  src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/htp_ops_test
-41b4153195ee11b7c19f8ab4f41bc40bfc493dc5be1a8b0b4403c7272cd6db14  src/htp-ops-lib-main/include/dsp/scna_params.h

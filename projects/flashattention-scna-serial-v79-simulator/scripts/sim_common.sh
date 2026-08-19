@@ -28,10 +28,17 @@ run_sim_case() {
   if [[ ${SCNA_SIM_TIMING:-0} == 1 ]]; then
     sim_options+=(--timing --pmu_statsfile "$metrics_dir/pmu.txt")
   fi
+  if [[ ${SCNA_SIM_TIMING_NODBC:-0} == 1 ]]; then
+    sim_options+=(--timing_nodbc --pmu_statsfile "$metrics_dir/pmu.txt")
+  fi
   if [[ ${SCNA_SIM_DETAILED:-0} == 1 ]]; then
     sim_options+=(--ihist "$metrics_dir/ihist.txt" --packet_analyze "$metrics_dir/packet_analyze.txt")
   fi
   if [[ -n ${SCNA_SIM_PCFILTER:-} ]]; then sim_options+=(--pcfilter "$SCNA_SIM_PCFILTER"); fi
+  if [[ ${SCNA_SIM_MEMTRACE:-0} == 1 ]]; then sim_options+=(--memtrace "$metrics_dir/memtrace.txt"); fi
+  if [[ ${SCNA_SIM_COPROCTRACE:-0} == 1 ]]; then sim_options+=(--coproctrace "$metrics_dir/coproctrace.txt"); fi
+  if [[ ${SCNA_SIM_PCTRACE:-0} == 1 ]]; then sim_options+=(--pctrace "$metrics_dir/pctrace.txt"); fi
+  if [[ ${SCNA_SIM_PCTRACE:-0} == min ]]; then sim_options+=(--pctrace_min "$metrics_dir/pctrace.txt"); fi
   [[ $- == *e* ]] && had_errexit=1
   started="$(date +%s%N)"
   set +e

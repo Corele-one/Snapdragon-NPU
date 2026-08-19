@@ -54,6 +54,12 @@ int simple_flash_attn_llm_profiled(__fp16 *restrict O, const __fp16 *restrict Q,
                                    int n_heads, int n_kv_heads, int head_dim, int64_t trace_id, int mode_flags,
                                    int op_index, struct LlmTraceProfileHeader *profile);
 
+int simple_flash_attn_dual_profiled(__fp16 *restrict O, const __fp16 *restrict Q, const __fp16 *restrict K,
+                                    const __fp16 *restrict V, const __fp16 *restrict mask, int qo_len, int kv_len,
+                                    int n_heads, int n_kv_heads, int head_dim, int64_t trace_id, int mode_flags,
+                                    int op_index, struct Figure8ProfileHeader *figure8_profile,
+                                    struct LlmTraceProfileHeader *llm_profile);
+
 int naive_flash_attn(float *restrict O, const float *restrict Q, const __fp16 *restrict K, const __fp16 *restrict V,
                      const __fp16 *restrict mask, int qo_len, int kv_len, int n_heads, int n_kv_heads, int head_dim);
 

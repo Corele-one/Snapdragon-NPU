@@ -1,4 +1,0 @@
-variant,instructions,vector_compute,shuffle_reduction,vector_load_store,scalar_other,control,spill_memory_ops
-serial,100,53,0,0,47,0,0
-lane8,216,78,72,11,55,0,0
-lane8-paired,454,166,144,41,102,1,28

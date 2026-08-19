@@ -1,6 +1,7 @@
 # Models and datasets
 /models/
 /projects/*/models/
+/projects/Archived
 
 # Documentation is kept locally and is not versioned in this repository.
 **/docs/

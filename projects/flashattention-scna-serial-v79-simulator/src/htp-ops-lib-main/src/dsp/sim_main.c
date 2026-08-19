@@ -172,6 +172,20 @@ static int mode_flags_for(const char *mode, int built_variant, int requested_var
   return -1;
 }
 
+static const char *trace_stage_name(int stage) {
+  static const char *names[] = {"unknown", "validate_in", "validate_out", "activation_hvx_load",
+    "activation_dma_inflight", "activation_dma_wait", "weight_dma_inflight", "weight_dma_wait",
+    "weight_hvx_dequant", "weight_hvx_load", "hmx_mma", "hvx_compute", "output_store",
+    "activation_quantize", "activation_pack", "q_load", "k_load", "v_load", "qk_dot",
+    "safe_sm", "core_acc", "o_scale", "o_store"};
+  return stage > 0 && stage < (int) (sizeof(names) / sizeof(names[0])) ? names[stage] : "unknown";
+}
+
+static const char *trace_unit_name(int unit) {
+  static const char *names[] = {"OTHER", "DMA", "HVX", "HMX", "STORE", "MEMORY", "SCALAR"};
+  return unit >= 0 && unit < (int) (sizeof(names) / sizeof(names[0])) ? names[unit] : "UNKNOWN";
+}
+
 static int run_attention(int argc, char **argv) {
   const char *mode = find_arg(argc, argv, "--mode");
   const char *requested_variant_name = find_arg(argc, argv, "--variant");
@@ -183,15 +197,19 @@ static int run_attention(int argc, char **argv) {
   const int warmup = int_arg(argc, argv, "--warmup", 1);
   const int iters = int_arg(argc, argv, "--iters", 5);
   const int tail_check = int_arg(argc, argv, "--tail-check", 0);
+  const int resource_audit = int_arg(argc, argv, "--resource-audit", 0);
+  const int trace_events = int_arg(argc, argv, "--trace-events", 4096);
   const int built_variant = scna_exp2_build_variant();
   const int requested_variant = variant_id(requested_variant_name);
   const int requested_workers = workers_arg(argc, argv);
-  const int mode_flags = mode ? mode_flags_for(mode, built_variant, requested_variant, requested_workers) : -1;
+  int mode_flags = mode ? mode_flags_for(mode, built_variant, requested_variant, requested_workers) : -1;
+  if (mode_flags >= 0 && resource_audit) mode_flags |= LLM_NPU_MODE_DETAILED_TRACE;
   const char *reported_variant = mode && strcmp(mode, "serial") == 0 ? variant_name(built_variant) :
                                  mode && strcmp(mode, "stage1") == 0 ? variant_name(SCNA_VARIANT_STAGE1_DYNAMIC_ROW) :
                                  mode && strcmp(mode, "optimized") == 0 ? variant_name(SCNA_VARIANT_OPTIMIZED) : "none";
   if (!mode || mode_flags < 0 || qo < 1 || kv < 1 || heads < 1 || kv_heads < 1 || dim < 1 ||
-      heads % kv_heads != 0 || dim % 64 != 0 || warmup < 0 || iters < 1 || requested_workers < 0) {
+      heads % kv_heads != 0 || dim % 64 != 0 || warmup < 0 || iters < 1 || requested_workers < 0 ||
+      (resource_audit != 0 && resource_audit != 1) || trace_events < 1) {
     FARF(ALWAYS,
          "ATTENTION_SMOKE_RESULT status=FAIL reason=invalid_arguments mode=%s variant=%s requested_variant=%s build_id=%d requested_workers=%d qo=%d kv=%d heads=%d kv_heads=%d head_dim=%d",
          mode ? mode : "missing", reported_variant, requested_variant_name ? requested_variant_name : "none",
@@ -211,11 +229,16 @@ static int run_attention(int argc, char **argv) {
   __fp16 *mask = (__fp16 *) memalign(128, mask_count * sizeof(__fp16));
   const int max_records = 128;
   const size_t profile_bytes = sizeof(struct Figure8ProfileHeader) +
-                               (size_t) max_records * sizeof(struct Figure8ProfileRecord);
+                               (size_t) max_records * sizeof(struct Figure8ProfileRecord) +
+                               (size_t) (resource_audit ? trace_events : 0) * sizeof(struct Figure8ProfileEvent);
   struct Figure8ProfileHeader *profile = (struct Figure8ProfileHeader *) memalign(128, profile_bytes);
-  if (!q || !out || !reference || !k || !v || !mask || !profile) {
+  const size_t llm_profile_bytes = sizeof(struct LlmTraceProfileHeader) +
+                                   (size_t) trace_events * sizeof(struct LlmTraceProfileEvent);
+  struct LlmTraceProfileHeader *llm_profile = resource_audit ?
+    (struct LlmTraceProfileHeader *) memalign(128, llm_profile_bytes) : NULL;
+  if (!q || !out || !reference || !k || !v || !mask || !profile || (resource_audit && !llm_profile)) {
     FARF(ALWAYS, "ATTENTION_SMOKE_RESULT status=FAIL reason=allocation");
-    free(q); free(out); free(reference); free(k); free(v); free(mask); free(profile);
+    free(q); free(out); free(reference); free(k); free(v); free(mask); free(profile); free(llm_profile);
     return 1;
   }
   fill_inputs(q, k, v, mask, qo, kv, heads, kv_heads, dim);
@@ -229,7 +252,7 @@ static int run_attention(int argc, char **argv) {
     FARF(ALWAYS, "ATTENTION_SMOKE_RESULT status=SKIP reason=vtcm_unavailable vtcm_total=%u",
          (unsigned) vtcm_manager_get_total_size());
     vtcm_manager_reset(); power_reset();
-    free(q); free(out); free(reference); free(k); free(v); free(mask); free(profile);
+    free(q); free(out); free(reference); free(k); free(v); free(mask); free(profile); free(llm_profile);
     return 3;
   }
   hmx_manager_setup();
@@ -240,10 +263,18 @@ static int run_attention(int argc, char **argv) {
     memset(profile, 0, profile_bytes);
     profile->magic = FIGURE8_PROFILE_MAGIC;
     profile->max_records = max_records;
-    profile->max_events = 0;
+    profile->max_events = resource_audit ? trace_events : 0;
+    if (resource_audit) {
+      memset(llm_profile, 0, llm_profile_bytes);
+      llm_profile->magic = LLM_TRACE_PROFILE_MAGIC;
+      llm_profile->max_events = trace_events;
+    }
     const int64_t t0 = HAP_perf_get_qtimer_count();
-    ret = simple_flash_attn_profiled((__fp16 *) out, (const __fp16 *) q, k, v, mask, qo, kv, heads,
-                                     kv_heads, dim, mode_flags, profile);
+    ret = resource_audit ?
+      simple_flash_attn_dual_profiled((__fp16 *) out, (const __fp16 *) q, k, v, mask, qo, kv, heads,
+                                      kv_heads, dim, 1, mode_flags, iteration, profile, llm_profile) :
+      simple_flash_attn_profiled((__fp16 *) out, (const __fp16 *) q, k, v, mask, qo, kv, heads,
+                                 kv_heads, dim, mode_flags, profile);
     const int64_t kernel_us = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - t0);
     if (ret != 0) break;
     if (iteration < 0) continue;
@@ -268,6 +299,48 @@ static int run_attention(int argc, char **argv) {
          (long long) v_load, (long long) qk_dot, (long long) safe_sm, (long long) core_acc,
          (long long) o_scale, (long long) o_store, (long long) scna_exp, (long long) prepare,
          tail_nonzero, masked_nonzero, checksum_float(out, q_count));
+    if (resource_audit) {
+      const int llm_count = llm_profile->event_count < trace_events ? llm_profile->event_count : trace_events;
+      const int fig_count = profile->event_count < trace_events ? profile->event_count : trace_events;
+      const struct LlmTraceProfileEvent *events = llm_trace_profile_events_const(llm_profile);
+      const struct Figure8ProfileEvent *fig_events = figure8_profile_events_const(profile);
+      int scna_events = 0;
+      for (int i = 0; i < fig_count; ++i) {
+        if (fig_events[i].component == FIGURE8_COMP_SCNA_EXP) {
+          ++scna_events;
+        }
+      }
+      FARF(ALWAYS,
+           "ATTENTION_RESOURCE_HEADER status=%s mode=%s variant=%s build_id=%d iteration=%d qo=%d kv=%d heads=%d kv_heads=%d head_dim=%d requested_workers=%d active_workers=%d hvx_contexts=%d vtcm_worker_cap=%d tasks=%d q_task_rows=%d figure_events=%d figure_overflow=%d llm_events=%d llm_overflow=%d",
+           profile->event_overflow == 0 && llm_profile->event_overflow == 0 ? "PASS" : "FAIL",
+           mode, reported_variant, built_variant, iteration, qo, kv, heads, kv_heads, dim, requested_workers,
+           profile->active_workers, profile->hvx_contexts, profile->vtcm_worker_cap, profile->tasks,
+           profile->q_task_rows, profile->event_count, profile->event_overflow, llm_profile->event_count,
+           llm_profile->event_overflow);
+      for (int i = 0; i < llm_count; ++i) {
+        const struct LlmTraceProfileEvent *event = &events[i];
+        const char *kind = event->unit == LLM_TRACE_UNIT_HMX ? "logical_ops" : "logical_bytes";
+        FARF(ALWAYS,
+             "ATTENTION_RESOURCE_EVENT index=%d stage=%s stage_id=%d unit=%s unit_id=%d worker=%d block_r=%d block_c=%d chunk_r=%d chunk_c=%d value_kind=%s value=%lld t0_us=%lld t1_us=%lld duration_us=%lld",
+             i, trace_stage_name(event->stage), event->stage, trace_unit_name(event->unit), event->unit,
+             event->worker, event->mr, event->nc, event->chunk_m, event->chunk_n, kind,
+             (long long) event->bytes, (long long) event->t0_us, (long long) event->t1_us,
+             (long long) event->dur_us);
+      }
+      const int gqa = heads / kv_heads;
+      const int kv_tiles = (kv + 63) / 64;
+      int pair_calls = 0, online_calls = 0;
+      for (int q0 = 0; q0 < qo; q0 += 4) {
+        const int qn = qo - q0 < 4 ? qo - q0 : 4;
+        pair_calls += kv_heads * ((qn * gqa + 1) / 2) * kv_tiles;
+        online_calls += kv_heads * ((qn * gqa + 63) / 64) * kv_tiles;
+      }
+      if (!(mode_flags & LLM_NPU_MODE_SCNA_FP16)) pair_calls = online_calls = 0;
+      FARF(ALWAYS,
+           "SCNA_RESOURCE_SUMMARY mode=%s variant=%s build_id=%d figure_scna_events=%d pair_calls=%d online_calls=%d logical_calls=%d total_duration_us=%lld",
+           mode, reported_variant, built_variant, scna_events, pair_calls, online_calls, pair_calls + online_calls,
+           (long long) scna_exp);
+    }
   }
 
   double sum_sq = 0.0;
@@ -295,7 +368,7 @@ static int run_attention(int argc, char **argv) {
   hmx_manager_reset();
   vtcm_manager_reset();
   power_reset();
-  free(q); free(out); free(reference); free(k); free(v); free(mask); free(profile);
+  free(q); free(out); free(reference); free(k); free(v); free(mask); free(profile); free(llm_profile);
   return pass ? 0 : 1;
 }
 

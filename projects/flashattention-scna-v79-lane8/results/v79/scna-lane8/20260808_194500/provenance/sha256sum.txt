@@ -1,3 +1,0 @@
-322b3eafee50c7602557f97cf22cde5117506b41fcf3d9fab7f7679de9924de4  /home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libhtp_ops_skel.so
-87584dd65e5a99a224d085fc578092ce9b478bb471438205a3bb6e3f7741f66b  /home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/htp_ops_test
-41b4153195ee11b7c19f8ab4f41bc40bfc493dc5be1a8b0b4403c7272cd6db14  /home/corleone/code/Snapdragon-NPU/projects/flashattention-scna-v79-lane8/src/htp-ops-lib-main/include/dsp/scna_params.h

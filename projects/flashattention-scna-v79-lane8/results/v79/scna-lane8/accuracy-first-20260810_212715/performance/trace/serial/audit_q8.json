@@ -1,9 +1,0 @@
-{
-  "trace": "results/v79/scna-lane8/accuracy-first-20260810_212715/performance/trace/serial/scna_serial_q8.perfetto.json",
-  "hardware_trace": false,
-  "slice_count": 780,
-  "scna_exp_slices": 600,
-  "event_overflow_total": 0,
-  "errors": [],
-  "pass": true
-}

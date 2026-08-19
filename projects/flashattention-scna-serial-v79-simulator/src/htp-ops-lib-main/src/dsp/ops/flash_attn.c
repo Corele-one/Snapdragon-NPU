@@ -338,6 +338,23 @@ void simple_flash_attn_f16_core(int kv_head_idx, uint8_t *vtcm, uint8_t *vtcm_li
   // end VTCM allocation
   assert(vtcm_cur <= vtcm_limit);
 
+  if ((mode_flags & LLM_NPU_MODE_DETAILED_TRACE) != 0) {
+    const size_t used = (size_t) (vtcm_cur - vtcm);
+    FARF(ALWAYS,
+         "ATTENTION_VTCM_LAYOUT worker=%d kv_head=%d blk_r=%u blk_c=%u g_br=%u q_bytes=%u o0_bytes=%u o1_bytes=%u k_bytes=%u v_bytes=%u s_bytes=%u p_bytes=%u d_bytes=%u col_vectors_bytes=%u row_vectors_bytes=%u hmx_scales_bytes=512 q_offset=%u o0_offset=%u o1_offset=%u k_offset=%u v_offset=%u s_offset=%u p_offset=%u d_offset=%u col_vectors_offset=%u row_vectors_offset=%u hmx_scales_offset=%u used_bytes=%u reserved_bytes=%u vtcm_total_bytes=%u",
+         worker_index, kv_head_idx, (unsigned) blk_sz_r, (unsigned) blk_sz_c, (unsigned) g_br,
+         (unsigned) qo_tile_size, (unsigned) qo_tile_size, (unsigned) qo_tile_size,
+         (unsigned) kv_tile_size, (unsigned) kv_tile_size, (unsigned) core_tile_size,
+         (unsigned) core_tile_size, (unsigned) d_tile_size, (unsigned) (4 * col_vec_size),
+         (unsigned) (2 * row_vec_size), (unsigned) ((uint8_t *) q_tile - vtcm),
+         (unsigned) ((uint8_t *) o_tile0 - vtcm), (unsigned) ((uint8_t *) o_tile1 - vtcm),
+         (unsigned) ((uint8_t *) k_tile - vtcm), (unsigned) ((uint8_t *) v_tile - vtcm),
+         (unsigned) ((uint8_t *) s_tile - vtcm), (unsigned) ((uint8_t *) p_tile - vtcm),
+         (unsigned) ((uint8_t *) d_tile - vtcm), (unsigned) ((uint8_t *) mvec_m - vtcm),
+         (unsigned) ((uint8_t *) row_buffer0 - vtcm), (unsigned) (hmx_output_scales_id - vtcm),
+         (unsigned) used, (unsigned) (vtcm_limit - vtcm), (unsigned) vtcm_manager_get_total_size());
+  }
+
   float  qk_scale    = 1.0f / sqrtf(head_dim) * 1.44269504f;  // log2(e) = 1.44269504
   __fp16 qk_scale_hf = (__fp16) qk_scale;                     // NOTE: this conversion can be very slow
 
@@ -2083,6 +2100,15 @@ int simple_flash_attn_llm_profiled(__fp16 *restrict O, const __fp16 *restrict Q,
                                    int op_index, struct LlmTraceProfileHeader *profile) {
   return simple_flash_attn_impl(O, Q, K, V, mask, qo_len, kv_len, n_heads, n_kv_heads, head_dim, mode_flags, NULL,
                                 profile, trace_id, op_index);
+}
+
+int simple_flash_attn_dual_profiled(__fp16 *restrict O, const __fp16 *restrict Q, const __fp16 *restrict K,
+                                    const __fp16 *restrict V, const __fp16 *restrict mask, int qo_len, int kv_len,
+                                    int n_heads, int n_kv_heads, int head_dim, int64_t trace_id, int mode_flags,
+                                    int op_index, struct Figure8ProfileHeader *figure8_profile,
+                                    struct LlmTraceProfileHeader *llm_profile) {
+  return simple_flash_attn_impl(O, Q, K, V, mask, qo_len, kv_len, n_heads, n_kv_heads, head_dim, mode_flags,
+                                figure8_profile, llm_profile, trace_id, op_index);
 }
 
 static inline int64_t llm_trace_now_us(void) {
