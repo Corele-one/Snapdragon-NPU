@@ -2,7 +2,8 @@
 /models/
 /projects/*/models/
 /projects/Archived
-
+/projects/*/*/*report.py
+/projects/*/*/*tutorial.py
 # Documentation is kept locally and is not versioned in this repository.
 **/docs/
 **/reports/
@@ -30,7 +31,8 @@ CMakeFiles/
 *.dll
 *.dylib
 *.exe
-
+*report.py
+*tutorial.py
 projects/model-convert-venv/
 
 # Generated deployment packages
@@ -73,3 +75,9 @@ local-config.*
 # Superseded machine-local planning note; the portable procedure is documented
 # in projects/flashattention/README.md.
 projects/flashattention/FA_Reproduction_Plan.md
+projects/flashattention-scna-serial-v79-simulator/tools/generate_all_serial_report.py
+projects/flashattention-scna-serial-v79-simulator/tools/generate_all_serial_report.py
+projects/flashattention-scna-serial-v79-simulator/tools/generate_all_serial_report.py
+projects/flashattention-scna-serial-v79-simulator/tools/generate_all_serial_report.py
+.gitignore
+projects/flashattention-scna-serial-v79-simulator/tools/generate_all_serial_report.py
