@@ -45,3 +45,20 @@ SCNA_RUN_ID=scna_combined_resource_v79_$(date +%Y%m%d_%H%M%S) ./scripts/run_comb
 原生 `memtrace`/`pctrace_min` 文件仍可能较大。脚本保留原始文件，不会自动删除；运行前应确认 `results/` 所在文件系统有足够空间。
 
 `Tools/vscode` 不是 VS Code 本体；详见手册第 8 节。本项目只提供 `.vscode` 模板，不自动安装或修改用户扩展。
+
+已有综合资源 run 可额外生成 LUT-vs-SCNA 同口径诊断表：
+
+```bash
+python3 tools/generate_lut_scna_roofline_diagnostic.py \
+  --run-dir results/runs/scna_combined_resource_v79_20260818_164158
+```
+
+输出仅描述 simulator diagnostic；不会生成或声称 Snapdragon 真机 Roofline。
+
+Qo=32 下重试 KV=64 与受控长 KV=512：
+
+```bash
+SCNA_RUN_ID=lut_scna_kv_v79_retry ./scripts/run_lut_scna_kv_diagnostic.sh
+```
+
+脚本分别运行 Origin、EXP-LUT、stage1 和 optimized，要求 `ATTENTION_VERIFY=PASS` 与正常退出，并输出 CSV/JSON/中文表。动态 trace/PMU 的 authority 从综合资源 run 重新执行四门禁：正常退出、文件非空、PC 命中目标范围、非零样本必须同时成立；任一失败均报告 `UNAVAILABLE`，不会用零值代替。

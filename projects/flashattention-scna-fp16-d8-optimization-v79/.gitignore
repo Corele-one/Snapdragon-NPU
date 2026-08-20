@@ -8,3 +8,4 @@ results/runs/
 artifacts/
 __pycache__/
 tests/__pycache__/
+.venv-roofline/

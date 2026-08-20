@@ -16,13 +16,20 @@
 #ifndef SCNA_OPTIMIZED_INLINE
 #define SCNA_OPTIMIZED_INLINE 0
 #endif
+#ifndef SCNA_OPTIMIZED_IMPL
+#define SCNA_OPTIMIZED_IMPL 0
+#endif
 
 #if SCNA_BUILD_VARIANT < 0 || SCNA_BUILD_VARIANT >= 7
 #error "SCNA_BUILD_VARIANT must be in [0,6]"
 #endif
+#if SCNA_OPTIMIZED_IMPL < 0 || SCNA_OPTIMIZED_IMPL >= 3
+#error "SCNA_OPTIMIZED_IMPL must be in [0,2]"
+#endif
 
 int scna_exp2_build_variant(void) { return SCNA_BUILD_VARIANT; }
 int scna_exp2_build_optimized_inline(void) { return SCNA_OPTIMIZED_INLINE ? 1 : 0; }
+int scna_exp2_build_optimized_impl(void) { return SCNA_OPTIMIZED_IMPL; }
 
 /* Stage one deliberately performs a table lookup and fp16->float->fp16
  * conversion in the row hot path.  Later builds call the same helper once at
@@ -41,6 +48,7 @@ int scna_exp2_prepare_hvx_params(scna_exp2_hvx_params_t *params, int mode_flags)
   params->layout = scna_exp2_layout_from_mode(mode_flags);
   params->variant = (mode_flags >> 10) & 7;
   params->build_variant = SCNA_BUILD_VARIANT;
+  params->optimized_impl = SCNA_OPTIMIZED_IMPL;
   params->prepare_us = 0;
   if (params->variant != SCNA_BUILD_VARIANT || params->layout != SCNA_LAYOUT_SERIAL || params->width != 8) {
     return -2;
@@ -71,6 +79,10 @@ static HVX_INLINE_ALWAYS HVX_Vector qf16_affine_relu_sum(
   HVX_Vector affine = Q6_Vhf_equals_Vqf16(affine_qf);
   affine = Q6_Vhf_vmax_VhfVhf(affine, Q6_V_vzero());
   return Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(sum, affine));
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector qf16_add(HVX_Vector a, HVX_Vector b) {
+  return Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(a, b));
 }
 
 static __attribute__((noinline, unused)) HVX_Vector stage1_dynamic_row(HVX_Vector x, int width) {
@@ -157,6 +169,59 @@ static HVX_INLINE_ALWAYS void pair_static_d8_fma_body(
   *out1 = sum1;
 }
 
+/* Seven active neurons split over four independent accumulation chains.  This
+ * retains the original qf16 arithmetic family while shortening the loop-carried
+ * dependency from eight additions to at most two plus a final tree reduction. */
+static HVX_INLINE_ALWAYS void pair_static_d8_qf16_tree(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  HVX_Vector a0 = Q6_V_vzero(), b0 = Q6_V_vzero(), c0 = Q6_V_vzero(), d0 = Q6_V_vzero();
+  HVX_Vector a1 = Q6_V_vzero(), b1 = Q6_V_vzero(), c1 = Q6_V_vzero(), d1 = Q6_V_vzero();
+  HVX_Vector w, b;
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+#define SCNA_TREE_TERM(index, acc0, acc1) do { \
+    unpack_coeff(params->coeff_bits[(index)], &w, &b); \
+    (acc0) = qf16_affine_relu_sum((acc0), x0, w, b); \
+    (acc1) = qf16_affine_relu_sum((acc1), x1, w, b); \
+  } while (0)
+  SCNA_TREE_TERM(0, a0, a1);
+  SCNA_TREE_TERM(1, b0, b1);
+  SCNA_TREE_TERM(2, c0, c1);
+  SCNA_TREE_TERM(3, d0, d1);
+  SCNA_TREE_TERM(4, a0, a1);
+  SCNA_TREE_TERM(5, b0, b1);
+  SCNA_TREE_TERM(6, c0, c1);
+#undef SCNA_TREE_TERM
+  *out0 = qf16_add(qf16_add(a0, b0), qf16_add(c0, d0));
+  *out1 = qf16_add(qf16_add(a1, b1), qf16_add(c1, d1));
+}
+
+static HVX_INLINE_ALWAYS void pair_piecewise_d8(
+    HVX_Vector x0, HVX_Vector x1, HVX_Vector *out0, HVX_Vector *out1) {
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+  HVX_Vector w0 = Q6_V_vzero(), b0 = Q6_V_vzero();
+  HVX_Vector w1 = Q6_V_vzero(), b1 = Q6_V_vzero();
+#pragma unroll
+  for (int i = 0; i < SCNA_D8_ACTIVE_WIDTH; ++i) {
+    __fp16 threshold_h = scna_exp2_d8_breakpoint[i];
+    __fp16 prefix_w_h = scna_exp2_d8_prefix_w[i];
+    __fp16 prefix_b_h = scna_exp2_d8_prefix_b[i];
+    const HVX_Vector threshold = Q6_Vh_vsplat_R(fp16_to_bits(&threshold_h));
+    const HVX_Vector prefix_w = Q6_Vh_vsplat_R(fp16_to_bits(&prefix_w_h));
+    const HVX_Vector prefix_b = Q6_Vh_vsplat_R(fp16_to_bits(&prefix_b_h));
+    w0 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x0, threshold), prefix_w, w0);
+    b0 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x0, threshold), prefix_b, b0);
+    w1 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x1, threshold), prefix_w, w1);
+    b1 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x1, threshold), prefix_b, b1);
+  }
+  HVX_Vector y0 = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_Vqf16Vhf(Q6_Vqf16_vmpy_VhfVhf(x0, w0), b0));
+  HVX_Vector y1 = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_Vqf16Vhf(Q6_Vqf16_vmpy_VhfVhf(x1, w1), b1));
+  *out0 = Q6_Vhf_vmax_VhfVhf(y0, Q6_V_vzero());
+  *out1 = Q6_Vhf_vmax_VhfVhf(y1, Q6_V_vzero());
+}
+
 static __attribute__((noinline, unused)) void pair_static_d8_fma_noinline(
     HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
     HVX_Vector *out0, HVX_Vector *out1) {
@@ -182,12 +247,27 @@ static __attribute__((noinline, unused)) HVX_Vector static_d8_fma_row(
   return sum;
 }
 
+static HVX_INLINE_ALWAYS HVX_Vector optimized_single(HVX_Vector x, const scna_exp2_hvx_params_t *params) {
+  HVX_Vector out, unused;
+  (void) unused;
+#if SCNA_OPTIMIZED_IMPL == 1
+  pair_static_d8_qf16_tree(x, x, params, &out, &unused);
+#elif SCNA_OPTIMIZED_IMPL == 2
+  pair_piecewise_d8(x, x, &out, &unused);
+#else
+  out = static_d8_fma_row(x, params);
+#endif
+  return out;
+}
+
 HVX_Vector hvx_scna_exp2_vhf(HVX_Vector input, const scna_exp2_hvx_params_t *params) {
   if (params == NULL || params->variant != SCNA_BUILD_VARIANT || params->width != 8) return Q6_V_vzero();
 #if SCNA_BUILD_VARIANT == 0
   return stage1_dynamic_row(input, params->width);
 #elif SCNA_BUILD_VARIANT <= 3
   return prepared_dynamic_row(input, params);
+#elif SCNA_BUILD_VARIANT == 6
+  return optimized_single(input, params);
 #else
   return static_d8_fma_row(input, params);
 #endif
@@ -213,6 +293,10 @@ void hvx_scna_exp2_pair_vhf(HVX_Vector input0, HVX_Vector input1,
   pair_static_d8_qf16(input0, input1, params, output0, output1);
 #elif SCNA_BUILD_VARIANT == 5
   pair_static_d8_fma_inline(input0, input1, params, output0, output1);
+#elif SCNA_BUILD_VARIANT == 6 && SCNA_OPTIMIZED_IMPL == 1
+  pair_static_d8_qf16_tree(input0, input1, params, output0, output1);
+#elif SCNA_BUILD_VARIANT == 6 && SCNA_OPTIMIZED_IMPL == 2
+  pair_piecewise_d8(input0, input1, output0, output1);
 #elif SCNA_BUILD_VARIANT == 6 && SCNA_OPTIMIZED_INLINE
   pair_static_d8_fma_inline(input0, input1, params, output0, output1);
 #else
@@ -453,6 +537,9 @@ int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layou
   *result = (struct ScnaExp2BenchResult) {
     .width = width, .layout = layout, .variant = variant, .lanes = 64, .iters = iters,
     .build_variant = SCNA_BUILD_VARIANT, .build_optimized_inline = SCNA_OPTIMIZED_INLINE ? 1 : 0,
+    .build_optimized_impl = SCNA_OPTIMIZED_IMPL,
+    .dead_neurons_removed = (SCNA_BUILD_VARIANT == SCNA_VARIANT_OPTIMIZED &&
+                             SCNA_OPTIMIZED_IMPL != SCNA_OPTIMIZED_IMPL_FMA) ? 1 : 0,
     .elapsed_us = elapsed, .pair_elapsed_us = pair_elapsed,
     .prepare_elapsed_us = prepare_elapsed,
     .expand_elapsed_us = expand_elapsed, .affine_relu_elapsed_us = affine_relu_elapsed,

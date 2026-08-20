@@ -97,6 +97,12 @@ struct Figure8AttnConfig {
   int         w8pc_a8pt_matmul_probe;
   int         hmx_int8_mode;
   int         roofline_fp16_bench;
+  int         roofline_hmx_fp16_bench;
+  int         roofline_hvx_fp16_bench;
+  int         roofline_hvx_v79_peak_bench;
+  int         lut_exp_bench;
+  const char *lut_distribution;
+  int         target_ms;
   int         roofline_bandwidth_bench;
   int         roofline_mix_precision_bench;
   int         roofline_int8_shape_bench;
@@ -135,11 +141,19 @@ static void figure8_print_usage(const char *prog) {
           "       %s --w8pc-a8pt-matmul-probe\n"
           "       %s --hmx-int8-mode N  (N=21 runs the QK output-stationary debug probe)\n"
           "       %s --roofline-fp16-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
+          "       %s --roofline-hmx-fp16-bench [--target-ms N] [--warmup N] [--csv-out PATH]\n"
+          "       %s --roofline-hvx-fp16-bench [--target-ms N] [--warmup N] [--csv-out PATH]\n"
+          "       %s --roofline-hvx-v79-peak-bench [--target-ms N] [--warmup N] [--csv-out PATH]\n"
+          "       %s --lut-exp-bench --distribution dense|attention|random [--target-ms N] [--csv-out PATH]\n"
           "       %s --roofline-bandwidth-bench [--bench-bytes N] [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-mix-precision-bench [--roofline-case N] [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-int8-shape-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --roofline-signed-int8-zero-overhead-bench [--warmup N] [--iters N] [--csv-out PATH]\n"
           "       %s --scna-exp-bench [--scna-variant VARIANT] [--scna-width 8] [--warmup N] [--iters N]\n",
+          prog,
+          prog,
+          prog,
+          prog,
           prog,
           prog,
           prog,
@@ -216,6 +230,12 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     .w8pc_a8pt_matmul_probe = 0,
     .hmx_int8_mode = -1,
     .roofline_fp16_bench = 0,
+    .roofline_hmx_fp16_bench = 0,
+    .roofline_hvx_fp16_bench = 0,
+    .roofline_hvx_v79_peak_bench = 0,
+    .lut_exp_bench = 0,
+    .lut_distribution = "dense",
+    .target_ms = 150,
     .roofline_bandwidth_bench = 0,
     .roofline_mix_precision_bench = 0,
     .roofline_int8_shape_bench = 0,
@@ -269,6 +289,14 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
       if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->hmx_int8_mode)) return -1;
     } else if (strcmp(arg, "--roofline-fp16-bench") == 0) {
       cfg->roofline_fp16_bench = 1;
+    } else if (strcmp(arg, "--roofline-hmx-fp16-bench") == 0) {
+      cfg->roofline_hmx_fp16_bench = 1;
+    } else if (strcmp(arg, "--roofline-hvx-fp16-bench") == 0) {
+      cfg->roofline_hvx_fp16_bench = 1;
+    } else if (strcmp(arg, "--roofline-hvx-v79-peak-bench") == 0) {
+      cfg->roofline_hvx_v79_peak_bench = 1;
+    } else if (strcmp(arg, "--lut-exp-bench") == 0) {
+      cfg->lut_exp_bench = 1;
     } else if (strcmp(arg, "--roofline-bandwidth-bench") == 0) {
       cfg->roofline_bandwidth_bench = 1;
     } else if (strcmp(arg, "--roofline-mix-precision-bench") == 0) {
@@ -328,6 +356,11 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
       else if (parse_int_cli_value(arg, argv[i], &cfg->workers)) return -1;
     } else if (strcmp(arg, "--bench-bytes") == 0) {
       if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->bench_bytes)) return -1;
+    } else if (strcmp(arg, "--target-ms") == 0) {
+      if (++i >= argc || parse_int_cli_value(arg, argv[i], &cfg->target_ms)) return -1;
+    } else if (strcmp(arg, "--distribution") == 0) {
+      if (++i >= argc) return -1;
+      cfg->lut_distribution = argv[i];
     } else if (strcmp(arg, "--no-events") == 0) {
       cfg->print_events = 0;
     } else if (strcmp(arg, "--events") == 0) {
@@ -367,13 +400,20 @@ static int parse_figure8_args(int argc, char **argv, struct Figure8AttnConfig *c
     }
   }
 
-  if (!cfg->enabled && !cfg->roofline_fp16_bench && !cfg->roofline_bandwidth_bench &&
+  if (!cfg->enabled && !cfg->roofline_fp16_bench && !cfg->roofline_hmx_fp16_bench &&
+      !cfg->roofline_hvx_fp16_bench && !cfg->roofline_hvx_v79_peak_bench && !cfg->lut_exp_bench &&
+      !cfg->roofline_bandwidth_bench &&
       !cfg->roofline_mix_precision_bench && !cfg->roofline_int8_shape_bench &&
       !cfg->roofline_signed_int8_zero_overhead_bench && !cfg->scna_exp_bench) {
     return 0;
   }
   if (!cfg->enabled && !cfg->scna_exp_bench) {
     return 0;
+  }
+  if (cfg->lut_exp_bench && strcmp(cfg->lut_distribution, "dense") != 0 &&
+      strcmp(cfg->lut_distribution, "attention") != 0 && strcmp(cfg->lut_distribution, "random") != 0) {
+    fprintf(stderr, "Unsupported --distribution: %s\n", cfg->lut_distribution);
+    return -1;
   }
   if (strcmp(cfg->mode, "baseline") != 0 && strcmp(cfg->mode, "lut-exp") != 0 &&
       strcmp(cfg->mode, "scna-fp16") != 0) {
@@ -762,7 +802,7 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
   const double single_ns = result->iters > 0 ? 1000.0 * result->elapsed_us / result->iters : 0.0;
   const double paired_ns = result->iters > 0 ? 1000.0 * result->pair_elapsed_us / result->iters : 0.0;
   fprintf(stderr,
-          "SCNA_EXP_BENCH layout=%s variant=%s variant_id=%d build_variant=%d optimized_inline=%d width=%d lanes=%d warmup=%d iters=%d prepare_elapsed_us=%lld param_prepare_ns=%.6f elapsed_us=%lld "
+          "SCNA_EXP_BENCH layout=%s variant=%s variant_id=%d build_variant=%d optimized_inline=%d optimized_impl=%d dead_neurons_removed=%d width=%d lanes=%d warmup=%d iters=%d prepare_elapsed_us=%lld param_prepare_ns=%.6f elapsed_us=%lld "
           "single_ns_per_64=%.6f pair_elapsed_us=%lld paired_ns_per_2x64=%.6f paired_ns_per_64=%.6f "
           "expand_ns_per_64=%.6f affine_relu_ns_per_64=%.6f reduce_ns_per_64=%.6f pack_ns_per_64=%.6f "
           "rmse=%.9g max_abs=%.9g dense_samples=%d dense_rmse=%.9g dense_max_abs=%.9g "
@@ -774,7 +814,8 @@ static int run_scna_exp_benchmark(const struct Figure8AttnConfig *cfg) {
           "reciprocal_max_relative_error=%.9g "
           "reciprocal_nonfinite_count=%d reciprocal_zero_inf_pass=%d reciprocal_pass=%d checksum=0x%08x\n",
           cfg->scna_layout, cfg->scna_variant, result->variant, result->build_variant,
-          result->build_optimized_inline, result->width, result->lanes,
+          result->build_optimized_inline, result->build_optimized_impl, result->dead_neurons_removed,
+          result->width, result->lanes,
           cfg->warmup, result->iters,
           (long long) result->prepare_elapsed_us,
           result->iters > 0 ? 1000.0 * result->prepare_elapsed_us / result->iters : 0.0,
@@ -932,6 +973,10 @@ static const char *roofline_mode_name(int mode) {
       return "hmx_int8_shape_sweep";
     case ROOFLINE_BENCH_MODE_SIGNED_INT8_ZERO_OVERHEAD:
       return "signed_int8_zero_overhead";
+    case ROOFLINE_BENCH_MODE_HVX_V79_PEAK:
+      return "hvx_v79_peak";
+    case ROOFLINE_BENCH_MODE_LUT_EXP:
+      return "lut_exp";
     default:
       return "unknown";
   }
@@ -1025,6 +1070,10 @@ static const char *roofline_kind_name(int kind) {
       return "hmx_fp16_int4_weight_n_gemm";
     case ROOFLINE_BENCH_KIND_V81_HMX_MANUAL_SMOKE:
       return "v81_hmx_manual_smoke";
+    case ROOFLINE_BENCH_KIND_HVX_V79_QF16_AFFINE_RELU:
+      return "hvx_v79_qf16_affine_relu";
+    case ROOFLINE_BENCH_KIND_LUT_EXP_GATHER:
+      return "lut_exp_vtcm_vgather";
     case ROOFLINE_BENCH_KIND_NOT_AVAILABLE:
       return "not_available";
     default:
@@ -1062,7 +1111,10 @@ static const char *roofline_metric_unit(int kind) {
     case ROOFLINE_BENCH_KIND_HVX_U8_MAC_PEAK:
     case ROOFLINE_BENCH_KIND_HVX_U8_S8_MAC_PEAK:
     case ROOFLINE_BENCH_KIND_HMX_FP16_INT4_WEIGHT_N_GEMM:
+    case ROOFLINE_BENCH_KIND_HVX_V79_QF16_AFFINE_RELU:
       return "TOPS";
+    case ROOFLINE_BENCH_KIND_LUT_EXP_GATHER:
+      return "Gelem/s";
     case ROOFLINE_BENCH_KIND_NOT_AVAILABLE:
     case ROOFLINE_BENCH_KIND_V81_HMX_MANUAL_SMOKE:
       return "N/A";
@@ -1175,6 +1227,10 @@ static const char *roofline_path_name(int path) {
       return "Q6_Vw_vrmpyacc_VwVubVb";
     case ROOFLINE_BENCH_PATH_HMX_HF_N_GEMM:
       return "hmx_activation_hf_weight_n_gemm_variant";
+    case ROOFLINE_BENCH_PATH_HVX_V79_QF16_AFFINE_RELU:
+      return "v79_qf16_mpy_add_convert_vmax_accumulate";
+    case ROOFLINE_BENCH_PATH_LUT_VTCM_VGATHER:
+      return "vtcm_64k_fp16_vgather_pair_store_sync";
     default:
       return "unknown";
   }
@@ -1367,6 +1423,85 @@ static void roofline_print_signed_zero_overhead_results(FILE *out, const struct 
   }
 }
 
+static int roofline_lut_distribution_id(const char *name) {
+  if (strcmp(name, "attention") == 0) return ROOFLINE_LUT_ATTENTION;
+  if (strcmp(name, "random") == 0) return ROOFLINE_LUT_RANDOM;
+  return ROOFLINE_LUT_DENSE;
+}
+
+static const char *roofline_lut_distribution_name(int distribution) {
+  switch (distribution) {
+    case ROOFLINE_LUT_ATTENTION: return "attention";
+    case ROOFLINE_LUT_RANDOM: return "random";
+    default: return "dense";
+  }
+}
+
+static float roofline_figure8_q_value(size_t index, uint32_t seed) {
+  if (seed == 0) return (float) ((int) ((index * 13u + 7u) % 251u) - 125) * 0.0078125f;
+  return (float) ((int) (figure8_mix32(seed ^ (uint32_t) index) & 0xffffu) - 32768) / 32768.0f;
+}
+
+static __fp16 roofline_figure8_k_value(size_t index, uint32_t seed) {
+  if (seed == 0) return (__fp16) ((float) ((int) ((index * 17u + 3u) % 257u) - 128) * 0.00390625f);
+  const int value = (int) (figure8_mix32(seed ^ UINT32_C(0x51ed270b) ^ (uint32_t) index) & 0xffffu) - 32768;
+  return (__fp16) ((float) value / 65536.0f);
+}
+
+static void roofline_fill_lut_inputs(__fp16 *dst, int distribution, const struct Figure8AttnConfig *cfg) {
+  if (distribution == ROOFLINE_LUT_DENSE) {
+    for (int i = 0; i < 128; ++i) dst[i] = (__fp16) (-256.0f + 256.0f * i / 127.0f);
+    return;
+  }
+  if (distribution == ROOFLINE_LUT_RANDOM) {
+    uint32_t state = cfg->seed ? cfg->seed : UINT32_C(0x4c555438);
+    for (int i = 0; i < 128; ++i) {
+      state = state * UINT32_C(1664525) + UINT32_C(1013904223);
+      const uint16_t bits = (uint16_t) ((state & 0x7bffu) | 0x8000u); /* finite negative FP16 index */
+      memcpy(&dst[i], &bits, sizeof(bits));
+    }
+    return;
+  }
+
+  const int d = cfg->head_dim;
+  const float scale = 1.4426950408889634f / sqrtf((float) d);
+  for (int row = 0; row < 2; ++row) {
+    float scores[64];
+    float rowmax = -INFINITY;
+    for (int col = 0; col < 64; ++col) {
+      const int kpos = cfg->kv_len > 64 ? (row * 977 + col * 61) % cfg->kv_len : col % cfg->kv_len;
+      float sum = 0.0f;
+      for (int lane = 0; lane < d; ++lane) {
+        const size_t qi = (size_t) row * cfg->n_heads * d + (size_t) lane;
+        const size_t ki = (size_t) kpos * cfg->n_kv_heads * d + (size_t) lane;
+        sum += roofline_figure8_q_value(qi, cfg->seed) * (float) roofline_figure8_k_value(ki, cfg->seed);
+      }
+      const __fp16 rounded = (__fp16) (sum * scale);
+      scores[col] = (float) rounded;
+      if (scores[col] > rowmax) rowmax = scores[col];
+    }
+    for (int col = 0; col < 64; ++col) dst[row * 64 + col] = (__fp16) (scores[col] - rowmax);
+  }
+}
+
+static void roofline_print_v2_results(FILE *out, const struct RooflineBenchResult *results, int max_results) {
+  for (int i = 0; i < max_results; ++i) {
+    const struct RooflineBenchResult *r = &results[i];
+    if (r->kind == 0 || r->elapsed_us <= 0) continue;
+    fprintf(out,
+            "%d,%s,%s,%s,%s,%d,%s,%d,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%.4f,%s,%d,%d\n",
+            r->schema_version, roofline_mode_name(r->mode), roofline_engine_name(r->engine),
+            roofline_kind_name(r->kind), roofline_path_name(r->path), r->distribution,
+            r->mode == ROOFLINE_BENCH_MODE_LUT_EXP ? roofline_lut_distribution_name(r->distribution) : "na",
+            r->size, (long long) r->iters,
+            (long long) r->elapsed_us, (long long) r->elapsed_ticks, (long long) r->elements,
+            (long long) r->input_bytes, (long long) r->output_bytes,
+            (long long) r->lut_entry_logical_bytes, (long long) r->effective_ops,
+            ((double) r->metric_x10000) / 10000.0, roofline_metric_unit(r->kind),
+            r->correctness, r->failure_code);
+  }
+}
+
 static int run_roofline_benchmark(const struct Figure8AttnConfig *cfg) {
   void *chan = NULL, *src = NULL, *dst = NULL;
   struct RooflineBenchResult *results = NULL;
@@ -1380,16 +1515,24 @@ static int run_roofline_benchmark(const struct Figure8AttnConfig *cfg) {
   const size_t max_msg_size = 4096;
   const size_t results_size = align_up(max_results * sizeof(struct RooflineBenchResult), 128);
   const size_t bench_size = align_up((size_t) cfg->bench_bytes, 128);
+  const size_t allocated_src_size = cfg->lut_exp_bench ? align_up(128 * sizeof(__fp16), 128) : bench_size;
+  const int use_v2 = cfg->roofline_hmx_fp16_bench || cfg->roofline_hvx_fp16_bench ||
+                     cfg->roofline_hvx_v79_peak_bench || cfg->lut_exp_bench;
 
   if (alloc_shared_mem_buf(&chan, &chan_fd, max_msg_size)) goto end;
   if (alloc_shared_mem_buf((void **) &results, &results_fd, results_size)) goto end;
   memset(results, 0, results_size);
 
-  if (cfg->roofline_bandwidth_bench) {
-    if (alloc_shared_mem_buf(&src, &src_fd, bench_size)) goto end;
-    if (alloc_shared_mem_buf(&dst, &dst_fd, bench_size)) goto end;
-    memset(src, 0x5a, bench_size);
-    memset(dst, 0, bench_size);
+  if (cfg->roofline_bandwidth_bench || cfg->lut_exp_bench) {
+    const size_t src_size = cfg->lut_exp_bench ? align_up(128 * sizeof(__fp16), 128) : bench_size;
+    if (alloc_shared_mem_buf(&src, &src_fd, src_size)) goto end;
+    if (cfg->lut_exp_bench) {
+      roofline_fill_lut_inputs((__fp16 *) src, roofline_lut_distribution_id(cfg->lut_distribution), cfg);
+    } else {
+      if (alloc_shared_mem_buf(&dst, &dst_fd, bench_size)) goto end;
+      memset(src, 0x5a, bench_size);
+      memset(dst, 0, bench_size);
+    }
   }
 
   if (cfg->csv_out) {
@@ -1406,7 +1549,11 @@ static int run_roofline_benchmark(const struct Figure8AttnConfig *cfg) {
     goto end;
   }
 
-  if (cfg->roofline_int8_shape_bench) {
+  if (use_v2) {
+    const char *header = "schema_version,mode,engine,kind,path,distribution_id,distribution,size,iters,elapsed_us,elapsed_ticks,elements,input_bytes,output_bytes,lut_entry_logical_bytes,effective_ops,metric,unit,correctness,failure_code\n";
+    fputs(header, stdout);
+    if (csv) fputs(header, csv);
+  } else if (cfg->roofline_int8_shape_bench) {
     printf("mode,engine,kind,path,variant,m,k,n,mt,kt,nt,tile_bytes,a_bytes,b_bytes,c_bytes,scales_bytes,allocated_bytes,total_vtcm_bytes,iters,elapsed_us,work_items,metric,unit,correctness\n");
     if (csv) {
       fprintf(csv, "mode,engine,kind,path,variant,m,k,n,mt,kt,nt,tile_bytes,a_bytes,b_bytes,c_bytes,scales_bytes,allocated_bytes,total_vtcm_bytes,iters,elapsed_us,work_items,metric,unit,correctness\n");
@@ -1429,6 +1576,33 @@ static int run_roofline_benchmark(const struct Figure8AttnConfig *cfg) {
   }
 
   struct MessageHeader *msg = (struct MessageHeader *) chan;
+  if (cfg->roofline_hmx_fp16_bench || cfg->roofline_hvx_fp16_bench ||
+      cfg->roofline_hvx_v79_peak_bench || cfg->lut_exp_bench) {
+    memset(results, 0, results_size);
+    int mode = ROOFLINE_BENCH_MODE_HMX_FP16;
+    if (cfg->roofline_hvx_fp16_bench) mode = ROOFLINE_BENCH_MODE_HVX_FP16;
+    if (cfg->roofline_hvx_v79_peak_bench) mode = ROOFLINE_BENCH_MODE_HVX_V79_PEAK;
+    if (cfg->lut_exp_bench) mode = ROOFLINE_BENCH_MODE_LUT_EXP;
+    struct RooflineBenchParams params = {
+      .output = { .fd = results_fd, .offset = 0 },
+      .src = { .fd = cfg->lut_exp_bench ? src_fd : -1, .offset = 0 },
+      .dst = { .fd = -1, .offset = cfg->lut_exp_bench ? roofline_lut_distribution_id(cfg->lut_distribution) : 0 },
+      .max_results = max_results,
+      .mode = mode,
+      .warmup = cfg->warmup,
+      .iters = cfg->iters,
+      .bytes = cfg->target_ms,
+    };
+    err = roofline_bench_send_request(msg, max_msg_size, &params);
+    if (err) {
+      fprintf(stderr, "roofline v2 bench failed: %d mode=%d distribution=%s\n", err, mode,
+              cfg->lut_distribution);
+      goto end;
+    }
+    roofline_print_v2_results(stdout, results, max_results);
+    if (csv) roofline_print_v2_results(csv, results, max_results);
+  }
+
   if (cfg->roofline_fp16_bench) {
     memset(results, 0, results_size);
     struct RooflineBenchParams params = {
@@ -1439,7 +1613,7 @@ static int run_roofline_benchmark(const struct Figure8AttnConfig *cfg) {
       .mode = ROOFLINE_BENCH_MODE_HMX_FP16,
       .warmup = cfg->warmup,
       .iters = cfg->iters,
-      .bytes = (int32_t) bench_size,
+      .bytes = 0,
     };
     err = roofline_bench_send_request(msg, max_msg_size, &params);
     if (err) {
@@ -1593,7 +1767,7 @@ end:
     free_shared_mem_buf(dst, dst_fd, bench_size);
   }
   if (src) {
-    free_shared_mem_buf(src, src_fd, bench_size);
+    free_shared_mem_buf(src, src_fd, allocated_src_size);
   }
   if (results) {
     free_shared_mem_buf(results, results_fd, results_size);
@@ -2262,7 +2436,9 @@ int main(int argc, char **argv) {
     return figure8_ret;
   }
 
-  if (figure8_cfg.roofline_fp16_bench || figure8_cfg.roofline_bandwidth_bench ||
+  if (figure8_cfg.roofline_fp16_bench || figure8_cfg.roofline_hmx_fp16_bench ||
+      figure8_cfg.roofline_hvx_fp16_bench || figure8_cfg.roofline_hvx_v79_peak_bench ||
+      figure8_cfg.lut_exp_bench || figure8_cfg.roofline_bandwidth_bench ||
       figure8_cfg.roofline_mix_precision_bench || figure8_cfg.roofline_int8_shape_bench ||
       figure8_cfg.roofline_signed_int8_zero_overhead_bench) {
     int roofline_ret = run_roofline_benchmark(&figure8_cfg);

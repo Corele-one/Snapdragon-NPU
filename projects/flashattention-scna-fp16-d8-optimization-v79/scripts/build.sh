@@ -7,10 +7,11 @@ htp_dir="$project_dir/src/htp-ops-lib-main"
 dsp_arch="v79"
 variant="stage1_dynamic_row"
 optimized_inline=0
+optimized_impl="fma"
 dsp_only=0
 
 usage() {
-  echo "Usage: $0 [--variant NAME] [--optimized-inline 0|1] [--dsp-only]  # v79 only" >&2
+  echo "Usage: $0 [--variant NAME] [--optimized-inline 0|1] [--optimized-impl fma|qf16-tree|piecewise-d8] [--dsp-only]  # v79 only" >&2
 }
 
 while [[ $# -gt 0 ]]; do
@@ -26,6 +27,9 @@ while [[ $# -gt 0 ]]; do
     --optimized-inline)
       [[ $# -ge 2 && ( "$2" == 0 || "$2" == 1 ) ]] || { usage; exit 2; }
       optimized_inline="$2"; shift 2 ;;
+    --optimized-impl)
+      [[ $# -ge 2 ]] || { usage; exit 2; }
+      optimized_impl="$2"; shift 2 ;;
     --dsp-only)
       dsp_only=1; shift ;;
     --help|-h)
@@ -50,6 +54,16 @@ case "$variant" in
   optimized) variant_id=6 ;;
   *) echo "Unknown variant: $variant" >&2; exit 2 ;;
 esac
+case "$optimized_impl" in
+  fma) optimized_impl_id=0 ;;
+  qf16-tree) optimized_impl_id=1 ;;
+  piecewise-d8) optimized_impl_id=2 ;;
+  *) echo "Unknown optimized implementation: $optimized_impl" >&2; exit 2 ;;
+esac
+if [[ "$variant" != optimized && "$optimized_impl" != fma ]]; then
+  echo "--optimized-impl is only valid with --variant optimized" >&2
+  exit 2
+fi
 
 # Qualcomm's setup script reads optional undefined variables.  Temporarily
 # disable nounset while sourcing it, then restore this script's strict mode.
@@ -70,6 +84,7 @@ build_cmake hexagon "DSP_ARCH=$dsp_arch" \
   FIGURE8_ENABLE_PROFILE_TIMERS=ON \
   FIGURE8_ENABLE_LUT_EXP=OFF \
   "SCNA_BUILD_VARIANT=$variant_id" \
-  "SCNA_OPTIMIZED_INLINE=$optimized_inline"
+  "SCNA_OPTIMIZED_INLINE=$optimized_inline" \
+  "SCNA_OPTIMIZED_IMPL=$optimized_impl_id"
 
-echo "Built variant=$variant build_id=$variant_id optimized_inline=$optimized_inline for $dsp_arch."
+echo "Built variant=$variant build_id=$variant_id optimized_inline=$optimized_inline optimized_impl=$optimized_impl($optimized_impl_id) for $dsp_arch."

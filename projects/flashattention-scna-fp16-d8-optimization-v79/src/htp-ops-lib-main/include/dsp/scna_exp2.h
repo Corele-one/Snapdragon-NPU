@@ -10,6 +10,7 @@ typedef struct {
   int layout;
   int variant;
   int build_variant;
+  int optimized_impl;
   int64_t prepare_us;
   uint32_t coeff_bits[SCNA_D8_WIDTH];
 } scna_exp2_hvx_params_t;
@@ -31,6 +32,7 @@ static inline int scna_exp2_width_from_mode(int mode_flags) {
 int scna_exp2_prepare_hvx_params(scna_exp2_hvx_params_t *params, int mode_flags);
 int scna_exp2_build_variant(void);
 int scna_exp2_build_optimized_inline(void);
+int scna_exp2_build_optimized_impl(void);
 
 HVX_Vector hvx_scna_exp2_vhf(HVX_Vector input, const scna_exp2_hvx_params_t *params);
 void hvx_scna_exp2_pair_vhf(HVX_Vector input0, HVX_Vector input1,

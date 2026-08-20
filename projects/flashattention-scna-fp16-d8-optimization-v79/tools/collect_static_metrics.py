@@ -9,6 +9,7 @@ from pathlib import Path
 VARIANTS = [
     "stage1_dynamic_row", "prepare_once_row", "pair_shared_dynamic", "pair_static_d8",
     "pair_d8_fma_noinline", "pair_d8_fma_inline", "optimized",
+    "optimized_qf16_tree", "optimized_piecewise_d8",
 ]
 OBJDUMP = "/local/mnt/workspace/Qualcomm/Hexagon_SDK/6.6.0.0/tools/HEXAGON_Tools/19.0.07/Tools/bin/hexagon-llvm-objdump"
 HOT_SYMBOL = {
@@ -19,6 +20,8 @@ HOT_SYMBOL = {
     "pair_d8_fma_noinline": ("pair_static_d8_fma_noinline", "hvx_scna_exp2_pair_vhf"),
     "pair_d8_fma_inline": ("hvx_scna_exp2_pair_vhf",),
     "optimized": ("pair_static_d8_fma_noinline", "hvx_scna_exp2_pair_vhf"),
+    "optimized_qf16_tree": ("hvx_scna_exp2_pair_vhf", "pair_static_d8_qf16_tree"),
+    "optimized_piecewise_d8": ("hvx_scna_exp2_pair_vhf", "pair_piecewise_d8"),
 }
 
 
@@ -37,6 +40,11 @@ def metric(lines):
         # widened .qf32 vmpy/vadd packets.  Count the IEEE-half input form,
         # while keeping qf16/convert as a separate dependency-chain metric.
         "fp16_fma": sum("vmpy" in line and ".hf" in line and ".qf32" in line for line in low),
+        "vmpy": sum("vmpy" in line for line in low),
+        "vadd": sum("vadd" in line for line in low),
+        "vmax": sum("vmax" in line for line in low),
+        "vmux": sum("vmux" in line for line in low),
+        "vgather": sum("vgather" in line for line in low),
         "spill_memory": sum(bool(re.search(r"mem[dhw]\(r(29|30)", line)) for line in low),
         "stack_frame_bytes": max(frames, default=0),
         "code_bytes": 4 * len(lines),

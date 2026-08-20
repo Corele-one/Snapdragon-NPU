@@ -6,6 +6,7 @@ project_dir="$(cd -- "$script_dir/.." && pwd)"
 htp_dir="$project_dir/src/htp-ops-lib-main"
 artifact_root="$project_dir/artifacts/variants"
 variants=(stage1_dynamic_row prepare_once_row pair_shared_dynamic pair_static_d8 pair_d8_fma_noinline pair_d8_fma_inline optimized)
+optimized_candidates=(optimized_qf16_tree optimized_piecewise_d8)
 final_policy="${FINAL_POLICY:-noinline}"
 
 [[ "$final_policy" == inline || "$final_policy" == noinline ]] || {
@@ -35,4 +36,23 @@ for index in "${!variants[@]}"; do
   rg -A2 -m1 'build .*scna_exp2.c.obj:' "${dsp_ship[0]%/ship}/build.ninja" >> "$out/compile_flags.txt"
 done
 
-echo "Built ${#variants[@]} independent v79 DSP libraries under $artifact_root"
+for candidate in "${optimized_candidates[@]}"; do
+  case "$candidate" in
+    optimized_qf16_tree) impl=qf16-tree ;;
+    optimized_piecewise_d8) impl=piecewise-d8 ;;
+  esac
+  "$script_dir/build.sh" --variant optimized --optimized-inline 1 --optimized-impl "$impl" --dsp-only
+  dsp_ship=("$htp_dir"/hexagon_ReleaseG_toolv*_v79/ship)
+  [[ ${#dsp_ship[@]} -eq 1 && -f "${dsp_ship[0]}/libhtp_ops_skel.so" ]] || {
+    echo "Missing unique v79 DSP artifact for $candidate" >&2; exit 1;
+  }
+  out="$artifact_root/$candidate"
+  mkdir -p "$out"
+  cp -f "${dsp_ship[0]}/libhtp_ops_skel.so" "$out/"
+  sha256sum "$out/libhtp_ops_skel.so" > "$out/sha256.txt"
+  printf 'variant=optimized\nbuild_id=6\noptimized_inline=1\noptimized_impl=%s\n' "$impl" > "$out/build_id.txt"
+  rg -m1 '^  FLAGS = .* -mv79' "${dsp_ship[0]%/ship}/build.ninja" > "$out/compile_flags.txt"
+  rg -A2 -m1 'build .*scna_exp2.c.obj:' "${dsp_ship[0]%/ship}/build.ninja" >> "$out/compile_flags.txt"
+done
+
+echo "Built ${#variants[@]} registered variants and ${#optimized_candidates[@]} optimized candidates under $artifact_root"

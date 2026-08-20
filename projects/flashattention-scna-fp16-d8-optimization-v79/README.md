@@ -31,6 +31,33 @@ python3 tools/generate_optimization_report.py \
   --spec experiment_spec.json
 ```
 
+### LUT 与 SCNA Roofline 对照
+
+先完成上面的注册主矩阵，再以**相同** `RUN_ID` 追加真机 Roof、KV=64/4096 的 event replay 和静态审计：
+
+```bash
+RUN_ID=scna_d8_v79_20260811 ./scripts/run_optimization.sh
+RUN_ID=scna_d8_v79_20260811 ./scripts/run_roofline_lut_scna.sh
+```
+
+后一个脚本会在相同 run 下生成 `ROOFLINE_LUT_VS_SCNA_REPORT_ZH.md`、机器可读数据和论文图。Roof benchmark 与 event replay 都是诊断证据，不参与 `run_optimization.sh` 的注册性能排序。LUT 表项的逻辑大小不会被解释为实际 `vgather` cache/TCM transaction。
+
+当前 Roofline 脚本还会构建两个不重新训练的独立候选 artifact：
+
+- `optimized_qf16_tree`：删除部署域内恒零的第八个神经元，并使用四条 partial-sum 链；
+- `optimized_piecewise_d8`：把同一个 d8 ReLU 和按单调断点改写为区间选择加一次 affine。
+
+它们通过 `SCNA_OPTIMIZED_IMPL` 在编译期固定，不改变运行时 mode bits。可单独运行的新 benchmark CLI 为：
+
+```bash
+./htp_ops_test --roofline-hmx-fp16-bench --target-ms 50
+./htp_ops_test --roofline-hvx-fp16-bench --target-ms 50
+./htp_ops_test --roofline-hvx-v79-peak-bench --target-ms 150
+./htp_ops_test --lut-exp-bench --distribution attention --target-ms 200
+```
+
+完整 run 输出 `roofline_lut_scna_summary.json`、5 份 CSV、SHA-256 evidence manifest，以及三组 SVG/PDF/300-dpi PNG；数据流图另含可编辑 `.drawio`。实验图使用 Matplotlib + Seaborn、色盲安全配色、marker 双编码和 bootstrap 95% CI。
+
 `--workers` 接受 `auto|1..6`。`auto` 取 requested/default HVX contexts、有效 task 数和 `total VTCM / 1 MiB` 的最小值。q=32 时调度器产生 16 个 query-block × KV-head task。
 
 每个 SCNA 请求都会在 DSP 端校验运行时 variant 与编译期 `SCNA_BUILD_VARIANT`。artifact、SHA-256、`-mv79` 编译证据和反汇编分别保存在 `artifacts/variants/` 与 run 的 `static/` 中。

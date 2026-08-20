@@ -47,6 +47,16 @@ enum ScnaVariant {
   SCNA_VARIANT_COUNT = 7,
 };
 
+/* Compile-time sub-implementations carried by SCNA_VARIANT_OPTIMIZED.
+ * They deliberately do not consume additional runtime mode bits: each one is
+ * shipped as an independently hashed DSP artifact. */
+enum ScnaOptimizedImpl {
+  SCNA_OPTIMIZED_IMPL_FMA = 0,
+  SCNA_OPTIMIZED_IMPL_QF16_TREE = 1,
+  SCNA_OPTIMIZED_IMPL_PIECEWISE_D8 = 2,
+  SCNA_OPTIMIZED_IMPL_COUNT = 3,
+};
+
 struct RpcmemBufAddr {
   int32_t fd;
   int32_t offset;
@@ -106,6 +116,8 @@ enum RooflineBenchMode {
   ROOFLINE_BENCH_MODE_MIX_PRECISION = 6,
   ROOFLINE_BENCH_MODE_HMX_INT8_SHAPE_SWEEP = 7,
   ROOFLINE_BENCH_MODE_SIGNED_INT8_ZERO_OVERHEAD = 8,
+  ROOFLINE_BENCH_MODE_HVX_V79_PEAK = 9,
+  ROOFLINE_BENCH_MODE_LUT_EXP = 10,
 };
 
 enum RooflineBenchKind {
@@ -160,6 +172,8 @@ enum RooflineBenchKind {
   // V81 manual-only smoke rows. These validate control/data movement
   // instructions and intentionally do not publish a compute peak.
   ROOFLINE_BENCH_KIND_V81_HMX_MANUAL_SMOKE = 44,
+  ROOFLINE_BENCH_KIND_HVX_V79_QF16_AFFINE_RELU = 45,
+  ROOFLINE_BENCH_KIND_LUT_EXP_GATHER = 46,
 };
 
 enum RooflineBenchEngine {
@@ -216,6 +230,14 @@ enum RooflineBenchPath {
   ROOFLINE_BENCH_PATH_HVX_U8_VRMPYACC = 26,
   ROOFLINE_BENCH_PATH_HVX_U8_S8_VRMPYACC = 27,
   ROOFLINE_BENCH_PATH_HMX_HF_N_GEMM = 28,
+  ROOFLINE_BENCH_PATH_HVX_V79_QF16_AFFINE_RELU = 29,
+  ROOFLINE_BENCH_PATH_LUT_VTCM_VGATHER = 30,
+};
+
+enum RooflineLutDistribution {
+  ROOFLINE_LUT_DENSE = 0,
+  ROOFLINE_LUT_ATTENTION = 1,
+  ROOFLINE_LUT_RANDOM = 2,
 };
 
 struct RooflineBenchParams {
@@ -258,6 +280,16 @@ struct RooflineBenchResult {
   int64_t scales_bytes;
   int64_t allocated_bytes;
   int64_t total_vtcm_bytes;
+  int32_t schema_version;
+  int32_t distribution;
+  int64_t elements;
+  int64_t input_bytes;
+  int64_t output_bytes;
+  int64_t lut_entry_logical_bytes;
+  int64_t effective_ops;
+  int64_t elapsed_ticks;
+  int32_t failure_code;
+  int32_t reserved1;
 } __attribute__((packed));
 
 enum ScnaLayout {
@@ -282,6 +314,8 @@ struct ScnaExp2BenchResult {
   int32_t iters;
   int32_t build_variant;
   int32_t build_optimized_inline;
+  int32_t build_optimized_impl;
+  int32_t dead_neurons_removed;
   int64_t elapsed_us;
   int64_t pair_elapsed_us;
   int64_t prepare_elapsed_us;

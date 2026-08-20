@@ -9,6 +9,7 @@ option(FIGURE8_ENABLE_LUT_EXP "Use LUT/vgather exp in the Figure 8 profiled flas
 option(FIGURE8_ENABLE_PROFILE_TIMERS "Enable Figure 8 flash attention profiling timers/logging" ON)
 set(SCNA_BUILD_VARIANT "0" CACHE STRING "SCNA optimization build id (0..6)")
 set(SCNA_OPTIMIZED_INLINE "0" CACHE STRING "Final optimized call policy: 0=noinline, 1=always_inline")
+set(SCNA_OPTIMIZED_IMPL "0" CACHE STRING "Optimized implementation: 0=fma, 1=qf16-tree, 2=piecewise-d8")
 option(HTP_ENABLE_OUT_STATIONARY_PREFILL "Enable the repaired output-stationary prefill matmul path" OFF)
 option(HTP_OS_DEBUG_COMPARE "Enable output-stationary debug accumulator checks" OFF)
 set(HTP_MATMUL_PIPELINE_MODE "0" CACHE STRING "Matmul qk pipeline mode: 0=auto original 4-stage path, 1=force sequential safe path")
@@ -117,6 +118,7 @@ else()
         FIGURE8_ENABLE_PROFILE_TIMERS=$<IF:$<BOOL:${FIGURE8_ENABLE_PROFILE_TIMERS}>,1,0>
         SCNA_BUILD_VARIANT=${SCNA_BUILD_VARIANT}
         SCNA_OPTIMIZED_INLINE=${SCNA_OPTIMIZED_INLINE}
+        SCNA_OPTIMIZED_IMPL=${SCNA_OPTIMIZED_IMPL}
         HTP_ENABLE_OUT_STATIONARY_PREFILL=$<IF:$<BOOL:${HTP_ENABLE_OUT_STATIONARY_PREFILL}>,1,0>
         HTP_OS_DEBUG_COMPARE=$<IF:$<BOOL:${HTP_OS_DEBUG_COMPARE}>,1,0>
         HTP_MATMUL_PIPELINE_MODE=${HTP_MATMUL_PIPELINE_MODE}

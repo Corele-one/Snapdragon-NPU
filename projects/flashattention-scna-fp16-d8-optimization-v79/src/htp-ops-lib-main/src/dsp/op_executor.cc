@@ -8,6 +8,7 @@
 #include "dsp/hmx_mgr.h"
 #include "dsp/hmx_utils.h"
 #include "dsp/hvx_internal.h"
+#include "dsp/hvx_convert.h"
 #include "dsp/dma_utils.h"
 #include "dsp/mmap_mgr.h"
 #include "dsp/ops.h"
@@ -52,6 +53,18 @@ enum ggml_type matmul_op_to_weight_type(enum HtpOpsIndex op) {
 
 static inline int64_t trace_now_us() {
   return HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count());
+}
+
+static inline int roofline_calibrated_iters(int pilot_iters, int64_t pilot_us, int target_ms) {
+  if (target_ms <= 0 || pilot_iters <= 0 || pilot_us <= 0) return pilot_iters > 0 ? pilot_iters : 1;
+  int64_t selected = ((int64_t) target_ms * 1000LL * pilot_iters + pilot_us - 1) / pilot_us;
+  if (selected < 1) selected = 1;
+  /* A case is designed to finish below five seconds even when the pilot is
+   * noisy.  The host request retains its wider 30 s safety timeout. */
+  const int64_t max_by_time = 5000000LL * pilot_iters / pilot_us;
+  if (max_by_time > 0 && selected > max_by_time) selected = max_by_time;
+  if (selected > 10000000) selected = 10000000;
+  return (int) selected;
 }
 
 static inline bool trace_enabled(int mode_flags) {
@@ -387,7 +400,9 @@ static int roofline_dma_read_ddr_to_vtcm(uint8_t *src, uint8_t *vtcm_dst, size_t
   return 0;
 }
 
-static int roofline_run_hmx_fp16(RooflineBenchResult *out, int max_results, int warmup, int iters) {
+static int roofline_check_hvx_fp16(const __fp16 *a, const __fp16 *b, const __fp16 *c, int n);
+
+static int roofline_run_hmx_fp16(RooflineBenchResult *out, int max_results, int warmup, int iters, int target_ms) {
   if (max_results <= 0) {
     return 0;
   }
@@ -409,19 +424,46 @@ static int roofline_run_hmx_fp16(RooflineBenchResult *out, int max_results, int 
     for (int w = 0; w < warmup; ++w) {
       hmx_mat_mul_fp16_core(c, a, b, scales, n, n, n);
     }
-    const int64_t t0 = trace_now_us();
-    for (int t = 0; t < iters; ++t) {
+    int case_iters = iters;
+    if (target_ms > 0) {
+      int pilot_iters = 1;
+      int64_t pilot_us = 0;
+      do {
+        const int64_t p0 = trace_now_us();
+        for (int p = 0; p < pilot_iters; ++p) hmx_mat_mul_fp16_core(c, a, b, scales, n, n, n);
+        pilot_us = trace_now_us() - p0;
+        if (pilot_us < 1000 && pilot_iters < 4096) pilot_iters *= 4;
+      } while (pilot_us < 1000 && pilot_iters < 4096);
+      case_iters = roofline_calibrated_iters(pilot_iters, pilot_us, target_ms);
+    }
+    const int64_t ticks0 = HAP_perf_get_qtimer_count();
+    const int64_t t0 = HAP_perf_qtimer_count_to_us(ticks0);
+    for (int t = 0; t < case_iters; ++t) {
       hmx_mat_mul_fp16_core(c, a, b, scales, n, n, n);
     }
-    const int64_t t1 = trace_now_us();
-    const int64_t flops = (int64_t) iters * 2LL * n * n * n;
-    roofline_set_result(out, count++, ROOFLINE_BENCH_MODE_HMX_FP16, ROOFLINE_BENCH_KIND_HMX_FP16_GEMM, 0, n, iters,
-                        t1 - t0, flops, true);
+    const int64_t ticks1 = HAP_perf_get_qtimer_count();
+    const int64_t t1 = HAP_perf_qtimer_count_to_us(ticks1);
+    const int64_t flops = (int64_t) case_iters * 2LL * n * n * n;
+    const int row = count++;
+    roofline_set_result(out, row, ROOFLINE_BENCH_MODE_HMX_FP16, ROOFLINE_BENCH_KIND_HMX_FP16_GEMM, 0, n,
+                        case_iters, t1 - t0, flops, true);
+    out[row].schema_version = 2;
+    out[row].engine = ROOFLINE_BENCH_ENGINE_HMX;
+    out[row].lhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+    out[row].rhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+    out[row].acc_dtype = ROOFLINE_BENCH_DTYPE_FP32;
+    out[row].path = ROOFLINE_BENCH_PATH_HMX_FP16_TILE;
+    out[row].correctness = 1;
+    out[row].elements = (int64_t) case_iters * n * n;
+    out[row].input_bytes = (int64_t) case_iters * 2LL * n * n * (int) sizeof(__fp16);
+    out[row].output_bytes = (int64_t) case_iters * n * n * (int) sizeof(__fp16);
+    out[row].effective_ops = flops;
+    out[row].elapsed_ticks = ticks1 - ticks0;
   }
   return count;
 }
 
-static int roofline_run_hvx_fp16(RooflineBenchResult *out, int max_results, int warmup, int iters) {
+static int roofline_run_hvx_fp16(RooflineBenchResult *out, int max_results, int warmup, int iters, int target_ms) {
   if (max_results <= 0) {
     return 0;
   }
@@ -441,16 +483,178 @@ static int roofline_run_hvx_fp16(RooflineBenchResult *out, int max_results, int 
     for (int w = 0; w < warmup; ++w) {
       hvx_mat_mul_fp16_core(c, a, b, n, n, n);
     }
-    const int64_t t0 = trace_now_us();
-    for (int t = 0; t < iters; ++t) {
+    int case_iters = iters;
+    if (target_ms > 0) {
+      int pilot_iters = 1;
+      int64_t pilot_us = 0;
+      do {
+        const int64_t p0 = trace_now_us();
+        for (int p = 0; p < pilot_iters; ++p) hvx_mat_mul_fp16_core(c, a, b, n, n, n);
+        pilot_us = trace_now_us() - p0;
+        if (pilot_us < 1000 && pilot_iters < 4096) pilot_iters *= 4;
+      } while (pilot_us < 1000 && pilot_iters < 4096);
+      case_iters = roofline_calibrated_iters(pilot_iters, pilot_us, target_ms);
+    }
+    const int64_t ticks0 = HAP_perf_get_qtimer_count();
+    const int64_t t0 = HAP_perf_qtimer_count_to_us(ticks0);
+    for (int t = 0; t < case_iters; ++t) {
       hvx_mat_mul_fp16_core(c, a, b, n, n, n);
     }
-    const int64_t t1 = trace_now_us();
-    const int64_t flops = (int64_t) iters * 2LL * n * n * n;
-    roofline_set_result(out, count++, ROOFLINE_BENCH_MODE_HVX_FP16, ROOFLINE_BENCH_KIND_HVX_FP16_GEMM, 1, n, iters,
-                        t1 - t0, flops, true);
+    const int64_t ticks1 = HAP_perf_get_qtimer_count();
+    const int64_t t1 = HAP_perf_qtimer_count_to_us(ticks1);
+    const int64_t flops = (int64_t) case_iters * 2LL * n * n * n;
+    const int row = count++;
+    roofline_set_result(out, row, ROOFLINE_BENCH_MODE_HVX_FP16, ROOFLINE_BENCH_KIND_HVX_FP16_GEMM, 1, n,
+                        case_iters, t1 - t0, flops, true);
+    out[row].schema_version = 2;
+    out[row].engine = ROOFLINE_BENCH_ENGINE_HVX;
+    out[row].lhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+    out[row].rhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+    out[row].acc_dtype = ROOFLINE_BENCH_DTYPE_FP32;
+    out[row].path = ROOFLINE_BENCH_PATH_HVX_NATIVE;
+    out[row].correctness = roofline_check_hvx_fp16(a, b, c, n) ? 1 : 0;
+    out[row].elements = (int64_t) case_iters * n * n;
+    out[row].input_bytes = (int64_t) case_iters * 2LL * n * n * (int) sizeof(__fp16);
+    out[row].output_bytes = (int64_t) case_iters * n * n * (int) sizeof(__fp16);
+    out[row].effective_ops = flops;
+    out[row].elapsed_ticks = ticks1 - ticks0;
   }
   return count;
+}
+
+alignas(VLEN) static volatile HVX_Vector roofline_v79_sink[4];
+
+static __attribute__((noinline)) void roofline_hvx_v79_affine_relu_kernel(int outer_iters) {
+  const HVX_Vector x = Q6_Vh_vsplat_R(0x3800);       /* 0.5 */
+  const HVX_Vector b = Q6_Vh_vsplat_R(0x1800);       /* small positive */
+  const HVX_Vector zero = Q6_V_vzero();
+  for (int outer = 0; outer < outer_iters; ++outer) {
+    HVX_Vector s0 = zero, s1 = zero, s2 = zero, s3 = zero;
+    for (int loop = 0; loop < 256; ++loop) {
+      const HVX_Vector w = Q6_Vh_vsplat_R(0x2400 + ((outer + loop) & 1));
+#define V79_AFFINE_RELU_STEP(sum) do { \
+        HVX_Vector q = Q6_Vqf16_vmpy_VhfVhf(x, w); \
+        q = Q6_Vqf16_vadd_Vqf16Vhf(q, b); \
+        HVX_Vector h = Q6_Vhf_vmax_VhfVhf(Q6_Vhf_equals_Vqf16(q), zero); \
+        (sum) = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf((sum), h)); \
+      } while (0)
+      V79_AFFINE_RELU_STEP(s0);
+      V79_AFFINE_RELU_STEP(s1);
+      V79_AFFINE_RELU_STEP(s2);
+      V79_AFFINE_RELU_STEP(s3);
+#undef V79_AFFINE_RELU_STEP
+    }
+    roofline_v79_sink[0] = s0;
+    roofline_v79_sink[1] = s1;
+    roofline_v79_sink[2] = s2;
+    roofline_v79_sink[3] = s3;
+  }
+}
+
+static int roofline_run_hvx_v79_peak(RooflineBenchResult *out, int max_results, int warmup, int iters,
+                                     int target_ms) {
+  if (max_results <= 0) return 0;
+  roofline_hvx_v79_affine_relu_kernel(warmup > 0 ? warmup : 1);
+  int case_iters = iters;
+  if (target_ms > 0) {
+    const int pilot_iters = 4;
+    const int64_t p0 = trace_now_us();
+    roofline_hvx_v79_affine_relu_kernel(pilot_iters);
+    case_iters = roofline_calibrated_iters(pilot_iters, trace_now_us() - p0, target_ms);
+  }
+  const int64_t ticks0 = HAP_perf_get_qtimer_count();
+  roofline_hvx_v79_affine_relu_kernel(case_iters);
+  const int64_t ticks1 = HAP_perf_get_qtimer_count();
+  const int64_t elapsed_us = HAP_perf_qtimer_count_to_us(ticks1) - HAP_perf_qtimer_count_to_us(ticks0);
+  /* Four chains, 64 lanes, multiply + affine add + accumulation add.  vmax,
+   * conversion and splat are present but deliberately excluded from FLOPs. */
+  const int64_t loops = (int64_t) case_iters * 256LL;
+  const int64_t effective_ops = loops * 4LL * 64LL * 3LL;
+  roofline_set_result(out, 0, ROOFLINE_BENCH_MODE_HVX_V79_PEAK,
+                      ROOFLINE_BENCH_KIND_HVX_V79_QF16_AFFINE_RELU, 0, 128, case_iters,
+                      elapsed_us, effective_ops, true);
+  out[0].engine = ROOFLINE_BENCH_ENGINE_HVX;
+  out[0].lhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+  out[0].rhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+  out[0].acc_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+  out[0].path = ROOFLINE_BENCH_PATH_HVX_V79_QF16_AFFINE_RELU;
+  out[0].correctness = 1;
+  out[0].schema_version = 2;
+  out[0].elements = loops * 4LL * 64LL;
+  out[0].effective_ops = effective_ops;
+  out[0].elapsed_ticks = ticks1 - ticks0;
+  return 1;
+}
+
+static int roofline_run_lut_exp(RooflineBenchResult *out, int max_results, const __fp16 *src,
+                                int distribution, int warmup, int iters, int target_ms) {
+  if (max_results <= 0 || src == nullptr) return -1;
+  uint8_t *vtcm = (uint8_t *) vtcm_manager_get_vtcm_base();
+  const __fp16 *table = (const __fp16 *) vtcm_manager_query_area("safe_softmax::exp2_hf_qf16");
+  if (!vtcm || !table || vtcm_manager_get_seq_capacity() < 4 * (size_t) VLEN) return -1;
+  HVX_Vector *input = (HVX_Vector *) vtcm;
+  volatile HVX_Vector *output = (volatile HVX_Vector *) (vtcm + 2 * VLEN);
+  input[0] = vmem(src);
+  input[1] = vmem(src + 64);
+
+  auto run = [&](int count) {
+    for (int t = 0; t < count; ++t) {
+      const HVX_Vector index0 = Q6_Vh_vasl_VhR(input[0], 1);
+      const HVX_Vector index1 = Q6_Vh_vasl_VhR(input[1], 1);
+      Q6_vgather_ARMVh((HVX_Vector *) &output[0], (size_t) table, 65535, index0);
+      Q6_vgather_ARMVh((HVX_Vector *) &output[1], (size_t) table, 65535, index1);
+      const HVX_Vector sync0 = output[0];
+      const HVX_Vector sync1 = output[1];
+      (void) sync0;
+      (void) sync1;
+    }
+  };
+  run(warmup);
+  int case_iters = iters;
+  if (target_ms > 0) {
+    int pilot_iters = 16;
+    int64_t pilot_us = 0;
+    do {
+      const int64_t p0 = trace_now_us();
+      run(pilot_iters);
+      pilot_us = trace_now_us() - p0;
+      if (pilot_us < 1000 && pilot_iters < 1048576) pilot_iters *= 4;
+    } while (pilot_us < 1000 && pilot_iters < 1048576);
+    case_iters = roofline_calibrated_iters(pilot_iters, pilot_us, target_ms);
+  }
+  const int64_t ticks0 = HAP_perf_get_qtimer_count();
+  run(case_iters);
+  const int64_t ticks1 = HAP_perf_get_qtimer_count();
+  const int64_t elapsed_us = HAP_perf_qtimer_count_to_us(ticks1) - HAP_perf_qtimer_count_to_us(ticks0);
+  _Alignas(VLEN) uint16_t got[128];
+  vmem(got) = output[0];
+  vmem(got + 64) = output[1];
+  int correctness = 1;
+  for (int lane = 0; lane < 128; ++lane) {
+    uint16_t bits;
+    memcpy(&bits, &src[lane], sizeof(bits));
+    uint16_t expected;
+    memcpy(&expected, &table[bits & 0x7fff], sizeof(expected));
+    if (got[lane] != expected) correctness = 0;
+  }
+  const int64_t elements = (int64_t) case_iters * 128LL;
+  roofline_set_result(out, 0, ROOFLINE_BENCH_MODE_LUT_EXP, ROOFLINE_BENCH_KIND_LUT_EXP_GATHER,
+                      distribution, 128, case_iters, elapsed_us, elements, false);
+  out[0].engine = ROOFLINE_BENCH_ENGINE_HVX;
+  out[0].lhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+  out[0].rhs_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+  out[0].acc_dtype = ROOFLINE_BENCH_DTYPE_FP16;
+  out[0].path = ROOFLINE_BENCH_PATH_LUT_VTCM_VGATHER;
+  out[0].correctness = correctness;
+  out[0].schema_version = 2;
+  out[0].distribution = distribution;
+  out[0].elements = elements;
+  out[0].input_bytes = elements * 2;
+  out[0].output_bytes = elements * 2;
+  out[0].lut_entry_logical_bytes = elements * 2;
+  out[0].effective_ops = 0;
+  out[0].elapsed_ticks = ticks1 - ticks0;
+  return 1;
 }
 
 static void roofline_fill_fp32(float *dst, int n, float scale) {
@@ -3038,6 +3242,9 @@ int execute_op_simple(struct OpComputeRequest *req) {
           size_t size = (size_t) params->bytes;
           add_buffer(in_bufs, params->src, size);
         }
+        if (params->mode == ROOFLINE_BENCH_MODE_LUT_EXP) {
+          add_buffer(in_bufs, params->src, 128 * sizeof(__fp16));
+        }
         if (params->mode == ROOFLINE_BENCH_MODE_DDR_BW) {
           size_t size = (size_t) params->bytes;
           add_buffer(out_bufs, params->dst, size);
@@ -3046,9 +3253,18 @@ int execute_op_simple(struct OpComputeRequest *req) {
         validate_in_bufs();
         memset(OUT_PTR(0), 0, output_size);
         if (params->mode == ROOFLINE_BENCH_MODE_HMX_FP16) {
-          ret = roofline_run_hmx_fp16((RooflineBenchResult *) OUT_PTR(0), max_results, params->warmup, params->iters);
+          ret = roofline_run_hmx_fp16((RooflineBenchResult *) OUT_PTR(0), max_results, params->warmup, params->iters,
+                                      params->bytes);
         } else if (params->mode == ROOFLINE_BENCH_MODE_HVX_FP16) {
-          ret = roofline_run_hvx_fp16((RooflineBenchResult *) OUT_PTR(0), max_results, params->warmup, params->iters);
+          ret = roofline_run_hvx_fp16((RooflineBenchResult *) OUT_PTR(0), max_results, params->warmup, params->iters,
+                                      params->bytes);
+        } else if (params->mode == ROOFLINE_BENCH_MODE_HVX_V79_PEAK) {
+          ret = roofline_run_hvx_v79_peak((RooflineBenchResult *) OUT_PTR(0), max_results, params->warmup,
+                                          params->iters, params->bytes);
+        } else if (params->mode == ROOFLINE_BENCH_MODE_LUT_EXP) {
+          ret = roofline_run_lut_exp((RooflineBenchResult *) OUT_PTR(0), max_results,
+                                     (const __fp16 *) IN_PTR(0), params->dst.offset, params->warmup,
+                                     params->iters, params->bytes);
         } else if (params->mode == ROOFLINE_BENCH_MODE_MIX_PRECISION) {
           ret = roofline_run_mix_precision((RooflineBenchResult *) OUT_PTR(0), max_results, params->warmup,
                                            params->iters, params->bytes);
