@@ -1,0 +1,66 @@
+{
+  "schema_version": 3,
+  "preregistered_at": "2026-08-21",
+  "experiment": "v79 HVX static-d8 SCNA instruction reduction, scalar constants, hot ABI, and software pipeline",
+  "primary_metric": {
+    "name": "full_attention_host_latency",
+    "qo_len": 32,
+    "kv_len": 4096,
+    "workers": 1,
+    "beats_exp_lut": "paired bootstrap 95% CI upper bound < 1.00",
+    "near_exp_lut": "paired bootstrap 95% CI upper bound <= 1.02",
+    "vertical_win": "candidate/static_d8 paired bootstrap 95% CI upper bound < 1.00",
+    "all_q_safety": "candidate/static_d8 paired bootstrap 95% CI upper bound <= 1.02 for q=1,4,8,16,32"
+  },
+  "fixed_contract": {
+    "architecture": "v79",
+    "sdk": "6.6.0.0",
+    "tools": "19.0.07",
+    "scna": "FP16 direct, frozen SCOPE d8 coefficients, x clamped to [-256,0]",
+    "unchanged": ["QK", "PV", "mask semantics", "K/V load", "VTCM tiling", "Origin HVX", "EXP-LUT"],
+    "main_matrix": {
+      "qo_len": [1, 4, 8, 16, 32],
+      "kv_len": 4096,
+      "heads": 12,
+      "kv_heads": 2,
+      "head_dim": 128,
+      "mask": "full",
+      "workers": 1,
+      "seeds": ["figure8_fixed", "20260810", "20260811"]
+    },
+    "sessions": 5,
+    "warmup_per_session": 5,
+    "measured_per_session": 20,
+    "micro_samples": 30,
+    "micro_min_sample_ms": 50
+  },
+  "baselines": {
+    "horizontal": ["baseline", "lut-exp"],
+    "vertical": "static_d8_ref",
+    "remeasure_in_every_formal_run": true
+  },
+  "kernel_implementations": [
+    {"id": "static_d8_ref", "build_id": 0, "parent": null, "only_change": "none"},
+    {"id": "d7_serial", "build_id": 1, "parent": "static_d8_ref", "only_change": "remove neuron 7 while preserving the first seven accumulation steps"},
+    {"id": "d7_scalar_w", "build_id": 2, "parent": "d7_serial", "only_change": "use Vqf16=vmpy(Vhf,Rhf), duplicating each FP16 weight into both scalar halfwords"},
+    {"id": "d7_pairret_noinline", "build_id": 3, "parent": "d7_scalar_w", "only_change": "unchecked noinline pair return-by-value hot interface"},
+    {"id": "d7_pairret_inline", "build_id": 4, "parent": "d7_scalar_w", "only_change": "always-inline pair return-by-value hot interface"},
+    {"id": "d7_quad_pipeline", "build_id": 5, "parent": "d7_scalar_w", "only_change": "interleave four independent vectors across two adjacent 64-column blocks"},
+    {"id": "d7_prebroadcast", "build_id": 6, "parent": "d7_serial", "only_change": "hoist seven vector weight/bias broadcasts outside the column loop"},
+    {"id": "qf16_tree_control", "build_id": 7, "parent": "static_d8_ref", "only_change": "four partial qf16 accumulation chains and tree reduction", "eligible_for_winner": false},
+    {"id": "piecewise_control", "build_id": 8, "parent": "static_d8_ref", "only_change": "interval selection and one affine evaluation", "eligible_for_winner": false},
+    {"id": "combined_confirm", "build_id": 9, "parent": ["d7_scalar_w", "d7_quad_pipeline"], "only_change": "combine only preregistered scalar-weight and quad factors", "requires_fresh_confirmation": true}
+  ],
+  "static_gates": {
+    "d7_pairret_inline": ["no evaluator spill/stack increase", "no caller spill/stack increase"],
+    "d7_prebroadcast": ["no evaluator spill/stack increase", "no caller spill/stack increase"],
+    "all": ["mv79 compile flag present", "artifact SHA256 archived", "instruction, packet, splat, call, stack, and spill metrics archived"]
+  },
+  "correctness": {
+    "attention_matrix": {"masks": ["full", "causal", "padding"], "qo_len": [1, 4], "kv_len": [4093, 4096], "head_dim": [64, 128], "seeds": ["figure8_fixed", "20260810", "20260811"]},
+    "gates": {"ret": 0, "finite": true, "mask_and_tail_zero": true, "rmse_max": 0.002, "max_abs_max": 0.01},
+    "order_preserving": "micro checksum must equal static_d8_ref"
+  },
+  "statistics": {"method": "paired bootstrap", "draws": 10000, "confidence": 0.95},
+  "out_of_scope": ["d4/d6 retraining", "hybrid LUT-SCNA", "HMX/v81", "QK/PV/mask/tiling changes", "end-to-end LLM"]
+}

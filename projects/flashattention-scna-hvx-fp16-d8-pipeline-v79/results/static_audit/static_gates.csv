@@ -1,0 +1,11 @@
+kernel_impl,static_pass,reasons,instructions,packets,splat,scalar_weight_multiply,evaluator_spill,evaluator_stack,caller_spill_delta,caller_stack_delta
+combined_confirm,1,,123,43,8,14,0,0,129,2048
+d7_pairret_inline,0,caller_stack_increase,123,43,8,14,0,0,-10,128
+d7_pairret_noinline,1,,112,36,8,14,0,0,0,0
+d7_prebroadcast,0,caller_spill_increase;caller_stack_increase,121,43,15,0,0,0,7,1920
+d7_quad_pipeline,1,,123,43,8,14,0,0,116,1920
+d7_scalar_w,1,,123,43,8,14,0,0,0,0
+d7_serial,1,,121,46,15,0,0,0,0,0
+piecewise_control,1,,137,41,22,0,0,384,0,0
+qf16_tree_control,1,,127,49,15,0,0,0,0,0
+static_d8_ref,1,,127,41,17,0,0,0,0,0
