@@ -1,2 +1,0 @@
-mode,function,kernel,width,lanes,iters,elapsed_us,pair_elapsed_us,rmse,max_abs_error,dense_samples,dense_rmse,dense_max_abs_error,pair_max_abs_diff,direct_tree_max_abs_diff,monotonic_violations,negative_count,nan_count,y_min,y_minus12,y_minus4,y_zero
-scna-fp16,exp2,direct,32,64,100000,11757,18358,8.59679e-05,0.000488281,4096,0.000611764,0.0135958,0,0.000976562,0,0,0,0,0.000202417,0.0603333,0.999512

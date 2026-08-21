@@ -1,2 +1,0 @@
-mode,width,lanes,iters,elapsed_us,rmse,max_abs_error,nan_count
-scna-int8,8,64,20,14,0.0052965,0.0161996,0

@@ -1,3 +1,0 @@
-alloc_shared_mem_buf: buf=0x7c43362000 fd=12 size=4096 flags=FASTRPC_MAP_FD
-alloc_shared_mem_buf: buf=0x7c43360000 fd=13 size=128 flags=FASTRPC_MAP_FD
-SCNA_EXP2_BENCH mode=scna-int8 width=16 lanes=64 iters=1000 elapsed_us=68 pair_elapsed_us=82 rmse=0.00238002 max_abs_error=0.0141602 dense_samples=1024 dense_rmse=0.0147718 dense_max_abs_error=0.0867047 pair_max_abs_diff=0 monotonic_violations=0 negative_count=0 nan_count=0 y_min=0 y_minus12=0 y_minus4=0.0476379 y_zero=0.98584

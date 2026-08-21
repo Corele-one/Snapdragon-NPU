@@ -1,5 +1,0 @@
-alloc_shared_mem_buf: buf=0x76fe7e8000 fd=12 size=4096 flags=FASTRPC_MAP_FD
-alloc_shared_mem_buf: buf=0x76fe7e7000 fd=13 size=256 flags=FASTRPC_MAP_FD
-SCNA_EXP_BENCH mode=scna-fp16 function=exp2 kernel=tree width=32 lanes=64 iters=100000 elapsed_us=6291 pair_elapsed_us=8767 rmse=6.39064e-05 max_abs_error=0.000488281 dense_samples=4096 dense_rmse=0.000564 dense_max_abs_error=0.0126192 pair_max_abs_diff=0 direct_tree_max_abs_diff=0.000976562 monotonic_violations=0 negative_count=0 nan_count=0 y_min=0 y_minus12=0.00020206 y_minus4=0.0599976 y_zero=0.999512
-HVX_FP16_TO_FP32_PROBE zero=7.27596e-12 one=1 quarter=0.25 neg_half=-0.5 int8_s32_pack_mismatches=0 int8_s32_pack_max_abs_diff=0
-HVX_INT8_S32_PACK_PROBE lanes=0,1,2,30,31,32,62,63 input=-128,-125,-123,-67,-65,-62,-2,0 output=-128,-125,-123,-67,-65,-62,-2,0

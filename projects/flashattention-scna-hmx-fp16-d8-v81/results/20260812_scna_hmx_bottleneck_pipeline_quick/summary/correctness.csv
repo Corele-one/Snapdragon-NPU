@@ -1,5 +1,0 @@
-candidate_nonfinite,head_dim,kv_len,label,mask_mode,max_abs_error,mode,rmse,status
-,128,4093,Hybrid pipeline request,full,,scna-hmx-fp16-d8-hybrid-attn-pipeline,,failed
-,128,4093,Hybrid pipeline request,causal,,scna-hmx-fp16-d8-hybrid-attn-pipeline,,failed
-,128,4093,Two-pass pipeline request,full,,scna-hmx-fp16-d8-two-pass-attn-pipeline,,failed
-,128,4093,Two-pass pipeline request,causal,,scna-hmx-fp16-d8-two-pass-attn-pipeline,,failed

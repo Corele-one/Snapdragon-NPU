@@ -1,4 +1,0 @@
-{"compare": null, "head_dim": 128, "kv_len": 4093, "mask_mode": "full", "mode": "scna-hmx-fp16-d8-hybrid-attn-pipeline", "numeric": [], "returncode": 1, "status": "failed", "tail_zero_required": true}
-{"compare": null, "head_dim": 128, "kv_len": 4093, "mask_mode": "causal", "mode": "scna-hmx-fp16-d8-hybrid-attn-pipeline", "numeric": [], "returncode": 1, "status": "failed", "tail_zero_required": true}
-{"compare": null, "head_dim": 128, "kv_len": 4093, "mask_mode": "full", "mode": "scna-hmx-fp16-d8-two-pass-attn-pipeline", "numeric": [], "returncode": 1, "status": "failed", "tail_zero_required": true}
-{"compare": null, "head_dim": 128, "kv_len": 4093, "mask_mode": "causal", "mode": "scna-hmx-fp16-d8-two-pass-attn-pipeline", "numeric": [], "returncode": 1, "status": "failed", "tail_zero_required": true}

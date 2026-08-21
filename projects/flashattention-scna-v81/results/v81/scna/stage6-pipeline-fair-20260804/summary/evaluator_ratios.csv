@@ -1,9 +1,0 @@
-qo_len,reference,candidate,samples_per_side,reference_median_us,candidate_median_us,reference_over_candidate,ratio_ci95_low,ratio_ci95_high
-4,baseline-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,522.5,544.0,0.9604779411764706,0.8951075610473669,1.067404426559356
-4,lut-exp-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,312.0,544.0,0.5735294117647058,0.5546666666666666,0.6309403437815976
-8,baseline-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,561.0,611.0,0.9181669394435352,0.7709766162310867,1.0785801963993455
-8,lut-exp-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,456.0,611.0,0.7463175122749591,0.5986139069392402,0.7864157119476268
-16,baseline-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,987.5,1051.5,0.9391345696623871,0.8748810656517603,0.9819219790675547
-16,lut-exp-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,708.5,1051.5,0.6737993342843557,0.6668241910217306,0.6818662818662818
-32,baseline-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,1639.0,1840.5,0.8905188807389296,0.8799348337238051,0.9201657458563536
-32,lut-exp-pipeline-on,scna-fp16-exp-tree-d8-pipeline-on,40,999.5,1840.5,0.5430589513719098,0.4948537378114843,0.5569727810174061

@@ -1,2 +1,0 @@
-mode,width,lanes,iters,elapsed_us,rmse,max_abs_error,nan_count
-scna-fp16,16,64,20,25,0.000370481,0.00295497,0

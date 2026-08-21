@@ -1,7 +1,0 @@
-{
-  "development_evidence": "docs/HMX_SCNA_OPTIMIZATION_HISTORY.json",
-  "formal_kernel_enabled": false,
-  "pass": false,
-  "reason": "The required 1/8-channel x ring-depth x synchronization matrix was not executed.",
-  "status": "not-run"
-}

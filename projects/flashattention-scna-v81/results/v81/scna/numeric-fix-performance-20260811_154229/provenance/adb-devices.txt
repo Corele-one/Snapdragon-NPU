@@ -1,3 +1,0 @@
-List of devices attached
-bde3ddde               device product:piano model:25091RP04C device:piano transport_id:1
-

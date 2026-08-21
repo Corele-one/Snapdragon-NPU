@@ -35,7 +35,12 @@ COLORS = dict(zip(LABELS, sns.color_palette("colorblind", len(LABELS))))
 MARKERS = {"lut-exp": "o", "pair_static_d8": "s", "optimized": "^",
            "optimized_qf16_tree": "D", "optimized_piecewise_d8": "P", "baseline": "X"}
 OPS_PER_ELEMENT = {"pair_static_d8": 24, "optimized": 24,
-                   "optimized_qf16_tree": 21, "optimized_piecewise_d8": 2}
+                   # Seven affine/ReLU partial updates contribute 7 * 3
+                   # effective arithmetic ops, followed by three qf16 tree
+                   # reduction adds.  Omitting those reductions would make W
+                   # inconsistent with the declared multiply/add/accumulate
+                   # convention used for the other variants.
+                   "optimized_qf16_tree": 24, "optimized_piecewise_d8": 2}
 
 
 def fields(line):
@@ -410,6 +415,112 @@ def plot_pipeline(base, attention, diagnostics, roofs, single=False):
     save_figure(fig, base)
 
 
+def plot_roofline_panels(figures, roofs, micro, attention, diagnostics):
+    """Render every report panel as an independently citable figure."""
+    short = {"pair_static_d8": "qf16 static", "optimized": "widened FMA",
+             "optimized_qf16_tree": "qf16 tree", "optimized_piecewise_d8": "piecewise"}
+    peak = max((r["metric"] for r in roofs if r["kind"] == "hvx_v79_qf16_affine_relu" and r["correctness"]), default=None)
+    vtcm = max((r["metric"] for r in roofs if r["kind"] == "vtcm_copy"), default=None)
+
+    fig, ax = plt.subplots(figsize=(5.2, 3.5))
+    if peak:
+        xs = [10 ** (-1 + 3 * i / 199) for i in range(200)]
+        ax.plot(xs, [min(peak, (vtcm or 1e9) * x / 1000) for x in xs],
+                color="0.25", linestyle="--", label=f"v79 HVX roof ({peak:.3f} TOPS)")
+        knee = peak * 1000 / vtcm if vtcm else None
+        if knee:
+            ax.axvline(knee, color="0.5", linestyle=":", linewidth=1,
+                       label=f"knee ({knee:.3f} FLOP/B)")
+    for label, ops in OPS_PER_ELEMENT.items():
+        values = [r["ns_per_64"] for r in micro if r["label"] == label]
+        if values:
+            throughput = ops * 64 / (median(values) * 1e-9) / 1e12
+            ax.scatter(ops / 4, throughput, color=COLORS[label], marker=MARKERS[label], s=48,
+                       label=short[label])
+    ax.set(xscale="log", yscale="log", xlabel="Effective FLOP / logical S+P byte",
+           ylabel="Effective arithmetic throughput (TOPS)", title="SCNA arithmetic roofline")
+    ax.legend(frameon=False)
+    fig.tight_layout()
+    save_figure(fig, figures / "roofline_scna_arithmetic")
+
+    fig, ax = plt.subplots(figsize=(5.2, 3.5))
+    if vtcm:
+        xs = [3.5, 6.5]
+        ax.plot(xs, [vtcm / x for x in xs], color="0.25", linestyle="--",
+                label=f"VTCM logical-byte roof ({vtcm:.1f} GB/s)")
+    for label in OPS_PER_ELEMENT:
+        values = [r["ns_per_64"] for r in micro if r["label"] == label]
+        if values:
+            ax.scatter(4, 64 / (median(values) * 1e-9) / 1e9, color=COLORS[label],
+                       marker=MARKERS[label], s=48, label=short[label])
+    groups = defaultdict(list)
+    for row in roofs:
+        if row["kind"] == "lut_exp_vtcm_vgather" and row["correctness"]:
+            groups[row["distribution"]].append(row["metric"])
+    for index, (distribution, values) in enumerate(sorted(groups.items())):
+        ax.scatter(6 + (index - 1) * .08, median(values), color=COLORS["lut-exp"],
+                   marker=("o", "s", "^")[index], s=48, label=f"LUT-{distribution}")
+    ax.set(xlabel="Logical bytes / exp2 element (transaction size unobserved)",
+           ylabel="Useful exp2 throughput (GElem/s)", title="LUT-EXP vs. SCNA useful-work view", xlim=(3.5, 6.5))
+    ax.legend(frameon=False, ncol=2)
+    fig.tight_layout()
+    save_figure(fig, figures / "roofline_useful_work")
+
+    fig, ax = plt.subplots(figsize=(5.6, 3.6))
+    for label in LABELS:
+        points = []
+        for q in (1, 4, 8, 16, 32):
+            values = [r["host_us"] for r in attention if r["label"] == label and r["qo_len"] == q]
+            if values:
+                lo, hi = bootstrap_median_ci(values, seed=20260819 + q)
+                points.append((q, median(values), lo, hi))
+        if points:
+            ax.errorbar([p[0] for p in points], [p[1] for p in points],
+                        yerr=[[p[1] - p[2] for p in points], [p[3] - p[1] for p in points]],
+                        label=LABELS[label], color=COLORS[label], marker=MARKERS[label],
+                        linewidth=1.2, capsize=2)
+    ax.set(xlabel="Query length (KV=4096)", ylabel="Host latency (us)",
+           title="Full Attention median and bootstrap 95% CI")
+    ax.set_xticks([1, 4, 8, 16, 32])
+    ax.legend(frameon=False, ncol=2)
+    fig.tight_layout()
+    save_figure(fig, figures / "attention_latency_ci")
+
+    fig, ax = plt.subplots(figsize=(5.6, 3.7))
+    long_rows = [r for r in diagnostics if r["kv_len"] == 4096]
+    labels = [r["label"] for r in long_rows]
+    x = list(range(len(labels)))
+    common = [max(0, r.get("safe_sm_us", 0) - r.get("scna_exp_us", 0)) for r in long_rows]
+    evaluator = [r.get("scna_exp_us", 0) if r["label"] != "lut-exp" else r.get("safe_sm_us", 0) for r in long_rows]
+    ax.bar(x, common, color="0.75", label="safe_sm excluding SCNA evaluator")
+    ax.bar(x, evaluator, bottom=common, color=[COLORS.get(label, (.3, .3, .3)) for label in labels],
+           hatch=["//" if label == "lut-exp" else "" for label in labels], label="SCNA evaluator / LUT safe_sm")
+    ax.set_xticks(x, [LABELS.get(label, label) for label in labels], rotation=25, ha="right")
+    ax.set(ylabel="Summed DSP qtimer (us)", title="HVX safe_sm diagnostic (scna_exp is nested)")
+    ax.legend(frameon=False)
+    fig.tight_layout()
+    save_figure(fig, figures / "safe_sm_scna_diagnostic")
+
+    hmx = max((r["metric"] for r in roofs if r["kind"] == "hmx_fp16_gemm"), default=None)
+    hvx = max((r["metric"] for r in roofs if r["kind"] == "hvx_v79_qf16_affine_relu"), default=None)
+    ddr = max((r["metric"] for r in roofs if r["kind"] == "ddr_copy"), default=None)
+    dma = max((r["metric"] for r in roofs if r["kind"] == "hmx_dma_read"), default=None)
+    items = [("DDR copy", ddr, "GB/s"), ("DDR→VTCM DMA", dma, "GB/s"),
+             ("VTCM copy", vtcm, "GB/s"), ("HVX qf16 mix", hvx, "TOPS"),
+             ("HMX FP16", hmx, "TFLOP/s")]
+    fig, ax = plt.subplots(figsize=(5.6, 3.5))
+    bars = ax.barh([x[0] for x in items], [x[1] or 0 for x in items],
+                   color=sns.color_palette("colorblind", len(items)), edgecolor="0.25")
+    for bar, (_, value, unit) in zip(bars, items):
+        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2,
+                "  UNAVAILABLE" if value is None else f"  {value:.3g} {unit}", va="center", fontsize=8)
+    ax.set(xlabel="Native measured value (units differ by row)", title="Independent measured roofs; rows are not additive")
+    ax.invert_yaxis()
+    ax.set_xlim(0, max((x[1] or 0) for x in items) * 1.28)
+    fig.tight_layout()
+    save_figure(fig, figures / "independent_measured_roofs")
+
+
 def write_drawio(path):
     boxes = [(20, 40, 125, 55, "S in VTCM"), (180, 15, 160, 80, "LUT: index + vgather\n64 KiB resident table"),
              (180, 125, 160, 80, "SCNA d8: 7 active affine-ReLU\nbroadcast + dependency chains"),
@@ -508,6 +619,10 @@ def main():
                           "attention_vs_lut_exp": attention_vs_lut},
                "promotion": promotion, "failure_status": failure_status,
                "definitions": {"logical_scna_bytes_per_element": 4, "logical_lut_bytes_per_element": 6,
+                               "scna_effective_ops_per_element": OPS_PER_ELEMENT,
+                               "arithmetic_roofline_x": "AI = W_effective / Q_logical",
+                               "arithmetic_roofline_y": "P_achieved = W_effective / T_micro_median",
+                               "arithmetic_roofline_kind": "logical_effective_not_pmu_transaction_bytes",
                                "lut_transaction_bytes_observed": False,
                                "simulator_merged_with_device": False}}
     (root / "roofline_lut_scna_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
@@ -525,6 +640,7 @@ def main():
     plot_pipeline(figures / "roofline_attention_pipeline", attention, diagnostics, roofs)
     plot_pipeline(figures / "roofline_attention_pipeline_double", attention, diagnostics, roofs)
     plot_pipeline(figures / "roofline_attention_pipeline_single", attention, diagnostics, roofs, single=True)
+    plot_roofline_panels(figures, roofs, micro, attention, diagnostics)
     plot_dataflow(figures / "nonlinear_dataflow_weakness", figures / "nonlinear_dataflow_weakness.drawio")
 
     hmx_peak = max((r["metric"] for r in roofs if r["kind"] == "hmx_fp16_gemm"), default=None)
@@ -561,10 +677,22 @@ def main():
              "## 测量事实", "", *(facts or ["- 当前 run 尚无可用真机测量。"]), "",
              "### 失败项重新分类", "", f"```json\n{json.dumps(failure_status, indent=2, sort_keys=True)}\n```", "",
              "## Roofline 位置", "",
-             "![Nonlinear roofline](figures/roofline_nonlinear_lut_vs_scna.svg)", "",
-             "![Attention pipeline](figures/roofline_attention_pipeline.svg)", "",
+             "经典模型的可达性能为 `min(compute peak, bandwidth × arithmetic intensity)`；转折点左侧通常受数据带宽限制，右侧通常受计算峰值限制。本报告将不同执行单元保持为独立 roof，避免混合不相容的单位。", "",
+             "![SCNA arithmetic roofline](figures/roofline_scna_arithmetic.svg)", "",
+             "图例中的黑色虚线是由实测 v79 HVX qf16 峰值与 VTCM 带宽共同限定的 ceiling；竖直点线是两条上限相交的 knee，彩色点是四个 SCNA evaluator。对每个点，横坐标严格由 `AI=W/Q` 建立，纵坐标由 `P=W/T` 建立：W 是声明口径内的 effective arithmetic ops，Q 是逻辑 S 输入与 P 输出字节，T 是 evaluator micro 中位时间。tree 的 W 包含七个 neuron 路径以及末端三次 reduction add。由于 Q 不是 PMU 实测 VTCM transaction byte，本图是 logical/effective Roofline，而不是严格的 cache-aware operational-intensity Roofline。点到虚线的差距反映当前指令混合、依赖链和 issue 开销，不能直接解释为 cache miss。", "",
+             "![LUT and SCNA useful work](figures/roofline_useful_work.svg)", "",
+             "共同视图不把 LUT 查表伪装成 FLOP：每产生一个有效 exp2 输出计一个 useful-work unit。SCNA 点固定在 4 logical B/element；LUT 的不同 marker 对应 attention、dense、random 输入分布，位于约 6 logical B/element。真实 gather transaction 未观测。", "",
+             "![Full Attention latency](figures/attention_latency_ci.svg)", "",
+             "误差棒为 bootstrap 95% CI；该图测量完整 host-visible Attention latency，不等同于 evaluator micro。", "",
+             "![safe_sm diagnostic](figures/safe_sm_scna_diagnostic.svg)", "",
+             "灰色部分是 `safe_sm - scna_exp`，彩色部分是嵌套的 evaluator 时间；二者组成 `safe_sm`，不能把 `scna_exp` 再加到完整阶段和中。", "",
+             "![Independent roofs](figures/independent_measured_roofs.svg)", "",
+             "各行保持原生单位：DDR/VTCM 为 GB/s、HVX 为 TOPS、HMX 为 TFLOP/s。条长不可跨行作数量比较，更不能相加；图的作用是登记每个 pipeline stage 可引用的独立实测 ceiling。", "",
              "- SCNA 标准面板按 affine multiplication、affine addition 和 accumulation 计 effective FLOP；ReLU/compare/mux 单独由反汇编解释。",
              "- LUT 不赋予虚构 FLOP；共同面板以一个有效 exp2 输出作为 useful-work unit。", "",
+             "### 术语：micro 与 qf16 tree", "",
+             "- `micro` 是重复调用单个 nonlinear evaluator 的隔离基准。本 run 的 SCNA micro 每次处理两个 64-lane HVX vector；LUT micro 报告每秒产生的 exp2 元素。它不包含 Q/K/V 搬运、HMX QK/PV、完整 softmax recurrence 或 FastRPC，因此不能直接外推 Attention speedup。",
+             "- `qf16 tree` 删除部署域内恒零的第八个神经元，把 7 个 affine–ReLU 项分到 4 条独立 qf16 累加链，最后树形归约。它缩短串行依赖，但增加同时存活的 accumulator 和调度压力；本 run 中 49 packets 高于 static 的 41，micro 反而慢约 2.2%。", "",
              "### 完整 Attention：相对 LUT-EXP", "", "| Qo | LUT median us | qf16 static / LUT | widened FMA / LUT | qf16 tree / LUT | piecewise / LUT |", "|---:|---:|---:|---:|---:|---:|"]
     for q in (1, 4, 8, 16, 32):
         lut_med = median([r["host_us"] for r in attention if r["label"] == "lut-exp" and r["qo_len"] == q])
