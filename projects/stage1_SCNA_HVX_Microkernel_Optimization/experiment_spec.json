@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "preregistered_at": "2026-08-22",
+  "experiment": "Stage 1 SCNA HVX microkernel optimization",
+  "architecture": "v79",
+  "production_baseline": "d7_pairret_noinline",
+  "horizontal_baselines": ["origin_hvx", "exp_lut"],
+  "historical_reference": "static_d8_ref",
+  "fixed_contract": {
+    "sdk": "6.6.0.0",
+    "tools": "19.0.07",
+    "scna": "FP16 direct, frozen SCOPE d8 coefficients, x clamped to [-256,0]",
+    "qo_len": [1, 4, 8, 16, 32],
+    "kv_len": 4096,
+    "query_heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "mask": "full",
+    "workers": 1,
+    "sessions": 5,
+    "warmup_per_session": 5,
+    "measure_per_session": 20,
+    "bootstrap_draws": 10000,
+    "confidence": 0.95
+  },
+  "correctness": {
+    "masks": ["full", "causal", "padding"],
+    "qo_len": [1, 4],
+    "kv_len": [4093, 4096],
+    "head_dim": [64, 128],
+    "seeds": ["figure8_fixed", "20260810", "20260811"],
+    "expected_cases": 72,
+    "rmse_max": 0.002,
+    "max_abs_max": 0.01,
+    "finite": true,
+    "mask_and_tail_zero": true
+  },
+  "experiment_order": [
+    "A_packet_analysis",
+    "B_two_accumulators",
+    "C_splat_audit",
+    "D_short_lifetime_constants",
+    "E_two_neuron_scheduling",
+    "F_iteration_software_pipeline",
+    "G_abi_small_q",
+    "H_range_folding",
+    "I_scale_fusion"
+  ],
+  "forbidden": [
+    "alternative exp approximation",
+    "Horner polynomial",
+    "lane-8",
+    "d7_quad_pipeline",
+    "global prebroadcast",
+    "forced inline",
+    "HMX QK/PV changes",
+    "FlashAttention tiling changes",
+    "Softmax dataflow changes",
+    "DMA pipeline changes"
+  ]
+}
+
