@@ -1,0 +1,371 @@
+{
+  "destination_project": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup",
+  "excluded": [
+    ".venv",
+    "__pycache__",
+    "android_*",
+    "artifacts",
+    "build",
+    "hexagon_*",
+    "reports",
+    "results"
+  ],
+  "files": [
+    {
+      "bytes": 4690,
+      "imported_sha256": "b9b1f0d22fbb06ec032dc76179bc9581e8a05499ac6cd49e76f68a1c5d5d850b",
+      "path": "src/htp-ops-lib-main/.clang-format",
+      "source_sha256": "b9b1f0d22fbb06ec032dc76179bc9581e8a05499ac6cd49e76f68a1c5d5d850b"
+    },
+    {
+      "bytes": 34,
+      "imported_sha256": "2965592b787cd2373a4e3f5bb5c1fb176630adcb9bd4f212f701ac2f1ce89649",
+      "path": "src/htp-ops-lib-main/.gitignore",
+      "source_sha256": "2965592b787cd2373a4e3f5bb5c1fb176630adcb9bd4f212f701ac2f1ce89649"
+    },
+    {
+      "bytes": 8139,
+      "imported_sha256": "cd5aa0871dc5d30ab919c8ca05b09b8866e87ccb2a6570d27386b3eed701e1cb",
+      "path": "src/htp-ops-lib-main/CMakeLists.txt",
+      "source_sha256": "cd5aa0871dc5d30ab919c8ca05b09b8866e87ccb2a6570d27386b3eed701e1cb"
+    },
+    {
+      "bytes": 5279,
+      "imported_sha256": "a580d33ef17607a5a769dd8dfb10993603d180276d0ffcead1b7366fffbb7dd8",
+      "path": "src/htp-ops-lib-main/README.md",
+      "source_sha256": "a580d33ef17607a5a769dd8dfb10993603d180276d0ffcead1b7366fffbb7dd8"
+    },
+    {
+      "bytes": 2590,
+      "imported_sha256": "8b8a2a5ebcff0eff5bb92a23eb4678f425288f1a7a1a1172de8a260a7d448f8a",
+      "path": "src/htp-ops-lib-main/include/dsp/dma_utils.h",
+      "source_sha256": "8b8a2a5ebcff0eff5bb92a23eb4678f425288f1a7a1a1172de8a260a7d448f8a"
+    },
+    {
+      "bytes": 349,
+      "imported_sha256": "040440a83394816fb16ba99930ec01af63e3a3fe02fff19afb032c5d4386aa70",
+      "path": "src/htp-ops-lib-main/include/dsp/hmx_mgr.h",
+      "source_sha256": "040440a83394816fb16ba99930ec01af63e3a3fe02fff19afb032c5d4386aa70"
+    },
+    {
+      "bytes": 1462,
+      "imported_sha256": "9b8f3f528a08a2865c58a0acb97cc6965b75373f7ea5de2934a464db3e31b2b7",
+      "path": "src/htp-ops-lib-main/include/dsp/hmx_utils.h",
+      "source_sha256": "9b8f3f528a08a2865c58a0acb97cc6965b75373f7ea5de2934a464db3e31b2b7"
+    },
+    {
+      "bytes": 2069,
+      "imported_sha256": "2d4e34b22b09e532d3d3ac70322f5ab603bd0b7709784f5a5ddb479dea25faf1",
+      "path": "src/htp-ops-lib-main/include/dsp/hvx_convert.h",
+      "source_sha256": "2d4e34b22b09e532d3d3ac70322f5ab603bd0b7709784f5a5ddb479dea25faf1"
+    },
+    {
+      "bytes": 29117,
+      "imported_sha256": "c119bb5753ceddf6737e8bf1cc5c24d261b3d5cb4d52f21bb166c1740b875597",
+      "path": "src/htp-ops-lib-main/include/dsp/hvx_internal.h",
+      "source_sha256": "c119bb5753ceddf6737e8bf1cc5c24d261b3d5cb4d52f21bb166c1740b875597"
+    },
+    {
+      "bytes": 34501,
+      "imported_sha256": "aeedaa050f7f8bf649b2c427879bc690d40d871f16df216f89e6eb616129bd71",
+      "path": "src/htp-ops-lib-main/include/dsp/hvx_math.h",
+      "source_sha256": "aeedaa050f7f8bf649b2c427879bc690d40d871f16df216f89e6eb616129bd71"
+    },
+    {
+      "bytes": 186,
+      "imported_sha256": "f7fee4de00f59238f75648078a28a783af2f84c7b1480ddfcdbf474ab99aa652",
+      "path": "src/htp-ops-lib-main/include/dsp/mmap_mgr.h",
+      "source_sha256": "f7fee4de00f59238f75648078a28a783af2f84c7b1480ddfcdbf474ab99aa652"
+    },
+    {
+      "bytes": 158,
+      "imported_sha256": "2dfe1d5149e02e9db3d4230c5c903ab04a89d786616081fc550b5eb82410ba75",
+      "path": "src/htp-ops-lib-main/include/dsp/op_executor.h",
+      "source_sha256": "2dfe1d5149e02e9db3d4230c5c903ab04a89d786616081fc550b5eb82410ba75"
+    },
+    {
+      "bytes": 5210,
+      "imported_sha256": "6fc05576c7e0e74be2aefd7f4fd56d1145f4c5fe77324623d4cdc47ef6817313",
+      "path": "src/htp-ops-lib-main/include/dsp/ops.h",
+      "source_sha256": "6fc05576c7e0e74be2aefd7f4fd56d1145f4c5fe77324623d4cdc47ef6817313"
+    },
+    {
+      "bytes": 123,
+      "imported_sha256": "e817bd183c1b6789e1725c839d7d5a8a338a45cc38dfd28d90841cdd03db0b76",
+      "path": "src/htp-ops-lib-main/include/dsp/power.h",
+      "source_sha256": "e817bd183c1b6789e1725c839d7d5a8a338a45cc38dfd28d90841cdd03db0b76"
+    },
+    {
+      "bytes": 1757,
+      "imported_sha256": "ed271c0d77f151ed916bf37b17fbee4eaa9c960a63cb6bea5bced4969baee61c",
+      "path": "src/htp-ops-lib-main/include/dsp/quants.h",
+      "source_sha256": "ed271c0d77f151ed916bf37b17fbee4eaa9c960a63cb6bea5bced4969baee61c"
+    },
+    {
+      "bytes": 1550,
+      "imported_sha256": "408b141055ec5f216cb9a270894c2ddae2b86b3a98efeca3f1b7dd2c067c88cf",
+      "path": "src/htp-ops-lib-main/include/dsp/scna_exp2.h",
+      "source_sha256": "408b141055ec5f216cb9a270894c2ddae2b86b3a98efeca3f1b7dd2c067c88cf"
+    },
+    {
+      "bytes": 13308,
+      "imported_sha256": "d1b78ce11220ba476c3b20783083b74f6ed224f6a66da12dbf705563f2148292",
+      "path": "src/htp-ops-lib-main/include/dsp/scna_exp2_hot.h",
+      "source_sha256": "d1b78ce11220ba476c3b20783083b74f6ed224f6a66da12dbf705563f2148292"
+    },
+    {
+      "bytes": 2135,
+      "imported_sha256": "d10fb7f1f57060f1af49e3f0a0f297f46adb3d4a8a7dfe020d88db26e174e6ed",
+      "path": "src/htp-ops-lib-main/include/dsp/scna_params.h",
+      "source_sha256": "d10fb7f1f57060f1af49e3f0a0f297f46adb3d4a8a7dfe020d88db26e174e6ed"
+    },
+    {
+      "bytes": 462,
+      "imported_sha256": "ea14798fa51bc258a8238489687c96879f6cdb0e403921a007d374169eff5915",
+      "path": "src/htp-ops-lib-main/include/dsp/utils.h",
+      "source_sha256": "ea14798fa51bc258a8238489687c96879f6cdb0e403921a007d374169eff5915"
+    },
+    {
+      "bytes": 560,
+      "imported_sha256": "4b5a378da377b0d1a95bb555afc0a9e48ef149f803b7f7836788e29c28fdfc2d",
+      "path": "src/htp-ops-lib-main/include/dsp/vtcm_mgr.h",
+      "source_sha256": "4b5a378da377b0d1a95bb555afc0a9e48ef149f803b7f7836788e29c28fdfc2d"
+    },
+    {
+      "bytes": 11823,
+      "imported_sha256": "162f19f46beeb89fccb0f9436a3f4ea44eb5d1cc94fec57d49b113e17a95d0e5",
+      "path": "src/htp-ops-lib-main/include/dsp/worker_pool.h",
+      "source_sha256": "162f19f46beeb89fccb0f9436a3f4ea44eb5d1cc94fec57d49b113e17a95d0e5"
+    },
+    {
+      "bytes": 330,
+      "imported_sha256": "6388e752e10cfce39ee9a2c63d3ffdb13b136d32ef05faadd3331ee469907721",
+      "path": "src/htp-ops-lib-main/include/host/op_export.h",
+      "source_sha256": "6388e752e10cfce39ee9a2c63d3ffdb13b136d32ef05faadd3331ee469907721"
+    },
+    {
+      "bytes": 254,
+      "imported_sha256": "53ca737c4531b8128ce8aa0d00a62cb38baeb5c20ce140975bebf640025fe5c5",
+      "path": "src/htp-ops-lib-main/include/host/session.h",
+      "source_sha256": "53ca737c4531b8128ce8aa0d00a62cb38baeb5c20ce140975bebf640025fe5c5"
+    },
+    {
+      "bytes": 666,
+      "imported_sha256": "696413598e5fcfacca43bfb44cea6a8f376e264724ebfb4e36cda1356f309da0",
+      "path": "src/htp-ops-lib-main/include/htp_ops.idl",
+      "source_sha256": "696413598e5fcfacca43bfb44cea6a8f376e264724ebfb4e36cda1356f309da0"
+    },
+    {
+      "bytes": 1422,
+      "imported_sha256": "782658b05e5bea713cdc3ea169a172ba19329a535d2edf3fe2edc62c55a6479d",
+      "path": "src/htp-ops-lib-main/include/message.h",
+      "source_sha256": "782658b05e5bea713cdc3ea169a172ba19329a535d2edf3fe2edc62c55a6479d"
+    },
+    {
+      "bytes": 18339,
+      "imported_sha256": "2852b4f71faa6714d642b60a1645eac0faf4c83ca54fb7dc9d8dedfe214d4990",
+      "path": "src/htp-ops-lib-main/include/op_reg.h",
+      "source_sha256": "2852b4f71faa6714d642b60a1645eac0faf4c83ca54fb7dc9d8dedfe214d4990"
+    },
+    {
+      "bytes": 354,
+      "imported_sha256": "ff8bab025c9a3ad4598d2d9198fc59c426ae2acecf7db0975f231ed074a11542",
+      "path": "src/htp-ops-lib-main/include/scna_env.idl",
+      "source_sha256": "ff8bab025c9a3ad4598d2d9198fc59c426ae2acecf7db0975f231ed074a11542"
+    },
+    {
+      "bytes": 11856,
+      "imported_sha256": "f9ca0e3391c3b5a89c35b3994e0df002ba8bf91f9cfe5cb5928d22b175c0e412",
+      "path": "src/htp-ops-lib-main/src/dsp/commu.c",
+      "source_sha256": "f9ca0e3391c3b5a89c35b3994e0df002ba8bf91f9cfe5cb5928d22b175c0e412"
+    },
+    {
+      "bytes": 3899,
+      "imported_sha256": "b509ce14810dcefcf5de5ca167a4096e4e6aea4dbe09a75b12612009dc0c6daf",
+      "path": "src/htp-ops-lib-main/src/dsp/hmx_mgr.c",
+      "source_sha256": "b509ce14810dcefcf5de5ca167a4096e4e6aea4dbe09a75b12612009dc0c6daf"
+    },
+    {
+      "bytes": 807,
+      "imported_sha256": "48b333e242158e273bf03f5c5ac79a4549a14e65d85b01f28d2635d6216ff8e2",
+      "path": "src/htp-ops-lib-main/src/dsp/mmap_mgr.cc",
+      "source_sha256": "48b333e242158e273bf03f5c5ac79a4549a14e65d85b01f28d2635d6216ff8e2"
+    },
+    {
+      "bytes": 158242,
+      "imported_sha256": "2272f310060633794de4284675ad8256784bffb0b8e3cb504819e3f7d423919e",
+      "path": "src/htp-ops-lib-main/src/dsp/op_executor.cc",
+      "source_sha256": "2272f310060633794de4284675ad8256784bffb0b8e3cb504819e3f7d423919e"
+    },
+    {
+      "bytes": 92435,
+      "imported_sha256": "6eeaca9a06bbf58b29531096539c33d9f4a77802ae60b82dae804d6a09eb1550",
+      "path": "src/htp-ops-lib-main/src/dsp/op_tests.cc",
+      "source_sha256": "6eeaca9a06bbf58b29531096539c33d9f4a77802ae60b82dae804d6a09eb1550"
+    },
+    {
+      "bytes": 116613,
+      "imported_sha256": "8c5c41f9e45ec571596f472e59a1c635a3cf6390901a5b35f9bec46f70a36c90",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/flash_attn.c",
+      "source_sha256": "8c5c41f9e45ec571596f472e59a1c635a3cf6390901a5b35f9bec46f70a36c90"
+    },
+    {
+      "bytes": 35963,
+      "imported_sha256": "c4bb13e19a5ccc761d74f6cb080f5a6acaf464310a0eddeaa5079405a25e4f52",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/flash_attn_sp_hdim.c",
+      "source_sha256": "c4bb13e19a5ccc761d74f6cb080f5a6acaf464310a0eddeaa5079405a25e4f52"
+    },
+    {
+      "bytes": 111792,
+      "imported_sha256": "4bd320b5743e5a71c9b0b190e32a8ea54fee80ae0918b395467fde83746f4fa0",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/mat_mul.c",
+      "source_sha256": "4bd320b5743e5a71c9b0b190e32a8ea54fee80ae0918b395467fde83746f4fa0"
+    },
+    {
+      "bytes": 9511,
+      "imported_sha256": "4b3e9fbfbf326f1f9a96aa443c1572ef371ffae84da7455e1f9cee1559b06821",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/mm_benchmark.c",
+      "source_sha256": "4b3e9fbfbf326f1f9a96aa443c1572ef371ffae84da7455e1f9cee1559b06821"
+    },
+    {
+      "bytes": 1618,
+      "imported_sha256": "036f5fbad9814fcce16a305a5e7ffeeac3844df17c2302bdfc26df877751742d",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/precompute_table.c",
+      "source_sha256": "036f5fbad9814fcce16a305a5e7ffeeac3844df17c2302bdfc26df877751742d"
+    },
+    {
+      "bytes": 2499,
+      "imported_sha256": "ac2f594cd1a39f8ad6c43652cc27f810239c1c829f8f5a50312a67b56e46870d",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/rms_norm.c",
+      "source_sha256": "ac2f594cd1a39f8ad6c43652cc27f810239c1c829f8f5a50312a67b56e46870d"
+    },
+    {
+      "bytes": 43795,
+      "imported_sha256": "4db150e3fcb914b7ade6f7e7a5be590703b46ac91d53ec68fc809db633459b66",
+      "path": "src/htp-ops-lib-main/src/dsp/ops/scna_exp2.c",
+      "source_sha256": "4db150e3fcb914b7ade6f7e7a5be590703b46ac91d53ec68fc809db633459b66"
+    },
+    {
+      "bytes": 1699,
+      "imported_sha256": "69f4fd9d087c19fe5d4e11766594256ec5041382fac6f84af9d944c51b18522f",
+      "path": "src/htp-ops-lib-main/src/dsp/power.c",
+      "source_sha256": "69f4fd9d087c19fe5d4e11766594256ec5041382fac6f84af9d944c51b18522f"
+    },
+    {
+      "bytes": 815,
+      "imported_sha256": "ff7b36f9cdb7fb673ed17781b993eff990b320dc3bb7489e08148d379d1a3049",
+      "path": "src/htp-ops-lib-main/src/dsp/scna_env_skel.c",
+      "source_sha256": "ff7b36f9cdb7fb673ed17781b993eff990b320dc3bb7489e08148d379d1a3049"
+    },
+    {
+      "bytes": 2965,
+      "imported_sha256": "80a0008f92857e3dc9b0c5b06babd0c4d629187669d3b256bf7160879f25a8c0",
+      "path": "src/htp-ops-lib-main/src/dsp/vtcm_mgr.cc",
+      "source_sha256": "80a0008f92857e3dc9b0c5b06babd0c4d629187669d3b256bf7160879f25a8c0"
+    },
+    {
+      "bytes": 15619,
+      "imported_sha256": "aae582ac781e99d95d977c24397ff95b357e6df1f9bcef87bd34111d085d15e2",
+      "path": "src/htp-ops-lib-main/src/dsp/worker_pool.c",
+      "source_sha256": "aae582ac781e99d95d977c24397ff95b357e6df1f9bcef87bd34111d085d15e2"
+    },
+    {
+      "bytes": 701,
+      "imported_sha256": "23a9b11cb976ae5887f8fd994848a729d5341ec0fe0e66fdb9af6eecdbf6b446",
+      "path": "src/htp-ops-lib-main/src/host/op_export.c",
+      "source_sha256": "23a9b11cb976ae5887f8fd994848a729d5341ec0fe0e66fdb9af6eecdbf6b446"
+    },
+    {
+      "bytes": 1809,
+      "imported_sha256": "fcb2287a877137d9e8b743f37fc20f33bcc5f1c98d52cdd237604527ca78257f",
+      "path": "src/htp-ops-lib-main/src/host/scna_env_smoke.c",
+      "source_sha256": "fcb2287a877137d9e8b743f37fc20f33bcc5f1c98d52cdd237604527ca78257f"
+    },
+    {
+      "bytes": 2747,
+      "imported_sha256": "315921b654eafe9c518efc6cf45c9cd86db6e12999e32f50c4cdbccae4c1c66e",
+      "path": "src/htp-ops-lib-main/src/host/session.c",
+      "source_sha256": "315921b654eafe9c518efc6cf45c9cd86db6e12999e32f50c4cdbccae4c1c66e"
+    },
+    {
+      "bytes": 101817,
+      "imported_sha256": "a05b2e59e7f0daa6a4f32c59be6712f196c1c42649f041b8d2439db325ada178",
+      "path": "src/htp-ops-lib-main/src/host/test.c",
+      "source_sha256": "a05b2e59e7f0daa6a4f32c59be6712f196c1c42649f041b8d2439db325ada178"
+    },
+    {
+      "bytes": 4082,
+      "imported_sha256": "69c75b08536c9e43fb5099993aef26b591af9259b9f3d0a2ad7382b11c55f761",
+      "path": "scripts/build.sh",
+      "source_sha256": "69c75b08536c9e43fb5099993aef26b591af9259b9f3d0a2ad7382b11c55f761"
+    },
+    {
+      "bytes": 1646,
+      "imported_sha256": "2ed36e9f6fac4ee3d5c21e77c45c446ec65c114ab9da7ed40f31bfa71ff226f3",
+      "path": "scripts/build_baselines.sh",
+      "source_sha256": "2ed36e9f6fac4ee3d5c21e77c45c446ec65c114ab9da7ed40f31bfa71ff226f3"
+    },
+    {
+      "bytes": 1736,
+      "imported_sha256": "c029f998694a81bdbd8198421d39679d286258776c1093ecf4318d3f2efc9b37",
+      "path": "scripts/build_candidate.sh",
+      "source_sha256": "c029f998694a81bdbd8198421d39679d286258776c1093ecf4318d3f2efc9b37"
+    },
+    {
+      "bytes": 6315,
+      "imported_sha256": "ff70b59face9e2894bacfa43684e36acd47bff12c3a62a818b8e42ade372982c",
+      "path": "scripts/deploy_and_smoke.sh",
+      "source_sha256": "ff70b59face9e2894bacfa43684e36acd47bff12c3a62a818b8e42ade372982c"
+    },
+    {
+      "bytes": 6757,
+      "imported_sha256": "8a8bd44f3b2236c7ef682da263b44a9370d8f82ce767b007c5b3fb0ae006a2ca",
+      "path": "scripts/run_baseline_experiment.sh",
+      "source_sha256": "8a8bd44f3b2236c7ef682da263b44a9370d8f82ce767b007c5b3fb0ae006a2ca"
+    },
+    {
+      "bytes": 7780,
+      "imported_sha256": "e7bacf7687b5ea21a79aa0d224ea70e28c80e1e7a71c1dc3e8b3624f65f4c8b7",
+      "path": "scripts/run_candidate_experiment.sh",
+      "source_sha256": "e7bacf7687b5ea21a79aa0d224ea70e28c80e1e7a71c1dc3e8b3624f65f4c8b7"
+    },
+    {
+      "bytes": 1734,
+      "imported_sha256": "66cb46879154bcca089604176650d4d7f6b5a5aaba0f82a9c1a508be74afeeb1",
+      "path": "scripts/run_component_profile.sh",
+      "source_sha256": "66cb46879154bcca089604176650d4d7f6b5a5aaba0f82a9c1a508be74afeeb1"
+    },
+    {
+      "bytes": 1235,
+      "imported_sha256": "acb047e19d59d367e7e19c4fa150d2bf256db6810691ddf899d1547ab9d5416b",
+      "path": "scripts/use_hexagon_sdk_6_6.sh",
+      "source_sha256": "acb047e19d59d367e7e19c4fa150d2bf256db6810691ddf899d1547ab9d5416b"
+    },
+    {
+      "bytes": 18159,
+      "imported_sha256": "a25930d151ca1623c6281c5b48049a9d15668ef42a4981c8e379eca2dd58870e",
+      "path": "tools/analyze_baseline.py",
+      "source_sha256": "a25930d151ca1623c6281c5b48049a9d15668ef42a4981c8e379eca2dd58870e"
+    },
+    {
+      "bytes": 7119,
+      "imported_sha256": "395f220e90375a945919171552cc2ed80f5eca7d30031c90dbe481891cd6fc67",
+      "path": "tools/analyze_candidate.py",
+      "source_sha256": "395f220e90375a945919171552cc2ed80f5eca7d30031c90dbe481891cd6fc67"
+    },
+    {
+      "bytes": 2336,
+      "imported_sha256": "85633f32319112f9708d7613c93262cac80a6b2c33d8cea0bf5238263e20ae3b",
+      "path": "tools/create_artifact_manifest.py",
+      "source_sha256": "85633f32319112f9708d7613c93262cac80a6b2c33d8cea0bf5238263e20ae3b"
+    },
+    {
+      "bytes": 5217,
+      "imported_sha256": "6d42bc88693f810701e1ee2278aa9714f288c9b33197569cd095467b7fb9f720",
+      "path": "tools/extract_packet_map.py",
+      "source_sha256": "6d42bc88693f810701e1ee2278aa9714f288c9b33197569cd095467b7fb9f720"
+    }
+  ],
+  "schema_version": 1,
+  "source_project": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_HVX_Softmax_Dataflow"
+}

@@ -1,0 +1,5 @@
+ M ../.gitignore
+A  stage1_SCNA_HVX_Microkernel_Optimization/tests/test_stage15_audit.py
+A  stage1_SCNA_HVX_Microkernel_Optimization/tools/audit_stage15_layout_batching.py
+?? Stage2_5_HVX_Softmax_Cleanup/
+?? Stage2_HVX_Softmax_Dataflow/

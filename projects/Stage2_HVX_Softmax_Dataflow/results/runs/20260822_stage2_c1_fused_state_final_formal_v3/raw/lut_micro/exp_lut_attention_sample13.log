@@ -1,0 +1,2 @@
+schema_version,mode,engine,kind,path,distribution_id,distribution,size,iters,elapsed_us,elapsed_ticks,elements,input_bytes,output_bytes,lut_entry_logical_bytes,effective_ops,metric,unit,correctness,failure_code
+2,lut_exp,HVX,lut_exp_vtcm_vgather,vtcm_64k_fp16_vgather_pair_store_sync,1,attention,128,5242880,200069,3841318,671088640,1342177280,1342177280,1342177280,0,3.3543,Gelem/s,1,0

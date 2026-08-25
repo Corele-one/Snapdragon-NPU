@@ -1,0 +1,17 @@
+schema_version=1
+run_id=20260822_upstream_formal_v2
+quick=0
+sessions=5
+warmups=5
+iterations=20
+captured_at=2026-08-22T10:34:53Z
+bde3ddde
+25091RP04C
+sun
+SM8750P
+b7a9e6d93be70b4995916a2424a642f73b1816260edb781fca4eb816f2b27863  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/upstream_0a50d990/test-stage25-fa
+fdac8bd9341b14f99ef9ac5a5b048b0b28728f5d62a6d202fec0dcbd1803784b  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/upstream_0a50d990/lib/libggml-base.so
+662e15653c743a6bee648960f7299d4f39c4ff9a3d58018105928bfe8276a639  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/upstream_0a50d990/lib/libggml-cpu.so
+d358cbfac3b34a821044f06bd028706258b514e4c40943805508a764b8718f6b  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/upstream_0a50d990/lib/libggml-hexagon.so
+4efb31952970112c96e00e622d479c8f5eaa3a7677642c008a0997e68b651617  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/upstream_0a50d990/lib/libggml-htp-v79.so
+e7e931d9f9762aa70315ae41d310027144e395f953a7f936a9f0028bc6240938  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/upstream_0a50d990/lib/libggml.so

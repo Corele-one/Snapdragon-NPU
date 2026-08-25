@@ -1,0 +1,362 @@
+{
+  "artifact_sha256": {
+    "d7_pairret_noinline": "1925a4b309c33bde54343d78d97b1699971f171421fd921cf7415853dec128be",
+    "fused_state_update": "192bb3a4e58969ecbabe966a935c63dccf441ea5ad329977b80c7190aae50a9d"
+  },
+  "attention": {
+    "d7_pairret_noinline": {
+      "1": {
+        "ci_high": 682.5,
+        "ci_low": 656.5,
+        "median": 659.5,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 808.5,
+        "ci_low": 776.0,
+        "median": 792.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1428.0,
+        "ci_low": 1315.5,
+        "median": 1332.0,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2620.0,
+        "ci_low": 2544.0,
+        "median": 2583.0,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5493.0,
+        "ci_low": 4902.0,
+        "median": 5415.5,
+        "n": 6
+      }
+    },
+    "exp_lut": {
+      "1": {
+        "ci_high": 693.5,
+        "ci_low": 564.5,
+        "median": 625.0,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 757.5,
+        "ci_low": 690.0,
+        "median": 727.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1305.0,
+        "ci_low": 1221.0,
+        "median": 1259.0,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2497.5,
+        "ci_low": 2302.5,
+        "median": 2354.0,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5098.5,
+        "ci_low": 4668.0,
+        "median": 4999.5,
+        "n": 6
+      }
+    },
+    "fused_state_update": {
+      "1": {
+        "ci_high": 680.5,
+        "ci_low": 563.5,
+        "median": 607.5,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 804.5,
+        "ci_low": 680.5,
+        "median": 737.0,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1463.5,
+        "ci_low": 1287.0,
+        "median": 1379.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2579.0,
+        "ci_low": 2471.5,
+        "median": 2526.5,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5481.0,
+        "ci_low": 4769.5,
+        "median": 5143.5,
+        "n": 6
+      }
+    },
+    "origin_hvx": {
+      "1": {
+        "ci_high": 695.0,
+        "ci_low": 658.5,
+        "median": 660.0,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 844.5,
+        "ci_low": 779.5,
+        "median": 815.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1474.0,
+        "ci_low": 1418.0,
+        "median": 1428.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2907.5,
+        "ci_low": 2715.5,
+        "median": 2822.5,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 6117.0,
+        "ci_low": 5421.0,
+        "median": 5702.5,
+        "n": 6
+      }
+    }
+  },
+  "attention_ratios": {
+    "candidate_over_exp_lut": {
+      "1": {
+        "ci_high": 1.0942730243558958,
+        "ci_low": 0.8756914809546388,
+        "median": 0.998222243143162,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 1.0701475444764035,
+        "ci_low": 0.9716647524632775,
+        "median": 1.0188022728723745,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1.126294074939982,
+        "ci_low": 1.0514914861650182,
+        "median": 1.093775593775594,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 1.0873181230478761,
+        "ci_low": 1.0325878363754417,
+        "median": 1.0594343622608653,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 1.1183278540749066,
+        "ci_low": 0.9540499603506429,
+        "median": 1.0614299090953856,
+        "n": 6
+      }
+    },
+    "candidate_over_pairret": {
+      "1": {
+        "ci_high": 1.0020447416231368,
+        "ci_low": 0.8583349574934105,
+        "median": 0.917264698966217,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 1.0061957868649318,
+        "ci_low": 0.8698139772949286,
+        "median": 0.9260772445597348,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1.0985281479410638,
+        "ci_low": 0.9321277133469996,
+        "median": 1.0133462446616623,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 1.0129917773561037,
+        "ci_low": 0.943327522190945,
+        "median": 0.979061566863894,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 1.0241415453975762,
+        "ci_low": 0.9200597525333734,
+        "median": 0.9797998222217892,
+        "n": 6
+      }
+    }
+  },
+  "candidate": "fused_state_update",
+  "correctness": {
+    "cases": 1,
+    "max_abs": 0.000108433771,
+    "max_rmse": 3.57461904e-05,
+    "nonfinite": 0,
+    "pass": true,
+    "pass_cases": 1
+  },
+  "diagnostic": {
+    "d7_pairret_noinline": {
+      "core_acc": 64.0,
+      "host_us": 5085.0,
+      "k_load": 1084.0,
+      "o_scale": 19.0,
+      "o_store": 26.0,
+      "profiled_total": 3938.0,
+      "q_load": 16.0,
+      "qk_dot": 22.0,
+      "safe_sm": 1500.0,
+      "scna_exp": 966.0,
+      "state_update": 0.0,
+      "v_load": 1207.0
+    },
+    "exp_lut": {
+      "core_acc": 70.0,
+      "host_us": 4315.0,
+      "k_load": 1076.0,
+      "o_scale": 8.0,
+      "o_store": 17.0,
+      "profiled_total": 3251.0,
+      "q_load": 16.0,
+      "qk_dot": 25.0,
+      "safe_sm": 960.0,
+      "scna_exp": 0.0,
+      "state_update": 0.0,
+      "v_load": 1079.0
+    },
+    "fused_state_update": {
+      "core_acc": 25.0,
+      "host_us": 4845.0,
+      "k_load": 1079.0,
+      "o_scale": 20.0,
+      "o_store": 17.0,
+      "profiled_total": 3697.0,
+      "q_load": 16.0,
+      "qk_dot": 17.0,
+      "safe_sm": 1543.0,
+      "scna_exp": 980.0,
+      "state_update": 0.0,
+      "v_load": 980.0
+    },
+    "origin_hvx": {
+      "core_acc": 48.0,
+      "host_us": 5131.0,
+      "k_load": 1073.0,
+      "o_scale": 16.0,
+      "o_store": 27.0,
+      "profiled_total": 4134.0,
+      "q_load": 16.0,
+      "qk_dot": 22.0,
+      "safe_sm": 1785.0,
+      "scna_exp": 0.0,
+      "state_update": 0.0,
+      "v_load": 1147.0
+    }
+  },
+  "micro": {
+    "ratios": {
+      "candidate_over_exp_lut": {
+        "ci_high": 1.081080302990625,
+        "ci_low": 1.081080302990625,
+        "median": 1.081080302990625,
+        "n": 3
+      },
+      "candidate_over_pairret": {
+        "ci_high": 1.0,
+        "ci_low": 1.0,
+        "median": 1.0,
+        "n": 3
+      }
+    },
+    "summary": {
+      "d7_pairret_noinline": {
+        "ci_high": 20.626998,
+        "ci_low": 20.626998,
+        "median": 20.626998,
+        "n": 3
+      },
+      "exp_lut": {
+        "ci_high": 19.07998688250902,
+        "ci_low": 19.07998688250902,
+        "median": 19.07998688250902,
+        "n": 3
+      },
+      "fused_state_update": {
+        "ci_high": 20.626998,
+        "ci_low": 20.626998,
+        "median": 20.626998,
+        "n": 3
+      }
+    }
+  },
+  "quick": true,
+  "recovery_attempts": [],
+  "run_id": "20260822_stage2_c1_fused_state_perf_quick_v1",
+  "schema_version": 1,
+  "source_commit": "0db719f73b86cb51542988f5d422cd23f234df3b",
+  "static": {
+    "d7_pairret_noinline": {
+      "caller": {
+        "instructions": 5698,
+        "instructions_per_packet": 2.3870967741935485,
+        "load_instructions": 2355,
+        "multiply_instructions": 146,
+        "packets": 2387,
+        "permute_instructions": 16,
+        "scalar_weight_multiply": 0,
+        "splat": 57,
+        "stack_frame_bytes": 7808,
+        "stack_references": 1367
+      },
+      "instructions": 112,
+      "instructions_per_packet": 3.111111111111111,
+      "load_instructions": 6,
+      "multiply_instructions": 21,
+      "packets": 36,
+      "permute_instructions": 0,
+      "scalar_weight_multiply": 14,
+      "splat": 8,
+      "stack_frame_bytes": 0,
+      "stack_references": 0,
+      "symbol": "hvx_scna_exp2_pair_hot_return_vhf"
+    },
+    "fused_state_update": {
+      "caller": {
+        "instructions": 5579,
+        "instructions_per_packet": 2.3700084961767205,
+        "load_instructions": 2342,
+        "multiply_instructions": 146,
+        "packets": 2354,
+        "permute_instructions": 16,
+        "scalar_weight_multiply": 0,
+        "splat": 57,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1376
+      },
+      "instructions": 112,
+      "instructions_per_packet": 3.111111111111111,
+      "load_instructions": 6,
+      "multiply_instructions": 21,
+      "packets": 36,
+      "permute_instructions": 0,
+      "scalar_weight_multiply": 14,
+      "splat": 8,
+      "stack_frame_bytes": 0,
+      "stack_references": 0,
+      "symbol": "hvx_scna_exp2_pair_hot_return_vhf"
+    }
+  }
+}

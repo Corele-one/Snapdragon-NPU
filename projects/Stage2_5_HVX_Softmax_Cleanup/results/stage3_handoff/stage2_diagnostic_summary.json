@@ -1,0 +1,157 @@
+{
+  "artifact": "stage2_diagnostic_q32 (fine timers)",
+  "barrier_wait_points": [
+    "one worker_pool_synctoken_wait after all submitted tasks; duration not separately instrumented"
+  ],
+  "dma_wait_status": "N/A: production HMX path uses synchronous HVX/HMX loads and l2fetch hints, not Hexagon DMA submission",
+  "dma_wait_us": null,
+  "iterations": [
+    {
+      "SCNA_us": 972,
+      "T_PV_O_update_us": 61,
+      "T_QK_us": 1124,
+      "T_Softmax_us": 1623,
+      "T_V_load_us": 999,
+      "decode_mask_max_us": 494,
+      "host_us": 4859,
+      "iteration": 0,
+      "profiled_total_us": 3807,
+      "rowsum_reduce_us": 0,
+      "softmax_residual_us": 136,
+      "state_us": 21
+    },
+    {
+      "SCNA_us": 969,
+      "T_PV_O_update_us": 55,
+      "T_QK_us": 1122,
+      "T_Softmax_us": 1622,
+      "T_V_load_us": 1006,
+      "decode_mask_max_us": 496,
+      "host_us": 4902,
+      "iteration": 1,
+      "profiled_total_us": 3805,
+      "rowsum_reduce_us": 0,
+      "softmax_residual_us": 134,
+      "state_us": 23
+    },
+    {
+      "SCNA_us": 970,
+      "T_PV_O_update_us": 53,
+      "T_QK_us": 1120,
+      "T_Softmax_us": 1625,
+      "T_V_load_us": 1007,
+      "decode_mask_max_us": 495,
+      "host_us": 4953,
+      "iteration": 2,
+      "profiled_total_us": 3805,
+      "rowsum_reduce_us": 0,
+      "softmax_residual_us": 137,
+      "state_us": 23
+    },
+    {
+      "SCNA_us": 969,
+      "T_PV_O_update_us": 56,
+      "T_QK_us": 1126,
+      "T_Softmax_us": 1618,
+      "T_V_load_us": 994,
+      "decode_mask_max_us": 495,
+      "host_us": 4866,
+      "iteration": 3,
+      "profiled_total_us": 3794,
+      "rowsum_reduce_us": 0,
+      "softmax_residual_us": 131,
+      "state_us": 23
+    },
+    {
+      "SCNA_us": 969,
+      "T_PV_O_update_us": 53,
+      "T_QK_us": 1119,
+      "T_Softmax_us": 1627,
+      "T_V_load_us": 1013,
+      "decode_mask_max_us": 499,
+      "host_us": 4884,
+      "iteration": 4,
+      "profiled_total_us": 3812,
+      "rowsum_reduce_us": 0,
+      "softmax_residual_us": 136,
+      "state_us": 23
+    }
+  ],
+  "metrics": {
+    "SCNA_us": {
+      "max": 972,
+      "median": 969,
+      "min": 969,
+      "n": 5
+    },
+    "T_PV_O_update_us": {
+      "max": 61,
+      "median": 55,
+      "min": 53,
+      "n": 5
+    },
+    "T_QK_us": {
+      "max": 1126,
+      "median": 1122,
+      "min": 1119,
+      "n": 5
+    },
+    "T_Softmax_us": {
+      "max": 1627,
+      "median": 1623,
+      "min": 1618,
+      "n": 5
+    },
+    "T_V_load_us": {
+      "max": 1013,
+      "median": 1006,
+      "min": 994,
+      "n": 5
+    },
+    "decode_mask_max_us": {
+      "max": 499,
+      "median": 495,
+      "min": 494,
+      "n": 5
+    },
+    "host_us": {
+      "max": 4953,
+      "median": 4884,
+      "min": 4859,
+      "n": 5
+    },
+    "profiled_total_us": {
+      "max": 3812,
+      "median": 3805,
+      "min": 3794,
+      "n": 5
+    },
+    "rowsum_reduce_us": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "n": 5
+    },
+    "softmax_residual_us": {
+      "max": 137,
+      "median": 136,
+      "min": 131,
+      "n": 5
+    },
+    "state_us": {
+      "max": 23,
+      "median": 23,
+      "min": 21,
+      "n": 5
+    }
+  },
+  "schema_version": 1,
+  "shape": {
+    "head_dim": 128,
+    "kv": 4096,
+    "kv_heads": 2,
+    "q": 32,
+    "q_heads": 12,
+    "workers": 1
+  }
+}

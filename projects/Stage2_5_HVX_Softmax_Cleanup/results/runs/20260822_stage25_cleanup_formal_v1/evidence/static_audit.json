@@ -1,0 +1,406 @@
+{
+  "baseline": "stage2_final",
+  "schema_version": 1,
+  "variants": {
+    "s25_a_mask_index": {
+      "core": {
+        "calls": 95,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": -4,
+          "instructions": -72,
+          "packets": 6,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 128,
+          "stack_references": -22,
+          "unaligned_vector_loads": 0,
+          "vector_loads": -33
+        },
+        "divmod_helper_calls": 6,
+        "instructions": 5576,
+        "instructions_per_packet": 2.35472972972973,
+        "packets": 2368,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7808,
+        "stack_references": 1369,
+        "unaligned_vector_loads": 4,
+        "vector_loads": 2332
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    },
+    "s25_b_full_mask_fastpath": {
+      "core": {
+        "calls": 99,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 37,
+          "packets": 41,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": -12,
+          "unaligned_vector_loads": -2,
+          "vector_loads": -2
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5685,
+        "instructions_per_packet": 2.365792759051186,
+        "packets": 2403,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1379,
+        "unaligned_vector_loads": 2,
+        "vector_loads": 2363
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    },
+    "s25_c_aligned_mask_load": {
+      "core": {
+        "calls": 100,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 19,
+          "packets": 4,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 1,
+          "unaligned_vector_loads": -4,
+          "vector_loads": 1
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5667,
+        "instructions_per_packet": 2.3951817413355876,
+        "packets": 2366,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1392,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 2366
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    },
+    "s25_d_invariant_hoist": {
+      "core": {
+        "calls": 99,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": -42,
+          "packets": 13,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 256,
+          "stack_references": -23,
+          "unaligned_vector_loads": 0,
+          "vector_loads": -24
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5606,
+        "instructions_per_packet": 2.3604210526315788,
+        "packets": 2375,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7936,
+        "stack_references": 1368,
+        "unaligned_vector_loads": 4,
+        "vector_loads": 2341
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    },
+    "s25_e_task_geometry": {
+      "core": {
+        "calls": 99,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5648,
+        "instructions_per_packet": 2.3911939034716343,
+        "packets": 2362,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1391,
+        "unaligned_vector_loads": 4,
+        "vector_loads": 2365
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": -2,
+          "packets": -1,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 2,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 2
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 72,
+        "instructions_per_packet": 2.0,
+        "packets": 36,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 20,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 38
+      }
+    },
+    "s25_f_roundtrip_audit": {
+      "core": {
+        "calls": 99,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5648,
+        "instructions_per_packet": 2.3911939034716343,
+        "packets": 2362,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1391,
+        "unaligned_vector_loads": 4,
+        "vector_loads": 2365
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    },
+    "stage1_d7": {
+      "core": {
+        "calls": 99,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 66,
+          "packets": 30,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 128,
+          "stack_references": -13,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 6
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5714,
+        "instructions_per_packet": 2.3887959866220734,
+        "packets": 2392,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7808,
+        "stack_references": 1378,
+        "unaligned_vector_loads": 4,
+        "vector_loads": 2371
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    },
+    "stage2_final": {
+      "core": {
+        "calls": 99,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 10,
+        "instructions": 5648,
+        "instructions_per_packet": 2.3911939034716343,
+        "packets": 2362,
+        "scalar_divide": 2,
+        "scalar_modulo_helpers": 1,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1391,
+        "unaligned_vector_loads": 4,
+        "vector_loads": 2365
+      },
+      "worker": {
+        "calls": 4,
+        "delta_vs_stage2_final": {
+          "divmod_helper_calls": 0,
+          "instructions": 0,
+          "packets": 0,
+          "scalar_divide": 0,
+          "scalar_modulo_helpers": 0,
+          "stack_frame_bytes": 0,
+          "stack_references": 0,
+          "unaligned_vector_loads": 0,
+          "vector_loads": 0
+        },
+        "divmod_helper_calls": 1,
+        "instructions": 74,
+        "instructions_per_packet": 2.0,
+        "packets": 37,
+        "scalar_divide": 1,
+        "scalar_modulo_helpers": 0,
+        "stack_frame_bytes": 104,
+        "stack_references": 18,
+        "unaligned_vector_loads": 0,
+        "vector_loads": 36
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+--full-mask-fastpath requires --mask-mode full
+exit_code=1

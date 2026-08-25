@@ -1,0 +1,541 @@
+{
+  "correctness": {
+    "q16_seed20260810": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 1.69306038e-05,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 2.23615879e-06
+      }
+    },
+    "q16_seed20260811": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 1.69306038e-05,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 2.23615879e-06
+      }
+    },
+    "q16_seedfigure8_fixed": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 7.45982476e-06,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 1.835196e-06
+      }
+    },
+    "q32_seed20260810": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 1.7259432e-05,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 2.2476027e-06
+      }
+    },
+    "q32_seed20260811": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 1.7259432e-05,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 2.2476027e-06
+      }
+    },
+    "q32_seedfigure8_fixed": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 7.45982476e-06,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 1.83877239e-06
+      }
+    },
+    "q8_seed20260810": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 1.40389707e-05,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 2.27753324e-06
+      }
+    },
+    "q8_seed20260811": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 1.40389707e-05,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 2.27753324e-06
+      }
+    },
+    "q8_seedfigure8_fixed": {
+      "effective_kernels": [
+        "hmx-seq"
+      ],
+      "pass": true,
+      "result": {
+        "max_abs": 7.45982476e-06,
+        "nonfinite": 0,
+        "pass": true,
+        "record": "correctness",
+        "rmse": 1.96157144e-06
+      }
+    }
+  },
+  "correctness_gate_pass": true,
+  "failures": [],
+  "performance": {
+    "controlled_fa1": {
+      "1": {
+        "dsp_op_us": {
+          "ci_high": 2391.0,
+          "ci_low": 2390.0,
+          "median": 2391.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 3288.489,
+          "ci_low": 2877.656,
+          "median": 3115.3125,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "16": {
+        "dsp_op_us": {
+          "ci_high": 38167.0,
+          "ci_low": 38166.0,
+          "median": 38166.5,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 39460.26,
+          "ci_low": 39024.167,
+          "median": 39342.864499999996,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "32": {
+        "dsp_op_us": {
+          "ci_high": 76312.0,
+          "ci_low": 76310.0,
+          "median": 76311.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 77575.209,
+          "ci_low": 77076.302,
+          "median": 77493.255,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "4": {
+        "dsp_op_us": {
+          "ci_high": 9559.0,
+          "ci_low": 9558.0,
+          "median": 9558.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 10650.573,
+          "ci_low": 10118.333,
+          "median": 10501.405999999999,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "8": {
+        "dsp_op_us": {
+          "ci_high": 19094.0,
+          "ci_low": 19093.0,
+          "median": 19093.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 20278.3335,
+          "ci_low": 19650.833,
+          "median": 20181.198,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "controlled_fa2": {
+      "1": {
+        "dsp_op_us": {
+          "ci_high": 2390.0,
+          "ci_low": 2390.0,
+          "median": 2390.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 3298.803,
+          "ci_low": 2856.771,
+          "median": 3178.411,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "16": {
+        "dsp_op_us": {
+          "ci_high": 899.0,
+          "ci_low": 898.0,
+          "median": 898.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=12,Bc=4096,threads=1,vtcm=8387328": 100
+        },
+        "host_us": {
+          "ci_high": 1411.615,
+          "ci_low": 1300.2865000000002,
+          "median": 1315.6509999999998,
+          "n": 100
+        },
+        "kernels": {
+          "hmx-seq": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "32": {
+        "dsp_op_us": {
+          "ci_high": 1572.0,
+          "ci_low": 1571.0,
+          "median": 1571.5,
+          "n": 100
+        },
+        "geometry": {
+          "Br=12,Bc=4096,threads=1,vtcm=8387328": 100
+        },
+        "host_us": {
+          "ci_high": 2232.761,
+          "ci_low": 2008.984,
+          "median": 2089.1400000000003,
+          "n": 100
+        },
+        "kernels": {
+          "hmx-seq": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "4": {
+        "dsp_op_us": {
+          "ci_high": 9558.0,
+          "ci_low": 9557.0,
+          "median": 9557.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=1,vtcm=82944": 100
+        },
+        "host_us": {
+          "ci_high": 10537.1355,
+          "ci_low": 10096.667,
+          "median": 10261.7445,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "8": {
+        "dsp_op_us": {
+          "ci_high": 673.0,
+          "ci_low": 672.0,
+          "median": 673.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=6,Bc=4096,threads=1,vtcm=7620224": 100
+        },
+        "host_us": {
+          "ci_high": 1065.937,
+          "ci_low": 983.177,
+          "median": 995.2865,
+          "n": 100
+        },
+        "kernels": {
+          "hmx-seq": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "system_default_fa2": {
+      "1": {
+        "dsp_op_us": {
+          "ci_high": 461.0,
+          "ci_low": 460.0,
+          "median": 460.5,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=6,vtcm=497664": 100
+        },
+        "host_us": {
+          "ci_high": 860.0264999999999,
+          "ci_low": 711.093,
+          "median": 740.5989999999999,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "16": {
+        "dsp_op_us": {
+          "ci_high": 647.0,
+          "ci_low": 645.0,
+          "median": 646.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=12,Bc=1344,threads=6,vtcm=4060928": 100
+        },
+        "host_us": {
+          "ci_high": 1272.5,
+          "ci_low": 1110.885,
+          "median": 1178.8020000000001,
+          "n": 100
+        },
+        "kernels": {
+          "hmx-pipe": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "32": {
+        "dsp_op_us": {
+          "ci_high": 602.0,
+          "ci_low": 598.5,
+          "median": 600.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=30,Bc=1344,threads=6,vtcm=5472128": 100
+        },
+        "host_us": {
+          "ci_high": 981.875,
+          "ci_low": 857.031,
+          "median": 902.8905,
+          "n": 100
+        },
+        "kernels": {
+          "hmx-pipe": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "4": {
+        "dsp_op_us": {
+          "ci_high": 1764.0,
+          "ci_low": 1761.0,
+          "median": 1762.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=1,Bc=64,threads=6,vtcm=497664": 100
+        },
+        "host_us": {
+          "ci_high": 2643.802,
+          "ci_low": 2382.0575,
+          "median": 2448.5675,
+          "n": 100
+        },
+        "kernels": {
+          "hvx": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "8": {
+        "dsp_op_us": {
+          "ci_high": 449.5,
+          "ci_low": 446.5,
+          "median": 448.0,
+          "n": 100
+        },
+        "geometry": {
+          "Br=6,Bc=1344,threads=6,vtcm=3606144": 100
+        },
+        "host_us": {
+          "ci_high": 865.3644999999999,
+          "ci_low": 742.656,
+          "median": 794.87,
+          "n": 100
+        },
+        "kernels": {
+          "hmx-pipe": 100
+        },
+        "sessions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    }
+  },
+  "recovery_attempts": [
+    "raw/recovery/controlled_fa1_q16_s4_attempt1.log"
+  ],
+  "run_id": "20260822_upstream_formal_v2",
+  "schema_version": 1
+}

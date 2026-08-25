@@ -1,0 +1,358 @@
+{
+  "artifact_sha256": {
+    "d7_pairret_noinline": "652f56177b53cfe58ced72ed7b784167e0e2209344f2a9ccf16dfd34fca45f4f",
+    "tail_s_resident": "9927149622cf5b052d698bf2abad444b0b3ba13b04ab60ba2379b6dbfb06e7ed"
+  },
+  "attention": {
+    "d7_pairret_noinline": {
+      "1": {
+        "ci_high": 682.5,
+        "ci_low": 582.0,
+        "median": 587.0,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 776.5,
+        "ci_low": 715.0,
+        "median": 755.0,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1360.0,
+        "ci_low": 1275.5,
+        "median": 1338.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2791.0,
+        "ci_low": 2522.5,
+        "median": 2628.0,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5825.5,
+        "ci_low": 5088.5,
+        "median": 5366.5,
+        "n": 6
+      }
+    },
+    "exp_lut": {
+      "1": {
+        "ci_high": 633.5,
+        "ci_low": 569.5,
+        "median": 596.0,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 858.5,
+        "ci_low": 686.0,
+        "median": 779.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1453.5,
+        "ci_low": 1229.0,
+        "median": 1304.0,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2617.5,
+        "ci_low": 2488.5,
+        "median": 2551.5,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5083.5,
+        "ci_low": 4686.5,
+        "median": 4911.0,
+        "n": 6
+      }
+    },
+    "origin_hvx": {
+      "1": {
+        "ci_high": 682.0,
+        "ci_low": 656.5,
+        "median": 672.5,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 826.0,
+        "ci_low": 772.5,
+        "median": 788.0,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1617.0,
+        "ci_low": 1514.5,
+        "median": 1560.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 3102.5,
+        "ci_low": 2784.0,
+        "median": 2874.5,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 6273.0,
+        "ci_low": 5890.5,
+        "median": 5955.0,
+        "n": 6
+      }
+    },
+    "tail_s_resident": {
+      "1": {
+        "ci_high": 666.5,
+        "ci_low": 564.0,
+        "median": 631.0,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 789.0,
+        "ci_low": 761.5,
+        "median": 775.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1578.0,
+        "ci_low": 1378.5,
+        "median": 1472.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2672.5,
+        "ci_low": 2532.0,
+        "median": 2624.0,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5650.0,
+        "ci_low": 5223.0,
+        "median": 5350.5,
+        "n": 6
+      }
+    }
+  },
+  "attention_ratios": {
+    "candidate_over_exp_lut": {
+      "1": {
+        "ci_high": 1.1294454526171904,
+        "ci_low": 0.9596149561805782,
+        "median": 1.0214353480398515,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 1.15023875249431,
+        "ci_low": 0.8887425410159171,
+        "median": 0.9948856828744849,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1.2766829854544812,
+        "ci_low": 0.9704707002096102,
+        "median": 1.1160278745644598,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 1.0739398853347009,
+        "ci_low": 0.9697637119363876,
+        "median": 1.026735340678113,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 1.153183920947796,
+        "ci_low": 1.0528877574772006,
+        "median": 1.1124947118132118,
+        "n": 6
+      }
+    },
+    "candidate_over_pairret": {
+      "1": {
+        "ci_high": 1.1353987694450893,
+        "ci_low": 0.8793820475605671,
+        "median": 1.0213994916199962,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 1.1036433635381941,
+        "ci_low": 0.9860710693932283,
+        "median": 1.021875,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1.2097649130961263,
+        "ci_low": 1.0176803105521,
+        "median": 1.1228440399682678,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 1.014046948024625,
+        "ci_low": 0.9560930532829193,
+        "median": 0.9906677785050277,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 1.0435712671963957,
+        "ci_low": 0.9638586671864078,
+        "median": 0.9883531939246432,
+        "n": 6
+      }
+    }
+  },
+  "candidate": "tail_s_resident",
+  "correctness": {
+    "cases": 1,
+    "max_abs": 0.000108433771,
+    "max_rmse": 3.57461904e-05,
+    "nonfinite": 0,
+    "pass": true,
+    "pass_cases": 1
+  },
+  "diagnostic": {
+    "d7_pairret_noinline": {
+      "core_acc": 63.0,
+      "host_us": 5088.0,
+      "k_load": 1083.0,
+      "o_scale": 24.0,
+      "o_store": 32.0,
+      "profiled_total": 4005.0,
+      "q_load": 16.0,
+      "qk_dot": 22.0,
+      "safe_sm": 1534.0,
+      "scna_exp": 975.0,
+      "v_load": 1231.0
+    },
+    "exp_lut": {
+      "core_acc": 65.0,
+      "host_us": 4479.0,
+      "k_load": 1087.0,
+      "o_scale": 21.0,
+      "o_store": 30.0,
+      "profiled_total": 3384.0,
+      "q_load": 16.0,
+      "qk_dot": 22.0,
+      "safe_sm": 978.0,
+      "scna_exp": 0.0,
+      "v_load": 1165.0
+    },
+    "origin_hvx": {
+      "core_acc": 54.0,
+      "host_us": 5262.0,
+      "k_load": 1087.0,
+      "o_scale": 10.0,
+      "o_store": 32.0,
+      "profiled_total": 4190.0,
+      "q_load": 16.0,
+      "qk_dot": 23.0,
+      "safe_sm": 1807.0,
+      "scna_exp": 0.0,
+      "v_load": 1161.0
+    },
+    "tail_s_resident": {
+      "core_acc": 55.0,
+      "host_us": 5099.0,
+      "k_load": 1087.0,
+      "o_scale": 21.0,
+      "o_store": 27.0,
+      "profiled_total": 4034.0,
+      "q_load": 16.0,
+      "qk_dot": 27.0,
+      "safe_sm": 1643.0,
+      "scna_exp": 950.0,
+      "v_load": 1158.0
+    }
+  },
+  "micro": {
+    "ratios": {
+      "candidate_over_exp_lut": {
+        "ci_high": 1.081080302990625,
+        "ci_low": 1.081015843621875,
+        "median": 1.081080302990625,
+        "n": 3
+      },
+      "candidate_over_pairret": {
+        "ci_high": 1.0,
+        "ci_low": 1.0,
+        "median": 1.0,
+        "n": 3
+      }
+    },
+    "summary": {
+      "d7_pairret_noinline": {
+        "ci_high": 20.626998,
+        "ci_low": 20.626998,
+        "median": 20.626998,
+        "n": 3
+      },
+      "exp_lut": {
+        "ci_high": 19.081124593780746,
+        "ci_low": 19.07998688250902,
+        "median": 19.07998688250902,
+        "n": 3
+      },
+      "tail_s_resident": {
+        "ci_high": 20.626998,
+        "ci_low": 20.626998,
+        "median": 20.626998,
+        "n": 3
+      }
+    }
+  },
+  "quick": true,
+  "recovery_attempts": [],
+  "run_id": "20260822_stage2_b1_tail_resident_quick_v1",
+  "schema_version": 1,
+  "source_commit": "0db719f73b86cb51542988f5d422cd23f234df3b",
+  "static": {
+    "d7_pairret_noinline": {
+      "caller": {
+        "instructions": 5648,
+        "instructions_per_packet": 2.393220338983051,
+        "load_instructions": 2348,
+        "multiply_instructions": 135,
+        "packets": 2360,
+        "permute_instructions": 16,
+        "scalar_weight_multiply": 0,
+        "splat": 57,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1360
+      },
+      "instructions": 112,
+      "instructions_per_packet": 3.111111111111111,
+      "load_instructions": 6,
+      "multiply_instructions": 21,
+      "packets": 36,
+      "permute_instructions": 0,
+      "scalar_weight_multiply": 14,
+      "splat": 8,
+      "stack_frame_bytes": 0,
+      "stack_references": 0,
+      "symbol": "hvx_scna_exp2_pair_hot_return_vhf"
+    },
+    "tail_s_resident": {
+      "caller": {
+        "instructions": 5953,
+        "instructions_per_packet": 2.416971173365814,
+        "load_instructions": 2435,
+        "multiply_instructions": 135,
+        "packets": 2463,
+        "permute_instructions": 17,
+        "scalar_weight_multiply": 0,
+        "splat": 63,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1416
+      },
+      "instructions": 112,
+      "instructions_per_packet": 3.111111111111111,
+      "load_instructions": 6,
+      "multiply_instructions": 21,
+      "packets": 36,
+      "permute_instructions": 0,
+      "scalar_weight_multiply": 14,
+      "splat": 8,
+      "stack_frame_bytes": 0,
+      "stack_references": 0,
+      "symbol": "hvx_scna_exp2_pair_hot_return_vhf"
+    }
+  }
+}

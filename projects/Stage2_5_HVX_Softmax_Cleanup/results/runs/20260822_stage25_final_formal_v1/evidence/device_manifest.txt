@@ -1,0 +1,14 @@
+schema_version=1
+run_id=20260822_stage25_final_formal_v1
+quick=0
+captured_at=2026-08-22T10:27:24Z
+candidates=stage2_5_final
+bde3ddde
+25091RP04C
+piano
+sun
+SM8750P
+Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys
+b181712925768e488aa4a32ade68dee4abba5fc50ef7ba9b54475226d06f19c5  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/stage1_d7/libhtp_ops_skel.so
+d1e16de7d56677b274664dda3328593f02eddff43cd126a8cb878543255df27c  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/stage2_final/libhtp_ops_skel.so
+875998b26120284a0744326dc283dcf0a0692407fff36141f90adff4f0b71ac2  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/stage2_5_final/libhtp_ops_skel.so

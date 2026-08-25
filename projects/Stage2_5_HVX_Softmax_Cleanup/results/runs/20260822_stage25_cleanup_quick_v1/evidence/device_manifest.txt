@@ -1,0 +1,16 @@
+schema_version=1
+run_id=20260822_stage25_cleanup_quick_v1
+quick=1
+captured_at=2026-08-22T10:13:59Z
+candidates=s25_b_full_mask_fastpath s25_c_aligned_mask_load s25_e_task_geometry
+bde3ddde
+25091RP04C
+piano
+sun
+SM8750P
+Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys
+b181712925768e488aa4a32ade68dee4abba5fc50ef7ba9b54475226d06f19c5  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/stage1_d7/libhtp_ops_skel.so
+d1e16de7d56677b274664dda3328593f02eddff43cd126a8cb878543255df27c  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/stage2_final/libhtp_ops_skel.so
+875998b26120284a0744326dc283dcf0a0692407fff36141f90adff4f0b71ac2  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/s25_b_full_mask_fastpath/libhtp_ops_skel.so
+066d274c1cdaa597f3f43c5d61225781224ff1b0578f9264228db3d041ed0671  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/s25_c_aligned_mask_load/libhtp_ops_skel.so
+28e31e7480e248b76fd1b3a4eba555b4198e80957f48e7392b97326cbdd907f7  /home/corleone/code/Snapdragon-NPU/projects/Stage2_5_HVX_Softmax_Cleanup/artifacts/variants/s25_e_task_geometry/libhtp_ops_skel.so

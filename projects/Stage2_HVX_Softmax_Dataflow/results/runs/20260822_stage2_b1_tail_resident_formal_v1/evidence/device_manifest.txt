@@ -1,0 +1,14 @@
+schema_version=1
+run_id=20260822_stage2_b1_tail_resident_formal_v1
+candidate=tail_s_resident
+quick=0
+captured_at=2026-08-22T08:34:22Z
+source_git_commit=0db719f73b86cb51542988f5d422cd23f234df3b
+bde3ddde
+25091RP04C
+piano
+sun
+SM8750P
+Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys
+652f56177b53cfe58ced72ed7b784167e0e2209344f2a9ccf16dfd34fca45f4f  /home/corleone/code/Snapdragon-NPU/projects/Stage2_HVX_Softmax_Dataflow/artifacts/variants/d7_pairret_noinline/libhtp_ops_skel.so
+9927149622cf5b052d698bf2abad444b0b3ba13b04ab60ba2379b6dbfb06e7ed  /home/corleone/code/Snapdragon-NPU/projects/Stage2_HVX_Softmax_Dataflow/artifacts/variants/tail_s_resident/libhtp_ops_skel.so

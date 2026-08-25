@@ -87,3 +87,4 @@ projects/Manual
 projects/flashattention-scna-fp16-d8-optimization-v79/tools/generate_roofline_lut_scna_report.py
 
 projects/QA/
+projects/Stage2_HVX_Softmax_Dataflow/PLAN.md

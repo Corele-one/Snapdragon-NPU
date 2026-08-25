@@ -2,6 +2,16 @@
 
 本文适用于以下场景：WSL2 笔记本随开发者出差，Android NPU 平板留在远端且不再与 WSL2 有线连接。Google VPS 只作为公网 SSH 中继；构建、`adb` 命令和结果分析仍在 WSL2 完成，NPU 程序在 Android 的 `adb shell` 域运行。
 
+```
+[WSL2 开发端]                          [Google VPS 中继]                      [Android 平板 (远端)]
+adb client / server
+       │
+       ▼
+127.0.0.1:15555 ──(SSH 本地转发 -L)──► 127.0.0.1:15555 ◄──(Termux 反向隧道 -R)── 127.0.0.1:5555 (adbd)
+                                                                                       │
+                                                                                       ▼ (u:r:shell:s0)
+                                                                                 FastRPC / HTP / NPU
+```
 ## 给后续 Agent 的强制执行规则
 
 后续 Agent 在部署、测试或调试 Android NPU 前必须先阅读本节，并遵守以下规则：

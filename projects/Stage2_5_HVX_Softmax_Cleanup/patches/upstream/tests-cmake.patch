@@ -1,0 +1,10 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 047f9535..00000000 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,3 +1,5 @@
+ llama_add_compile_flags()
++add_executable(test-stage25-fa test-stage25-fa.cpp)
++target_link_libraries(test-stage25-fa PRIVATE ggml)
+ 
+ function(llama_build source)

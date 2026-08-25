@@ -1,0 +1,270 @@
+{
+  "artifact_sha256": "652f56177b53cfe58ced72ed7b784167e0e2209344f2a9ccf16dfd34fca45f4f",
+  "attention": {
+    "d7_pairret_noinline": {
+      "1": {
+        "ci_high": 676.5,
+        "ci_low": 606.0,
+        "median": 663.5,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 798.0,
+        "ci_low": 771.5,
+        "median": 783.0,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1486.0,
+        "ci_low": 1315.5,
+        "median": 1355.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2540.5,
+        "ci_low": 2523.0,
+        "median": 2531.5,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 5621.5,
+        "ci_low": 5042.5,
+        "median": 5525.5,
+        "n": 6
+      }
+    },
+    "exp_lut": {
+      "1": {
+        "ci_high": 802.5,
+        "ci_low": 575.5,
+        "median": 630.5,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 685.0,
+        "ci_low": 658.5,
+        "median": 664.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1502.0,
+        "ci_low": 1211.0,
+        "median": 1348.0,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2689.0,
+        "ci_low": 2464.5,
+        "median": 2642.0,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 4840.5,
+        "ci_low": 4604.0,
+        "median": 4718.0,
+        "n": 6
+      }
+    },
+    "origin_hvx": {
+      "1": {
+        "ci_high": 734.0,
+        "ci_low": 663.5,
+        "median": 686.5,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 886.5,
+        "ci_low": 771.5,
+        "median": 829.5,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1447.5,
+        "ci_low": 1432.0,
+        "median": 1441.5,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 2987.0,
+        "ci_low": 2562.0,
+        "median": 2752.0,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 6009.0,
+        "ci_low": 4870.0,
+        "median": 5454.5,
+        "n": 6
+      }
+    }
+  },
+  "correctness": {
+    "cases": 1,
+    "max_abs": 0.000108433771,
+    "max_rmse": 3.57461904e-05,
+    "nonfinite": 0,
+    "pass": true,
+    "pass_cases": 1
+  },
+  "diagnostic": {
+    "d7_pairret_noinline": {
+      "core_acc": 58.0,
+      "host_us": 4772.0,
+      "k_load": 1083.0,
+      "o_scale": 16.0,
+      "o_store": 22.0,
+      "profiled_total": 3778.0,
+      "q_load": 16.0,
+      "qk_dot": 16.0,
+      "safe_sm": 1469.0,
+      "scna_exp": 963.0,
+      "v_load": 1098.0
+    },
+    "exp_lut": {
+      "core_acc": 64.0,
+      "host_us": 4299.0,
+      "k_load": 1080.0,
+      "o_scale": 16.0,
+      "o_store": 24.0,
+      "profiled_total": 3303.0,
+      "q_load": 16.0,
+      "qk_dot": 17.0,
+      "safe_sm": 961.0,
+      "scna_exp": 0.0,
+      "v_load": 1125.0
+    },
+    "origin_hvx": {
+      "core_acc": 45.0,
+      "host_us": 5228.0,
+      "k_load": 1079.0,
+      "o_scale": 17.0,
+      "o_store": 25.0,
+      "profiled_total": 4162.0,
+      "q_load": 16.0,
+      "qk_dot": 22.0,
+      "safe_sm": 1815.0,
+      "scna_exp": 0.0,
+      "v_load": 1143.0
+    }
+  },
+  "micro": {
+    "d7_pairret_noinline": {
+      "checksums": [
+        "0x0bc93b2d"
+      ],
+      "ci_high": 20.626998,
+      "ci_low": 20.626998,
+      "median": 20.626998,
+      "n": 3
+    },
+    "exp_lut": {
+      "ci_high": 19.07998688250902,
+      "ci_low": 19.07998688250902,
+      "median": 19.07998688250902,
+      "n": 3
+    },
+    "pairret_vs_lut": 1.081080302990625
+  },
+  "quick": true,
+  "ratios": {
+    "exp_lut": {
+      "1": {
+        "ci_high": 1.159141987167869,
+        "ci_low": 0.8470198885524693,
+        "median": 0.9671663174100842,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 1.1921804789293196,
+        "ci_low": 1.1488510710134858,
+        "median": 1.1745472469694755,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1.2175866004296454,
+        "ci_low": 0.8764110931445723,
+        "median": 1.024095442173192,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 1.0261779768366226,
+        "ci_low": 0.9414295663930554,
+        "median": 0.959688844668032,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 1.2151896051660893,
+        "ci_low": 1.0746932420357935,
+        "median": 1.1415195723647287,
+        "n": 6
+      }
+    },
+    "origin_hvx": {
+      "1": {
+        "ci_high": 0.983647242959016,
+        "ci_low": 0.8661871330859691,
+        "median": 0.9527006668411079,
+        "n": 6
+      },
+      "4": {
+        "ci_high": 1.0350441361916771,
+        "ci_low": 0.8717130077985626,
+        "median": 0.9446382607431106,
+        "n": 6
+      },
+      "8": {
+        "ci_high": 1.026993233303913,
+        "ci_low": 0.9164414775101798,
+        "median": 0.9423302654492662,
+        "n": 6
+      },
+      "16": {
+        "ci_high": 0.9883098381918309,
+        "ci_low": 0.8490108897397043,
+        "median": 0.9222241379035103,
+        "n": 6
+      },
+      "32": {
+        "ci_high": 1.154313546288361,
+        "ci_low": 0.8730154569892473,
+        "median": 0.9805963053613687,
+        "n": 6
+      }
+    }
+  },
+  "recovery_attempts": [],
+  "run_id": "20260822_stage2_baseline_quick_v1",
+  "schema_version": 1,
+  "source_commit": "0db719f73b86cb51542988f5d422cd23f234df3b",
+  "source_sha256": {
+    "flash_attn.c": "e061b7fb6046eaafcc05f1d7a52ac4621a63e423808df80b505f1c6cd6dec523",
+    "scna_exp2.c": "4db150e3fcb914b7ade6f7e7a5be590703b46ac91d53ec68fc809db633459b66"
+  },
+  "static": {
+    "d7_pairret_noinline": {
+      "caller": {
+        "instructions": 5648,
+        "instructions_per_packet": 2.393220338983051,
+        "load_instructions": 2348,
+        "multiply_instructions": 135,
+        "packets": 2360,
+        "permute_instructions": 16,
+        "scalar_weight_multiply": 0,
+        "splat": 57,
+        "stack_frame_bytes": 7680,
+        "stack_references": 1360
+      },
+      "instructions": 112,
+      "instructions_per_packet": 3.111111111111111,
+      "load_instructions": 6,
+      "multiply_instructions": 21,
+      "packets": 36,
+      "permute_instructions": 0,
+      "scalar_weight_multiply": 14,
+      "splat": 8,
+      "stack_frame_bytes": 0,
+      "stack_references": 0,
+      "symbol": "hvx_scna_exp2_pair_hot_return_vhf"
+    }
+  }
+}
