@@ -1,0 +1,273 @@
+{
+  "aggregation": "component timers are summed across task records per iteration; host_us remains wall time",
+  "bootstrap_draws": 10000,
+  "groups": {
+    "original_baseline|32|4096|32|auto|original_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "original_baseline",
+        "mapping": "original_kv_head",
+        "q": 32,
+        "q_task_rows": 32,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 43.0,
+          "ci_low": 41.0,
+          "median": 42.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1603.0,
+          "ci_low": 1563.0,
+          "median": 1584.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 184.0,
+          "ci_low": 177.0,
+          "median": 180.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2456.0,
+          "ci_low": 2444.0,
+          "median": 2450.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 32.0,
+          "ci_low": 32.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 25.0,
+          "ci_low": 25.0,
+          "median": 25.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 2043.0,
+          "ci_low": 2029.0,
+          "median": 2037.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 126.0,
+          "ci_low": 123.0,
+          "median": 125.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_baseline_q32_kv4096_s1.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_baseline_q32_kv4096_s2.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_baseline_q32_kv4096_s3.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_baseline_q32_kv4096_s4.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_baseline_q32_kv4096_s5.log"
+      ]
+    },
+    "original_lut-exp|32|4096|32|auto|original_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "original_lut-exp",
+        "mapping": "original_kv_head",
+        "q": 32,
+        "q_task_rows": 32,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 46.0,
+          "ci_low": 45.0,
+          "median": 45.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1071.0,
+          "ci_low": 1021.0,
+          "median": 1053.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 181.0,
+          "ci_low": 174.0,
+          "median": 177.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 4.0,
+          "ci_low": 3.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1423.5,
+          "ci_low": 1413.0,
+          "median": 1420.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 32.0,
+          "ci_low": 32.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 26.0,
+          "ci_low": 25.0,
+          "median": 25.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1018.5,
+          "ci_low": 1009.0,
+          "median": 1015.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 120.0,
+          "ci_low": 118.0,
+          "median": 119.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_lut-exp_q32_kv4096_s1.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_lut-exp_q32_kv4096_s2.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_lut-exp_q32_kv4096_s3.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_lut-exp_q32_kv4096_s4.log",
+        "results/runs/20260827_stage275_original_formal_v1/raw/attention/original_lut-exp_q32_kv4096_s5.log"
+      ]
+    }
+  },
+  "schema_version": 1
+}

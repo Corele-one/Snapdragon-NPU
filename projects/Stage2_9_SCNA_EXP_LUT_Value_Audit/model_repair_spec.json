@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "experiment": "Stage 2.9.1 Qwen model lineage and HMX matmul repair",
+  "frozen_at": "2026-09-10",
+  "source": {
+    "hf_dir": "/home/corleone/code/model/qwen2.5-1.5b",
+    "git_commit": "8faed761d45a263340a0528343f099c05c9a4323",
+    "safetensors": "model.safetensors",
+    "safetensors_sha256": "a961db72e75d52b18e6b0c9d379e51a26973b233385e0e127fdda7d648aec796"
+  },
+  "toolchain": {
+    "llama_tree": "work/llama.cpp-stage29",
+    "llama_commit": "fc6746a68a3616b5fb1f65df0b9882ccffa00c2a",
+    "cpu_converter": "convert_hf_to_gguf.py",
+    "hmx_converter": "extras/convert_hf_to_gguf_htp.py",
+    "quantizer": "/home/corleone/code/Snapdragon-NPU/projects/flashattention/src/llama.cpp-npu-htp-backend/build-host/bin/llama-quantize",
+    "quantizer_type": "514",
+    "quantizer_type_name": "IQ4_NL+Q8_0",
+    "python": "generated/model_pair_venv/bin/python",
+    "requirements": "requirements/model_pair.lock"
+  },
+  "outputs": {
+    "root": "generated/models/qwen2.5-1.5b-stage291",
+    "cpu_f16": "qwen2.5-1.5b-stage291-cpu-f16.gguf",
+    "hmx_f16": "qwen2.5-1.5b-stage291-hmx-f16.gguf",
+    "cpu_quant": "qwen2.5-1.5b-stage291-cpu-iq4nl-q8.gguf",
+    "hmx_quant": "qwen2.5-1.5b-stage291-hmx-iq4nl-q8.gguf",
+    "manifest": "model_pair_manifest.json",
+    "tensor_validation": "tensor_validation.jsonl"
+  },
+  "hmx_matmul_tensor_suffixes": [
+    "attn_q.weight", "attn_k.weight", "attn_v.weight", "attn_output.weight",
+    "ffn_gate.weight", "ffn_up.weight", "ffn_down.weight"
+  ],
+  "matmul_audit": {
+    "dtypes": ["f16", "iq4_nl", "q8_0"],
+    "paths": ["sequential", "pipeline", "output_stationary"],
+    "seeds": [29101, 29102, 29103],
+    "m": [1, 4, 8, 16, 32, 64, 128, 512],
+    "kn": [[1536, 1536], [1536, 256], [1536, 8960], [8960, 1536]],
+    "single_tile_cases": {
+      "f16": [1, 32, 32],
+      "iq4_nl": [1, 256, 32],
+      "q8_0": [1, 256, 32]
+    },
+    "relative_l2_max": 0.01,
+    "normalized_max_abs_max": 0.02,
+    "nonfinite_max": 0
+  },
+  "gates": {
+    "trusted_cpu_f16_ppl": 6.4756,
+    "cpu_f16_vs_trusted_ppl_relative_max": 0.02,
+    "standard_f16_htp_vs_cpu_relative_max": 0.01,
+    "hmx_f16_vs_cpu_relative_max": 0.05,
+    "hmx_quant_vs_cpu_quant_relative_max": 0.05
+  },
+  "hard_boundaries": [
+    "do not modify Stage2_75_Worker_Scheduler",
+    "do not modify SCNA or EXP-LUT evaluator code",
+    "do not enable production output-stationary paths disabled by Stage2.75",
+    "do not overwrite existing models or Stage2.9 gate2 evidence",
+    "stop after the first failed gate"
+  ]
+}

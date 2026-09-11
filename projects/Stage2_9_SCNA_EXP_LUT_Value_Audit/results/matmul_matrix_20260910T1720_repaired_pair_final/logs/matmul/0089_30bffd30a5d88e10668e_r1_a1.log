@@ -1,0 +1,2 @@
+AUDIT_STARTUP_TIMING session_open_us=38776 backend_init_us=1665 main_to_ready_us=40448
+MATMUL_AUDIT_JSON {"schema_version":1,"dtype":"f16","requested_path":"sequential","actual_path":1,"m":512,"k":1536,"n":256,"seed":29103,"elapsed_us":183,"activation_checksum":"0xc68b1e6c552e6783","weight_checksum":"0xe3dc212d709eaedd","output_checksum":"0xc2388d6595db1506","rmse":6.07776513e-06,"relative_l2":0.000100130399,"normalized_max_abs":0.000832537827,"nonfinite_count":0,"stage_checksums_match":true,"pass":true}

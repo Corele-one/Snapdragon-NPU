@@ -1,0 +1,8 @@
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/llama-bench: 1 file pushed. 0.1 MB/s (3615856 bytes in 35.052s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/llama-perplexity: 1 file pushed. 0.1 MB/s (12478608 bytes in 119.994s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/libllama.so: 1 file pushed. 0.1 MB/s (13737704 bytes in 119.923s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/libggml.so: 1 file pushed. 0.1 MB/s (4237664 bytes in 38.619s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/libggml-base.so: 1 file pushed. 0.1 MB/s (4216744 bytes in 35.936s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/libggml-cpu.so: 1 file pushed. 0.1 MB/s (2157112 bytes in 20.677s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/artifacts/model_host/libggml-htp.so: 1 file pushed. 0.1 MB/s (1495560 bytes in 17.396s)
+7 files pushed. 0.1 MB/s (41939248 bytes in 388.822s)

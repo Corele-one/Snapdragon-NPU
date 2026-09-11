@@ -1,0 +1,1637 @@
+{
+  "schema_version": 1,
+  "required_cases": 72,
+  "production_extension_cases": 108,
+  "cases": 180,
+  "passed": 180,
+  "max_rmse": 0.000283223198,
+  "max_abs_error": 0.00121130981,
+  "candidate_nonfinite": 0,
+  "reference_nonfinite": 0,
+  "determinism_repeats": 10,
+  "determinism_unique_checksums": [
+    "0x19c89fab0065963c"
+  ],
+  "rows": [
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4093_d128_seed20260810.log",
+      "rmse": 0.000242163645,
+      "max_abs_error": 0.000813530292,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4093_d128_seed20260811.log",
+      "rmse": 0.000242163645,
+      "max_abs_error": 0.000813528895,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.83204603e-05,
+      "max_abs_error": 0.000132653397,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4093_d64_seed20260810.log",
+      "rmse": 0.000281627814,
+      "max_abs_error": 0.000964757986,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4093_d64_seed20260811.log",
+      "rmse": 0.000281627843,
+      "max_abs_error": 0.00096476078,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.57461904e-05,
+      "max_abs_error": 0.000108433771,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4096_d128_seed20260810.log",
+      "rmse": 0.000243089307,
+      "max_abs_error": 0.000805689953,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4096_d128_seed20260811.log",
+      "rmse": 0.000243089322,
+      "max_abs_error": 0.000805689022,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.81031893e-05,
+      "max_abs_error": 0.000132021785,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4096_d64_seed20260810.log",
+      "rmse": 0.000283174944,
+      "max_abs_error": 0.000986019615,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4096_d64_seed20260811.log",
+      "rmse": 0.000283174973,
+      "max_abs_error": 0.000986022409,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q1_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.58983016e-05,
+      "max_abs_error": 0.000107823114,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4093_d128_seed20260810.log",
+      "rmse": 0.000242324735,
+      "max_abs_error": 0.000971527305,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4093_d128_seed20260811.log",
+      "rmse": 0.000242324706,
+      "max_abs_error": 0.000971526373,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.12121844e-05,
+      "max_abs_error": 0.000136955234,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4093_d64_seed20260810.log",
+      "rmse": 0.000279653381,
+      "max_abs_error": 0.00120667182,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4093_d64_seed20260811.log",
+      "rmse": 0.000279653381,
+      "max_abs_error": 0.00120666903,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.56220808e-05,
+      "max_abs_error": 0.000127332838,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4096_d128_seed20260810.log",
+      "rmse": 0.000241562273,
+      "max_abs_error": 0.000959587749,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4096_d128_seed20260811.log",
+      "rmse": 0.000241562258,
+      "max_abs_error": 0.000959586818,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.09925633e-05,
+      "max_abs_error": 0.000132653397,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4096_d64_seed20260810.log",
+      "rmse": 0.000278955413,
+      "max_abs_error": 0.00119740609,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4096_d64_seed20260811.log",
+      "rmse": 0.000278955413,
+      "max_abs_error": 0.0011974033,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/causal_q4_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.5325269e-05,
+      "max_abs_error": 0.000119733158,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4093_d128_seed20260810.log",
+      "rmse": 0.000242163645,
+      "max_abs_error": 0.000813530292,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4093_d128_seed20260811.log",
+      "rmse": 0.000242163645,
+      "max_abs_error": 0.000813528895,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.83204603e-05,
+      "max_abs_error": 0.000132653397,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4093_d64_seed20260810.log",
+      "rmse": 0.000281627814,
+      "max_abs_error": 0.000964757986,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4093_d64_seed20260811.log",
+      "rmse": 0.000281627843,
+      "max_abs_error": 0.00096476078,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.57461904e-05,
+      "max_abs_error": 0.000108433771,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4096_d128_seed20260810.log",
+      "rmse": 0.000243089307,
+      "max_abs_error": 0.000805689953,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4096_d128_seed20260811.log",
+      "rmse": 0.000243089322,
+      "max_abs_error": 0.000805689022,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.81031893e-05,
+      "max_abs_error": 0.000132021785,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4096_d64_seed20260810.log",
+      "rmse": 0.000283174944,
+      "max_abs_error": 0.000986019615,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4096_d64_seed20260811.log",
+      "rmse": 0.000283174973,
+      "max_abs_error": 0.000986022409,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q1_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.58983016e-05,
+      "max_abs_error": 0.000107823114,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4093_d128_seed20260810.log",
+      "rmse": 0.000241926507,
+      "max_abs_error": 0.000976083335,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4093_d128_seed20260811.log",
+      "rmse": 0.000241926478,
+      "max_abs_error": 0.000976082403,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.08834094e-05,
+      "max_abs_error": 0.000132653397,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4093_d64_seed20260810.log",
+      "rmse": 0.00027906074,
+      "max_abs_error": 0.00119465031,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4093_d64_seed20260811.log",
+      "rmse": 0.00027906074,
+      "max_abs_error": 0.00119464751,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.5449164e-05,
+      "max_abs_error": 0.000118132026,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4096_d128_seed20260810.log",
+      "rmse": 0.000242038877,
+      "max_abs_error": 0.000945421401,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4096_d128_seed20260811.log",
+      "rmse": 0.000242038848,
+      "max_abs_error": 0.00094542047,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.08909182e-05,
+      "max_abs_error": 0.000132021785,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4096_d64_seed20260810.log",
+      "rmse": 0.000279465981,
+      "max_abs_error": 0.00117908139,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4096_d64_seed20260811.log",
+      "rmse": 0.000279465981,
+      "max_abs_error": 0.00117907859,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/full_q4_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.53890646e-05,
+      "max_abs_error": 0.000119733158,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4093_d128_seed20260810.log",
+      "rmse": 0.000243052069,
+      "max_abs_error": 0.000812977552,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4093_d128_seed20260811.log",
+      "rmse": 0.000243052069,
+      "max_abs_error": 0.000812976155,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.90093626e-05,
+      "max_abs_error": 0.000134640664,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4093_d64_seed20260810.log",
+      "rmse": 0.00028322314,
+      "max_abs_error": 0.000969859771,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4093_d64_seed20260811.log",
+      "rmse": 0.000283223198,
+      "max_abs_error": 0.000969862565,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.62568207e-05,
+      "max_abs_error": 0.000109409593,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4096_d128_seed20260810.log",
+      "rmse": 0.000242163645,
+      "max_abs_error": 0.000813530292,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4096_d128_seed20260811.log",
+      "rmse": 0.000242163645,
+      "max_abs_error": 0.000813528895,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.83204603e-05,
+      "max_abs_error": 0.000132653397,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4096_d64_seed20260810.log",
+      "rmse": 0.000281627814,
+      "max_abs_error": 0.000964757986,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4096_d64_seed20260811.log",
+      "rmse": 0.000281627843,
+      "max_abs_error": 0.00096476078,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q1_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.57461904e-05,
+      "max_abs_error": 0.000108433771,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4093_d128_seed20260810.log",
+      "rmse": 0.000242724724,
+      "max_abs_error": 0.00098113576,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4093_d128_seed20260811.log",
+      "rmse": 0.000242724695,
+      "max_abs_error": 0.000981134828,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.1148829e-05,
+      "max_abs_error": 0.000142744451,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4093_d64_seed20260810.log",
+      "rmse": 0.000280310633,
+      "max_abs_error": 0.00120454933,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4093_d64_seed20260811.log",
+      "rmse": 0.000280310633,
+      "max_abs_error": 0.00120454654,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.58342986e-05,
+      "max_abs_error": 0.000127882318,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4096_d128_seed20260810.log",
+      "rmse": 0.000241926507,
+      "max_abs_error": 0.000976083335,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4096_d128_seed20260811.log",
+      "rmse": 0.000241926478,
+      "max_abs_error": 0.000976082403,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.08834094e-05,
+      "max_abs_error": 0.000132653397,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4096_d64_seed20260810.log",
+      "rmse": 0.00027906074,
+      "max_abs_error": 0.00119465031,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4096_d64_seed20260811.log",
+      "rmse": 0.00027906074,
+      "max_abs_error": 0.00119464751,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/correctness/padding_q4_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.5449164e-05,
+      "max_abs_error": 0.000118132026,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4093_d128_seed20260810.log",
+      "rmse": 0.000248531782,
+      "max_abs_error": 0.00115419738,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4093_d128_seed20260811.log",
+      "rmse": 0.000248531782,
+      "max_abs_error": 0.00115420064,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.30290238e-05,
+      "max_abs_error": 0.000144653197,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4093_d64_seed20260810.log",
+      "rmse": 0.000264825183,
+      "max_abs_error": 0.00115497503,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4093_d64_seed20260811.log",
+      "rmse": 0.000264825183,
+      "max_abs_error": 0.00115497224,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.61455968e-05,
+      "max_abs_error": 0.00014686861,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4096_d128_seed20260810.log",
+      "rmse": 0.000247721968,
+      "max_abs_error": 0.00114397984,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4096_d128_seed20260811.log",
+      "rmse": 0.000247721968,
+      "max_abs_error": 0.0011439831,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.28943276e-05,
+      "max_abs_error": 0.000145856407,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4096_d64_seed20260810.log",
+      "rmse": 0.000263836147,
+      "max_abs_error": 0.00114339683,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4096_d64_seed20260811.log",
+      "rmse": 0.000263836177,
+      "max_abs_error": 0.00114339404,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q16_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.57708741e-05,
+      "max_abs_error": 0.00013753146,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4093_d128_seed20260810.log",
+      "rmse": 0.000252778525,
+      "max_abs_error": 0.00118898088,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4093_d128_seed20260811.log",
+      "rmse": 0.000252778525,
+      "max_abs_error": 0.00118898414,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.31745757e-05,
+      "max_abs_error": 0.000153609784,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4093_d64_seed20260810.log",
+      "rmse": 0.000250589626,
+      "max_abs_error": 0.00115944166,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4093_d64_seed20260811.log",
+      "rmse": 0.000250589626,
+      "max_abs_error": 0.00115944538,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.66169697e-05,
+      "max_abs_error": 0.000150216511,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4096_d128_seed20260810.log",
+      "rmse": 0.000251898397,
+      "max_abs_error": 0.00117334072,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4096_d128_seed20260811.log",
+      "rmse": 0.000251898397,
+      "max_abs_error": 0.00117334351,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.2981701e-05,
+      "max_abs_error": 0.000151270069,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4096_d64_seed20260810.log",
+      "rmse": 0.000249713485,
+      "max_abs_error": 0.00115174334,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4096_d64_seed20260811.log",
+      "rmse": 0.000249713485,
+      "max_abs_error": 0.00115174754,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q32_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.64253283e-05,
+      "max_abs_error": 0.000149102474,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4093_d128_seed20260810.log",
+      "rmse": 0.000245284638,
+      "max_abs_error": 0.00110757723,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4093_d128_seed20260811.log",
+      "rmse": 0.000245284638,
+      "max_abs_error": 0.00110758049,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.16601288e-05,
+      "max_abs_error": 0.00014590926,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4093_d64_seed20260810.log",
+      "rmse": 0.000279834203,
+      "max_abs_error": 0.00121130981,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4093_d64_seed20260811.log",
+      "rmse": 0.000279834203,
+      "max_abs_error": 0.00121130701,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.56393721e-05,
+      "max_abs_error": 0.000131103094,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4096_d128_seed20260810.log",
+      "rmse": 0.000244599039,
+      "max_abs_error": 0.00110182026,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4096_d128_seed20260811.log",
+      "rmse": 0.00024459901,
+      "max_abs_error": 0.00110182352,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.16093353e-05,
+      "max_abs_error": 0.000143278448,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4096_d64_seed20260810.log",
+      "rmse": 0.000278407038,
+      "max_abs_error": 0.00120242219,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4096_d64_seed20260811.log",
+      "rmse": 0.000278407068,
+      "max_abs_error": 0.0012024194,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/causal_q8_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.53212126e-05,
+      "max_abs_error": 0.000130161498,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4093_d128_seed20260810.log",
+      "rmse": 0.000246316922,
+      "max_abs_error": 0.00113809481,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4093_d128_seed20260811.log",
+      "rmse": 0.000246316922,
+      "max_abs_error": 0.00113809807,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.25591061e-05,
+      "max_abs_error": 0.000143278448,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4093_d64_seed20260810.log",
+      "rmse": 0.000261990965,
+      "max_abs_error": 0.00113361515,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4093_d64_seed20260811.log",
+      "rmse": 0.000261990965,
+      "max_abs_error": 0.00113361236,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.53206087e-05,
+      "max_abs_error": 0.000130922766,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4096_d128_seed20260810.log",
+      "rmse": 0.000246608281,
+      "max_abs_error": 0.00113233784,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4096_d128_seed20260811.log",
+      "rmse": 0.000246608281,
+      "max_abs_error": 0.0011323411,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.25283833e-05,
+      "max_abs_error": 0.000142492645,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4096_d64_seed20260810.log",
+      "rmse": 0.000261723821,
+      "max_abs_error": 0.00112047233,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4096_d64_seed20260811.log",
+      "rmse": 0.00026172385,
+      "max_abs_error": 0.00112047419,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q16_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.52271491e-05,
+      "max_abs_error": 0.000128477142,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4093_d128_seed20260810.log",
+      "rmse": 0.000247875258,
+      "max_abs_error": 0.00113809481,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4093_d128_seed20260811.log",
+      "rmse": 0.000247875258,
+      "max_abs_error": 0.00113809807,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.2405456e-05,
+      "max_abs_error": 0.000153673522,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4093_d64_seed20260810.log",
+      "rmse": 0.000246021344,
+      "max_abs_error": 0.00115653127,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4093_d64_seed20260811.log",
+      "rmse": 0.000246021344,
+      "max_abs_error": 0.001156535,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.5248504e-05,
+      "max_abs_error": 0.000130922766,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4096_d128_seed20260810.log",
+      "rmse": 0.000248106284,
+      "max_abs_error": 0.00113233784,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4096_d128_seed20260811.log",
+      "rmse": 0.000248106284,
+      "max_abs_error": 0.0011323411,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.2386735e-05,
+      "max_abs_error": 0.000150796201,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4096_d64_seed20260810.log",
+      "rmse": 0.000246107811,
+      "max_abs_error": 0.00119388942,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4096_d64_seed20260811.log",
+      "rmse": 0.000246107811,
+      "max_abs_error": 0.00119389361,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q32_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.51602503e-05,
+      "max_abs_error": 0.00012809824,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4093_d128_seed20260810.log",
+      "rmse": 0.000244309515,
+      "max_abs_error": 0.00110757723,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4093_d128_seed20260811.log",
+      "rmse": 0.000244309515,
+      "max_abs_error": 0.00110758049,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.13613598e-05,
+      "max_abs_error": 0.000143278448,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4093_d64_seed20260810.log",
+      "rmse": 0.000278172869,
+      "max_abs_error": 0.00119465031,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4093_d64_seed20260811.log",
+      "rmse": 0.000278172898,
+      "max_abs_error": 0.00119464751,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.52267198e-05,
+      "max_abs_error": 0.000130922766,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4096_d128_seed20260810.log",
+      "rmse": 0.000244318944,
+      "max_abs_error": 0.00110182026,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4096_d128_seed20260811.log",
+      "rmse": 0.000244318944,
+      "max_abs_error": 0.00110182352,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.13783127e-05,
+      "max_abs_error": 0.000141569588,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4096_d64_seed20260810.log",
+      "rmse": 0.000278691616,
+      "max_abs_error": 0.00117908139,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4096_d64_seed20260811.log",
+      "rmse": 0.000278691645,
+      "max_abs_error": 0.00117907859,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/full_q8_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.51776216e-05,
+      "max_abs_error": 0.000127144565,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4093_d128_seed20260810.log",
+      "rmse": 0.000247083721,
+      "max_abs_error": 0.00114327436,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4093_d128_seed20260811.log",
+      "rmse": 0.000247083692,
+      "max_abs_error": 0.00114327762,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.27418563e-05,
+      "max_abs_error": 0.00014590926,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4093_d64_seed20260810.log",
+      "rmse": 0.000262918795,
+      "max_abs_error": 0.00112825539,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4093_d64_seed20260811.log",
+      "rmse": 0.000262918824,
+      "max_abs_error": 0.0011282526,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.56765668e-05,
+      "max_abs_error": 0.000129592663,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4096_d128_seed20260810.log",
+      "rmse": 0.000246316922,
+      "max_abs_error": 0.00113809481,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4096_d128_seed20260811.log",
+      "rmse": 0.000246316922,
+      "max_abs_error": 0.00113809807,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.25591061e-05,
+      "max_abs_error": 0.000143278448,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4096_d64_seed20260810.log",
+      "rmse": 0.000261990965,
+      "max_abs_error": 0.00113361515,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4096_d64_seed20260811.log",
+      "rmse": 0.000261990965,
+      "max_abs_error": 0.00113361236,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q16_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.53206087e-05,
+      "max_abs_error": 0.000130922766,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4093_d128_seed20260810.log",
+      "rmse": 0.000248647528,
+      "max_abs_error": 0.00114327436,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4093_d128_seed20260811.log",
+      "rmse": 0.000248647499,
+      "max_abs_error": 0.00114327762,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.25776379e-05,
+      "max_abs_error": 0.000154858863,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4093_d64_seed20260810.log",
+      "rmse": 0.000246713316,
+      "max_abs_error": 0.00115174334,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4093_d64_seed20260811.log",
+      "rmse": 0.000246713316,
+      "max_abs_error": 0.00115174754,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.55981465e-05,
+      "max_abs_error": 0.000129592663,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4096_d128_seed20260810.log",
+      "rmse": 0.000247875258,
+      "max_abs_error": 0.00113809481,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4096_d128_seed20260811.log",
+      "rmse": 0.000247875258,
+      "max_abs_error": 0.00113809807,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.2405456e-05,
+      "max_abs_error": 0.000153673522,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4096_d64_seed20260810.log",
+      "rmse": 0.000246021344,
+      "max_abs_error": 0.00115653127,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4096_d64_seed20260811.log",
+      "rmse": 0.000246021344,
+      "max_abs_error": 0.001156535,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q32_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.5248504e-05,
+      "max_abs_error": 0.000130922766,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4093_d128_seed20260810.log",
+      "rmse": 0.000245059084,
+      "max_abs_error": 0.00110512739,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4093_d128_seed20260811.log",
+      "rmse": 0.000245059084,
+      "max_abs_error": 0.00110513065,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4093_d128_seedfigure8_fixed.log",
+      "rmse": 4.1562198e-05,
+      "max_abs_error": 0.00014590926,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4093_d64_seed20260810.log",
+      "rmse": 0.000279392116,
+      "max_abs_error": 0.00120454933,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4093_d64_seed20260811.log",
+      "rmse": 0.000279392116,
+      "max_abs_error": 0.00120454654,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4093_d64_seedfigure8_fixed.log",
+      "rmse": 3.55456759e-05,
+      "max_abs_error": 0.000129592663,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4096_d128_seed20260810.log",
+      "rmse": 0.000244309515,
+      "max_abs_error": 0.00110757723,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4096_d128_seed20260811.log",
+      "rmse": 0.000244309515,
+      "max_abs_error": 0.00110758049,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4096_d128_seedfigure8_fixed.log",
+      "rmse": 4.13613598e-05,
+      "max_abs_error": 0.000143278448,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4096_d64_seed20260810.log",
+      "rmse": 0.000278172869,
+      "max_abs_error": 0.00119465031,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4096_d64_seed20260811.log",
+      "rmse": 0.000278172898,
+      "max_abs_error": 0.00119464751,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    },
+    {
+      "category": "production_correctness",
+      "file": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/results/runs/20260827_stage275_correctness_formal_v1/raw/production_correctness/padding_q8_kv4096_d64_seedfigure8_fixed.log",
+      "rmse": 3.52267198e-05,
+      "max_abs_error": 0.000130922766,
+      "candidate_nonfinite": 0,
+      "reference_nonfinite": 0,
+      "pass": 1
+    }
+  ]
+}

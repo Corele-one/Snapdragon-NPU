@@ -1,0 +1,931 @@
+#include <math.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
+#include <HAP_perf.h>
+
+#include "dsp/hvx_convert.h"
+#include "dsp/hvx_math.h"
+#include "dsp/scna_exp2.h"
+#include "dsp/scna_exp2_hot.h"
+#include "dsp/utils.h"
+#include "dsp/vtcm_mgr.h"
+
+#ifndef SCNA_BUILD_VARIANT
+#define SCNA_BUILD_VARIANT SCNA_VARIANT_STAGE1_DYNAMIC_ROW
+#endif
+#ifndef SCNA_OPTIMIZED_INLINE
+#define SCNA_OPTIMIZED_INLINE 0
+#endif
+#ifndef SCNA_OPTIMIZED_IMPL
+#define SCNA_OPTIMIZED_IMPL 0
+#endif
+#ifndef SCNA_KERNEL_IMPL
+#define SCNA_KERNEL_IMPL SCNA_KERNEL_IMPL_STATIC_D8_REF
+#endif
+
+#if SCNA_BUILD_VARIANT < 0 || SCNA_BUILD_VARIANT >= 7
+#error "SCNA_BUILD_VARIANT must be in [0,6]"
+#endif
+#if SCNA_OPTIMIZED_IMPL < 0 || SCNA_OPTIMIZED_IMPL >= 3
+#error "SCNA_OPTIMIZED_IMPL must be in [0,2]"
+#endif
+#if SCNA_KERNEL_IMPL < 0 || SCNA_KERNEL_IMPL >= SCNA_KERNEL_IMPL_COUNT
+#error "SCNA_KERNEL_IMPL must be in [0,13]"
+#endif
+
+int scna_exp2_build_variant(void) { return SCNA_BUILD_VARIANT; }
+int scna_exp2_build_optimized_inline(void) { return SCNA_OPTIMIZED_INLINE ? 1 : 0; }
+int scna_exp2_build_optimized_impl(void) { return SCNA_OPTIMIZED_IMPL; }
+int scna_exp2_build_kernel_impl(void) { return SCNA_KERNEL_IMPL; }
+
+/* Stage one deliberately performs a table lookup and fp16->float->fp16
+ * conversion in the row hot path.  Later builds call the same helper once at
+ * Attention invocation setup and carry only packed halfword bits thereafter. */
+static __attribute__((noinline, unused)) uint32_t scna_lookup_convert_coeff(int neuron) {
+  float wf = (float) scna_exp2_d8_wk[neuron];
+  float bf = (float) scna_exp2_d8_bk[neuron];
+  __fp16 wh = (__fp16) wf;
+  __fp16 bh = (__fp16) bf;
+  return (uint32_t) fp16_to_bits(&wh) | ((uint32_t) fp16_to_bits(&bh) << 16);
+}
+
+int scna_exp2_prepare_hvx_params(scna_exp2_hvx_params_t *params, int mode_flags) {
+  if (params == NULL) return -1;
+  params->width = scna_exp2_width_from_mode(mode_flags);
+  params->layout = scna_exp2_layout_from_mode(mode_flags);
+  params->variant = (mode_flags >> 10) & 7;
+  params->build_variant = SCNA_BUILD_VARIANT;
+  params->optimized_impl = SCNA_OPTIMIZED_IMPL;
+  params->prepare_us = 0;
+  if (params->variant != SCNA_BUILD_VARIANT || params->layout != SCNA_LAYOUT_SERIAL || params->width != 8) {
+    return -2;
+  }
+  if (SCNA_BUILD_VARIANT != SCNA_VARIANT_STAGE1_DYNAMIC_ROW) {
+    for (int i = 0; i < params->width; ++i) params->coeff_bits[i] = scna_lookup_convert_coeff(i);
+  }
+  return 0;
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector hvx_scna_exp2_clamp_vhf(HVX_Vector x) {
+  const HVX_Vector zero = Q6_V_vzero();
+  __fp16 min_hf = (__fp16) SCNA_MIN_INPUT;
+  const HVX_Vector minimum = Q6_Vh_vsplat_R(fp16_to_bits(&min_hf));
+  x = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(minimum, x), minimum, x);
+  return Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x, zero), zero, x);
+}
+
+static HVX_INLINE_ALWAYS void unpack_coeff(uint32_t packed, HVX_Vector *w, HVX_Vector *b) {
+  *w = Q6_Vh_vsplat_R((int) (packed & 0xffff));
+  *b = Q6_Vh_vsplat_R((int) (packed >> 16));
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector qf16_affine_relu_sum(
+    HVX_Vector sum, HVX_Vector x, HVX_Vector w, HVX_Vector b) {
+  HVX_Vector affine_qf = Q6_Vqf16_vmpy_VhfVhf(x, w);
+  affine_qf = Q6_Vqf16_vadd_Vqf16Vhf(affine_qf, b);
+  HVX_Vector affine = Q6_Vhf_equals_Vqf16(affine_qf);
+  affine = Q6_Vhf_vmax_VhfVhf(affine, Q6_V_vzero());
+  return Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(sum, affine));
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector qf16_add(HVX_Vector a, HVX_Vector b) {
+  return Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_VhfVhf(a, b));
+}
+
+static __attribute__((noinline, unused)) HVX_Vector stage1_dynamic_row(HVX_Vector x, int width) {
+  const HVX_Vector zero = Q6_V_vzero();
+  HVX_Vector sum = zero;
+  x = hvx_scna_exp2_clamp_vhf(x);
+  for (int i = 0; i < width; ++i) {
+    HVX_Vector w, b;
+    unpack_coeff(scna_lookup_convert_coeff(i), &w, &b);
+    sum = qf16_affine_relu_sum(sum, x, w, b);
+  }
+  return sum;
+}
+
+static __attribute__((noinline, unused)) HVX_Vector prepared_dynamic_row(
+    HVX_Vector x, const scna_exp2_hvx_params_t *params) {
+  const HVX_Vector zero = Q6_V_vzero();
+  HVX_Vector sum = zero;
+  x = hvx_scna_exp2_clamp_vhf(x);
+  for (int i = 0; i < params->width; ++i) {
+    HVX_Vector w, b;
+    unpack_coeff(params->coeff_bits[i], &w, &b);
+    sum = qf16_affine_relu_sum(sum, x, w, b);
+  }
+  return sum;
+}
+
+static __attribute__((noinline, unused)) void pair_shared_dynamic_qf16(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  const HVX_Vector zero = Q6_V_vzero();
+  HVX_Vector sum0 = zero, sum1 = zero;
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+  for (int i = 0; i < params->width; ++i) {
+    HVX_Vector w, b;
+    unpack_coeff(params->coeff_bits[i], &w, &b); /* one w/b broadcast for two rows */
+    sum0 = qf16_affine_relu_sum(sum0, x0, w, b);
+    sum1 = qf16_affine_relu_sum(sum1, x1, w, b);
+  }
+  *out0 = sum0;
+  *out1 = sum1;
+}
+
+static __attribute__((noinline, unused)) void pair_static_d8_qf16(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  const HVX_Vector zero = Q6_V_vzero();
+  HVX_Vector sum0 = zero, sum1 = zero;
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+#pragma unroll
+  for (int i = 0; i < SCNA_D8_WIDTH; ++i) {
+    HVX_Vector w, b;
+    unpack_coeff(params->coeff_bits[i], &w, &b);
+    sum0 = qf16_affine_relu_sum(sum0, x0, w, b);
+    sum1 = qf16_affine_relu_sum(sum1, x1, w, b);
+  }
+  *out0 = sum0;
+  *out1 = sum1;
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector fma_affine_relu_sum(
+    HVX_Vector sum, HVX_Vector x, HVX_Vector w, HVX_Vector b) {
+  HVX_Vector affine = Q6_Vhf_vmpyacc_VhfVhfVhf(b, x, w);
+  affine = Q6_Vhf_vmax_VhfVhf(affine, Q6_V_vzero());
+  return Q6_Vhf_vadd_VhfVhf(sum, affine);
+}
+
+static HVX_INLINE_ALWAYS void pair_static_d8_fma_body(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  HVX_Vector sum0 = Q6_V_vzero(), sum1 = Q6_V_vzero();
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+#pragma unroll
+  for (int i = 0; i < SCNA_D8_WIDTH; ++i) {
+    HVX_Vector w, b;
+    unpack_coeff(params->coeff_bits[i], &w, &b);
+    sum0 = fma_affine_relu_sum(sum0, x0, w, b);
+    sum1 = fma_affine_relu_sum(sum1, x1, w, b);
+  }
+  *out0 = sum0;
+  *out1 = sum1;
+}
+
+/* Seven active neurons split over four independent accumulation chains.  This
+ * retains the original qf16 arithmetic family while shortening the loop-carried
+ * dependency from eight additions to at most two plus a final tree reduction. */
+static HVX_INLINE_ALWAYS void pair_static_d8_qf16_tree(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  HVX_Vector a0 = Q6_V_vzero(), b0 = Q6_V_vzero(), c0 = Q6_V_vzero(), d0 = Q6_V_vzero();
+  HVX_Vector a1 = Q6_V_vzero(), b1 = Q6_V_vzero(), c1 = Q6_V_vzero(), d1 = Q6_V_vzero();
+  HVX_Vector w, b;
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+#define SCNA_TREE_TERM(index, acc0, acc1) do { \
+    unpack_coeff(params->coeff_bits[(index)], &w, &b); \
+    (acc0) = qf16_affine_relu_sum((acc0), x0, w, b); \
+    (acc1) = qf16_affine_relu_sum((acc1), x1, w, b); \
+  } while (0)
+  SCNA_TREE_TERM(0, a0, a1);
+  SCNA_TREE_TERM(1, b0, b1);
+  SCNA_TREE_TERM(2, c0, c1);
+  SCNA_TREE_TERM(3, d0, d1);
+  SCNA_TREE_TERM(4, a0, a1);
+  SCNA_TREE_TERM(5, b0, b1);
+  SCNA_TREE_TERM(6, c0, c1);
+#undef SCNA_TREE_TERM
+  *out0 = qf16_add(qf16_add(a0, b0), qf16_add(c0, d0));
+  *out1 = qf16_add(qf16_add(a1, b1), qf16_add(c1, d1));
+}
+
+static HVX_INLINE_ALWAYS void pair_piecewise_d8(
+    HVX_Vector x0, HVX_Vector x1, HVX_Vector *out0, HVX_Vector *out1) {
+  x0 = hvx_scna_exp2_clamp_vhf(x0);
+  x1 = hvx_scna_exp2_clamp_vhf(x1);
+  HVX_Vector w0 = Q6_V_vzero(), b0 = Q6_V_vzero();
+  HVX_Vector w1 = Q6_V_vzero(), b1 = Q6_V_vzero();
+#pragma unroll
+  for (int i = 0; i < SCNA_D8_ACTIVE_WIDTH; ++i) {
+    __fp16 threshold_h = scna_exp2_d8_breakpoint[i];
+    __fp16 prefix_w_h = scna_exp2_d8_prefix_w[i];
+    __fp16 prefix_b_h = scna_exp2_d8_prefix_b[i];
+    const HVX_Vector threshold = Q6_Vh_vsplat_R(fp16_to_bits(&threshold_h));
+    const HVX_Vector prefix_w = Q6_Vh_vsplat_R(fp16_to_bits(&prefix_w_h));
+    const HVX_Vector prefix_b = Q6_Vh_vsplat_R(fp16_to_bits(&prefix_b_h));
+    w0 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x0, threshold), prefix_w, w0);
+    b0 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x0, threshold), prefix_b, b0);
+    w1 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x1, threshold), prefix_w, w1);
+    b1 = Q6_V_vmux_QVV(Q6_Q_vcmp_gt_VhfVhf(x1, threshold), prefix_b, b1);
+  }
+  HVX_Vector y0 = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_Vqf16Vhf(Q6_Vqf16_vmpy_VhfVhf(x0, w0), b0));
+  HVX_Vector y1 = Q6_Vhf_equals_Vqf16(Q6_Vqf16_vadd_Vqf16Vhf(Q6_Vqf16_vmpy_VhfVhf(x1, w1), b1));
+  *out0 = Q6_Vhf_vmax_VhfVhf(y0, Q6_V_vzero());
+  *out1 = Q6_Vhf_vmax_VhfVhf(y1, Q6_V_vzero());
+}
+
+static __attribute__((noinline, unused)) void pair_static_d8_fma_noinline(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  pair_static_d8_fma_body(x0, x1, params, out0, out1);
+}
+
+static HVX_INLINE_ALWAYS void pair_static_d8_fma_inline(
+    HVX_Vector x0, HVX_Vector x1, const scna_exp2_hvx_params_t *params,
+    HVX_Vector *out0, HVX_Vector *out1) {
+  pair_static_d8_fma_body(x0, x1, params, out0, out1);
+}
+
+static __attribute__((noinline, unused)) HVX_Vector static_d8_fma_row(
+    HVX_Vector x, const scna_exp2_hvx_params_t *params) {
+  HVX_Vector sum = Q6_V_vzero();
+  x = hvx_scna_exp2_clamp_vhf(x);
+#pragma unroll
+  for (int i = 0; i < SCNA_D8_WIDTH; ++i) {
+    HVX_Vector w, b;
+    unpack_coeff(params->coeff_bits[i], &w, &b);
+    sum = fma_affine_relu_sum(sum, x, w, b);
+  }
+  return sum;
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector optimized_single(HVX_Vector x, const scna_exp2_hvx_params_t *params) {
+  HVX_Vector out, unused;
+  (void) unused;
+#if SCNA_OPTIMIZED_IMPL == 1
+  pair_static_d8_qf16_tree(x, x, params, &out, &unused);
+#elif SCNA_OPTIMIZED_IMPL == 2
+  pair_piecewise_d8(x, x, &out, &unused);
+#else
+  out = static_d8_fma_row(x, params);
+#endif
+  return out;
+}
+
+HVX_Vector hvx_scna_exp2_vhf(HVX_Vector input, const scna_exp2_hvx_params_t *params) {
+  if (params == NULL || params->variant != SCNA_BUILD_VARIANT || params->width != 8) return Q6_V_vzero();
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_SERIAL || \
+    SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PREBROADCAST
+  return scna_d7_serial_single_inline(input, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_TWO_ACC
+  return scna_d7_scalar_single_two_acc_inline(input, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SHORT_CONST
+  return scna_d7_scalar_single_short_const_inline(input, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_TWO_NEURON
+  return scna_d7_scalar_single_inline(input, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SCALE_PROBE
+  return scna_d7_scalar_single_inline(input, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_SCALAR_W || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_NOINLINE || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_INLINE || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_QUAD_PIPELINE || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_COMBINED_CONFIRM
+  return scna_d7_scalar_single_inline(input, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_QF16_TREE_CONTROL
+  HVX_Vector out, unused;
+  pair_static_d8_qf16_tree(input, input, params, &out, &unused);
+  return out;
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_PIECEWISE_CONTROL
+  HVX_Vector out, unused;
+  pair_piecewise_d8(input, input, &out, &unused);
+  return out;
+#else
+#if SCNA_BUILD_VARIANT == 0
+  return stage1_dynamic_row(input, params->width);
+#elif SCNA_BUILD_VARIANT <= 3
+  return prepared_dynamic_row(input, params);
+#elif SCNA_BUILD_VARIANT == 6
+  return optimized_single(input, params);
+#else
+  return static_d8_fma_row(input, params);
+#endif
+#endif
+}
+
+__attribute__((noinline)) HVX_VectorPair hvx_scna_exp2_pair_hot_return_vhf(
+    HVX_Vector input0, HVX_Vector input1, const scna_exp2_hvx_params_t *params) {
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_TWO_ACC
+  return scna_d7_scalar_pair_two_acc_inline(input0, input1, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SHORT_CONST
+  return scna_d7_scalar_pair_short_const_inline(input0, input1, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_TWO_NEURON
+  return scna_d7_scalar_pair_two_neuron_inline(input0, input1, params);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SCALE_PROBE
+  return scna_d7_scalar_pair_inline(input0, input1, params);
+#else
+  return scna_d7_scalar_pair_inline(input0, input1, params);
+#endif
+}
+
+void hvx_scna_exp2_pair_vhf(HVX_Vector input0, HVX_Vector input1,
+                            const scna_exp2_hvx_params_t *params,
+                            HVX_Vector *output0, HVX_Vector *output1) {
+  if (params == NULL || params->variant != SCNA_BUILD_VARIANT || params->width != 8) {
+    *output0 = Q6_V_vzero();
+    *output1 = Q6_V_vzero();
+    return;
+  }
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_SERIAL
+  {
+    const HVX_VectorPair result = scna_d7_serial_pair_inline(input0, input1, params);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_TWO_ACC
+  {
+    const HVX_VectorPair result = scna_d7_scalar_pair_two_acc_inline(input0, input1, params);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SHORT_CONST
+  {
+    const HVX_VectorPair result = scna_d7_scalar_pair_short_const_inline(input0, input1, params);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_TWO_NEURON
+  {
+    const HVX_VectorPair result = scna_d7_scalar_pair_two_neuron_inline(input0, input1, params);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SCALE_PROBE
+  {
+    const HVX_VectorPair result = scna_d7_scalar_pair_inline(input0, input1, params);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_SCALAR_W || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_NOINLINE || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_INLINE || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_QUAD_PIPELINE || \
+      SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_COMBINED_CONFIRM
+  {
+    const HVX_VectorPair result = scna_d7_scalar_pair_inline(input0, input1, params);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PREBROADCAST
+  {
+    const scna_exp2_prebroadcast_t prepared = scna_prebroadcast_prepare_inline(params);
+    const HVX_VectorPair result = scna_prebroadcast_pair_inline(input0, input1, &prepared);
+    *output0 = Q6_V_lo_W(result); *output1 = Q6_V_hi_W(result);
+  }
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_QF16_TREE_CONTROL
+  pair_static_d8_qf16_tree(input0, input1, params, output0, output1);
+#elif SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_PIECEWISE_CONTROL
+  pair_piecewise_d8(input0, input1, output0, output1);
+#else
+#if SCNA_BUILD_VARIANT == 0
+  *output0 = stage1_dynamic_row(input0, params->width);
+  *output1 = stage1_dynamic_row(input1, params->width);
+#elif SCNA_BUILD_VARIANT == 1
+  *output0 = prepared_dynamic_row(input0, params);
+  *output1 = prepared_dynamic_row(input1, params);
+#elif SCNA_BUILD_VARIANT == 2
+  pair_shared_dynamic_qf16(input0, input1, params, output0, output1);
+#elif SCNA_BUILD_VARIANT == 3
+  pair_static_d8_qf16(input0, input1, params, output0, output1);
+#elif SCNA_BUILD_VARIANT == 5
+  pair_static_d8_fma_inline(input0, input1, params, output0, output1);
+#elif SCNA_BUILD_VARIANT == 6 && SCNA_OPTIMIZED_IMPL == 1
+  pair_static_d8_qf16_tree(input0, input1, params, output0, output1);
+#elif SCNA_BUILD_VARIANT == 6 && SCNA_OPTIMIZED_IMPL == 2
+  pair_piecewise_d8(input0, input1, output0, output1);
+#elif SCNA_BUILD_VARIANT == 6 && SCNA_OPTIMIZED_INLINE
+  pair_static_d8_fma_inline(input0, input1, params, output0, output1);
+#else
+  pair_static_d8_fma_noinline(input0, input1, params, output0, output1);
+  /* Keep the noinline experiment as a real call/return boundary.  Without a
+   * post-call observable barrier LLVM may legally turn this into a tail jump,
+   * which would no longer measure the preregistered call-policy difference. */
+  __asm__ volatile("" : : "m"(*output0), "m"(*output1) : "memory");
+#endif
+#endif
+}
+
+static void scna_scalar_fp16_oracle(const __fp16 *input, __fp16 *output) {
+  __fp16 x = *input;
+  if ((float) x < SCNA_MIN_INPUT) x = (__fp16) SCNA_MIN_INPUT;
+  if ((float) x > 0.0f) x = (__fp16) 0.0f;
+  __fp16 sum = (__fp16) 0.0f;
+  for (int i = 0; i < SCNA_D8_WIDTH; ++i) {
+    __fp16 affine = (__fp16) (scna_exp2_d8_bk[i] + x * scna_exp2_d8_wk[i]);
+    if ((float) affine < 0.0f) affine = (__fp16) 0.0f;
+    sum = (__fp16) (sum + affine);
+  }
+  *output = sum;
+}
+
+static HVX_INLINE_ALWAYS HVX_Vector scna_scale_vhf(HVX_Vector input, int scale_hf_bits) {
+  const int duplicated_scale = scale_hf_bits | (scale_hf_bits << 16);
+  return Q6_Vhf_equals_Vqf16(Q6_Vqf16_vmpy_VhfRhf(input, duplicated_scale));
+}
+
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SCALE_PROBE
+static float scna_fp16_float_from_bits(uint16_t bits) {
+  __fp16 value;
+  memcpy(&value, &bits, sizeof(value));
+  return (float) value;
+}
+#endif
+
+int scna_exp2_bench_run(struct ScnaExp2BenchResult *result, int width, int layout, int variant,
+                        int warmup, int iters) {
+  if (result == NULL || width != 8 || layout != SCNA_LAYOUT_SERIAL ||
+      variant != SCNA_BUILD_VARIANT || warmup < 0 || iters <= 0) return -1;
+  _Alignas(VLEN) __fp16 input0[64], input1[64], input2[64], input3[64];
+  _Alignas(VLEN) __fp16 output0[64], output1[64], output2[64], output3[64];
+  _Alignas(VLEN) __fp16 single0[64], single1[64];
+  _Alignas(VLEN) __fp16 pair_ref2[64], pair_ref3[64];
+  scna_exp2_hvx_params_t params;
+  const int mode_flags = LLM_NPU_MODE_SCNA_FP16 | LLM_NPU_MODE_SCNA_D8 | (variant << 10);
+  if (scna_exp2_prepare_hvx_params(&params, mode_flags) != 0) return -2;
+  volatile uint32_t prepare_guard = 0;
+  const int64_t prepare_t0 = HAP_perf_get_qtimer_count();
+  for (int sample = 0; sample < iters; ++sample) {
+#if SCNA_BUILD_VARIANT == 0
+    for (int neuron = 0; neuron < width; ++neuron) prepare_guard ^= scna_lookup_convert_coeff(neuron);
+#else
+    scna_exp2_hvx_params_t prepared_sample;
+    (void) scna_exp2_prepare_hvx_params(&prepared_sample, mode_flags);
+    prepare_guard ^= prepared_sample.coeff_bits[sample & 7];
+#endif
+  }
+  const int64_t prepare_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - prepare_t0);
+  for (int lane = 0; lane < 64; ++lane) {
+    input0[lane] = (__fp16) (-256.0f + 256.0f * lane / 63.0f);
+    input1[lane] = (__fp16) (-16.0f + 16.0f * lane / 63.0f);
+    input2[lane] = (__fp16) (-32.0f + 32.0f * lane / 63.0f);
+    input3[lane] = (__fp16) (-8.0f + 8.0f * lane / 63.0f);
+  }
+  volatile uint16_t timing_nonce = 0;
+  for (int i = 0; i < warmup; ++i) {
+    timing_nonce ^= 1u;
+    const HVX_Vector timed_input = Q6_V_vxor_VV(
+        vmem(input0), Q6_Vh_vsplat_R((int) timing_nonce));
+    vmem(output0) = hvx_scna_exp2_vhf(timed_input, &params);
+    __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) output0) : "memory");
+  }
+  const int64_t t0 = HAP_perf_get_qtimer_count();
+  for (int i = 0; i < iters; ++i) {
+    timing_nonce ^= 1u;
+    const HVX_Vector timed_input = Q6_V_vxor_VV(
+        vmem(input0), Q6_Vh_vsplat_R((int) timing_nonce));
+    vmem(output0) = hvx_scna_exp2_vhf(timed_input, &params);
+    __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) output0) : "memory");
+  }
+  const int64_t elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - t0);
+  vmem(single0) = hvx_scna_exp2_vhf(vmem(input0), &params);
+  vmem(single1) = hvx_scna_exp2_vhf(vmem(input1), &params);
+  for (int i = 0; i < warmup; ++i) {
+    timing_nonce ^= 1u;
+    const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+    hvx_scna_exp2_pair_vhf(Q6_V_vxor_VV(vmem(input0), perturb),
+                           Q6_V_vxor_VV(vmem(input1), perturb), &params,
+                           (HVX_Vector *) output0, (HVX_Vector *) output1);
+    __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) output0),
+                                  "m"(*(const __fp16 (*)[64]) output1) : "memory");
+  }
+  const int64_t pt0 = HAP_perf_get_qtimer_count();
+  for (int i = 0; i < iters; ++i) {
+    timing_nonce ^= 1u;
+    const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+    hvx_scna_exp2_pair_vhf(Q6_V_vxor_VV(vmem(input0), perturb),
+                           Q6_V_vxor_VV(vmem(input1), perturb), &params,
+                           (HVX_Vector *) output0, (HVX_Vector *) output1);
+    __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) output0),
+                                  "m"(*(const __fp16 (*)[64]) output1) : "memory");
+  }
+  const int64_t pair_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - pt0);
+
+  int64_t scale_only_elapsed = 0;
+  int64_t separate_scale_lut_elapsed = 0;
+  int64_t separate_scale_scna_elapsed = 0;
+  int64_t fused_scale_scna_elapsed = 0;
+  float fused_scale_max_abs_diff = 0.0f;
+  int fused_scale_mismatches = 0;
+  int fused_scale_samples = 0;
+  uint32_t scale_checksum = 0;
+  const int scale_head_dim = 128;
+  __fp16 scale_hf = (__fp16) (1.4426950408889634f / sqrtf((float) scale_head_dim));
+  const uint16_t scale_hf_bits = fp16_to_bits(&scale_hf);
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_PAIRRET_SCALE_PROBE
+  {
+    _Alignas(VLEN) __fp16 scale_raw0[64], scale_raw1[64];
+    _Alignas(VLEN) __fp16 scale_sep0[64], scale_sep1[64];
+    _Alignas(VLEN) __fp16 scale_fused0[64], scale_fused1[64];
+    const float scale_value = (float) scale_hf;
+    /* Match the registered Figure-8 attention distribution (fixed seed,
+     * q-head 0 / kv-head 0) but retain raw centered dots before qk_scale. */
+    for (int row = 0; row < 2; ++row) {
+      float raw_scores[64];
+      float raw_rowmax = -INFINITY;
+      for (int col = 0; col < 64; ++col) {
+        const int kpos = (row * 977 + col * 61) % 4096;
+        float sum = 0.0f;
+        for (int lane = 0; lane < scale_head_dim; ++lane) {
+          const size_t qi = (size_t) row * 12 * scale_head_dim + (size_t) lane;
+          const size_t ki = (size_t) kpos * 2 * scale_head_dim + (size_t) lane;
+          const float q = (float) ((int) ((qi * 13u + 7u) % 251u) - 125) * 0.0078125f;
+          const __fp16 k = (__fp16) ((float) ((int) ((ki * 17u + 3u) % 257u) - 128) * 0.00390625f);
+          sum += q * (float) k;
+        }
+        raw_scores[col] = sum;
+        if (sum > raw_rowmax) raw_rowmax = sum;
+      }
+      for (int col = 0; col < 64; ++col) {
+        const __fp16 raw_centered = (__fp16) (raw_scores[col] - raw_rowmax);
+        if (row == 0) scale_raw0[col] = raw_centered; else scale_raw1[col] = raw_centered;
+      }
+    }
+
+    scna_exp2_hvx_params_t fused_params = params;
+    for (int neuron = 0; neuron < SCNA_D8_WIDTH; ++neuron) {
+      const uint32_t packed = params.coeff_bits[neuron];
+      const float weight = scna_fp16_float_from_bits((uint16_t) (packed & 0xffff));
+      __fp16 fused_weight = (__fp16) (weight * scale_value);
+      fused_params.coeff_bits[neuron] = (packed & 0xffff0000u) | fp16_to_bits(&fused_weight);
+    }
+    __fp16 raw_min_hf = (__fp16) (SCNA_MIN_INPUT / scale_value);
+    const int raw_min_hf_bits = fp16_to_bits(&raw_min_hf);
+    const __fp16 *table = (const __fp16 *) vtcm_manager_query_area("safe_softmax::exp2_hf_qf16");
+    if (table == NULL) return -3;
+
+    for (int i = 0; i < warmup; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      vmem(scale_sep0) = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw0), perturb), scale_hf_bits);
+      vmem(scale_sep1) = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw1), perturb), scale_hf_bits);
+      __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) scale_sep0),
+                                    "m"(*(const __fp16 (*)[64]) scale_sep1) : "memory");
+    }
+    int64_t st0 = HAP_perf_get_qtimer_count();
+    for (int i = 0; i < iters; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      vmem(scale_sep0) = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw0), perturb), scale_hf_bits);
+      vmem(scale_sep1) = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw1), perturb), scale_hf_bits);
+      __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) scale_sep0),
+                                    "m"(*(const __fp16 (*)[64]) scale_sep1) : "memory");
+    }
+    scale_only_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - st0);
+
+    for (int i = 0; i < warmup; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      const HVX_Vector scaled0 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw0), perturb), scale_hf_bits);
+      const HVX_Vector scaled1 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw1), perturb), scale_hf_bits);
+      const HVX_VectorPair pair = scna_d7_scalar_pair_inline(scaled0, scaled1, &params);
+      vmem(scale_sep0) = Q6_V_lo_W(pair); vmem(scale_sep1) = Q6_V_hi_W(pair);
+      __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) scale_sep0),
+                                    "m"(*(const __fp16 (*)[64]) scale_sep1) : "memory");
+    }
+    st0 = HAP_perf_get_qtimer_count();
+    for (int i = 0; i < iters; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      const HVX_Vector scaled0 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw0), perturb), scale_hf_bits);
+      const HVX_Vector scaled1 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw1), perturb), scale_hf_bits);
+      const HVX_VectorPair pair = scna_d7_scalar_pair_inline(scaled0, scaled1, &params);
+      vmem(scale_sep0) = Q6_V_lo_W(pair); vmem(scale_sep1) = Q6_V_hi_W(pair);
+      __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) scale_sep0),
+                                    "m"(*(const __fp16 (*)[64]) scale_sep1) : "memory");
+    }
+    separate_scale_scna_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - st0);
+
+    for (int i = 0; i < warmup; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      const HVX_VectorPair pair = scna_d7_scalar_pair_fused_scale_inline(
+          Q6_V_vxor_VV(vmem(scale_raw0), perturb), Q6_V_vxor_VV(vmem(scale_raw1), perturb),
+          &fused_params, raw_min_hf_bits);
+      vmem(scale_fused0) = Q6_V_lo_W(pair); vmem(scale_fused1) = Q6_V_hi_W(pair);
+      __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) scale_fused0),
+                                    "m"(*(const __fp16 (*)[64]) scale_fused1) : "memory");
+    }
+    st0 = HAP_perf_get_qtimer_count();
+    for (int i = 0; i < iters; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      const HVX_VectorPair pair = scna_d7_scalar_pair_fused_scale_inline(
+          Q6_V_vxor_VV(vmem(scale_raw0), perturb), Q6_V_vxor_VV(vmem(scale_raw1), perturb),
+          &fused_params, raw_min_hf_bits);
+      vmem(scale_fused0) = Q6_V_lo_W(pair); vmem(scale_fused1) = Q6_V_hi_W(pair);
+      __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) scale_fused0),
+                                    "m"(*(const __fp16 (*)[64]) scale_fused1) : "memory");
+    }
+    fused_scale_scna_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - st0);
+
+    volatile HVX_Vector *lut_out0 = (volatile HVX_Vector *) scale_sep0;
+    volatile HVX_Vector *lut_out1 = (volatile HVX_Vector *) scale_sep1;
+    for (int i = 0; i < warmup; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      const HVX_Vector scaled0 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw0), perturb), scale_hf_bits);
+      const HVX_Vector scaled1 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw1), perturb), scale_hf_bits);
+      Q6_vgather_ARMVh((HVX_Vector *) lut_out0, (size_t) table, 65535, Q6_Vh_vasl_VhR(scaled0, 1));
+      Q6_vgather_ARMVh((HVX_Vector *) lut_out1, (size_t) table, 65535, Q6_Vh_vasl_VhR(scaled1, 1));
+      const HVX_Vector sync0 = *lut_out0, sync1 = *lut_out1;
+      (void) sync0; (void) sync1;
+    }
+    st0 = HAP_perf_get_qtimer_count();
+    for (int i = 0; i < iters; ++i) {
+      timing_nonce ^= 1u;
+      const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+      const HVX_Vector scaled0 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw0), perturb), scale_hf_bits);
+      const HVX_Vector scaled1 = scna_scale_vhf(Q6_V_vxor_VV(vmem(scale_raw1), perturb), scale_hf_bits);
+      Q6_vgather_ARMVh((HVX_Vector *) lut_out0, (size_t) table, 65535, Q6_Vh_vasl_VhR(scaled0, 1));
+      Q6_vgather_ARMVh((HVX_Vector *) lut_out1, (size_t) table, 65535, Q6_Vh_vasl_VhR(scaled1, 1));
+      const HVX_Vector sync0 = *lut_out0, sync1 = *lut_out1;
+      (void) sync0; (void) sync1;
+    }
+    separate_scale_lut_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - st0);
+
+    const int dense_scale_blocks = 32;
+    for (int block = 0; block < dense_scale_blocks; ++block) {
+      for (int lane = 0; lane < 128; ++lane) {
+        const int sample = block * 128 + lane;
+        const float scaled = -256.0f + 256.0f * sample / (dense_scale_blocks * 128 - 1);
+        const __fp16 raw = (__fp16) (scaled / scale_value);
+        if (lane < 64) scale_raw0[lane] = raw; else scale_raw1[lane - 64] = raw;
+      }
+      const HVX_Vector scaled0 = scna_scale_vhf(vmem(scale_raw0), scale_hf_bits);
+      const HVX_Vector scaled1 = scna_scale_vhf(vmem(scale_raw1), scale_hf_bits);
+      const HVX_VectorPair separate = scna_d7_scalar_pair_inline(scaled0, scaled1, &params);
+      const HVX_VectorPair fused = scna_d7_scalar_pair_fused_scale_inline(
+          vmem(scale_raw0), vmem(scale_raw1), &fused_params, raw_min_hf_bits);
+      vmem(scale_sep0) = Q6_V_lo_W(separate); vmem(scale_sep1) = Q6_V_hi_W(separate);
+      vmem(scale_fused0) = Q6_V_lo_W(fused); vmem(scale_fused1) = Q6_V_hi_W(fused);
+      for (int lane = 0; lane < 64; ++lane) {
+        const float diff0 = fabsf((float) scale_sep0[lane] - (float) scale_fused0[lane]);
+        const float diff1 = fabsf((float) scale_sep1[lane] - (float) scale_fused1[lane]);
+        if (diff0 > fused_scale_max_abs_diff) fused_scale_max_abs_diff = diff0;
+        if (diff1 > fused_scale_max_abs_diff) fused_scale_max_abs_diff = diff1;
+        if (memcmp(&scale_sep0[lane], &scale_fused0[lane], sizeof(__fp16)) != 0) ++fused_scale_mismatches;
+        if (memcmp(&scale_sep1[lane], &scale_fused1[lane], sizeof(__fp16)) != 0) ++fused_scale_mismatches;
+        uint16_t bits0, bits1;
+        memcpy(&bits0, &scale_fused0[lane], sizeof(bits0));
+        memcpy(&bits1, &scale_fused1[lane], sizeof(bits1));
+        scale_checksum = (scale_checksum << 5) ^ (scale_checksum >> 2) ^ bits0 ^ ((uint32_t) bits1 << 16);
+      }
+    }
+    fused_scale_samples = dense_scale_blocks * 128;
+  }
+#endif
+
+  hvx_scna_exp2_pair_vhf(vmem(input2), vmem(input3), &params,
+                         (HVX_Vector *) pair_ref2, (HVX_Vector *) pair_ref3);
+  for (int i = 0; i < warmup; ++i) {
+    timing_nonce ^= 1u;
+    const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_QUAD_PIPELINE || \
+    SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_COMBINED_CONFIRM
+    scna_d7_scalar_quad_inline(Q6_V_vxor_VV(vmem(input0), perturb),
+                               Q6_V_vxor_VV(vmem(input1), perturb),
+                               Q6_V_vxor_VV(vmem(input2), perturb),
+                               Q6_V_vxor_VV(vmem(input3), perturb), &params,
+                               (HVX_Vector *) output0, (HVX_Vector *) output1,
+                               (HVX_Vector *) output2, (HVX_Vector *) output3);
+#else
+    hvx_scna_exp2_pair_vhf(Q6_V_vxor_VV(vmem(input0), perturb),
+                           Q6_V_vxor_VV(vmem(input1), perturb), &params,
+                           (HVX_Vector *) output0, (HVX_Vector *) output1);
+    hvx_scna_exp2_pair_vhf(Q6_V_vxor_VV(vmem(input2), perturb),
+                           Q6_V_vxor_VV(vmem(input3), perturb), &params,
+                           (HVX_Vector *) output2, (HVX_Vector *) output3);
+#endif
+  }
+  const int64_t qt0 = HAP_perf_get_qtimer_count();
+  for (int i = 0; i < iters; ++i) {
+    timing_nonce ^= 1u;
+    const HVX_Vector perturb = Q6_Vh_vsplat_R((int) timing_nonce);
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_QUAD_PIPELINE || \
+    SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_COMBINED_CONFIRM
+    scna_d7_scalar_quad_inline(Q6_V_vxor_VV(vmem(input0), perturb),
+                               Q6_V_vxor_VV(vmem(input1), perturb),
+                               Q6_V_vxor_VV(vmem(input2), perturb),
+                               Q6_V_vxor_VV(vmem(input3), perturb), &params,
+                               (HVX_Vector *) output0, (HVX_Vector *) output1,
+                               (HVX_Vector *) output2, (HVX_Vector *) output3);
+#else
+    hvx_scna_exp2_pair_vhf(Q6_V_vxor_VV(vmem(input0), perturb),
+                           Q6_V_vxor_VV(vmem(input1), perturb), &params,
+                           (HVX_Vector *) output0, (HVX_Vector *) output1);
+    hvx_scna_exp2_pair_vhf(Q6_V_vxor_VV(vmem(input2), perturb),
+                           Q6_V_vxor_VV(vmem(input3), perturb), &params,
+                           (HVX_Vector *) output2, (HVX_Vector *) output3);
+#endif
+    __asm__ volatile("" : : "m"(*(const __fp16 (*)[64]) output0),
+                                  "m"(*(const __fp16 (*)[64]) output1),
+                                  "m"(*(const __fp16 (*)[64]) output2),
+                                  "m"(*(const __fp16 (*)[64]) output3) : "memory");
+  }
+  const int64_t quad_elapsed = HAP_perf_qtimer_count_to_us(HAP_perf_get_qtimer_count() - qt0);
+
+  /* Timed inputs deliberately vary to defeat loop-invariant code motion.
+   * Restore the canonical outputs before correctness and checksum gates. */
+  hvx_scna_exp2_pair_vhf(vmem(input0), vmem(input1), &params,
+                         (HVX_Vector *) output0, (HVX_Vector *) output1);
+#if SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_D7_QUAD_PIPELINE || \
+    SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_COMBINED_CONFIRM
+  scna_d7_scalar_quad_inline(vmem(input0), vmem(input1), vmem(input2), vmem(input3), &params,
+                             (HVX_Vector *) output0, (HVX_Vector *) output1,
+                             (HVX_Vector *) output2, (HVX_Vector *) output3);
+#else
+  hvx_scna_exp2_pair_vhf(vmem(input2), vmem(input3), &params,
+                         (HVX_Vector *) output2, (HVX_Vector *) output3);
+#endif
+
+  int64_t expand_elapsed = 0, affine_relu_elapsed = 0, reduce_elapsed = 0, pack_elapsed = 0;
+
+  int paired_single_mismatches = 0;
+  int quad_pair_mismatches = 0;
+  float pair_max_abs_diff = 0.0f;
+  for (int lane = 0; lane < 64; ++lane) {
+    if (memcmp(&output0[lane], &single0[lane], sizeof(__fp16)) != 0) ++paired_single_mismatches;
+    if (memcmp(&output1[lane], &single1[lane], sizeof(__fp16)) != 0) ++paired_single_mismatches;
+    const float diff0 = fabsf((float) output0[lane] - (float) single0[lane]);
+    const float diff1 = fabsf((float) output1[lane] - (float) single1[lane]);
+    if (diff0 > pair_max_abs_diff) pair_max_abs_diff = diff0;
+    if (diff1 > pair_max_abs_diff) pair_max_abs_diff = diff1;
+  }
+  for (int lane = 0; lane < 64; ++lane) {
+    if (memcmp(&output2[lane], &pair_ref2[lane], sizeof(__fp16)) != 0) ++quad_pair_mismatches;
+    if (memcmp(&output3[lane], &pair_ref3[lane], sizeof(__fp16)) != 0) ++quad_pair_mismatches;
+  }
+  int canonical_oracle_mismatches = 0;
+  for (int lane = 0; lane < 64; ++lane) {
+    const __fp16 canonical_input = (__fp16) (-256.0f + 256.0f * lane / 63.0f);
+    __fp16 expected;
+    scna_scalar_fp16_oracle(&canonical_input, &expected);
+    if (memcmp(&single0[lane], &expected, sizeof(__fp16)) != 0) ++canonical_oracle_mismatches;
+  }
+
+  double sq = 0.0;
+  float max_abs = 0.0f;
+  int nan_count = 0;
+  uint32_t checksum = 0;
+  for (int lane = 0; lane < 64; ++lane) {
+    const float error = (float) output0[lane] - exp2f((float) input0[lane]);
+    sq += (double) error * error;
+    if (fabsf(error) > max_abs) max_abs = fabsf(error);
+    if (!isfinite((float) output0[lane])) ++nan_count;
+    uint16_t bits;
+    memcpy(&bits, &output0[lane], sizeof(bits));
+    checksum = (checksum << 5) ^ (checksum >> 2) ^ bits;
+  }
+
+  const int dense_blocks = 64;
+  double dense_sq = 0.0;
+  float dense_max_abs = 0.0f;
+  float previous = -INFINITY;
+  int monotonic = 0, negative = 0;
+  for (int block = 0; block < dense_blocks; ++block) {
+    for (int lane = 0; lane < 64; ++lane) {
+      const int sample = block * 64 + lane;
+      input0[lane] = (__fp16) (-256.0f + 256.0f * sample / (dense_blocks * 64 - 1));
+    }
+    vmem(output0) = hvx_scna_exp2_vhf(vmem(input0), &params);
+    for (int lane = 0; lane < 64; ++lane) {
+      const float actual = (float) output0[lane];
+      const float error = actual - exp2f((float) input0[lane]);
+      dense_sq += (double) error * error;
+      if (fabsf(error) > dense_max_abs) dense_max_abs = fabsf(error);
+      if (actual < previous) ++monotonic;
+      if (actual < 0.0f) ++negative;
+      previous = actual;
+    }
+  }
+
+  const int random_blocks = 16;
+  uint32_t random_state = UINT32_C(0x5c4e4138);
+  double random_sq = 0.0;
+  float random_max_abs = 0.0f;
+  int random_nonfinite = 0;
+  for (int block = 0; block < random_blocks; ++block) {
+    for (int lane = 0; lane < 64; ++lane) {
+      random_state = random_state * UINT32_C(1664525) + UINT32_C(1013904223);
+      input0[lane] = (__fp16) (-256.0f * (float) (random_state & 0xffff) / 65535.0f);
+    }
+    vmem(output0) = hvx_scna_exp2_vhf(vmem(input0), &params);
+    for (int lane = 0; lane < 64; ++lane) {
+      const float actual = (float) output0[lane];
+      const float error = actual - exp2f((float) input0[lane]);
+      random_sq += (double) error * error;
+      if (fabsf(error) > random_max_abs) random_max_abs = fabsf(error);
+      if (!isfinite(actual)) ++random_nonfinite;
+    }
+  }
+
+  double native_sq = 0.0;
+  float native_max_abs = 0.0f;
+  for (int lane = 0; lane < 64; ++lane) {
+    input0[lane] = (__fp16) (-16.0f + 16.0f * lane / 63.0f);
+  }
+  vmem(output0) = hvx_my_exp2_xqf_vhf(vmem(input0));
+  for (int lane = 0; lane < 64; ++lane) {
+    const float error = (float) output0[lane] - exp2f((float) input0[lane]);
+    native_sq += (double) error * error;
+    if (fabsf(error) > native_max_abs) native_max_abs = fabsf(error);
+  }
+  double native_qf16_sq = 0.0;
+  float native_qf16_max_abs = 0.0f;
+  const HVX_Vector native_qf16_input = Q6_Vqf16_vsub_VhfVhf(vmem(input0), Q6_V_vzero());
+  vmem(output0) = hvx_my_exp2_vhf_vqf16(native_qf16_input);
+  for (int lane = 0; lane < 64; ++lane) {
+    const float error = (float) output0[lane] - exp2f((float) input0[lane]);
+    native_qf16_sq += (double) error * error;
+    if (fabsf(error) > native_qf16_max_abs) native_qf16_max_abs = fabsf(error);
+  }
+
+  for (int lane = 0; lane < 64; ++lane) input0[lane] = (__fp16) 1.0f;
+  HVX_VectorPair ones_pair = hvx_my_vhf_to_wqf32(vmem(input0));
+  HVX_Vector ones_sum = Q6_Vqf32_vadd_Vqf32Vqf32(Q6_V_lo_W(ones_pair), Q6_V_hi_W(ones_pair));
+  for (int shift = 64; shift >= 4; shift >>= 1) {
+    ones_sum = Q6_Vqf32_vadd_Vqf32Vqf32(ones_sum, Q6_V_vror_VR(ones_sum, shift));
+  }
+  _Alignas(VLEN) float rowsum_probe_lanes[32];
+  vmem(rowsum_probe_lanes) = Q6_Vsf_equals_Vqf32(ones_sum);
+  const float rowsum_ones_probe = rowsum_probe_lanes[31];
+
+  /* Exercise the reciprocal used by the common Attention output-scale path.
+   * The largest FP16 subnormal has a finite FP16 reciprocal; zero is the only
+   * input in this probe for which infinity is the required result. */
+  for (int lane = 0; lane < 64; ++lane) input0[lane] = (__fp16) 1.0f;
+  {
+    const uint16_t largest_subnormal_bits = 0x03ff;
+    memcpy(&input0[0], &largest_subnormal_bits, sizeof(largest_subnormal_bits));
+  }
+  input0[1] = (__fp16) 0.0f;
+  for (int exponent = -10; exponent <= 10; ++exponent) {
+    input0[exponent + 12] = (__fp16) ldexpf(1.0f, exponent);
+  }
+  input0[33] = (__fp16) 1.5f;
+  input0[34] = (__fp16) 7.75f;
+  input0[35] = (__fp16) 64.0f;
+  input0[36] = (__fp16) 511.5f;
+  input0[37] = (__fp16) 4096.0f;
+  vmem(output0) = hvx_my_inv_vhf(vmem(input0));
+  float reciprocal_max_relative_error = 0.0f;
+  int reciprocal_nonfinite_count = 0;
+  for (int lane = 0; lane < 64; ++lane) {
+    const float x = (float) input0[lane];
+    const float actual = (float) output0[lane];
+    if (x == 0.0f) continue;
+    if (!isfinite(actual)) {
+      ++reciprocal_nonfinite_count;
+      continue;
+    }
+    const float expected = 1.0f / x;
+    const float relative_error = fabsf(actual - expected) / expected;
+    if (relative_error > reciprocal_max_relative_error) {
+      reciprocal_max_relative_error = relative_error;
+    }
+  }
+  const int reciprocal_zero_inf_pass = isinf((float) output0[1]) ? 1 : 0;
+
+  *result = (struct ScnaExp2BenchResult) {
+    .schema_version = 4, .kernel_impl = SCNA_KERNEL_IMPL,
+    .width = width, .layout = layout, .variant = variant, .lanes = 64, .iters = iters,
+    .build_variant = SCNA_BUILD_VARIANT, .build_optimized_inline = SCNA_OPTIMIZED_INLINE ? 1 : 0,
+    .build_optimized_impl = SCNA_OPTIMIZED_IMPL,
+    .dead_neurons_removed = SCNA_KERNEL_IMPL == SCNA_KERNEL_IMPL_STATIC_D8_REF ? 0 : 1,
+    .elapsed_us = elapsed, .pair_elapsed_us = pair_elapsed, .quad_elapsed_us = quad_elapsed,
+    .prepare_elapsed_us = prepare_elapsed,
+    .expand_elapsed_us = expand_elapsed, .affine_relu_elapsed_us = affine_relu_elapsed,
+    .reduce_elapsed_us = reduce_elapsed, .pack_elapsed_us = pack_elapsed,
+    .rmse = (float) sqrt(sq / 64.0), .max_abs_error = max_abs,
+    .dense_rmse = (float) sqrt(dense_sq / (dense_blocks * 64)),
+    .dense_max_abs_error = dense_max_abs,
+    .random_rmse = (float) sqrt(random_sq / (random_blocks * 64)),
+    .random_max_abs_error = random_max_abs, .pair_max_abs_diff = pair_max_abs_diff,
+    .dense_samples = dense_blocks * 64, .random_samples = random_blocks * 64,
+    .random_nonfinite_count = random_nonfinite, .monotonic_violations = monotonic,
+    .negative_count = negative, .nan_count = nan_count,
+    .lane_oracle_mismatches = 0,
+    .canonical_oracle_mismatches = canonical_oracle_mismatches,
+    .paired_single_mismatches = paired_single_mismatches,
+    .quad_pair_mismatches = quad_pair_mismatches,
+    .native_exp2_rmse = (float) sqrt(native_sq / 64.0),
+    .native_exp2_max_abs_error = native_max_abs,
+    .native_qf16_exp2_rmse = (float) sqrt(native_qf16_sq / 64.0),
+    .native_qf16_exp2_max_abs_error = native_qf16_max_abs,
+    .rowsum_ones_probe = rowsum_ones_probe,
+    .reciprocal_max_relative_error = reciprocal_max_relative_error,
+    .reciprocal_nonfinite_count = reciprocal_nonfinite_count,
+    .reciprocal_zero_inf_pass = reciprocal_zero_inf_pass,
+    .checksum_bits = checksum ^ prepare_guard,
+    .scale_head_dim = scale_head_dim, .scale_fp16_bits = scale_hf_bits,
+    .scale_only_elapsed_us = scale_only_elapsed,
+    .separate_scale_lut_elapsed_us = separate_scale_lut_elapsed,
+    .separate_scale_scna_elapsed_us = separate_scale_scna_elapsed,
+    .fused_scale_scna_elapsed_us = fused_scale_scna_elapsed,
+    .fused_scale_max_abs_diff = fused_scale_max_abs_diff,
+    .fused_scale_mismatches = fused_scale_mismatches,
+    .fused_scale_samples = fused_scale_samples,
+    .scale_checksum_bits = scale_checksum,
+  };
+  return 0;
+}

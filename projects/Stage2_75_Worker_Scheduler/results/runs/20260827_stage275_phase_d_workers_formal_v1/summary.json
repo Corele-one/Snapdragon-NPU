@@ -1,0 +1,4795 @@
+{
+  "aggregation": "component timers are summed across task records per iteration; host_us remains wall time",
+  "bootstrap_draws": 10000,
+  "groups": {
+    "exp_lut|32|4096|16|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 33.0,
+          "ci_low": 32.0,
+          "median": 33.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 2140.0,
+          "ci_low": 2114.0,
+          "median": 2128.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 286.0,
+          "ci_low": 281.5,
+          "median": 283.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 7.0,
+          "ci_low": 6.5,
+          "median": 7.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1708.0,
+          "ci_low": 1688.0,
+          "median": 1699.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 15.5,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 22.0,
+          "ci_low": 22.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1090.0,
+          "ci_low": 1077.5,
+          "median": 1085.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 243.0,
+          "ci_low": 236.0,
+          "median": 240.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w1_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w1_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w1_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w1_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w1_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|16|2|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "2"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 46.0,
+          "ci_low": 44.5,
+          "median": 45.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1273.0,
+          "ci_low": 1254.5,
+          "median": 1265.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 375.0,
+          "ci_low": 368.0,
+          "median": 371.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 10.0,
+          "ci_low": 8.0,
+          "median": 9.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 26.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1827.0,
+          "ci_low": 1803.0,
+          "median": 1816.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 18.0,
+          "ci_low": 16.0,
+          "median": 18.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 27.0,
+          "ci_low": 27.0,
+          "median": 27.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1099.5,
+          "ci_low": 1071.0,
+          "median": 1084.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 241.5,
+          "ci_low": 235.0,
+          "median": 238.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w2_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w2_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w2_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w2_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w2_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|16|3|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "3"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 42.0,
+          "ci_low": 40.0,
+          "median": 41.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1230.0,
+          "ci_low": 1203.0,
+          "median": 1210.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 327.0,
+          "ci_low": 319.0,
+          "median": 323.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 8.0,
+          "ci_low": 6.5,
+          "median": 7.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 25.0,
+          "ci_low": 23.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1775.0,
+          "ci_low": 1741.0,
+          "median": 1753.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 17.0,
+          "ci_low": 17.0,
+          "median": 17.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 25.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1067.0,
+          "ci_low": 1046.0,
+          "median": 1056.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 259.0,
+          "ci_low": 249.0,
+          "median": 254.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 3145728.0,
+          "ci_low": 3145728.0,
+          "median": 3145728.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w3_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w3_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w3_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w3_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w3_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|16|4|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "4"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 50.0,
+          "ci_low": 47.5,
+          "median": 48.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 725.0,
+          "ci_low": 713.0,
+          "median": 718.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 385.0,
+          "ci_low": 370.5,
+          "median": 378.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.5,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1863.0,
+          "ci_low": 1843.0,
+          "median": 1853.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 31.0,
+          "ci_low": 30.0,
+          "median": 31.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1071.5,
+          "ci_low": 1064.0,
+          "median": 1068.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 282.0,
+          "ci_low": 264.0,
+          "median": 277.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w4_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w4_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w4_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w4_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w4_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|16|5|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "5"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 48.0,
+          "ci_low": 45.0,
+          "median": 46.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 723.5,
+          "ci_low": 707.5,
+          "median": 714.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 380.0,
+          "ci_low": 373.0,
+          "median": 376.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 23.5,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1865.0,
+          "ci_low": 1842.0,
+          "median": 1855.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 28.0,
+          "ci_low": 28.0,
+          "median": 28.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 31.0,
+          "ci_low": 29.0,
+          "median": 30.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1079.0,
+          "ci_low": 1066.0,
+          "median": 1071.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 288.0,
+          "ci_low": 269.0,
+          "median": 279.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w5_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w5_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w5_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w5_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w5_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|16|6|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "6"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 45.0,
+          "ci_low": 42.5,
+          "median": 44.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 742.0,
+          "ci_low": 707.0,
+          "median": 724.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 381.0,
+          "ci_low": 369.5,
+          "median": 373.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1867.0,
+          "ci_low": 1842.0,
+          "median": 1853.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 27.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 31.0,
+          "ci_low": 29.0,
+          "median": 30.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1079.5,
+          "ci_low": 1064.0,
+          "median": 1074.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 292.0,
+          "ci_low": 271.5,
+          "median": 283.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w6_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w6_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w6_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w6_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_w6_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|16|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 44.5,
+          "ci_low": 43.0,
+          "median": 43.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 735.0,
+          "ci_low": 688.0,
+          "median": 709.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 375.0,
+          "ci_low": 365.5,
+          "median": 369.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 4.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 23.5,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1855.0,
+          "ci_low": 1832.0,
+          "median": 1843.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 24.0,
+          "ci_low": 20.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 31.0,
+          "ci_low": 29.0,
+          "median": 30.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1068.0,
+          "ci_low": 1053.0,
+          "median": 1060.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 298.5,
+          "ci_low": 281.0,
+          "median": 287.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r16_wauto_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|32|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 32,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 33.0,
+          "ci_low": 32.0,
+          "median": 33.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1882.5,
+          "ci_low": 1857.0,
+          "median": 1866.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 140.0,
+          "ci_low": 134.0,
+          "median": 137.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 22.0,
+          "ci_low": 22.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1618.0,
+          "ci_low": 1561.0,
+          "median": 1594.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 14.0,
+          "ci_low": 14.0,
+          "median": 14.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 32.0,
+          "ci_low": 32.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 22.0,
+          "ci_low": 22.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1259.5,
+          "ci_low": 1214.0,
+          "median": 1235.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 124.0,
+          "ci_low": 119.0,
+          "median": 121.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_w1_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_w1_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_w1_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_w1_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_w1_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|32|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 32,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 46.0,
+          "ci_low": 45.0,
+          "median": 45.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1096.0,
+          "ci_low": 1073.0,
+          "median": 1081.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 178.0,
+          "ci_low": 174.0,
+          "median": 176.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 1635.0,
+          "ci_low": 1618.0,
+          "median": 1626.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 32.0,
+          "ci_low": 32.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 25.0,
+          "ci_low": 25.0,
+          "median": 25.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1239.0,
+          "ci_low": 1224.0,
+          "median": 1230.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 103.0,
+          "ci_low": 100.0,
+          "median": 101.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r32_wauto_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|4|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 4,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 76.0,
+          "ci_low": 70.0,
+          "median": 73.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 5025.5,
+          "ci_low": 4888.0,
+          "median": 4940.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 1138.0,
+          "ci_low": 1116.0,
+          "median": 1129.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 26.0,
+          "ci_low": 23.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 29.0,
+          "ci_low": 27.0,
+          "median": 28.5,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 4045.0,
+          "ci_low": 3882.0,
+          "median": 3941.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 22.0,
+          "ci_low": 21.0,
+          "median": 21.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1184.0,
+          "ci_low": 1152.0,
+          "median": 1167.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 1542.0,
+          "ci_low": 1454.0,
+          "median": 1485.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_w1_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_w1_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_w1_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_w1_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_w1_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|4|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 4,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 113.0,
+          "ci_low": 107.0,
+          "median": 110.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1416.0,
+          "ci_low": 1395.5,
+          "median": 1406.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 1946.0,
+          "ci_low": 1864.0,
+          "median": 1896.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 26.0,
+          "ci_low": 24.0,
+          "median": 25.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 44.0,
+          "ci_low": 42.0,
+          "median": 43.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 5345.0,
+          "ci_low": 5176.0,
+          "median": 5259.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 23.0,
+          "ci_low": 21.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 51.0,
+          "ci_low": 48.0,
+          "median": 49.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1088.0,
+          "ci_low": 1072.0,
+          "median": 1080.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 2085.0,
+          "ci_low": 1971.0,
+          "median": 2035.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 6291456.0,
+          "ci_low": 6291456.0,
+          "median": 6291456.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/exp_lut_q32_kv4096_r4_wauto_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 36.0,
+          "ci_low": 33.0,
+          "median": 35.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 3102.0,
+          "ci_low": 3021.5,
+          "median": 3060.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 524.0,
+          "ci_low": 517.0,
+          "median": 522.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 12.0,
+          "ci_low": 10.0,
+          "median": 11.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2503.0,
+          "ci_low": 2457.0,
+          "median": 2477.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 27.0,
+          "ci_low": 26.0,
+          "median": 26.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1082.0,
+          "ci_low": 1053.0,
+          "median": 1073.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 782.5,
+          "ci_low": 766.0,
+          "median": 778.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w1_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w1_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w1_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w1_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w1_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|2|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "2"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 56.0,
+          "ci_low": 52.0,
+          "median": 54.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1906.0,
+          "ci_low": 1872.0,
+          "median": 1885.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 724.0,
+          "ci_low": 706.0,
+          "median": 713.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 18.0,
+          "ci_low": 17.0,
+          "median": 18.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 32.0,
+          "ci_low": 30.5,
+          "median": 31.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2754.5,
+          "ci_low": 2725.5,
+          "median": 2742.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 20.0,
+          "ci_low": 18.0,
+          "median": 20.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 36.0,
+          "ci_low": 35.0,
+          "median": 36.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1141.5,
+          "ci_low": 1123.0,
+          "median": 1129.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 747.0,
+          "ci_low": 737.0,
+          "median": 740.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w2_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w2_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w2_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w2_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w2_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|3|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "3"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 53.0,
+          "ci_low": 50.5,
+          "median": 52.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1396.0,
+          "ci_low": 1372.0,
+          "median": 1381.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 673.0,
+          "ci_low": 659.0,
+          "median": 666.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 15.5,
+          "ci_low": 13.0,
+          "median": 14.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 31.0,
+          "ci_low": 30.0,
+          "median": 30.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2554.0,
+          "ci_low": 2528.0,
+          "median": 2543.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 20.0,
+          "ci_low": 18.0,
+          "median": 19.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 32.0,
+          "ci_low": 31.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1069.0,
+          "ci_low": 1046.0,
+          "median": 1060.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 671.0,
+          "ci_low": 657.0,
+          "median": 666.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 3145728.0,
+          "ci_low": 3145728.0,
+          "median": 3145728.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w3_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w3_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w3_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w3_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w3_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|4|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "4"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 66.0,
+          "ci_low": 59.0,
+          "median": 64.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 993.5,
+          "ci_low": 964.0,
+          "median": 980.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 773.5,
+          "ci_low": 760.0,
+          "median": 768.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 13.0,
+          "ci_low": 11.5,
+          "median": 12.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 29.0,
+          "ci_low": 27.0,
+          "median": 28.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2582.0,
+          "ci_low": 2533.0,
+          "median": 2558.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 23.0,
+          "ci_low": 22.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 40.0,
+          "ci_low": 38.0,
+          "median": 39.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1038.0,
+          "ci_low": 1021.5,
+          "median": 1029.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 606.0,
+          "ci_low": 577.0,
+          "median": 595.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w4_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w4_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w4_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w4_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w4_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|5|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "5"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 55.0,
+          "ci_low": 52.0,
+          "median": 53.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 968.0,
+          "ci_low": 952.5,
+          "median": 957.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 751.5,
+          "ci_low": 731.0,
+          "median": 738.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 10.0,
+          "ci_low": 8.0,
+          "median": 9.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 27.0,
+          "ci_low": 26.0,
+          "median": 27.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2455.0,
+          "ci_low": 2405.0,
+          "median": 2439.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 25.5,
+          "ci_low": 23.0,
+          "median": 24.5,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 39.0,
+          "ci_low": 37.0,
+          "median": 38.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1019.0,
+          "ci_low": 1004.0,
+          "median": 1008.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 532.0,
+          "ci_low": 517.0,
+          "median": 524.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 5242880.0,
+          "ci_low": 5242880.0,
+          "median": 5242880.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w5_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w5_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w5_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w5_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w5_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|6|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "6"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 95.0,
+          "ci_low": 91.0,
+          "median": 93.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1042.0,
+          "ci_low": 1006.0,
+          "median": 1021.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 849.0,
+          "ci_low": 826.0,
+          "median": 835.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 17.0,
+          "ci_low": 15.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 32.0,
+          "ci_low": 31.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2715.0,
+          "ci_low": 2662.0,
+          "median": 2682.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 26.0,
+          "ci_low": 23.0,
+          "median": 24.5,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 59.0,
+          "ci_low": 54.0,
+          "median": 56.5,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1092.0,
+          "ci_low": 1070.0,
+          "median": 1080.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 557.0,
+          "ci_low": 547.0,
+          "median": 551.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 6291456.0,
+          "ci_low": 6291456.0,
+          "median": 6291456.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w6_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w6_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w6_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w6_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_w6_s5.log"
+      ]
+    },
+    "exp_lut|32|4096|8|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "exp_lut",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 94.0,
+          "ci_low": 87.0,
+          "median": 90.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1020.0,
+          "ci_low": 1007.0,
+          "median": 1012.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 851.0,
+          "ci_low": 830.0,
+          "median": 837.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 16.0,
+          "ci_low": 13.0,
+          "median": 14.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 29.0,
+          "ci_low": 26.0,
+          "median": 27.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2712.0,
+          "ci_low": 2678.0,
+          "median": 2697.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 27.0,
+          "ci_low": 25.0,
+          "median": 26.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 59.0,
+          "ci_low": 55.0,
+          "median": 57.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1089.0,
+          "ci_low": 1080.5,
+          "median": 1085.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 557.5,
+          "ci_low": 543.0,
+          "median": 550.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 6291456.0,
+          "ci_low": 6291456.0,
+          "median": 6291456.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/exp_lut_q32_kv4096_r8_wauto_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 16.0,
+          "ci_low": 15.0,
+          "median": 15.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 2522.0,
+          "ci_low": 2504.0,
+          "median": 2512.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 270.0,
+          "ci_low": 268.0,
+          "median": 269.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 20.0,
+          "ci_low": 20.0,
+          "median": 20.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2114.5,
+          "ci_low": 2105.0,
+          "median": 2109.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 23.0,
+          "ci_low": 23.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1552.0,
+          "ci_low": 1544.0,
+          "median": 1548.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 967.0,
+          "ci_low": 965.0,
+          "median": 966.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 216.0,
+          "ci_low": 211.0,
+          "median": 213.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w1_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w1_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w1_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w1_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w1_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|2|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "2"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 25.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1433.0,
+          "ci_low": 1410.0,
+          "median": 1424.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 368.5,
+          "ci_low": 361.0,
+          "median": 365.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 7.0,
+          "ci_low": 6.5,
+          "median": 7.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2175.0,
+          "ci_low": 2160.5,
+          "median": 2168.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 27.0,
+          "ci_low": 26.0,
+          "median": 27.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1510.0,
+          "ci_low": 1495.0,
+          "median": 1504.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 974.0,
+          "ci_low": 970.0,
+          "median": 972.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 206.0,
+          "ci_low": 200.0,
+          "median": 203.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w2_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w2_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w2_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w2_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w2_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|3|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "3"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 23.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1357.5,
+          "ci_low": 1343.0,
+          "median": 1352.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 320.0,
+          "ci_low": 314.5,
+          "median": 317.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 6.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 22.0,
+          "ci_low": 21.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2150.5,
+          "ci_low": 2127.5,
+          "median": 2137.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1513.0,
+          "ci_low": 1492.0,
+          "median": 1503.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 983.0,
+          "ci_low": 976.5,
+          "median": 980.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 228.0,
+          "ci_low": 221.0,
+          "median": 224.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 3145728.0,
+          "ci_low": 3145728.0,
+          "median": 3145728.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w3_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w3_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w3_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w3_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w3_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|4|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "4"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 35.5,
+          "ci_low": 32.0,
+          "median": 34.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 791.5,
+          "ci_low": 776.0,
+          "median": 783.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 386.0,
+          "ci_low": 378.0,
+          "median": 382.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 6.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 23.0,
+          "ci_low": 22.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2227.0,
+          "ci_low": 2207.0,
+          "median": 2218.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 20.0,
+          "ci_low": 20.0,
+          "median": 20.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 30.0,
+          "ci_low": 29.0,
+          "median": 29.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1495.0,
+          "ci_low": 1478.0,
+          "median": 1487.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 999.0,
+          "ci_low": 994.0,
+          "median": 997.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 230.0,
+          "ci_low": 223.0,
+          "median": 226.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w4_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w4_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w4_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w4_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w4_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|5|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "5"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 34.0,
+          "ci_low": 32.0,
+          "median": 33.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 818.0,
+          "ci_low": 777.0,
+          "median": 782.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 384.0,
+          "ci_low": 377.5,
+          "median": 382.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 23.0,
+          "ci_low": 22.5,
+          "median": 23.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2226.5,
+          "ci_low": 2210.0,
+          "median": 2220.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 24.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 31.0,
+          "ci_low": 30.0,
+          "median": 30.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1502.0,
+          "ci_low": 1489.0,
+          "median": 1496.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1000.5,
+          "ci_low": 997.0,
+          "median": 999.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 228.0,
+          "ci_low": 223.0,
+          "median": 225.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w5_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w5_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w5_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w5_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w5_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|6|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "6"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 34.0,
+          "ci_low": 31.0,
+          "median": 32.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 794.0,
+          "ci_low": 779.0,
+          "median": 785.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 377.0,
+          "ci_low": 371.0,
+          "median": 374.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 23.0,
+          "ci_low": 22.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2225.0,
+          "ci_low": 2212.5,
+          "median": 2219.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 24.0,
+          "ci_low": 20.0,
+          "median": 20.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 30.5,
+          "ci_low": 29.0,
+          "median": 29.5,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1500.0,
+          "ci_low": 1489.0,
+          "median": 1493.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 999.0,
+          "ci_low": 997.0,
+          "median": 998.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 232.5,
+          "ci_low": 226.5,
+          "median": 228.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w6_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w6_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w6_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w6_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_w6_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|16|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 16,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 34.0,
+          "ci_low": 32.5,
+          "median": 33.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 855.0,
+          "ci_low": 802.0,
+          "median": 833.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 384.0,
+          "ci_low": 375.0,
+          "median": 378.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 6.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 23.0,
+          "ci_low": 22.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2261.0,
+          "ci_low": 2231.0,
+          "median": 2248.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 31.0,
+          "ci_low": 29.0,
+          "median": 30.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1518.5,
+          "ci_low": 1496.0,
+          "median": 1509.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1005.0,
+          "ci_low": 1000.0,
+          "median": 1001.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 235.0,
+          "ci_low": 225.0,
+          "median": 230.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r16_wauto_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|32|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 32,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 2351.0,
+          "ci_low": 2324.0,
+          "median": 2336.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 143.0,
+          "ci_low": 134.0,
+          "median": 138.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 20.0,
+          "ci_low": 20.0,
+          "median": 20.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2054.0,
+          "ci_low": 2019.0,
+          "median": 2030.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 15.0,
+          "ci_low": 15.0,
+          "median": 15.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 32.0,
+          "ci_low": 32.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 23.0,
+          "ci_low": 23.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1712.0,
+          "ci_low": 1697.0,
+          "median": 1707.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 968.0,
+          "ci_low": 965.0,
+          "median": 966.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 114.0,
+          "ci_low": 110.0,
+          "median": 112.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_w1_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_w1_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_w1_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_w1_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_w1_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|32|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 32,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 35.0,
+          "ci_low": 34.0,
+          "median": 35.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1281.0,
+          "ci_low": 1241.5,
+          "median": 1255.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 181.0,
+          "ci_low": 176.0,
+          "median": 179.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 5.0,
+          "ci_low": 4.5,
+          "median": 5.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 22.0,
+          "ci_low": 22.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2017.0,
+          "ci_low": 2001.5,
+          "median": 2010.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 32.0,
+          "ci_low": 32.0,
+          "median": 32.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 26.0,
+          "ci_low": 25.0,
+          "median": 26.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1648.5,
+          "ci_low": 1633.0,
+          "median": 1640.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 973.0,
+          "ci_low": 970.0,
+          "median": 971.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 93.5,
+          "ci_low": 91.0,
+          "median": 92.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r32_wauto_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|4|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 4,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 27.0,
+          "ci_low": 25.0,
+          "median": 26.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 5469.5,
+          "ci_low": 5312.0,
+          "median": 5352.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 1224.0,
+          "ci_low": 1100.0,
+          "median": 1171.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 24.0,
+          "ci_low": 23.0,
+          "median": 23.5,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 21.0,
+          "ci_low": 17.0,
+          "median": 19.5,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 4577.0,
+          "ci_low": 4304.0,
+          "median": 4393.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 17.0,
+          "ci_low": 16.0,
+          "median": 16.5,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 30.0,
+          "ci_low": 28.0,
+          "median": 29.5,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1712.0,
+          "ci_low": 1649.0,
+          "median": 1670.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1039.0,
+          "ci_low": 1024.0,
+          "median": 1030.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 1512.5,
+          "ci_low": 1442.0,
+          "median": 1466.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_w1_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_w1_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_w1_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_w1_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_w1_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|4|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 4,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 67.0,
+          "ci_low": 62.5,
+          "median": 65.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1535.0,
+          "ci_low": 1473.0,
+          "median": 1504.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 2133.0,
+          "ci_low": 1966.0,
+          "median": 2034.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 23.0,
+          "ci_low": 21.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 38.0,
+          "ci_low": 35.0,
+          "median": 37.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 5733.0,
+          "ci_low": 5504.0,
+          "median": 5642.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 25.0,
+          "ci_low": 24.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 54.5,
+          "ci_low": 49.0,
+          "median": 51.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1568.0,
+          "ci_low": 1548.0,
+          "median": 1560.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1069.0,
+          "ci_low": 1053.0,
+          "median": 1060.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 1837.0,
+          "ci_low": 1801.0,
+          "median": 1816.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 6291456.0,
+          "ci_low": 6291456.0,
+          "median": 6291456.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_b_2x2_formal_v1/raw/attention/fused_state_update_q32_kv4096_r4_wauto_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|1|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "1"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 13.0,
+          "ci_low": 12.0,
+          "median": 12.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 3513.5,
+          "ci_low": 3461.0,
+          "median": 3480.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 527.5,
+          "ci_low": 524.0,
+          "median": 526.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 12.0,
+          "ci_low": 12.0,
+          "median": 12.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.0,
+          "ci_low": 22.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2899.0,
+          "ci_low": 2877.0,
+          "median": 2890.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 16.0,
+          "ci_low": 16.0,
+          "median": 16.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 28.0,
+          "ci_low": 28.0,
+          "median": 28.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1549.0,
+          "ci_low": 1541.0,
+          "median": 1544.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 984.0,
+          "ci_low": 981.0,
+          "median": 982.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 726.0,
+          "ci_low": 715.0,
+          "median": 720.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 1048576.0,
+          "ci_low": 1048576.0,
+          "median": 1048576.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w1_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w1_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w1_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w1_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w1_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|2|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "2"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 23.0,
+          "ci_low": 21.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 2041.0,
+          "ci_low": 2005.0,
+          "median": 2016.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 721.0,
+          "ci_low": 708.0,
+          "median": 714.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 18.0,
+          "ci_low": 15.0,
+          "median": 16.5,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 28.0,
+          "ci_low": 24.0,
+          "median": 24.5,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 3034.5,
+          "ci_low": 2962.0,
+          "median": 2988.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 20.0,
+          "ci_low": 18.0,
+          "median": 18.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 36.0,
+          "ci_low": 36.0,
+          "median": 36.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1542.0,
+          "ci_low": 1531.0,
+          "median": 1537.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1007.5,
+          "ci_low": 998.0,
+          "median": 1002.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 669.0,
+          "ci_low": 593.5,
+          "median": 631.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 2097152.0,
+          "ci_low": 2097152.0,
+          "median": 2097152.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w2_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w2_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w2_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w2_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w2_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|3|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "3"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 26.0,
+          "ci_low": 24.0,
+          "median": 25.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1556.5,
+          "ci_low": 1527.0,
+          "median": 1547.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 674.0,
+          "ci_low": 664.0,
+          "median": 670.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 15.0,
+          "ci_low": 13.0,
+          "median": 14.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 26.0,
+          "ci_low": 24.0,
+          "median": 25.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2962.0,
+          "ci_low": 2909.0,
+          "median": 2941.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 19.0,
+          "ci_low": 18.0,
+          "median": 18.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 32.0,
+          "ci_low": 31.0,
+          "median": 31.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1551.5,
+          "ci_low": 1529.0,
+          "median": 1543.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1041.0,
+          "ci_low": 1017.0,
+          "median": 1026.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 3.0,
+          "ci_low": 3.0,
+          "median": 3.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 638.0,
+          "ci_low": 621.0,
+          "median": 629.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 3145728.0,
+          "ci_low": 3145728.0,
+          "median": 3145728.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w3_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w3_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w3_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w3_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w3_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|4|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "4"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 4.0,
+          "ci_low": 4.0,
+          "median": 4.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 45.0,
+          "ci_low": 41.0,
+          "median": 42.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1129.0,
+          "ci_low": 1093.0,
+          "median": 1102.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 768.0,
+          "ci_low": 758.5,
+          "median": 762.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 15.0,
+          "ci_low": 14.0,
+          "median": 15.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 28.0,
+          "ci_low": 27.0,
+          "median": 28.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 3040.0,
+          "ci_low": 3007.0,
+          "median": 3023.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 22.0,
+          "ci_low": 21.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 40.0,
+          "ci_low": 39.0,
+          "median": 40.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1522.0,
+          "ci_low": 1501.0,
+          "median": 1513.5,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1044.0,
+          "ci_low": 1030.0,
+          "median": 1038.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 605.0,
+          "ci_low": 588.5,
+          "median": 596.5,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 4194304.0,
+          "ci_low": 4194304.0,
+          "median": 4194304.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w4_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w4_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w4_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w4_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w4_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|5|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "5"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 5.0,
+          "ci_low": 5.0,
+          "median": 5.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 35.0,
+          "ci_low": 31.0,
+          "median": 33.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1081.5,
+          "ci_low": 1066.5,
+          "median": 1071.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 750.0,
+          "ci_low": 731.5,
+          "median": 739.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 12.0,
+          "ci_low": 11.0,
+          "median": 12.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 24.5,
+          "ci_low": 23.0,
+          "median": 24.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 2925.0,
+          "ci_low": 2866.0,
+          "median": 2902.5,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 23.0,
+          "ci_low": 22.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 38.0,
+          "ci_low": 35.5,
+          "median": 36.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1515.0,
+          "ci_low": 1487.0,
+          "median": 1500.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1039.5,
+          "ci_low": 1022.0,
+          "median": 1031.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 540.0,
+          "ci_low": 521.5,
+          "median": 532.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 5242880.0,
+          "ci_low": 5242880.0,
+          "median": 5242880.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w5_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w5_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w5_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w5_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w5_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|6|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "6"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 62.5,
+          "ci_low": 59.0,
+          "median": 62.0,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1122.5,
+          "ci_low": 1096.0,
+          "median": 1106.5,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 861.0,
+          "ci_low": 840.0,
+          "median": 848.5,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 18.0,
+          "ci_low": 15.0,
+          "median": 17.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 27.0,
+          "ci_low": 25.0,
+          "median": 26.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 3025.5,
+          "ci_low": 2994.0,
+          "median": 3017.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 23.0,
+          "ci_low": 22.0,
+          "median": 22.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 55.0,
+          "ci_low": 52.0,
+          "median": 54.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1510.0,
+          "ci_low": 1498.0,
+          "median": 1503.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1025.0,
+          "ci_low": 1017.0,
+          "median": 1020.0,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 491.0,
+          "ci_low": 480.0,
+          "median": 488.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 6291456.0,
+          "ci_low": 6291456.0,
+          "median": 6291456.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w6_s1.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w6_s2.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w6_s3.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w6_s4.log",
+        "results/runs/20260827_stage275_phase_d_workers_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_w6_s5.log"
+      ]
+    },
+    "fused_state_update|32|4096|8|auto|query_chunk_x_kv_head": {
+      "meta": {
+        "kv": 4096,
+        "label": "fused_state_update",
+        "mapping": "query_chunk_x_kv_head",
+        "q": 32,
+        "q_task_rows": 8,
+        "requested_workers": "auto"
+      },
+      "metrics": {
+        "active_workers": {
+          "ci_high": 6.0,
+          "ci_low": 6.0,
+          "median": 6.0,
+          "n": 100
+        },
+        "core_acc": {
+          "ci_high": 67.5,
+          "ci_low": 61.5,
+          "median": 64.5,
+          "n": 100
+        },
+        "host_us": {
+          "ci_high": 1140.0,
+          "ci_low": 1119.0,
+          "median": 1128.0,
+          "n": 100
+        },
+        "k_load": {
+          "ci_high": 873.0,
+          "ci_low": 835.5,
+          "median": 854.0,
+          "n": 100
+        },
+        "o_scale": {
+          "ci_high": 17.0,
+          "ci_low": 16.0,
+          "median": 17.0,
+          "n": 100
+        },
+        "o_store": {
+          "ci_high": 27.0,
+          "ci_low": 26.0,
+          "median": 27.0,
+          "n": 100
+        },
+        "profiled_total": {
+          "ci_high": 3117.0,
+          "ci_low": 3054.0,
+          "median": 3087.0,
+          "n": 100
+        },
+        "q_load": {
+          "ci_high": 26.0,
+          "ci_low": 22.0,
+          "median": 23.0,
+          "n": 100
+        },
+        "q_task_rows_actual": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "qk_dot": {
+          "ci_high": 58.0,
+          "ci_low": 53.0,
+          "median": 56.0,
+          "n": 100
+        },
+        "safe_sm": {
+          "ci_high": 1543.0,
+          "ci_low": 1514.0,
+          "median": 1530.0,
+          "n": 100
+        },
+        "scna_exp": {
+          "ci_high": 1039.0,
+          "ci_low": 1023.0,
+          "median": 1029.5,
+          "n": 100
+        },
+        "state_update": {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "median": 0.0,
+          "n": 100
+        },
+        "task_record_imbalance": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "task_records_max_worker": {
+          "ci_high": 2.0,
+          "ci_low": 2.0,
+          "median": 2.0,
+          "n": 100
+        },
+        "task_records_min_worker": {
+          "ci_high": 1.0,
+          "ci_low": 1.0,
+          "median": 1.0,
+          "n": 100
+        },
+        "tasks": {
+          "ci_high": 8.0,
+          "ci_low": 8.0,
+          "median": 8.0,
+          "n": 100
+        },
+        "v_load": {
+          "ci_high": 509.5,
+          "ci_low": 501.0,
+          "median": 504.0,
+          "n": 100
+        },
+        "vtcm_total_bytes": {
+          "ci_high": 6291456.0,
+          "ci_low": 6291456.0,
+          "median": 6291456.0,
+          "n": 100
+        }
+      },
+      "sources": [
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_wauto_s1.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_wauto_s2.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_wauto_s3.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_wauto_s4.log",
+        "results/runs/20260827_stage275_phase_c_rows_formal_v1/raw/attention/fused_state_update_q32_kv4096_r8_wauto_s5.log"
+      ]
+    }
+  },
+  "schema_version": 1
+}

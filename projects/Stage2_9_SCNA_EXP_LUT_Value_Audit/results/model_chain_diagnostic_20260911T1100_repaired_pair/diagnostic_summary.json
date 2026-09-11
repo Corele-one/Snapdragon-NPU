@@ -1,0 +1,67 @@
+{
+  "failed_boundary": "frozen_flash_attention_state_update",
+  "interpretation": "The repaired HMX matmul path is not the first divergent stage. The frozen fused Attention row-sum/state-update path fails at short KV for baseline, EXP-LUT and SCNA. Evaluator comparison is therefore not identifiable without an out-of-scope change.",
+  "model_path_isolation": {
+    "attempt": 1,
+    "case_id": "5828e3f6ac9799dcbf14",
+    "custom_flash_ppl": 8886008787371.395,
+    "execution": "custom_flash_on_vs_off",
+    "first_divergent_output": "kqv_out-0",
+    "first_divergent_relative_l2": 0.285748286,
+    "first_divergent_tensor": "blk.0.attn_output.weight",
+    "no_custom_flash_ppl": 6.3753,
+    "preceding_model_matmuls": 10,
+    "preceding_model_matmuls_all_pass": true,
+    "record_type": "model_path_isolation"
+  },
+  "rowsum": {
+    "masked_and_tail_zero": true,
+    "scalar_expected_fp32": 25.092910766601562,
+    "stored_fp16": 46.78125
+  },
+  "schema_version": 1,
+  "short_kv_failed_modes": [
+    "baseline",
+    "lut-exp",
+    "scna-fp16"
+  ],
+  "short_kv_failure_is_common_to_evaluators": true,
+  "sources": [
+    {
+      "bytes": 9795,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/00_hmx_f16_custom_flash_current.log",
+      "sha256": "3de4cc64f1f7d48668f0cd8cb2326eb3441661068f895d7587fbdf1071f09ac8"
+    },
+    {
+      "bytes": 9757,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/01_hmx_f16_no_flash_current.log",
+      "sha256": "e423c78c4ff0fa340a8f18ba191a7864430a75151ebe72eae8dfe5bb09d9360c"
+    },
+    {
+      "bytes": 25050,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/02_hmx_f16_model_matmul_current.log",
+      "sha256": "208a7b1b57ef7d5e41c099fae4258eb1169c52aa4dfe4dac8f2b86590eb2d3f5"
+    },
+    {
+      "bytes": 95637,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/03_stage291_short_attn_sweep.log",
+      "sha256": "790efc0dc1097768e93e248f24b2ccde2b48e95cb92a009b1a1c82c3cabc6b6a"
+    },
+    {
+      "bytes": 7100,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/04_stage291_short_attn_modes.log",
+      "sha256": "a740f3345b50dde59fcdc5afbc3a7b28f569460b4bdfed51c0583b6fdba54e7b"
+    },
+    {
+      "bytes": 6346,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/05_stage291_short_attn_scna.log",
+      "sha256": "374d61ef05c0c96bb87596368aba4b16e9749db909f7cd67abc684f8ee150c95"
+    },
+    {
+      "bytes": 15744,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage2_9_SCNA_EXP_LUT_Value_Audit/results/model_chain_diagnostic_20260911T1100_repaired_pair/logs/06_stage291_attn_numeric_q32kv32.log",
+      "sha256": "134fcfc48cb5226a1c437c2e6dc977065e06051ed374f239ab065f5f44d58858"
+    }
+  ],
+  "verdict": "AUDIT_INVALID"
+}

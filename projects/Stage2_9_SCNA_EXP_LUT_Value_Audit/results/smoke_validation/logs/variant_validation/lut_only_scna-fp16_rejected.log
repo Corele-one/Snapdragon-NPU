@@ -1,0 +1,2 @@
+AUDIT_STARTUP_TIMING session_open_us=33996 backend_init_us=1515 main_to_ready_us=35519
+VALUE_AUDIT_ERROR evaluator=scna-fp16 distribution=boundary ret=-1

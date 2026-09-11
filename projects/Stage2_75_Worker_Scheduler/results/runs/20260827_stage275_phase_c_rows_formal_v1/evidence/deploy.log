@@ -1,0 +1,9 @@
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/scna_env_smoke: 1 file pushed. 2.3 MB/s (14640 bytes in 0.006s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/libscna_env.so: 1 file pushed. 5.0 MB/s (39128 bytes in 0.007s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/htp_ops_test: 1 file pushed. 17.4 MB/s (165264 bytes in 0.009s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/src/htp-ops-lib-main/android_ReleaseG_aarch64/ship/libhtp_ops.so: 1 file pushed. 8.5 MB/s (59800 bytes in 0.007s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libscna_env_skel.so: 1 file pushed. 2.8 MB/s (19624 bytes in 0.007s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/src/htp-ops-lib-main/hexagon_ReleaseG_toolv19_v79/ship/libscna_env_skel.so: 1 file pushed. 2.9 MB/s (19624 bytes in 0.006s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/artifacts/variants/d7_pairret_noinline/libhtp_ops_skel.so: 1 file pushed. 36.7 MB/s (1505056 bytes in 0.039s)
+/home/corleone/code/Snapdragon-NPU/projects/Stage2_75_Worker_Scheduler/artifacts/variants/d7_pairret_noinline/libhtp_ops_skel.so: 1 file pushed. 35.5 MB/s (1505056 bytes in 0.040s)
+SCNA environment smoke test passed.
