@@ -1,4 +1,0 @@
-  FLAGS = -mhmx -mv79 -G0 -Wall -Werror -fno-zero-initialized-in-bss -fdata-sections -fpic -mllvm -enable-xqf-gen=true -mhvx -mhvx-length=128B -O2 -g  -std=gnu11 -fPIC
-build CMakeFiles/htp_ops_skel.dir/src/dsp/ops/flash_attn.c.obj: C_COMPILER__htp_ops_skel_unscanned_Release /home/corleone/code/Snapdragon-NPU/projects/Stage2_HVX_Softmax_Dataflow/src/htp-ops-lib-main/src/dsp/ops/flash_attn.c || cmake_object_order_depends_target_htp_ops_skel
-  DEFINES = -DFIGURE8_ENABLE_LUT_EXP=0 -DFIGURE8_ENABLE_PROFILE_TIMERS=1 -DHTP_ENABLE_OUT_STATIONARY_PREFILL=0 -DHTP_MATMUL_ACTIVATION_AREA_KB=2048 -DHTP_MATMUL_OUTPUT_AREA_KB=1536 -DHTP_MATMUL_PIPELINE_MODE=0 -DHTP_MATMUL_SCRATCH_AREA_KB=1024 -DHTP_MATMUL_WEIGHT_AREA_KB=1024 -DHTP_OS_DEBUG_COMPARE=0 -DSCNA_BUILD_VARIANT=3 -DSCNA_KERNEL_IMPL=3 -DSCNA_OPTIMIZED_IMPL=0 -DSCNA_OPTIMIZED_INLINE=0 -DSTAGE2_SOFTMAX_IMPL=0 -Dhtp_ops_skel_EXPORTS
-  DEP_FILE = CMakeFiles/htp_ops_skel.dir/src/dsp/ops/flash_attn.c.obj.d

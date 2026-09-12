@@ -1,2 +1,0 @@
-AUDIT_STARTUP_TIMING session_open_us=33285 backend_init_us=1400 main_to_ready_us=34693
-MATMUL_AUDIT_JSON {"schema_version":1,"dtype":"iq4_nl","requested_path":"production","actual_path":1,"m":4,"k":8960,"n":1536,"seed":29102,"elapsed_us":434,"activation_checksum":"0xc28716ba1949e283","weight_checksum":"0x7d1972d1c87d0383","output_checksum":"0x191418964631b703","rmse":0.000122055413,"relative_l2":0.000423304579,"normalized_max_abs":0.000732511304,"nonfinite_count":0,"stage_checksums_match":true,"pass":true}

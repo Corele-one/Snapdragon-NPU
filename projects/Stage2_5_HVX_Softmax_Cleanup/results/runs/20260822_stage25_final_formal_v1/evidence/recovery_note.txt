@@ -1,7 +1,0 @@
-The origin_hvx q32 session-1 first attempt did not produce a valid completed
-sample and triggered the configured retry.  The recovery probe passed and the
-retry produced 20 valid measurements.  The runner version used for this run
-accidentally let the nested recovery probe truncate the exit-code preamble, so
-the original exit code and expected-marker line are unavailable.  The attempt
-is retained in summary.json and raw/recovery; it is not represented as a
-latency sample.  The runner was corrected after this observation.

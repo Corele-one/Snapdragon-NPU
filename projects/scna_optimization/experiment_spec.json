@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "target": {
+    "soc": "SM8750P",
+    "dsp_arch": "v79"
+  },
+  "shape": {
+    "kv_len": 4096,
+    "n_heads": 12,
+    "n_kv_heads": 2,
+    "head_dim": 128,
+    "mask": "full",
+    "q_lengths": [4, 8, 16, 32]
+  },
+  "benchmark": {
+    "sessions": 5,
+    "warmup_iterations": 5,
+    "measured_iterations": 20,
+    "mode_order": "cyclically rotated by session",
+    "expected_host_samples": 1200,
+    "intrusive_events": false,
+    "bootstrap_draws": 10000
+  },
+  "modes": {
+    "baseline": "Unmodified flashattention reference: HMX QK/PV and HVX polynomial exp2",
+    "lut_exp": "Unmodified flashattention reference: HMX QK/PV and VTCM LUT + HVX vgather exp2",
+    "scna": "Frozen Stage 2.75 final system: d7_pairret_noinline + fused_state_update + adaptive scheduler"
+  },
+  "correctness": {
+    "masks": ["full", "causal", "padding"],
+    "q_lengths": [1, 4, 8, 16, 32],
+    "kv_lengths": [4093, 4096],
+    "head_dimensions": [64, 128],
+    "seeds": ["figure8_fixed", "20260810", "20260811"],
+    "expected_cases": 180,
+    "rmse_limit": 0.002,
+    "max_abs_limit": 0.01,
+    "determinism_processes": 10
+  }
+}

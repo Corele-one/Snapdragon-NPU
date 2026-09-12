@@ -1,0 +1,14 @@
+captured_at=2026-09-11T16:54:00Z
+matrix=3 masks x 5 q x 2 kv x 2 dimensions x 3 seeds = 180
+scheduler=adaptive; q<=8:4,q<=16:8,otherwise:16
+127.0.0.1:15555
+25091RP04C
+SM8750P
+Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys
+700a2699fb47bcd98b892529482a519d6d57a6c3dad0ccf62e2da5a15812ceca  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/htp_ops_test
+fad8d2cf1e647840b7b8563db6685aa2877f187597e3f76f56076ae5be9df199  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libhtp_ops.so
+fe5c8475c00dc390664c64f60d61e069ffdff2429b5e484c91bf679b80c7b6ef  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libhtp_ops_skel.so
+0c0bbd6d2ae19c9242cdf8a4a9d1c05c5621e3cda953459e2ad79aee75526a10  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libscna_env.so
+1522d9d218472bbd44e7f23762eba33e6aa4dab6893d3d3cb3be22683d332301  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libscna_env_skel.so
+1b0ef460c5f008021d0ecebd4abde8e3a3d2bc2a5b0a83d99cc2179468b5229f  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/scna_env_smoke
+58ff3f3abc2e6267517ad96ba12c817cee805b12a4d182d795f43e08bd0c4271  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/sha256.txt

@@ -1,0 +1,11 @@
+{
+  "banned_experimental_kernel_hits": [],
+  "frame_bytes": 0,
+  "frame_related_lines": [],
+  "instructions": 112,
+  "packets": 36,
+  "pass": true,
+  "schema_version": 1,
+  "spill_instructions": 0,
+  "symbol": "hvx_scna_exp2_pair_hot_return_vhf"
+}

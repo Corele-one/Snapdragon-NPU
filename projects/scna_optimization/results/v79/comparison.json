@@ -1,0 +1,221 @@
+{
+  "all_ret_zero": true,
+  "comparison_scope": "original FlashAttention systems versus the frozen final SCNA system",
+  "diagnostics": {
+    "baseline": {
+      "measured_iterations": 3,
+      "median_task_work_sum_us": {
+        "core_acc": 56.0,
+        "k_load": 175.0,
+        "o_scale": 5.0,
+        "o_store": 23.0,
+        "param_prepare": 0.0,
+        "profiled_total": 2147.0,
+        "q_load": 16.0,
+        "qk_dot": 31.0,
+        "safe_sm": 1730.0,
+        "scna_exp": 0.0,
+        "state_update": 0.0,
+        "v_load": 112.0
+      },
+      "units": "task work-sum microseconds; do not compare directly with host wall latency",
+      "worker_records": []
+    },
+    "lut_exp": {
+      "measured_iterations": 3,
+      "median_task_work_sum_us": {
+        "core_acc": 61.0,
+        "k_load": 190.0,
+        "o_scale": 4.0,
+        "o_store": 22.0,
+        "param_prepare": 0.0,
+        "profiled_total": 1389.0,
+        "q_load": 16.0,
+        "qk_dot": 32.0,
+        "safe_sm": 951.0,
+        "scna_exp": 0.0,
+        "state_update": 0.0,
+        "v_load": 118.0
+      },
+      "units": "task work-sum microseconds; do not compare directly with host wall latency",
+      "worker_records": []
+    },
+    "scna": {
+      "measured_iterations": 3,
+      "median_task_work_sum_us": {
+        "core_acc": 46.0,
+        "k_load": 375.0,
+        "o_scale": 13.0,
+        "o_store": 23.0,
+        "param_prepare": 0.0,
+        "profiled_total": 2302.0,
+        "q_load": 25.0,
+        "qk_dot": 38.0,
+        "safe_sm": 1562.0,
+        "scna_exp": 1005.0,
+        "state_update": 0.0,
+        "v_load": 222.0
+      },
+      "units": "task work-sum microseconds; do not compare directly with host wall latency",
+      "worker_records": [
+        {
+          "active_workers": 4,
+          "hvx_contexts": 6,
+          "q_task_rows": 16,
+          "tasks": 4,
+          "vtcm_worker_cap": 8
+        },
+        {
+          "active_workers": 4,
+          "hvx_contexts": 6,
+          "q_task_rows": 16,
+          "tasks": 4,
+          "vtcm_worker_cap": 8
+        },
+        {
+          "active_workers": 4,
+          "hvx_contexts": 6,
+          "q_task_rows": 16,
+          "tasks": 4,
+          "vtcm_worker_cap": 8
+        }
+      ]
+    }
+  },
+  "host_latency_us": {
+    "baseline": {
+      "16": {
+        "ci95_high": 881.0,
+        "ci95_low": 876.0,
+        "count": 100,
+        "median": 877.0
+      },
+      "32": {
+        "ci95_high": 1435.0,
+        "ci95_low": 1432.5,
+        "count": 100,
+        "median": 1434.0
+      },
+      "4": {
+        "ci95_high": 572.0,
+        "ci95_low": 558.0,
+        "count": 100,
+        "median": 561.5
+      },
+      "8": {
+        "ci95_high": 658.0,
+        "ci95_low": 657.0,
+        "count": 100,
+        "median": 658.0
+      }
+    },
+    "lut_exp": {
+      "16": {
+        "ci95_high": 659.0,
+        "ci95_low": 658.0,
+        "count": 100,
+        "median": 659.0
+      },
+      "32": {
+        "ci95_high": 1040.0,
+        "ci95_low": 1009.5,
+        "count": 100,
+        "median": 1020.0
+      },
+      "4": {
+        "ci95_high": 549.0,
+        "ci95_low": 548.0,
+        "count": 100,
+        "median": 548.0
+      },
+      "8": {
+        "ci95_high": 577.0,
+        "ci95_low": 549.0,
+        "count": 100,
+        "median": 549.0
+      }
+    },
+    "scna": {
+      "16": {
+        "ci95_high": 657.5,
+        "ci95_low": 656.0,
+        "count": 100,
+        "median": 657.0
+      },
+      "32": {
+        "ci95_high": 861.0,
+        "ci95_low": 780.5,
+        "count": 100,
+        "median": 833.5
+      },
+      "4": {
+        "ci95_high": 499.0,
+        "ci95_low": 496.5,
+        "count": 100,
+        "median": 498.0
+      },
+      "8": {
+        "ci95_high": 535.0,
+        "ci95_low": 493.5,
+        "count": 100,
+        "median": 526.5
+      }
+    }
+  },
+  "paired_ratios": {
+    "lut_exp_over_baseline": {
+      "16": {
+        "ci95_high": 0.7552795588912926,
+        "ci95_low": 0.7488613706619551,
+        "count": 100,
+        "median": 0.752
+      },
+      "32": {
+        "ci95_high": 0.7238986833962007,
+        "ci95_low": 0.7055686277978775,
+        "count": 100,
+        "median": 0.7189760468364588
+      },
+      "4": {
+        "ci95_high": 0.982078853046595,
+        "ci95_low": 0.9580785706440156,
+        "count": 100,
+        "median": 0.9606643356643356
+      },
+      "8": {
+        "ci95_high": 0.8588313906869183,
+        "ci95_low": 0.8353658536585366,
+        "count": 100,
+        "median": 0.836890243902439
+      }
+    },
+    "scna_over_baseline": {
+      "16": {
+        "ci95_high": 0.7488584474885844,
+        "ci95_low": 0.7191256830601093,
+        "count": 100,
+        "median": 0.7292206823899523
+      },
+      "32": {
+        "ci95_high": 0.5868501740781769,
+        "ci95_low": 0.5490027086924403,
+        "count": 100,
+        "median": 0.5779791389720244
+      },
+      "4": {
+        "ci95_high": 0.9322282099343955,
+        "ci95_low": 0.8709090909090909,
+        "count": 100,
+        "median": 0.8768248175182483
+      },
+      "8": {
+        "ci95_high": 0.8072837632776935,
+        "ci95_low": 0.7024111675126903,
+        "count": 100,
+        "median": 0.795144157814871
+      }
+    }
+  },
+  "schema_version": 1,
+  "valid_host_samples": 1200
+}

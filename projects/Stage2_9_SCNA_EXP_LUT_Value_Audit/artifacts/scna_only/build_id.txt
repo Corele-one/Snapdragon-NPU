@@ -1,9 +1,0 @@
-architecture=v79
-audit_build_flavor=scna_only
-audit_build_flavor_id=2
-runtime_variant=pair_static_d8
-kernel_impl=d7_pairret_noinline
-kernel_impl_id=3
-softmax_impl=fused_state_update
-softmax_impl_id=2
-scheduler=stage2_75_adaptive

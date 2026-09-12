@@ -1,0 +1,19 @@
+captured_at=2026-09-11T16:57:17Z
+sessions=5 warmup=5 iters=20 expected_samples=1200
+baseline_source=reference/flashattention/htp-ops-lib-main
+scna_source=src/htp-ops-lib-main
+127.0.0.1:15555
+25091RP04C
+SM8750P
+Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys
+f324edd5f5f22f8fa0808cedb9983a3d83287bdc55fad4b0602b35da6cb7c16d  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/reference/htp_ops_test
+7de42ead5a70661d5e100f9664605a45733d58fac756d068d548041bcb30013e  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/reference/libhtp_ops.so
+d31df325eb0d93a86450fa7dc25a2bfc5be2eedc4d5001c37d69e1adfdc82624  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/reference/libhtp_ops_skel.so
+98a84bf3835bd1957e09dee4ba14b98e6fde1eac1282ec541430c8639ff94438  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/reference/sha256.txt
+700a2699fb47bcd98b892529482a519d6d57a6c3dad0ccf62e2da5a15812ceca  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/htp_ops_test
+fad8d2cf1e647840b7b8563db6685aa2877f187597e3f76f56076ae5be9df199  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libhtp_ops.so
+fe5c8475c00dc390664c64f60d61e069ffdff2429b5e484c91bf679b80c7b6ef  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libhtp_ops_skel.so
+0c0bbd6d2ae19c9242cdf8a4a9d1c05c5621e3cda953459e2ad79aee75526a10  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libscna_env.so
+1522d9d218472bbd44e7f23762eba33e6aa4dab6893d3d3cb3be22683d332301  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/libscna_env_skel.so
+1b0ef460c5f008021d0ecebd4abde8e3a3d2bc2a5b0a83d99cc2179468b5229f  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/scna_env_smoke
+58ff3f3abc2e6267517ad96ba12c817cee805b12a4d182d795f43e08bd0c4271  /home/corleone/code/Snapdragon-NPU/projects/scna_optimization/artifacts/scna/sha256.txt

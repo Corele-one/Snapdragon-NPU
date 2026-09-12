@@ -1,3 +1,0 @@
-matplotlib>=3.7
-seaborn>=0.13
-pytest>=8.0

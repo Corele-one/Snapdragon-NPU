@@ -1,0 +1,494 @@
+{
+  "artifacts": {
+    "reference/htp_ops_test": {
+      "sha256": "f324edd5f5f22f8fa0808cedb9983a3d83287bdc55fad4b0602b35da6cb7c16d",
+      "size": 96920
+    },
+    "reference/libhtp_ops.so": {
+      "sha256": "7de42ead5a70661d5e100f9664605a45733d58fac756d068d548041bcb30013e",
+      "size": 59888
+    },
+    "reference/libhtp_ops_skel.so": {
+      "sha256": "d31df325eb0d93a86450fa7dc25a2bfc5be2eedc4d5001c37d69e1adfdc82624",
+      "size": 1430656
+    },
+    "scna/htp_ops_test": {
+      "sha256": "700a2699fb47bcd98b892529482a519d6d57a6c3dad0ccf62e2da5a15812ceca",
+      "size": 156584
+    },
+    "scna/libhtp_ops.so": {
+      "sha256": "fad8d2cf1e647840b7b8563db6685aa2877f187597e3f76f56076ae5be9df199",
+      "size": 59752
+    },
+    "scna/libhtp_ops_skel.so": {
+      "sha256": "fe5c8475c00dc390664c64f60d61e069ffdff2429b5e484c91bf679b80c7b6ef",
+      "size": 1480896
+    },
+    "scna/libscna_env.so": {
+      "sha256": "0c0bbd6d2ae19c9242cdf8a4a9d1c05c5621e3cda953459e2ad79aee75526a10",
+      "size": 39096
+    },
+    "scna/libscna_env_skel.so": {
+      "sha256": "1522d9d218472bbd44e7f23762eba33e6aa4dab6893d3d3cb3be22683d332301",
+      "size": 19560
+    },
+    "scna/scna_env_smoke": {
+      "sha256": "1b0ef460c5f008021d0ecebd4abde8e3a3d2bc2a5b0a83d99cc2179468b5229f",
+      "size": 14616
+    }
+  },
+  "build_parameters": {
+    "android": "build_cmake android",
+    "hexagon": "build_cmake hexagon DSP_ARCH=v79 FIGURE8_ENABLE_PROFILE_TIMERS=ON FIGURE8_ENABLE_LUT_EXP=OFF"
+  },
+  "optimized_source": {
+    "file_count": 46,
+    "files": [
+      {
+        "path": ".clang-format",
+        "sha256": "b9b1f0d22fbb06ec032dc76179bc9581e8a05499ac6cd49e76f68a1c5d5d850b",
+        "size": 4690
+      },
+      {
+        "path": "CMakeLists.txt",
+        "sha256": "da0ee340eda12d602301c6dbf49950b76c60593065600f3efa6deaca5e78600e",
+        "size": 7657
+      },
+      {
+        "path": "README.md",
+        "sha256": "a580d33ef17607a5a769dd8dfb10993603d180276d0ffcead1b7366fffbb7dd8",
+        "size": 5279
+      },
+      {
+        "path": "include/dsp/dma_utils.h",
+        "sha256": "8b8a2a5ebcff0eff5bb92a23eb4678f425288f1a7a1a1172de8a260a7d448f8a",
+        "size": 2590
+      },
+      {
+        "path": "include/dsp/hmx_mgr.h",
+        "sha256": "040440a83394816fb16ba99930ec01af63e3a3fe02fff19afb032c5d4386aa70",
+        "size": 349
+      },
+      {
+        "path": "include/dsp/hmx_utils.h",
+        "sha256": "9b8f3f528a08a2865c58a0acb97cc6965b75373f7ea5de2934a464db3e31b2b7",
+        "size": 1462
+      },
+      {
+        "path": "include/dsp/hvx_convert.h",
+        "sha256": "2d4e34b22b09e532d3d3ac70322f5ab603bd0b7709784f5a5ddb479dea25faf1",
+        "size": 2069
+      },
+      {
+        "path": "include/dsp/hvx_internal.h",
+        "sha256": "c119bb5753ceddf6737e8bf1cc5c24d261b3d5cb4d52f21bb166c1740b875597",
+        "size": 29117
+      },
+      {
+        "path": "include/dsp/hvx_math.h",
+        "sha256": "aeedaa050f7f8bf649b2c427879bc690d40d871f16df216f89e6eb616129bd71",
+        "size": 34501
+      },
+      {
+        "path": "include/dsp/mmap_mgr.h",
+        "sha256": "f7fee4de00f59238f75648078a28a783af2f84c7b1480ddfcdbf474ab99aa652",
+        "size": 186
+      },
+      {
+        "path": "include/dsp/op_executor.h",
+        "sha256": "2dfe1d5149e02e9db3d4230c5c903ab04a89d786616081fc550b5eb82410ba75",
+        "size": 158
+      },
+      {
+        "path": "include/dsp/ops.h",
+        "sha256": "6fc05576c7e0e74be2aefd7f4fd56d1145f4c5fe77324623d4cdc47ef6817313",
+        "size": 5210
+      },
+      {
+        "path": "include/dsp/power.h",
+        "sha256": "e817bd183c1b6789e1725c839d7d5a8a338a45cc38dfd28d90841cdd03db0b76",
+        "size": 123
+      },
+      {
+        "path": "include/dsp/quants.h",
+        "sha256": "ed271c0d77f151ed916bf37b17fbee4eaa9c960a63cb6bea5bced4969baee61c",
+        "size": 1757
+      },
+      {
+        "path": "include/dsp/scna_exp2.h",
+        "sha256": "408b141055ec5f216cb9a270894c2ddae2b86b3a98efeca3f1b7dd2c067c88cf",
+        "size": 1550
+      },
+      {
+        "path": "include/dsp/scna_exp2_hot.h",
+        "sha256": "848cb872779aa6ff0cea2598c7144027068bcfbb962c46006bf54d04cc95eef2",
+        "size": 2107
+      },
+      {
+        "path": "include/dsp/scna_params.h",
+        "sha256": "7e2d47ddc15a46faca321f572d34bf5cc6cbe9af29d3d62c49e15cbdb6f07f06",
+        "size": 1160
+      },
+      {
+        "path": "include/dsp/utils.h",
+        "sha256": "ea14798fa51bc258a8238489687c96879f6cdb0e403921a007d374169eff5915",
+        "size": 462
+      },
+      {
+        "path": "include/dsp/vtcm_mgr.h",
+        "sha256": "4b5a378da377b0d1a95bb555afc0a9e48ef149f803b7f7836788e29c28fdfc2d",
+        "size": 560
+      },
+      {
+        "path": "include/dsp/worker_pool.h",
+        "sha256": "162f19f46beeb89fccb0f9436a3f4ea44eb5d1cc94fec57d49b113e17a95d0e5",
+        "size": 11823
+      },
+      {
+        "path": "include/host/op_export.h",
+        "sha256": "6388e752e10cfce39ee9a2c63d3ffdb13b136d32ef05faadd3331ee469907721",
+        "size": 330
+      },
+      {
+        "path": "include/host/session.h",
+        "sha256": "53ca737c4531b8128ce8aa0d00a62cb38baeb5c20ce140975bebf640025fe5c5",
+        "size": 254
+      },
+      {
+        "path": "include/htp_ops.idl",
+        "sha256": "696413598e5fcfacca43bfb44cea6a8f376e264724ebfb4e36cda1356f309da0",
+        "size": 666
+      },
+      {
+        "path": "include/message.h",
+        "sha256": "782658b05e5bea713cdc3ea169a172ba19329a535d2edf3fe2edc62c55a6479d",
+        "size": 1422
+      },
+      {
+        "path": "include/op_reg.h",
+        "sha256": "295ef548486738d91ba999ad96c302c3820bcf7cbcc14ba16c4d50c59b4ed9f7",
+        "size": 17675
+      },
+      {
+        "path": "include/scna_env.idl",
+        "sha256": "ff8bab025c9a3ad4598d2d9198fc59c426ae2acecf7db0975f231ed074a11542",
+        "size": 354
+      },
+      {
+        "path": "src/dsp/commu.c",
+        "sha256": "f9ca0e3391c3b5a89c35b3994e0df002ba8bf91f9cfe5cb5928d22b175c0e412",
+        "size": 11856
+      },
+      {
+        "path": "src/dsp/hmx_mgr.c",
+        "sha256": "b509ce14810dcefcf5de5ca167a4096e4e6aea4dbe09a75b12612009dc0c6daf",
+        "size": 3899
+      },
+      {
+        "path": "src/dsp/mmap_mgr.cc",
+        "sha256": "48b333e242158e273bf03f5c5ac79a4549a14e65d85b01f28d2635d6216ff8e2",
+        "size": 807
+      },
+      {
+        "path": "src/dsp/op_executor.cc",
+        "sha256": "2272f310060633794de4284675ad8256784bffb0b8e3cb504819e3f7d423919e",
+        "size": 158242
+      },
+      {
+        "path": "src/dsp/op_tests.cc",
+        "sha256": "6eeaca9a06bbf58b29531096539c33d9f4a77802ae60b82dae804d6a09eb1550",
+        "size": 92435
+      },
+      {
+        "path": "src/dsp/ops/flash_attn.c",
+        "sha256": "b378b3799a57861bf2ed20e694bc4704207e15e27d25e959faa3ca7599d6267a",
+        "size": 113460
+      },
+      {
+        "path": "src/dsp/ops/flash_attn_sp_hdim.c",
+        "sha256": "c4bb13e19a5ccc761d74f6cb080f5a6acaf464310a0eddeaa5079405a25e4f52",
+        "size": 35963
+      },
+      {
+        "path": "src/dsp/ops/mat_mul.c",
+        "sha256": "4bd320b5743e5a71c9b0b190e32a8ea54fee80ae0918b395467fde83746f4fa0",
+        "size": 111792
+      },
+      {
+        "path": "src/dsp/ops/mm_benchmark.c",
+        "sha256": "4b3e9fbfbf326f1f9a96aa443c1572ef371ffae84da7455e1f9cee1559b06821",
+        "size": 9511
+      },
+      {
+        "path": "src/dsp/ops/precompute_table.c",
+        "sha256": "036f5fbad9814fcce16a305a5e7ffeeac3844df17c2302bdfc26df877751742d",
+        "size": 1618
+      },
+      {
+        "path": "src/dsp/ops/rms_norm.c",
+        "sha256": "ac2f594cd1a39f8ad6c43652cc27f810239c1c829f8f5a50312a67b56e46870d",
+        "size": 2499
+      },
+      {
+        "path": "src/dsp/ops/scna_exp2.c",
+        "sha256": "442f9da5c60a86140642e96ea092cd22061cc0101533c795bfc9d5019a1c39ac",
+        "size": 7867
+      },
+      {
+        "path": "src/dsp/power.c",
+        "sha256": "69f4fd9d087c19fe5d4e11766594256ec5041382fac6f84af9d944c51b18522f",
+        "size": 1699
+      },
+      {
+        "path": "src/dsp/scna_env_skel.c",
+        "sha256": "ff7b36f9cdb7fb673ed17781b993eff990b320dc3bb7489e08148d379d1a3049",
+        "size": 815
+      },
+      {
+        "path": "src/dsp/vtcm_mgr.cc",
+        "sha256": "80a0008f92857e3dc9b0c5b06babd0c4d629187669d3b256bf7160879f25a8c0",
+        "size": 2965
+      },
+      {
+        "path": "src/dsp/worker_pool.c",
+        "sha256": "aae582ac781e99d95d977c24397ff95b357e6df1f9bcef87bd34111d085d15e2",
+        "size": 15619
+      },
+      {
+        "path": "src/host/op_export.c",
+        "sha256": "23a9b11cb976ae5887f8fd994848a729d5341ec0fe0e66fdb9af6eecdbf6b446",
+        "size": 701
+      },
+      {
+        "path": "src/host/scna_env_smoke.c",
+        "sha256": "fcb2287a877137d9e8b743f37fc20f33bcc5f1c98d52cdd237604527ca78257f",
+        "size": 1809
+      },
+      {
+        "path": "src/host/session.c",
+        "sha256": "315921b654eafe9c518efc6cf45c9cd86db6e12999e32f50c4cdbccae4c1c66e",
+        "size": 2747
+      },
+      {
+        "path": "src/host/test.c",
+        "sha256": "95bf9375e48d8877164a6aa4bf9f2ec6db4620eaa7d3fc60b662f37564d2eaa9",
+        "size": 95993
+      }
+    ],
+    "tree_sha256": "800bd23995bde98508835ef9c167135ca0ba4056c1088e62137c348fda2f34cb"
+  },
+  "reference_matches_flashattention_authority": true,
+  "reference_source": {
+    "file_count": 41,
+    "files": [
+      {
+        "path": ".clang-format",
+        "sha256": "b9b1f0d22fbb06ec032dc76179bc9581e8a05499ac6cd49e76f68a1c5d5d850b",
+        "size": 4690
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "2965592b787cd2373a4e3f5bb5c1fb176630adcb9bd4f212f701ac2f1ce89649",
+        "size": 34
+      },
+      {
+        "path": "CMakeLists.txt",
+        "sha256": "14a964f9130e9c69a3922d7889cbbcabfe195978cec911294e179615424f3bab",
+        "size": 5773
+      },
+      {
+        "path": "README.md",
+        "sha256": "a580d33ef17607a5a769dd8dfb10993603d180276d0ffcead1b7366fffbb7dd8",
+        "size": 5279
+      },
+      {
+        "path": "docs/HTP_OPS_LIB_MAIN_TUTORIAL.zh-CN.md",
+        "sha256": "a996f127be35175df51a58f61bf34b28348fb02007ce3eb9ca4f4203e651ebdc",
+        "size": 11745
+      },
+      {
+        "path": "include/dsp/dma_utils.h",
+        "sha256": "8b8a2a5ebcff0eff5bb92a23eb4678f425288f1a7a1a1172de8a260a7d448f8a",
+        "size": 2590
+      },
+      {
+        "path": "include/dsp/hmx_mgr.h",
+        "sha256": "040440a83394816fb16ba99930ec01af63e3a3fe02fff19afb032c5d4386aa70",
+        "size": 349
+      },
+      {
+        "path": "include/dsp/hmx_utils.h",
+        "sha256": "9b8f3f528a08a2865c58a0acb97cc6965b75373f7ea5de2934a464db3e31b2b7",
+        "size": 1462
+      },
+      {
+        "path": "include/dsp/hvx_convert.h",
+        "sha256": "b280b9099d51212afec72f15c5b62fbd609d725e974485c9db7235791a021cb2",
+        "size": 2649
+      },
+      {
+        "path": "include/dsp/hvx_internal.h",
+        "sha256": "c119bb5753ceddf6737e8bf1cc5c24d261b3d5cb4d52f21bb166c1740b875597",
+        "size": 29117
+      },
+      {
+        "path": "include/dsp/hvx_math.h",
+        "sha256": "8f1403b7dae4f8ea4a7811c1115ada8c8abde168d884d5cc2eaf3b1fca3ba714",
+        "size": 34944
+      },
+      {
+        "path": "include/dsp/mmap_mgr.h",
+        "sha256": "f7fee4de00f59238f75648078a28a783af2f84c7b1480ddfcdbf474ab99aa652",
+        "size": 186
+      },
+      {
+        "path": "include/dsp/op_executor.h",
+        "sha256": "2dfe1d5149e02e9db3d4230c5c903ab04a89d786616081fc550b5eb82410ba75",
+        "size": 158
+      },
+      {
+        "path": "include/dsp/ops.h",
+        "sha256": "986be92e830e565b5e9acc2666f66186f1942ee36fd7b8b4c9510b527c1392e4",
+        "size": 5065
+      },
+      {
+        "path": "include/dsp/power.h",
+        "sha256": "e817bd183c1b6789e1725c839d7d5a8a338a45cc38dfd28d90841cdd03db0b76",
+        "size": 123
+      },
+      {
+        "path": "include/dsp/quants.h",
+        "sha256": "ed271c0d77f151ed916bf37b17fbee4eaa9c960a63cb6bea5bced4969baee61c",
+        "size": 1757
+      },
+      {
+        "path": "include/dsp/utils.h",
+        "sha256": "ea14798fa51bc258a8238489687c96879f6cdb0e403921a007d374169eff5915",
+        "size": 462
+      },
+      {
+        "path": "include/dsp/vtcm_mgr.h",
+        "sha256": "4b5a378da377b0d1a95bb555afc0a9e48ef149f803b7f7836788e29c28fdfc2d",
+        "size": 560
+      },
+      {
+        "path": "include/dsp/worker_pool.h",
+        "sha256": "162f19f46beeb89fccb0f9436a3f4ea44eb5d1cc94fec57d49b113e17a95d0e5",
+        "size": 11823
+      },
+      {
+        "path": "include/host/op_export.h",
+        "sha256": "6388e752e10cfce39ee9a2c63d3ffdb13b136d32ef05faadd3331ee469907721",
+        "size": 330
+      },
+      {
+        "path": "include/host/session.h",
+        "sha256": "53ca737c4531b8128ce8aa0d00a62cb38baeb5c20ce140975bebf640025fe5c5",
+        "size": 254
+      },
+      {
+        "path": "include/htp_ops.idl",
+        "sha256": "696413598e5fcfacca43bfb44cea6a8f376e264724ebfb4e36cda1356f309da0",
+        "size": 666
+      },
+      {
+        "path": "include/message.h",
+        "sha256": "782658b05e5bea713cdc3ea169a172ba19329a535d2edf3fe2edc62c55a6479d",
+        "size": 1422
+      },
+      {
+        "path": "include/op_reg.h",
+        "sha256": "2cb43c749b5d69355995bff1d88e865ab76b0f544a5be39c04d913a9a60bb0ba",
+        "size": 12142
+      },
+      {
+        "path": "src/dsp/commu.c",
+        "sha256": "f9ca0e3391c3b5a89c35b3994e0df002ba8bf91f9cfe5cb5928d22b175c0e412",
+        "size": 11856
+      },
+      {
+        "path": "src/dsp/hmx_mgr.c",
+        "sha256": "b509ce14810dcefcf5de5ca167a4096e4e6aea4dbe09a75b12612009dc0c6daf",
+        "size": 3899
+      },
+      {
+        "path": "src/dsp/mmap_mgr.cc",
+        "sha256": "48b333e242158e273bf03f5c5ac79a4549a14e65d85b01f28d2635d6216ff8e2",
+        "size": 807
+      },
+      {
+        "path": "src/dsp/op_executor.cc",
+        "sha256": "5f7d980e278a29e0705abf5e485fce6fc84d48c11845e1fa15b5b767b2660667",
+        "size": 147069
+      },
+      {
+        "path": "src/dsp/op_tests.cc",
+        "sha256": "6eeaca9a06bbf58b29531096539c33d9f4a77802ae60b82dae804d6a09eb1550",
+        "size": 92435
+      },
+      {
+        "path": "src/dsp/ops/flash_attn.c",
+        "sha256": "811e1fc0a4ce3b4aa561fd26a9c11f1bbc15acdabab60bf02b5081574159de52",
+        "size": 88299
+      },
+      {
+        "path": "src/dsp/ops/flash_attn_sp_hdim.c",
+        "sha256": "c4bb13e19a5ccc761d74f6cb080f5a6acaf464310a0eddeaa5079405a25e4f52",
+        "size": 35963
+      },
+      {
+        "path": "src/dsp/ops/mat_mul.c",
+        "sha256": "4bd320b5743e5a71c9b0b190e32a8ea54fee80ae0918b395467fde83746f4fa0",
+        "size": 111792
+      },
+      {
+        "path": "src/dsp/ops/mm_benchmark.c",
+        "sha256": "4b3e9fbfbf326f1f9a96aa443c1572ef371ffae84da7455e1f9cee1559b06821",
+        "size": 9511
+      },
+      {
+        "path": "src/dsp/ops/precompute_table.c",
+        "sha256": "036f5fbad9814fcce16a305a5e7ffeeac3844df17c2302bdfc26df877751742d",
+        "size": 1618
+      },
+      {
+        "path": "src/dsp/ops/rms_norm.c",
+        "sha256": "ac2f594cd1a39f8ad6c43652cc27f810239c1c829f8f5a50312a67b56e46870d",
+        "size": 2499
+      },
+      {
+        "path": "src/dsp/power.c",
+        "sha256": "69f4fd9d087c19fe5d4e11766594256ec5041382fac6f84af9d944c51b18522f",
+        "size": 1699
+      },
+      {
+        "path": "src/dsp/vtcm_mgr.cc",
+        "sha256": "80a0008f92857e3dc9b0c5b06babd0c4d629187669d3b256bf7160879f25a8c0",
+        "size": 2965
+      },
+      {
+        "path": "src/dsp/worker_pool.c",
+        "sha256": "aae582ac781e99d95d977c24397ff95b357e6df1f9bcef87bd34111d085d15e2",
+        "size": 15619
+      },
+      {
+        "path": "src/host/op_export.c",
+        "sha256": "23a9b11cb976ae5887f8fd994848a729d5341ec0fe0e66fdb9af6eecdbf6b446",
+        "size": 701
+      },
+      {
+        "path": "src/host/session.c",
+        "sha256": "315921b654eafe9c518efc6cf45c9cd86db6e12999e32f50c4cdbccae4c1c66e",
+        "size": 2747
+      },
+      {
+        "path": "src/host/test.c",
+        "sha256": "bd198e225e088e5a3809856dbdbf844b18d8938c55386367c98ac750ecd2024e",
+        "size": 64356
+      }
+    ],
+    "tree_sha256": "c5916b03ffc28e1ac7d2e75aedc75b43fe49219c593e48b5668f985728889d55"
+  },
+  "schema_version": 1,
+  "target": "Hexagon v79 only"
+}

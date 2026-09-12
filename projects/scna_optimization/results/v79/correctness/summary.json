@@ -1,0 +1,1637 @@
+{
+  "cases": 180,
+  "determinism_processes": 10,
+  "determinism_unique_checksums": [
+    "0x19c89fab0065963c"
+  ],
+  "masked_p_nonzero": 0,
+  "max_abs_error": 0.00121130981,
+  "max_rmse": 0.000283223198,
+  "nonfinite": 0,
+  "pass": true,
+  "passed_cases": 180,
+  "rows": [
+    {
+      "file": "causal_q16_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115419738,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000248531782,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115420064,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000248531782,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000144653197,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.30290238e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115497503,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000264825183,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115497224,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000264825183,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00014686861,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.61455968e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114397984,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247721968,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.0011439831,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247721968,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000145856407,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.28943276e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114339683,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000263836147,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114339404,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000263836177,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q16_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00013753146,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.57708741e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000813530292,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242163645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000813528895,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242163645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132653397,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.83204603e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000964757986,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000281627814,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00096476078,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000281627843,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000108433771,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.57461904e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000805689953,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000243089307,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000805689022,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000243089322,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132021785,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.81031893e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000986019615,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000283174944,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000986022409,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000283174973,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q1_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000107823114,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.58983016e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00118898088,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000252778525,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00118898414,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000252778525,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000153609784,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.31745757e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115944166,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000250589626,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115944538,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000250589626,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000150216511,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.66169697e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00117334072,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000251898397,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00117334351,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000251898397,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000151270069,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.2981701e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115174334,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000249713485,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115174754,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000249713485,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q32_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000149102474,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.64253283e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000971527305,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242324735,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000971526373,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242324706,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000136955234,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.12121844e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120667182,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279653381,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120666903,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279653381,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000127332838,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.56220808e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000959587749,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000241562273,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000959586818,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000241562258,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132653397,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.09925633e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119740609,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278955413,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.0011974033,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278955413,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q4_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000119733158,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.5325269e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110757723,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000245284638,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110758049,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000245284638,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00014590926,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.16601288e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00121130981,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279834203,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00121130701,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279834203,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000131103094,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.56393721e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110182026,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244599039,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110182352,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00024459901,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000143278448,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.16093353e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120242219,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278407038,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.0012024194,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278407068,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "causal_q8_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130161498,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.53212126e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809481,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246316922,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809807,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246316922,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000143278448,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.25591061e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113361515,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000261990965,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113361236,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000261990965,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130922766,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.53206087e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113233784,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246608281,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.0011323411,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246608281,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000142492645,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.25283833e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00112047233,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000261723821,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00112047419,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00026172385,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q16_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000128477142,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.52271491e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000813530292,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242163645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000813528895,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242163645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132653397,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.83204603e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000964757986,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000281627814,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00096476078,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000281627843,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000108433771,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.57461904e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000805689953,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000243089307,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000805689022,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000243089322,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132021785,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.81031893e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000986019615,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000283174944,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000986022409,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000283174973,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q1_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000107823114,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.58983016e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809481,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247875258,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809807,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247875258,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000153673522,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.2405456e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115653127,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246021344,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.001156535,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246021344,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130922766,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.5248504e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113233784,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000248106284,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.0011323411,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000248106284,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000150796201,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.2386735e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119388942,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246107811,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119389361,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246107811,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q32_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00012809824,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.51602503e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000976083335,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000241926507,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000976082403,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000241926478,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132653397,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.08834094e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119465031,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00027906074,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119464751,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00027906074,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000118132026,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.5449164e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000945421401,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242038877,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00094542047,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242038848,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132021785,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.08909182e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00117908139,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279465981,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00117907859,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279465981,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q4_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000119733158,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.53890646e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110757723,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244309515,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110758049,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244309515,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000143278448,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.13613598e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119465031,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278172869,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119464751,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278172898,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130922766,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.52267198e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110182026,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244318944,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110182352,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244318944,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000141569588,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.13783127e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00117908139,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278691616,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00117907859,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278691645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "full_q8_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000127144565,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.51776216e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114327436,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247083721,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114327762,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247083692,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00014590926,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.27418563e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00112825539,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000262918795,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.0011282526,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000262918824,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000129592663,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.56765668e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809481,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246316922,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809807,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246316922,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000143278448,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.25591061e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113361515,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000261990965,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113361236,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000261990965,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q16_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130922766,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.53206087e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000812977552,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000243052069,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000812976155,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000243052069,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000134640664,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.90093626e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000969859771,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00028322314,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000969862565,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000283223198,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000109409593,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.62568207e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000813530292,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242163645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000813528895,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242163645,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132653397,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.83204603e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000964757986,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000281627814,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00096476078,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000281627843,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q1_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000108433771,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.57461904e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114327436,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000248647528,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00114327762,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000248647499,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000154858863,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.25776379e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115174334,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246713316,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115174754,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246713316,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000129592663,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.55981465e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809481,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247875258,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00113809807,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000247875258,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000153673522,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.2405456e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00115653127,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246021344,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.001156535,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000246021344,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q32_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130922766,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.5248504e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00098113576,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242724724,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000981134828,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000242724695,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000142744451,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.1148829e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120454933,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000280310633,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120454654,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000280310633,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000127882318,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.58342986e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000976083335,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000241926507,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000976082403,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000241926478,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000132653397,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.08834094e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119465031,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00027906074,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119464751,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.00027906074,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q4_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000118132026,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.5449164e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4093_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110512739,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000245059084,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4093_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110513065,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000245059084,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4093_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00014590926,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.1562198e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4093_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120454933,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279392116,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4093_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00120454654,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000279392116,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4093_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000129592663,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.55456759e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4096_d128_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110757723,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244309515,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4096_d128_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00110758049,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000244309515,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4096_d128_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000143278448,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 4.13613598e-05,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4096_d64_seed20260810.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119465031,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278172869,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4096_d64_seed20260811.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.00119464751,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 0.000278172898,
+      "tail_p_nonzero": 0
+    },
+    {
+      "file": "padding_q8_kv4096_d64_seedfigure8_fixed.log",
+      "masked_p_nonzero": 0,
+      "max_abs_error": 0.000130922766,
+      "nonfinite": 0,
+      "pass": true,
+      "rmse": 3.52267198e-05,
+      "tail_p_nonzero": 0
+    }
+  ],
+  "schema_version": 1,
+  "tail_p_nonzero": 0
+}

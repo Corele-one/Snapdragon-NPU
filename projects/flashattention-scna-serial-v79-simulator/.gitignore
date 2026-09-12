@@ -1,8 +1,0 @@
-/artifacts/
-/build/
-/.venv/
-/src/htp-ops-lib-main/hexagon_*/
-/results/runs/*
-!/results/runs/.gitkeep
-__pycache__/
-*.pyc
