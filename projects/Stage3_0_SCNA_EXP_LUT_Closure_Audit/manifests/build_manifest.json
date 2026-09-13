@@ -1,0 +1,115 @@
+{
+  "architecture": "v79",
+  "artifacts": {
+    "exp_lut_system": {
+      "build_id": "audit=stage3_0_closure\nartifact=exp_lut_system\nsystem_kind=original-flashattention\narchitecture=v79\nsdk=6.6.0.0\nrowsum_helper_sha256=aa9cf3bb575dd8f3d7eb06efa500d2d80a13d55535ad5d129b1dde3ba41a72fd",
+      "bytes": 1438208,
+      "content_build_id": "sha256:722c590491826f64e11bf1a10a1c817879db8fe2c07d6f4690c946a9adf9ad4a",
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/artifacts/exp_lut_system/libhtp_ops_skel.so",
+      "sha256": "722c590491826f64e11bf1a10a1c817879db8fe2c07d6f4690c946a9adf9ad4a"
+    },
+    "fair_combined": {
+      "build_id": "audit=stage3_0_closure\nartifact=fair_combined\nsystem_kind=fair-attribution\narchitecture=v79\nsdk=6.6.0.0\nrowsum_helper_sha256=aa9cf3bb575dd8f3d7eb06efa500d2d80a13d55535ad5d129b1dde3ba41a72fd",
+      "bytes": 1531040,
+      "content_build_id": "sha256:44b2827285ffd18c7ce42a9bca93f8e54b7496f78bf239519eb0d741d5cf0c80",
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/artifacts/fair_combined/libhtp_ops_skel.so",
+      "sha256": "44b2827285ffd18c7ce42a9bca93f8e54b7496f78bf239519eb0d741d5cf0c80"
+    },
+    "lut_only": {
+      "build_id": "audit=stage3_0_closure\nartifact=lut_only\nsystem_kind=fair-attribution\narchitecture=v79\nsdk=6.6.0.0\nrowsum_helper_sha256=aa9cf3bb575dd8f3d7eb06efa500d2d80a13d55535ad5d129b1dde3ba41a72fd",
+      "bytes": 1526496,
+      "content_build_id": "sha256:dee82ad3af14b348468be66fa23d925373f4c15d0efc1138e1de4b5327d33dda",
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/artifacts/lut_only/libhtp_ops_skel.so",
+      "sha256": "dee82ad3af14b348468be66fa23d925373f4c15d0efc1138e1de4b5327d33dda"
+    },
+    "scna_only": {
+      "build_id": "audit=stage3_0_closure\nartifact=scna_only\nsystem_kind=fair-attribution\narchitecture=v79\nsdk=6.6.0.0\nrowsum_helper_sha256=aa9cf3bb575dd8f3d7eb06efa500d2d80a13d55535ad5d129b1dde3ba41a72fd",
+      "bytes": 1523168,
+      "content_build_id": "sha256:3eb070cae80a7d24c0e74baee9b239018b792f734efec6f5c48eaa32fd7ab9bb",
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/artifacts/scna_only/libhtp_ops_skel.so",
+      "sha256": "3eb070cae80a7d24c0e74baee9b239018b792f734efec6f5c48eaa32fd7ab9bb"
+    },
+    "scna_system": {
+      "build_id": "audit=stage3_0_closure\nartifact=scna_system\nsystem_kind=optimized-scna\narchitecture=v79\nsdk=6.6.0.0\nrowsum_helper_sha256=aa9cf3bb575dd8f3d7eb06efa500d2d80a13d55535ad5d129b1dde3ba41a72fd",
+      "bytes": 1494080,
+      "content_build_id": "sha256:fc2cc68eb53d4a4ac5e1fc236bc11b982c89094228f49454712d7b89dd54da17",
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/artifacts/scna_system/libhtp_ops_skel.so",
+      "sha256": "fc2cc68eb53d4a4ac5e1fc236bc11b982c89094228f49454712d7b89dd54da17"
+    }
+  },
+  "audit_harness": {
+    "files": 61,
+    "included": [
+      "scripts",
+      "tools",
+      "tests",
+      "templates",
+      "requirements",
+      "docs",
+      "README.md",
+      ".gitignore",
+      "experiment_spec.json",
+      "model_repair_spec.json",
+      "audit_rerun_spec.json"
+    ],
+    "tree_sha256": "36744d4e79fd8e3a952dacaf776c943c00bf356cdda659793508f18e165c6445"
+  },
+  "experiment_spec": {
+    "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/experiment_spec.json",
+    "sha256": "77a303132bcf591afab2cc8fd3a9d1debc1b875ec08009776eba4370b32315e7"
+  },
+  "frozen_configuration": {
+    "kernel_impl": "d7_pairret_noinline",
+    "kernel_impl_id": 3,
+    "runtime_variant": "pair_static_d8",
+    "scheduler": "stage2_75_adaptive",
+    "softmax_impl": "fused_state_update",
+    "softmax_impl_id": 2
+  },
+  "host_artifacts": {
+    "htp_ops_test": {
+      "build_id": "7f10db95bff3dbf5299278b634fb5350a71358ab",
+      "bytes": 210640,
+      "sha256": "530e6de05886face8d1026f227b9f9d6a9daacf4092f3a3ca22ef2d57dd30bfc"
+    },
+    "libhtp_ops.so": {
+      "build_id": "faba951e28c7700821167d8841f3c57666fa229a",
+      "bytes": 59872,
+      "sha256": "a3b3170afa59c2d00cc5737bb2af4bcc722d6b1c29278a4db757e592d54a2525"
+    },
+    "libscna_env.so": {
+      "build_id": "22e3d1c28daeb58021ae457c0fc55c0fe392b94c",
+      "bytes": 39144,
+      "sha256": "ad3cade64fbe3030ab71dd15e31045ae04fc799dfdba8d090dc15ac3035199b8"
+    },
+    "scna_env_smoke": {
+      "build_id": "649d4d76c8207e1d876866e4ba9edfa7009d57c6",
+      "bytes": 14664,
+      "sha256": "2f852de88e8cf79f5bdf1bc3c076c50fe56e4f7aa3c9b53121477037df675a76"
+    }
+  },
+  "llama_backend_bridge": {
+    "files": 12,
+    "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/work/llama.cpp-stage30/ggml/src/ggml-htp",
+    "tree_sha256": "780ac042bb1ba2eed05bad1fb3757941912aaabe23b785f09820e4c2859297b0"
+  },
+  "model_host_artifacts": {},
+  "schema_version": 2,
+  "source": {
+    "files": 47,
+    "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/src/htp-ops-lib-main",
+    "tree_sha256": "52f63b8303b2247d4c3e34c90f43d20a0111cb5e4a848b63926176a09be1f339"
+  },
+  "system_sources": {
+    "exp_lut_system": {
+      "files": 42,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/systems/exp_lut_system/htp-ops-lib-main",
+      "tree_sha256": "9c351d614a5556e07567122ba1570827213facff89494e6f5ae197d96c3a9023"
+    },
+    "scna_system": {
+      "files": 47,
+      "path": "/home/corleone/code/Snapdragon-NPU/projects/Stage3_0_SCNA_EXP_LUT_Closure_Audit/systems/scna_system/htp-ops-lib-main",
+      "tree_sha256": "d19d070c899145edd608fabb5ad071b89db4b9664e3479e8b8a0eb54fd76d500"
+    }
+  }
+}

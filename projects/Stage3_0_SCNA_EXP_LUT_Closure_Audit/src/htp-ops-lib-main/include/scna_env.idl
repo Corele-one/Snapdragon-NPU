@@ -1,0 +1,14 @@
+/* Minimal FastRPC interface used only to validate the SCNA experiment setup. */
+
+#ifndef SCNA_ENV_IDL
+#define SCNA_ENV_IDL
+
+#include "AEEStdDef.idl"
+#include "remote.idl"
+
+interface scna_env : remote_handle64 {
+    /* No HMX, HVX, VTCM, or SCNA computation is performed by this call. */
+    AEEResult ping(in int32 token);
+};
+
+#endif /* SCNA_ENV_IDL */

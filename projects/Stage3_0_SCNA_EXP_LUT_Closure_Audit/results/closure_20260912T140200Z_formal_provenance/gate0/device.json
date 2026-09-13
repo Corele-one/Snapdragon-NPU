@@ -1,0 +1,8 @@
+{
+  "build_fingerprint": "Xiaomi/piano/piano:16/BP2A.250605.031.A3/OS3.0.303.0.WPYCNXM:user/release-keys",
+  "dsp_architecture": "v79",
+  "product": "piano",
+  "sdk": "6.6.0.0",
+  "serial": "127.0.0.1:15555",
+  "soc_model": "SM8750P"
+}

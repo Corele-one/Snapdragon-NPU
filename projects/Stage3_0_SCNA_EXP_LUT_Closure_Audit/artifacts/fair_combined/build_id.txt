@@ -1,0 +1,6 @@
+audit=stage3_0_closure
+artifact=fair_combined
+system_kind=fair-attribution
+architecture=v79
+sdk=6.6.0.0
+rowsum_helper_sha256=aa9cf3bb575dd8f3d7eb06efa500d2d80a13d55535ad5d129b1dde3ba41a72fd

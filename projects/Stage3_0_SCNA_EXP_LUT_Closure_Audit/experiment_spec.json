@@ -1,0 +1,84 @@
+{
+  "schema_version": 2,
+  "experiment": "Stage 3.0 SCNA vs EXP-LUT closure audit",
+  "preregistered_at": "2026-09-12",
+  "target": {"soc": "SM8750P", "architecture": "v79", "sdk": "6.6.0.0"},
+  "artifacts": ["exp_lut_system", "scna_system", "fair_combined", "lut_only", "scna_only"],
+  "source_roots": {
+    "exp_lut_system": "../flashattention",
+    "scna_system": "../scna_optimization",
+    "stage29_archive": "../Archived/Stage2_9_SCNA_EXP_LUT_Value_Audit"
+  },
+  "gate0": {
+    "artifact": "fair_combined",
+    "modes": ["baseline", "lut-exp", "scna-fp16"],
+    "masks": ["full", "causal", "padding"],
+    "q": [1, 4, 8, 16, 32],
+    "kv": [32, 64, 128, 512, 4093, 4096],
+    "head_dim": [64, 128],
+    "seeds": [12029, 12030, 12031, 29101],
+    "expected_cases": 2160,
+    "long_context_sentinels": {"masks": ["causal", "padding"], "q": [1, 32], "kv": 16384, "head_dim": 128, "seed": 12029},
+    "determinism": {"processes": 10, "cases": [{"mask": "causal", "q": 32, "kv": 32, "head_dim": 128, "seed": 29101}, {"mask": "full", "q": 32, "kv": 4096, "head_dim": 128, "seed": 12029}]},
+    "gates": {"rmse_max": 0.002, "max_abs_max": 0.01, "nonfinite_max": 0, "masked_probability_nonzero_max": 0, "tail_probability_nonzero_max": 0, "rowsum_fp16_ulp_max": 2}
+  },
+  "attention_correctness": {
+    "modes": ["lut-exp", "scna-fp16"], "masks": ["full", "causal", "padding"],
+    "q": [1, 4, 8, 16, 32], "kv": [4093, 4096], "head_dim": [64, 128],
+    "seeds": [12029, 12030, 12031],
+    "long_context_sentinels": {"masks": ["causal", "padding"], "q": [1, 32], "kv": 16384, "head_dim": 128, "seed": 12029},
+    "gates": {"rmse_max": 0.002, "max_abs_max": 0.01, "nonfinite_max": 0}
+  },
+  "nonlinear": {
+    "modes": ["lut-exp", "scna-fp16"],
+    "distributions": ["exhaustive-fp16", "dense", "attention", "boundary"],
+    "default_elements": 4096, "sessions": 5, "warmup": 5, "measure": 20
+  },
+  "performance": {
+    "tracks": {
+      "track-a": [{"artifact": "exp_lut_system", "mode": "lut-exp", "candidate": "lut-exp"}, {"artifact": "scna_system", "mode": "scna-fp16", "candidate": "scna-fp16"}],
+      "track-b": [{"artifact": "fair_combined", "mode": "lut-exp", "candidate": "lut-exp"}, {"artifact": "fair_combined", "mode": "scna-fp16", "candidate": "scna-fp16"}]
+    },
+    "q": [1, 4, 8, 16, 32], "kv": [512, 2048, 4096, 16384], "mask": "causal",
+    "full_mask_anchor": {"q": 32, "kv": 4096},
+    "sessions": 5, "warmup": 5, "measure": 20,
+    "bootstrap_draws": 10000, "confidence": 0.95
+  },
+  "attention_performance": {
+    "artifact": "fair_combined", "modes": ["lut-exp", "scna-fp16"],
+    "q": [1, 4, 8, 16, 32], "kv": [512, 2048, 4096, 16384], "mask": "causal",
+    "full_mask_anchor": {"q": 32, "kv": 4096},
+    "sessions": 5, "warmup": 5, "measure": 20, "bootstrap_draws": 10000, "confidence": 0.95
+  },
+  "resource": {
+    "fresh_processes": 30,
+    "stress": {"q": 64, "kv": 4096, "workers": [1, 2, 4, 5, 6]},
+    "dedicated_vs_combined_equivalence_ratio": [0.98, 1.02]
+  },
+  "thermal": {"duration_seconds": 600, "sample_period_seconds": 5, "start_temperature_delta_c_max": 1.0, "energy_claims_allowed": false},
+  "model": {
+    "name": "Qwen2.5-1.5B-Instruct",
+    "import_manifest": "generated/model_pair_import.json",
+    "dataset": "/data/local/tmp/llama-cpu-reference-qwen/wikitext-2.test.raw",
+    "ppl_chunks": 64,
+    "baseline_cpu_relative_ppl_delta_max": 0.05,
+    "gates": {"trusted_cpu_f16_relative_max": 0.02, "standard_f16_htp_relative_max": 0.01, "hmx_f16_relative_max": 0.05, "hmx_quant_relative_max": 0.05},
+    "prompt_tokens": [512, 1024, 2048, 4096], "generation_tokens": 32,
+    "sessions": 5, "warmup": 5, "measure": 20,
+    "logit_contexts": [128, 512, 2048, 4096], "logit_fixtures_per_context": 2,
+    "logit_policy": "descriptive; missing, nonfinite, or CPU fallback invalidates the audit"
+  },
+  "decision": {
+    "allowed_verdicts": ["KEEP_SCNA", "SWITCH_TO_LUT", "DYNAMIC_POLICY", "AUDIT_INVALID"],
+    "ppl_equivalence_ratio": [0.995, 1.005], "material_performance_ratio": [0.98, 1.02],
+    "scna_max_slowdown_ratio": 1.05, "resource_steady_improvement_min": 0.05,
+    "cold_start_p95_improvement_min": 0.10, "thermal_improvement_min": 0.05,
+    "tie_policy": "retain_current_scna"
+  },
+  "hard_boundaries": [
+    "do not modify flashattention, scna_optimization, or Archived/Stage2_9_SCNA_EXP_LUT_Value_Audit",
+    "do not refit or restructure either evaluator",
+    "do not run performance or model ranking after a Gate 0 failure",
+    "do not claim SCOPE hardware, INT8 scale fusion, cross-operator, area, power, or energy results"
+  ]
+}
