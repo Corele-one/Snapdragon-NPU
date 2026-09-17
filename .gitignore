@@ -89,3 +89,5 @@ projects/flashattention-scna-fp16-d8-optimization-v79/tools/generate_roofline_lu
 projects/QA/
 projects/Stage2_HVX_Softmax_Dataflow/PLAN.md
 projects/Stage2_75_Worker_Scheduler/PLAN.md
+projects/Stage3_1_SCNA_D8_Accuracy_Latency_Audit/results/
+projects/Stage3_1_SCNA_D8_Accuracy_Latency_Audit/artifacts
